@@ -8,7 +8,7 @@ class AuthenticationService:
     """
 
     @staticmethod
-    def authenticate(username, password):
+    def login(username, password):
         """
         Authenticates a user based on the provided username and password.
 
@@ -21,3 +21,11 @@ class AuthenticationService:
         """
         # Validate the user's credentials using the UserDataAccess class
         return UserDataAccess.validate_user(username, password)
+
+    @staticmethod
+    def redirect(self, username, password):
+        user = UserDataAccess.get_user(username, password)
+        if user.type == "Admin":
+            return "admin_main_page"
+        else:
+            return "volunteer_main_page"
