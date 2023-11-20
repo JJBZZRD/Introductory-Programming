@@ -1,12 +1,13 @@
 from DataAccessLayer.user_data_access import UserDataAccess
+from DataAccessLayer.data_access import DataAccess
 import util
 
 class PersonDataEdit:
 
-
-    def update_volunteer(self, id, first_name = None, last_name = None, phone_num = None, camp = None, username = None, password = None):
+    @staticmethod
+    def update_volunteer(id, first_name = None, last_name = None, phone_num = None, camp = None, username = None, password = None):
         # get variables
-        volunteer = UserDataAccess.get_volunteer(id)
+        volunteer = UserDataAccess.get_volunteer_by_id(id)
         if first_name:
             volunteer.first_name = first_name
         if last_name:
@@ -26,18 +27,28 @@ class PersonDataEdit:
         
         return UserDataAccess.update_volunteer(volunteer)
     
-    def delete_volunteer(self, id):
+    @staticmethod
+    def delete_volunteer(id):
         return UserDataAccess.delete_volunteer(id)
     
-    def create_volunteer(self, id, first_name = None, last_name = None, camp = None, username = None, password = None):
+    @staticmethod
+    def create_volunteer(id, first_name = None, last_name = None, camp = None, username = None, password = None):
         return UserDataAccess.create_volunteer(first_name, last_name, camp, username, password)
     
-    def create_refugee(self, first_name, last_name, camp):
+    @staticmethod
+    def create_refugee(first_name, last_name, camp):
         return UserDataAccess.create_refugee(first_name, last_name, camp)
     
-    def update_refugee(self, id, first_name = None, last_name = None):
+    @staticmethod
+    def update_refugee(id, first_name = None, last_name = None):
+        refugee = DataAccess.get_refugee_by_id(id)
+        if first_name:
+            refugee.first_name = first_name
+        if last_name:
+            refugee.last_name = last_name 
         return UserDataAccess.update_refugee(id, first_name, last_name)
     
-    def delete_refugee(self, id):
+    @staticmethod
+    def delete_refugee(id):
         return UserDataAccess.delete_refugee(id)
     

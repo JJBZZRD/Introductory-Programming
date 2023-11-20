@@ -20,12 +20,17 @@ class AuthenticationService:
         :return: Boolean indicating the result of the authentication process.
         """
         # Validate the user's credentials using the UserDataAccess class
-        return UserDataAccess.validate_user(username, password)
+        if UserDataAccess.validate_user(username, password):
+            return UserDataAccess.get_user(username, password)
+        else:
+            return False
 
     @staticmethod
-    def redirect(self, username, password):
-        user = UserDataAccess.get_user(username, password)
+    def redirect(self, user):
+        # user = UserDataAccess.get_user(username, password)
         if user.type == "Admin":
             return "admin_main_page"
         else:
             return "volunteer_main_page"
+        
+        
