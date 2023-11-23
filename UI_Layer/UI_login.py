@@ -2,9 +2,9 @@ import tkinter as tk
 from UI_dashboard import AdminDashboard, VolunteerDashboard
 
 class LoginScreen(tk.Frame):
-    def __init__(self, parent, callback, **kwargs):
-        super().__init__(parent, **kwargs)
-        self.parent = parent
+    def __init__(self, root, callback, **kwargs):
+        super().__init__(root, **kwargs)
+        self.root = root
         self.callback = callback
         self.setup_login_screen()
 
@@ -23,16 +23,14 @@ class LoginScreen(tk.Frame):
         volunteer_login_button = tk.Button(self, text="Volunteer Login", command=self.login_as_volunteer)
         volunteer_login_button.pack(pady=5)
 
-
     def login_as_admin(self):
-        # Use the callback to transition to the Admin Plans screen
         self.callback(AdminDashboard)
         self.clear()
 
     def login_as_volunteer(self):
-        # Use the callback to transition to the Volunteer Dashboard
         self.callback(VolunteerDashboard)
         self.clear()
 
     def clear(self):
         self.destroy()
+
