@@ -10,12 +10,12 @@ class LoginScreen(tk.Frame):
 
     def setup_login_screen(self):
         tk.Label(self, text="Username:").pack()
-        self.username_entry = tk.Entry(self)
-        self.username_entry.pack()
+        username_entry = tk.Entry(self)
+        username_entry.pack()
 
         tk.Label(self, text="Password:").pack()
-        self.password_entry = tk.Entry(self, show="*")
-        self.password_entry.pack()
+        password_entry = tk.Entry(self, show="*")
+        password_entry.pack()
 
         admin_login_button = tk.Button(self, text="Admin Login", command=self.login_as_admin)
         admin_login_button.pack(pady=5)

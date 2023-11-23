@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+
 class UIHeader:
     @staticmethod
     def logout():
@@ -23,7 +24,7 @@ class UIHeader:
         pass  # Placeholder for role change logic
 
     @staticmethod
-    def create_header(parent):
+    def create_header(parent, header_name='camp_1'):
         header = tk.Frame(parent, bg='white')
 
         # Logo on the left
@@ -31,7 +32,7 @@ class UIHeader:
         logo_label.pack(side=tk.LEFT, padx=(10, 20))
 
         # Camp name
-        camp_label = tk.Label(header, text="CAMP 1", bg="white", font=("Helvetica", 16))
+        camp_label = tk.Label(header, text=header_name, bg="white", font=("Helvetica", 16))
         camp_label.pack(side=tk.LEFT)
 
         # Spacer
