@@ -3,9 +3,9 @@ from tkinter import ttk
 from UI_header import UIHeader
 
 class Dashboard(tk.Frame):
-    def __init__(self, parent, callback, **kwargs):
-        super().__init__(parent, **kwargs)
-        self.parent = parent
+    def __init__(self, root, callback, **kwargs):
+        super().__init__(root, **kwargs)
+        self.root = root
         self.header = UIHeader.create_header(self)
         self.header.pack(side=tk.TOP, fill=tk.X)
         self.setup_dashboard()
@@ -56,9 +56,9 @@ class Dashboard(tk.Frame):
         for resource, counts in resources.items():
             self.create_resource_indicator(resource_frame, resource, counts['allocated'], counts['total'])
 
-    def create_resource_indicator(self, parent, resource, allocated, total):
+    def create_resource_indicator(self, root, resource, allocated, total):
         # This creates each resource indicator bar along with +/- buttons
-        frame = tk.Frame(parent, bg='white')
+        frame = tk.Frame(root, bg='white')
         frame.pack(pady=5, fill='x', padx=10)
 
         # Resource icon (just a placeholder label here)

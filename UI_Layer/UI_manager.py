@@ -1,4 +1,5 @@
 import tkinter as tk
+from UI_dashboard import AdminDashboard, VolunteerDashboard
 from UI_login import LoginScreen
 
 class UIManager:
@@ -15,16 +16,3 @@ class UIManager:
         if self.current_screen is not None:
             self.current_screen.destroy()
 
-def run_application():
-    root = tk.Tk()
-    root.title("Refugee Management System")
-
-    ui_manager = UIManager(root)  # Create an instance of UIManager
-
-    login_screen = LoginScreen(root, ui_manager.show_screen)  # Pass show_screen method to LoginScreen
-    login_screen.pack(expand=True, fill='both')
-
-    root.mainloop()
-
-if __name__ == "__main__":
-    run_application()
