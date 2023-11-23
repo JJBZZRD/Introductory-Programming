@@ -35,4 +35,4 @@ class LoginScreen(tk.Frame):
         self.clear()
 
     def clear(self):
-        self.login_frame.destroy()
+        self.destroy()
