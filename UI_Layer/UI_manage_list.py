@@ -16,7 +16,15 @@ class ManageList(tk.Frame):
     def setup_list(self):
         raise NotImplementedError("Subclasses should implement this method to setup the different lists")
 
+    def result_list(self):
+        # need to gather the search bar value. there needs to be a backend update to gather the
+        # associated results from the search. this will have to be in array value.
+        # the collected results will be assigned to the self.results value.
+        # the create_search frame can then be recalled (certain states will be lost like the filter selection)
+        pass
+
     def create_title(self):
+        #this method creates the title and add entry button for each list
         page_top_frame = tk.Frame(self.root)
         page_top_frame.pack(side='top')
 
@@ -26,14 +34,10 @@ class ManageList(tk.Frame):
         new_plan_button = ttk.Button(page_top_frame, text=self.list_type[1])
         new_plan_button.pack(padx=10, pady=5)
 
-    def result_list(self):
-        # need to gather the search bar value. there needs to be a backend update to gather the
-        # associated results from the search. this will have to be in array value.
-        # the collected results will be assigned to the self.results value.
-        # the create_search frame can then be recalled (certain states will be lost like the filter selection)
-        pass
+
 
     def create_search(self):
+        #this creates the search bar and results box in a grid, i might seperate these later
         search_frame = tk.Frame(self.root)
         search_frame.pack()
 
@@ -69,7 +73,6 @@ class ManageList(tk.Frame):
     def switch_screen(self, event=None):
         self.pack_forget()
         self.show_screen(AdminDashboard)
-
 
 
 class PlanList(ManageList):
