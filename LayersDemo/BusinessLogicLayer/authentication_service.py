@@ -26,6 +26,11 @@ class AuthenticationService:
             return False
 
     @staticmethod
+    def logout():
+        return "login_page"
+
+
+    @staticmethod
     def redirect(self, user):
         # user = UserDataAccess.get_user(username, password)
         if user.type == "Admin":
