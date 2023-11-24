@@ -25,9 +25,9 @@ class AuthenticationService:
         else:
             return False
 
-    @staticmethod
-    def logout():
-        return "login_page"
+    # @staticmethod
+    # def logout():
+    #     return "login_page"
 
 
     @staticmethod
