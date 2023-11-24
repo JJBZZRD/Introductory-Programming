@@ -11,7 +11,7 @@ class UIManager:
     def show_screen(self, screen_class, *args):
         self.clear_screen()
 
-        if not self.header:
+        if self.header is None:
             self.header = UIHeader.create_header(self.root)
             self.header.pack(side='top', fill='x')
         else:

@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from UI_dashboard import AdminDashboard
+from UI_modify_entries import ModifyPlan
 
 
 class ManageList(tk.Frame):
@@ -12,6 +13,7 @@ class ManageList(tk.Frame):
         self.list_type = None
         self.result_headers = None
         self.results = None
+        self.search_field = None
 
     def setup_list(self):
         raise NotImplementedError("Subclasses should implement this method to setup the different lists")
@@ -20,26 +22,24 @@ class ManageList(tk.Frame):
         # need to gather the search bar value. there needs to be a backend update to gather the
         # associated results from the search. this will have to be in array value.
         # the collected results will be assigned to the self.results value.
-        # the create_search frame can then be recalled (certain states will be lost like the filter selection)
+        # the create_result will then be recalled to display the new list
         pass
 
     def create_title(self):
-        #this method creates the title and add entry button for each list
-        #page_top_frame = tk.Frame(self.root)
-        #page_top_frame.pack(side='top')
+        # this method creates the title and add entry button for each list
+        # page_top_frame = tk.Frame(self.root)
+        # page_top_frame.pack(side='top')
 
         list_title = ttk.Label(self, text=self.list_type[0], font=("Helvetica", 20, "bold"))
         list_title.grid(column=6, row=0, padx=10, pady=5)
 
-        new_plan_button = ttk.Button(self, text=self.list_type[1])
-        new_plan_button.grid(column=6, row=1,padx=10, pady=5)
-
-
+        new_plan_button = ttk.Button(self, text=self.list_type[1], command=self.switch_to_modify_plan)
+        new_plan_button.grid(column=6, row=1, padx=10, pady=5)
 
     def create_search(self):
-        #this creates the search bar and results box in a grid, i might seperate these later
-        #search_frame = tk.Frame(self.root)
-        #search_frame.pack()
+        # this creates the search bar, filters and search button
+        # search_frame = tk.Frame(self.root)
+        # search_frame.pack()
 
         search_filters = ttk.Combobox(self, values=self.result_headers, state="readonly")
         search_filters.set("Filter")  # set default value
@@ -48,6 +48,7 @@ class ManageList(tk.Frame):
 
         search_bar = ttk.Entry(self, width=100)
         search_bar.grid(column=6, row=2, padx=5)
+        self.search_field = search_bar.get()
         # search_bar.pack(padx=10, pady=5)
 
         search_button = ttk.Button(self, text='Search', command=self.result_list)
@@ -58,6 +59,7 @@ class ManageList(tk.Frame):
         # then each list within thi list will populate the row from the treeview widget under the appropriate header
 
     def create_results(self):
+        #this method creates the results list for a chosen subclass
         results_list = ttk.Treeview(self, columns=self.result_headers, show='headings')
 
         # this lets us change the header values depending on what are being passed
@@ -68,12 +70,16 @@ class ManageList(tk.Frame):
         for i in self.results:
             results_list.insert('', 'end', values=i)
 
-        results_list.bind('<Double-1>', self.switch_screen)
+        results_list.bind('<Double-1>', self.switch_to_admin_dashboard)
 
         results_list.grid(column=0, row=3, columnspan=13)
 
-    def switch_screen(self, event=None):
+    def switch_to_admin_dashboard(self, event=None):
         self.show_screen(AdminDashboard)
+        self.destroy()
+
+    def switch_to_modify_plan(self, event=None):
+        self.show_screen(ModifyPlan)
         self.destroy()
 
 
