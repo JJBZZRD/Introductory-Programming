@@ -1,11 +1,13 @@
 import tkinter as tk
 from UI_dashboard import AdminDashboard, VolunteerDashboard
+from UI_manage_list import PlanList
+
 
 class LoginScreen(tk.Frame):
-    def __init__(self, root, callback, **kwargs):
+    def __init__(self, root, show_screen, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
-        self.callback = callback
+        self.show_screen = show_screen
         self.setup_login_screen()
 
     def setup_login_screen(self):
@@ -24,13 +26,12 @@ class LoginScreen(tk.Frame):
         volunteer_login_button.pack(pady=5)
 
     def login_as_admin(self):
-        self.callback(AdminDashboard)
+        self.show_screen(PlanList)
         self.clear()
 
     def login_as_volunteer(self):
-        self.callback(VolunteerDashboard)
+        self.show_screen(VolunteerDashboard)
         self.clear()
 
     def clear(self):
         self.destroy()
-

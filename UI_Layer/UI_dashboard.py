@@ -3,10 +3,11 @@ from tkinter import ttk
 
 
 class Dashboard(tk.Frame):
-    def __init__(self, root, callback, **kwargs):
+    def __init__(self, root, show_screen, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
         self.setup_dashboard()
+        self.show_screen = show_screen
 
     def setup_dashboard(self):
         raise NotImplementedError("Subclasses should implement this method to setup the dashboard layout")

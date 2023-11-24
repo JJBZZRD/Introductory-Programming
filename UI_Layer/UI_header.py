@@ -3,6 +3,8 @@ from tkinter import ttk
 
 
 class UIHeader:
+    # i think we might need to rethink this class to get show_screen working from UI_manager
+
     @staticmethod
     def logout():
         pass  # Placeholder for the logout logic
@@ -19,9 +21,9 @@ class UIHeader:
     def open_settings():
         pass  # Placeholder for settings logic
 
-    @staticmethod
+    '''@staticmethod
     def change_role(event=None):
-        pass  # Placeholder for role change logic
+        pass  # Placeholder for role change logic'''
 
     @staticmethod
     def create_header(parent, header_name='camp_1'):
@@ -40,10 +42,10 @@ class UIHeader:
         spacer.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
 
         # Dropdown menu for roles
-        role_menu = ttk.Combobox(header, values=["Admin", "User"], state="readonly")
+        '''role_menu = ttk.Combobox(header, values=["Admin", "User"], state="readonly")
         role_menu.set("Admin")  # set default value
         role_menu.pack(side=tk.LEFT)
-        role_menu.bind('<<ComboboxSelected>>', UIHeader.change_role)
+        role_menu.bind('<<ComboboxSelected>>', UIHeader.change_role)'''
 
         # Navigation buttons
         nav_back_button = tk.Button(header, text="←", bg="white", command=UIHeader.navigate_back)
