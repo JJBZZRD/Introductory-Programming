@@ -1,5 +1,5 @@
 from UI_header import UIHeader
-
+from UI_login import LoginScreen
 
 class UIManager:
     def __init__(self, root):
@@ -11,12 +11,18 @@ class UIManager:
     def show_screen(self, screen_class, *args):
         self.clear_screen()
 
-        if self.header is None:
-            self.header = UIHeader.create_header(self.root)
-            self.header.pack(side='top', fill='x')
+        if screen_class is LoginScreen:
+            if self.header is not None:
+                self.header.destroy()
+                self.header = None
         else:
-            # we can update the header with new information here
-            pass
+            if self.header is None:
+                self.header = UIHeader(self.root, self.show_screen)
+                self.header.pack(side='top', fill='x')
+            else:
+                # we can update the header with new information here
+                pass
+
 
         # here i have integrated the header to exist at the top of any loaded frames
         #UIHeader.create_header(self.root).pack(side='top', fill='x')

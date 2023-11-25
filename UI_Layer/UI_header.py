@@ -1,13 +1,17 @@
 import tkinter as tk
 from tkinter import ttk
+from UI_login import LoginScreen
 
 
-class UIHeader:
-    # i think we might need to rethink this class to get show_screen working from UI_manager
+class UIHeader(tk.Frame):
+    def __init__(self, root, show_screen, **kwargs):
+        super().__init__(root, **kwargs)
+        self.root = root
+        self.show_screen = show_screen
+        self.create_header()
 
-    @staticmethod
-    def logout():
-        pass  # Placeholder for the logout logic
+    def logout(self):
+        self.show_screen(LoginScreen)
 
     @staticmethod
     def navigate_back():
@@ -25,9 +29,8 @@ class UIHeader:
     def change_role(event=None):
         pass  # Placeholder for role change logic'''
 
-    @staticmethod
-    def create_header(parent, header_name='camp_1'):
-        header = tk.Frame(parent, bg='white')
+    def create_header(self, header_name='camp_1'):
+        header = tk.Frame(self, bg='white')
 
         # Logo on the left
         logo_label = tk.Label(header, text="LOGO", bg="white")
@@ -48,18 +51,19 @@ class UIHeader:
         role_menu.bind('<<ComboboxSelected>>', UIHeader.change_role)'''
 
         # Navigation buttons
-        nav_back_button = tk.Button(header, text="←", bg="white", command=UIHeader.navigate_back)
+        nav_back_button = tk.Button(header, text="←", bg="white", command=self.navigate_back)
         nav_back_button.pack(side=tk.LEFT, padx=(10, 0))
 
-        nav_forward_button = tk.Button(header, text="→", bg="white", command=UIHeader.navigate_forward)
+        nav_forward_button = tk.Button(header, text="→", bg="white", command=self.navigate_forward)
         nav_forward_button.pack(side=tk.LEFT, padx=(0, 10))
 
         # Settings button
-        settings_button = tk.Button(header, text="⚙", bg="white", command=UIHeader.open_settings)
+        settings_button = tk.Button(header, text="⚙", bg="white", command=self.open_settings)
         settings_button.pack(side=tk.LEFT)
 
         # Logout button
-        logout_button = tk.Button(header, text="Logout", command=UIHeader.logout)
+        logout_button = tk.Button(header, text="Logout", command=self.logout)
         logout_button.pack(side=tk.RIGHT, padx=(0, 10))
 
-        return header
+        header.pack(side='top', fill='x')
+

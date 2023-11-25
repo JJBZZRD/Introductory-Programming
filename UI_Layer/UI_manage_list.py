@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from UI_dashboard import AdminDashboard
-from UI_modify_entries import ModifyPlan
+from UI_modify_entries import NewPlan
 
 
 class ManageList(tk.Frame):
@@ -33,7 +33,7 @@ class ManageList(tk.Frame):
         list_title = ttk.Label(self, text=self.list_type[0], font=("Helvetica", 20, "bold"))
         list_title.grid(column=6, row=0, padx=10, pady=5)
 
-        new_plan_button = ttk.Button(self, text=self.list_type[1], command=self.switch_to_modify_plan)
+        new_plan_button = ttk.Button(self, text=self.list_type[1], command=self.switch_to_new_plan)
         new_plan_button.grid(column=6, row=1, padx=10, pady=5)
 
     def create_search(self):
@@ -78,8 +78,8 @@ class ManageList(tk.Frame):
         self.show_screen(AdminDashboard)
         self.destroy()
 
-    def switch_to_modify_plan(self, event=None):
-        self.show_screen(ModifyPlan)
+    def switch_to_new_plan(self, event=None):
+        self.show_screen(NewPlan)
         self.destroy()
 
 
