@@ -5,23 +5,21 @@ import UI_modify_entries as me
 
 
 class UIHeader(tk.Frame):
-    def __init__(self, root, show_screen, **kwargs):
+    def __init__(self, root, show_screen, page_nav, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
         self.show_screen = show_screen
+        self.page_nav = page_nav
         self.create_header()
 
     def logout(self):
         self.show_screen(LoginScreen)
 
-    @staticmethod
-    def navigate_back():
-        pass  # Placeholder for navigation logic
+    def navigate_back(self):
+        self.page_nav('back')
 
-    @staticmethod
-    def navigate_forward():
-        pass
-
+    def navigate_forward(self):
+        self.page_nav('forward')
 
     def open_settings(self):
         self.show_screen(me.EditVolunteer)
@@ -67,4 +65,3 @@ class UIHeader(tk.Frame):
         logout_button.pack(side=tk.RIGHT, padx=(0, 10))
 
         header.pack(side='top', fill='x')
-
