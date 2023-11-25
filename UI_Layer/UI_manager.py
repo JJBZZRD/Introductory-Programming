@@ -1,6 +1,7 @@
 from UI_header import UIHeader
 from UI_login import LoginScreen
 
+
 class UIManager:
     def __init__(self, root):
         self.root = root
@@ -23,9 +24,8 @@ class UIManager:
                 # we can update the header with new information here
                 pass
 
-
         # here i have integrated the header to exist at the top of any loaded frames
-        #UIHeader.create_header(self.root).pack(side='top', fill='x')
+        # UIHeader.create_header(self.root).pack(side='top', fill='x')
         self.current_screen = screen_class(self.root, self.show_screen, *args)
         self.current_screen.pack(expand=True, fill='both')
         self.page_history.append(screen_class)
@@ -33,5 +33,3 @@ class UIManager:
     def clear_screen(self):
         if self.current_screen is not None:
             self.current_screen.destroy()
-
-

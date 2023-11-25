@@ -15,6 +15,7 @@ class ModifyEntries(tk.Frame):
         self.modify_type = None  # this passes the title name information from the subclass to the 'def create_title(self):' method
         self.modifiable_variables: list = None  # this allows the subclass to pass the list of entry names to the ' def create_entry_fields(self):' method
         self.entry_fields = None  # this variable creates a dictionary that allows you to extract the values from the entry fields in 'def create_entry_fields(self):'
+        self.button_labels = None
 
     def setup_modify(self):
         raise NotImplementedError("Subclasses should implement this method to setup the different entry modify pages")
@@ -52,13 +53,13 @@ class ModifyEntries(tk.Frame):
             j += 1
 
     def create_buttons(self):
-        save_record = ttk.Button(self.lower_frame, text='create')
+        save_record = ttk.Button(self.lower_frame, text=self.button_labels)
         save_record.grid(column=5, row=4, padx=5, pady=5)
 
-        spacer_button = ttk.Button(self.lower_frame, text="Create")
+        spacer_button = ttk.Button(self.lower_frame, text=self.button_labels)
         spacer_button.grid()
 
-        spacer_width = spacer_button.winfo_reqwidth() +10
+        spacer_width = spacer_button.winfo_reqwidth() + 10
 
         spacer_button.grid_forget()
 
@@ -66,13 +67,12 @@ class ModifyEntries(tk.Frame):
         spacer_frame.grid(column=0, row=4)
 
 
-
-
 class NewPlan(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Plan']
         self.modifiable_variables = ['Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
+        self.button_labels = 'Create'
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
@@ -84,26 +84,57 @@ class EditPlan(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Plan']
         self.modifiable_variables = ['Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
+        self.button_labels = 'Save Changes'
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
+
 
 class NewCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Camp']
-        self.modifiable_variables = ['Camp Name', 'Refugees', 'Volunteers', 'Water Level', 'Food Level', 'Medical supply']
+        self.modifiable_variables = ['Camp Name', 'Refugees', 'Volunteers', 'Water Level', 'Food Level',
+                                     'Medical supply']
+        self.button_labels = 'Create'
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
 
+
 class EditCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Camp']
-        self.modifiable_variables = ['Camp Name', 'Refugees', 'Volunteers', 'Water Level', 'Food Level', 'Medical supply']
+        self.modifiable_variables = ['Camp Name', 'Refugees', 'Volunteers', 'Water Level', 'Food Level',
+                                     'Medical supply']
+        self.button_labels = 'Save Changes'
+        self.entry_fields = {}
+        self.create_title()
+        self.create_entry_fields()
+        self.create_buttons()
+
+
+class NewVolunteer(ModifyEntries):
+    def setup_modify(self):
+        self.lower_frame = tk.Frame(self)
+        self.modify_type = ['New Volunteer']
+        self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp']
+        self.button_labels = 'Create'
+        self.entry_fields = {}
+        self.create_title()
+        self.create_entry_fields()
+        self.create_buttons()
+
+
+class EditVolunteer(ModifyEntries):
+    def setup_modify(self):
+        self.lower_frame = tk.Frame(self)
+        self.modify_type = ['Edit Volunteer']
+        self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp']
+        self.button_labels = 'Save Changes'
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()

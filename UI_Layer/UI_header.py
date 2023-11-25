@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from UI_login import LoginScreen
+import UI_modify_entries as me
 
 
 class UIHeader(tk.Frame):
@@ -21,9 +22,9 @@ class UIHeader(tk.Frame):
     def navigate_forward():
         pass
 
-    @staticmethod
-    def open_settings():
-        pass  # Placeholder for settings logic
+
+    def open_settings(self):
+        self.show_screen(me.EditVolunteer)
 
     '''@staticmethod
     def change_role(event=None):
