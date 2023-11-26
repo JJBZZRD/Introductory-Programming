@@ -14,6 +14,7 @@ class ModifyEntries(tk.Frame):
         self.lower_frame = None
         self.modify_type = None  # this passes the title name information from the subclass to the 'def create_title(self):' method
         self.modifiable_variables: list = None  # this allows the subclass to pass the list of entry names to the ' def create_entry_fields(self):' method
+        self.current_data = None  # this information is passed to be displayed in the entry fields only if it is an edit entry variant subclass being called
         self.entry_fields = None  # this variable creates a dictionary that allows you to extract the values from the entry fields in 'def create_entry_fields(self):'
         self.button_labels = None
 
@@ -21,7 +22,7 @@ class ModifyEntries(tk.Frame):
         raise NotImplementedError("Subclasses should implement this method to setup the different entry modify pages")
 
     def create_title(self):
-        # this method creates the title and add entry button for each list
+        # this method creates the title
         # page_top_frame = tk.Frame(self.root)
         # page_top_frame.pack(side='top')
 
@@ -37,20 +38,38 @@ class ModifyEntries(tk.Frame):
 
         k = 1
         j = 0
-        for i in self.modifiable_variables:  # this loop creates a vertical list of columns that is 4 high maximum
-            entry_name = ttk.Label(self.lower_frame, text=i)
+        for i, variable in enumerate(
+                self.modifiable_variables):  # this loop creates a vertical list of columns that is 4 high maximum
+            entry_name = ttk.Label(self.lower_frame, text=variable)
             entry_name.grid(column=k, row=j, pady=5, padx=5)
 
             entry_field = ttk.Entry(self.lower_frame)
             entry_field.grid(column=k + 1, row=j, pady=5, padx=5)
 
-            self.entry_fields[i] = entry_field
+            if self.current_data is not None and i < len(self.current_data):
+                placeholder = self.current_data[i]
+            else:
+                placeholder = "Enter " + variable
+
+            entry_field.insert(0, placeholder)
+            entry_field.bind("<FocusIn>", lambda event, e=entry_field, p=placeholder: self.on_focus_in(event, e, p))
+            entry_field.bind("<FocusOut>", lambda event, e=entry_field, p=placeholder: self.on_focus_out(event, e, p))
+
+            self.entry_fields[variable] = entry_field
 
             if j == 3:
                 k += 2
                 j = -1
 
             j += 1
+
+    def on_focus_in(self, event, entry, placeholder):
+        if entry.get() == placeholder:
+            entry.delete(0, tk.END)
+
+    def on_focus_out(self, event, entry, placeholder):
+        if not entry.get():
+            entry.insert(0, placeholder)
 
     def create_buttons(self):
         save_record = ttk.Button(self.lower_frame, text=self.button_labels)
@@ -73,6 +92,7 @@ class NewPlan(ModifyEntries):
         self.modify_type = ['New Plan']
         self.modifiable_variables = ['Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
         self.button_labels = 'Create'
+        self.current_data = None
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
@@ -135,6 +155,7 @@ class EditVolunteer(ModifyEntries):
         self.modify_type = ['Edit Volunteer']
         self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp']
         self.button_labels = 'Save Changes'
+        self.current_data = ['JJ', 'Buzzard', '24/03/1997', '07780364693', 'camp1']
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
