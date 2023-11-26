@@ -5,15 +5,17 @@ import UI_modify_entries as me
 
 
 class UIHeader(tk.Frame):
-    def __init__(self, root, show_screen, page_nav, **kwargs):
+    def __init__(self, root, show_screen, page_nav, reset_history, *args, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
         self.show_screen = show_screen
         self.page_nav = page_nav
+        self.reset_history = reset_history
         self.create_header()
 
     def logout(self):
         self.show_screen(LoginScreen)
+        self.reset_history()
 
     def navigate_back(self):
         self.page_nav('back')

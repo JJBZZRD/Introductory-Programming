@@ -5,7 +5,7 @@ from UI_modify_entries import NewPlan
 
 
 class ManageList(tk.Frame):
-    def __init__(self, root, show_screen, **kwargs):
+    def __init__(self, root, show_screen, *args, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
         self.show_screen = show_screen

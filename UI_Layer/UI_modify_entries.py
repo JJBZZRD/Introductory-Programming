@@ -6,7 +6,7 @@ from tkinter import ttk
 # produces varients of the pages to modfiy camps, plans, refugees, volunteers (and admins as personal details) There
 # will be two varients for each subclass. adding new records and modfiying existing records
 class ModifyEntries(tk.Frame):
-    def __init__(self, root, show_screen, **kwargs):
+    def __init__(self, root, show_screen, *args, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
         self.show_screen = show_screen

@@ -4,7 +4,7 @@ from UI_manage_list import PlanList
 
 
 class LoginScreen(tk.Frame):
-    def __init__(self, root, show_screen, **kwargs):
+    def __init__(self, root, show_screen, *args, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
         self.show_screen = show_screen
