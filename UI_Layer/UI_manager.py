@@ -13,14 +13,14 @@ class UIManager:
     def show_screen(self, screen_class, nav='not nav', *args):
         self.clear_screen()
 
-        if screen_class is LoginScreen: # this makes sure the header is destroyed if the logout function is called
+        if screen_class is LoginScreen:  # this makes sure the header is destroyed if the logout function is called
             self.page_history = [LoginScreen]
             self.current_page_position = 0
             if self.header is not None:
                 self.header.destroy()
                 self.header = None
         else:
-            if self.header is None: # this makes sure no duplicate header frams are made when calling show_screen
+            if self.header is None:  # this makes sure no duplicate header frams are made when calling show_screen
                 self.header = UIHeader(self.root, self.show_screen, self.page_nav, self.reset_history)
                 self.header.pack(side='top', fill='x')
             else:
@@ -36,7 +36,11 @@ class UIManager:
             if self.current_page_position != len(self.page_history) - 1:
                 self.page_history = self.page_history[:self.current_page_position + 1]
 
-            self.page_history.append(screen_class)
+            if len(self.page_history) == 0:
+                self.page_history.append(screen_class)
+            elif screen_class != self.page_history[-1]:
+                self.page_history.append(screen_class)
+
         self.current_page_position = len(self.page_history) - 1
         print(self.page_history)
 
@@ -78,4 +82,3 @@ class UIManager:
     def reset_history(self):
         self.page_history.clear()
         self.current_page_position = 0
-
