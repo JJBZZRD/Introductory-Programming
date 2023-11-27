@@ -47,31 +47,31 @@ class CampDataEdit:
             if not util.is_positive(shelters):
                 return "Cannot enter a negative value to shelters."
         else:
-            return "Cannot enter a number to shelters."
+            return "You should enter a number to shelters."
 
         if util.is_num(food):
             if not util.is_positive(food):
                 return "Cannot enter a negative value to food level."
         else:
-            return "Cannot enter a number to food level."
+            return "You should enter a number to food level."
 
         if util.is_num(water):
             if not util.is_positive(water):
                 return "Cannot enter a negative value to water level."
         else:
-            return "Cannot enter a number to water level."
+            return "You should enter a number to water level."
 
         if util.is_num(medical):
             if not util.is_positive(medical):
                 return "Cannot enter a negative value to medical level."
         else:
-            return "Cannot enter a number to medical level."
+            return "You should enter a number to medical level."
 
         if util.is_num(other):
             if not util.is_positive(other):
                 return "Cannot enter a negative value to ..."
         else:
-            return "Cannot enter a number to ..."
+            return "You should enter a number to ..."
 
         return DataAccess.update_camp(camp)
 
