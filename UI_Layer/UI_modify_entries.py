@@ -10,13 +10,13 @@ class ModifyEntries(tk.Frame):
         super().__init__(root, **kwargs)
         self.root = root
         self.show_screen = show_screen
-        self.setup_modify()
         self.lower_frame = None
         self.modify_type = None  # this passes the title name information from the subclass to the 'def create_title(self):' method
-        self.modifiable_variables: list = None  # this allows the subclass to pass the list of entry names to the ' def create_entry_fields(self):' method
-        self.current_data = None  # this information is passed to be displayed in the entry fields only if it is an edit entry variant subclass being called
-        self.entry_fields = None  # this variable creates a dictionary that allows you to extract the values from the entry fields in 'def create_entry_fields(self):'
+        self.modifiable_variables: list = []  # this allows the subclass to pass the list of entry names to the ' def create_entry_fields(self):' method
+        self.current_data = []  # this information is passed to be displayed in the entry fields only if it is an edit entry variant subclass being called
+        self.entry_fields = {}  # this variable creates a dictionary that allows you to extract the values from the entry fields in 'def create_entry_fields(self):'
         self.button_labels = None
+        self.setup_modify()
 
     def setup_modify(self):
         raise NotImplementedError("Subclasses should implement this method to setup the different entry modify pages")
@@ -32,19 +32,22 @@ class ModifyEntries(tk.Frame):
     def create_entry_fields(self):
         # lower_frame = tk.Frame(self)
         self.lower_frame.pack(pady=10)
-
+        entry_fields = {}
         # The ui logic to display the current values from the database within the entry boxes (read-only or
         # otherwise) is held in the following for loop
 
         k = 1
         j = 0
-        for i, variable in enumerate(
-                self.modifiable_variables):  # this loop creates a vertical list of columns that is 4 high maximum
+        for i, variable in enumerate(self.modifiable_variables):  # this loop creates a vertical list of columns that is 4 high maximum
             entry_name = ttk.Label(self.lower_frame, text=variable)
             entry_name.grid(column=k, row=j, pady=5, padx=5)
 
             entry_field = ttk.Entry(self.lower_frame)
             entry_field.grid(column=k + 1, row=j, pady=5, padx=5)
+
+
+
+            self.entry_fields.update({variable: entry_field})
 
             if self.current_data is not None and i < len(self.current_data):
                 placeholder = self.current_data[i]
@@ -55,7 +58,7 @@ class ModifyEntries(tk.Frame):
             entry_field.bind("<FocusIn>", lambda event, e=entry_field, p=placeholder: self.on_focus_in(event, e, p))
             entry_field.bind("<FocusOut>", lambda event, e=entry_field, p=placeholder: self.on_focus_out(event, e, p))
 
-            self.entry_fields[variable] = entry_field
+
 
             if j == 3:
                 k += 2
@@ -72,7 +75,7 @@ class ModifyEntries(tk.Frame):
             entry.insert(0, placeholder)
 
     def create_buttons(self):
-        save_record = ttk.Button(self.lower_frame, text=self.button_labels)
+        save_record = ttk.Button(self.lower_frame, text=self.button_labels, command=self.get_inputs)
         save_record.grid(column=5, row=4, padx=5, pady=5)
 
         spacer_button = ttk.Button(self.lower_frame, text=self.button_labels)
@@ -84,6 +87,13 @@ class ModifyEntries(tk.Frame):
 
         spacer_frame = ttk.Frame(self.lower_frame, height=0, width=spacer_width)
         spacer_frame.grid(column=0, row=4)
+
+    def get_inputs(self):
+        inputs = []
+        for key in self.entry_fields:
+            inputs.append(self.entry_fields[key].get())
+
+        print(tuple(inputs))
 
 
 class NewPlan(ModifyEntries):
