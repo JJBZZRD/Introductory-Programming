@@ -14,7 +14,7 @@ class UIHeader(tk.Frame):
         self.create_header()
 
     def logout(self):
-        self.show_screen(LoginScreen)
+        self.show_screen('LoginScreen')
         self.reset_history()
 
     def navigate_back(self):
@@ -24,7 +24,7 @@ class UIHeader(tk.Frame):
         self.page_nav('forward')
 
     def open_settings(self):
-        self.show_screen(me.EditVolunteer)
+        self.show_screen('EditVolunteer')
 
     '''@staticmethod
     def change_role(event=None):

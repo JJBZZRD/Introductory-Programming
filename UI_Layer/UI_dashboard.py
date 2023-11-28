@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from UI_modify_entries import EditCamp
+#from UI_modify_entries import EditCamp
 
 
 
@@ -36,7 +36,7 @@ class Dashboard(tk.Frame):
             for resource_name, (amount, capacity) in resources.items():
                 self.create_resource_frame(camp_frame, resource_name, amount, capacity, camp_name)
 
-            ttk.Button(camp_frame, text="Edit Camp", command=lambda cn=camp_name: self.show_screen(EditCamp, cn)).pack(pady=5)
+            ttk.Button(camp_frame, text="Edit Camp", command=lambda cn=camp_name: self.show_screen('EditCamp', cn)).pack(pady=5)
 
         additional_resources_frame = tk.Frame(tab, bg='lightgray', bd=2, relief='groove')
         additional_resources_frame.pack(side='right', fill='y', padx=(5, 0))
@@ -63,8 +63,8 @@ class Dashboard(tk.Frame):
         # Create resources section in left frame
         for resource_name, (amount, capacity) in camp_resources.items():
             self.create_resource_frame(left_frame, resource_name, amount, capacity, f"Camp {camp_number}")
-        
-        ttk.Button(left_frame, text="Edit Camp", command=lambda cn=camp_number: self.show_screen(EditCamp, cn)).pack(pady=5)
+
+        ttk.Button(left_frame, text="Edit Camp", command=lambda cn=camp_number: self.show_screen('EditCamp', cn)).pack(pady=5)
 
         # Create refugees section in right frame
         self.create_refugees_section(right_frame)
@@ -95,7 +95,7 @@ class Dashboard(tk.Frame):
         refugees_list_label.pack(pady=10, expand=True)
 
         # Manage refugees button (dummy)
-        manage_refugees_button = ttk.Button(parent, text="Manage Refugees")
+        manage_refugees_button = ttk.Button(parent, text="Manage Refugees", command=lambda: self.show_screen('RefugeeList'))
         manage_refugees_button.pack(pady=5)
 
     def create_resource_frame(self, parent, resource_name, amount, capacity, camp_name=None):

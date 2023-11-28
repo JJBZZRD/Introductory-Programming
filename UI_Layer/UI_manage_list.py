@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-from UI_dashboard import AdminDashboard
-from UI_modify_entries import NewPlan
+#from UI_dashboard import AdminDashboard
+#from UI_modify_entries import NewPlan
 
 
 class ManageList(tk.Frame):
@@ -75,11 +75,11 @@ class ManageList(tk.Frame):
         results_list.grid(column=0, row=3, columnspan=13)
 
     def switch_to_admin_dashboard(self, event=None):
-        self.show_screen(AdminDashboard)
+        self.show_screen('AdminDashboard')
         self.destroy()
 
     def switch_to_new_plan(self, event=None):
-        self.show_screen(NewPlan)
+        self.show_screen('NewPlan')
         self.destroy()
 
 
@@ -104,6 +104,7 @@ class VolunteerList(ManageList):
                          'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']]
         self.create_title()
         self.create_search()
+        self.create_results()
 
 
 class RefugeeList(ManageList):
@@ -115,3 +116,4 @@ class RefugeeList(ManageList):
                          'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']]
         self.create_title()
         self.create_search()
+        self.create_results()

@@ -1,6 +1,6 @@
 import tkinter as tk
-from UI_dashboard import AdminDashboard, VolunteerDashboard
-from UI_manage_list import PlanList
+#from UI_dashboard import AdminDashboard, VolunteerDashboard
+#from UI_manage_list import PlanList
 
 
 class LoginScreen(tk.Frame):
@@ -26,11 +26,11 @@ class LoginScreen(tk.Frame):
         volunteer_login_button.pack(pady=5)
 
     def login_as_admin(self):
-        self.show_screen(PlanList)
+        self.show_screen('PlanList')
         self.clear()
 
     def login_as_volunteer(self):
-        self.show_screen(VolunteerDashboard)
+        self.show_screen('VolunteerDashboard')
         self.clear()
 
     def clear(self):

@@ -1,6 +1,8 @@
 from UI_header import UIHeader
 from UI_login import LoginScreen
-
+import UI_dashboard as db
+import UI_manage_list as ml
+import UI_modify_entries as me
 
 class UIManager:
     def __init__(self, root):
@@ -9,9 +11,14 @@ class UIManager:
         self.page_history = []
         self.current_page_position = 0
         self.header = None
+        self.class_dict = {'LoginScreen': LoginScreen, 'PlanList': ml.PlanList, 'RefugeeList': ml.RefugeeList, 'VolunteerList': ml.VolunteerList
+                           , 'AdminDashboard': db.AdminDashboard, 'VolunteerDashboard': db.VolunteerDashboard, 'NewPlan': me.NewPlan, 'EditPlan': me.EditPlan
+                           , 'NewCamp': me.NewCamp, 'EditCamp': me.EditCamp, 'NewVolunteer': me.NewVolunteer, 'EditVolunteer': me.EditVolunteer}
 
-    def show_screen(self, screen_class, nav='not nav', *args):
+    def show_screen(self, screen_name: str, nav='not nav', *args):
         self.clear_screen()
+
+        screen_class = self.class_dict[screen_name]
 
         if screen_class is LoginScreen:  # this makes sure the header is destroyed if the logout function is called
             self.page_history = [LoginScreen]
