@@ -3,14 +3,14 @@ from config import conn, cursor
 
 class Volunteer:
     def __init__(self, first_name, last_name, username, password, date_of_birth, phone, account_status, campID):
-        self.volunteerID = None,
-        self.first_name = first_name,
-        self.last_name = last_name,
-        self.username = username,
-        self.password = password,
-        self.date_of_birth = date_of_birth,
-        self.phone = phone,
-        self.account_status = account_status,
+        self.volunteerID = None
+        self.first_name = first_name
+        self.last_name = last_name
+        self.username = username
+        self.password = password
+        self.date_of_birth = date_of_birth
+        self.phone = phone
+        self.account_status = account_status
         self.campID = campID
 
     def insert_volunteer(self):  # Insert an existing instance of a volunteer into the database
@@ -21,7 +21,7 @@ class Volunteer:
         """
         cursor.execute(sql, (self.first_name, self.last_name, self.username,
                              self.password, self.date_of_birth, self.phone, self.account_status, self.campID))
-        conn.comit()
+        conn.commit()
 
         self.volunteerID = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
 

@@ -19,7 +19,7 @@ class Plan:  # Plan class has attributes matching columns in table
         """
         cursor.execute(sql, (self.start_date, self.end_date, self.region, self.name, self.event_name,
                              self.description))
-        conn.comit()
+        conn.commit()
 
         self.planID = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
 

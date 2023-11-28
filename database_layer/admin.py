@@ -3,12 +3,12 @@ from config import conn, cursor
 
 class Admin:
     def __init__(self, first_name, last_name, username, date_of_birth, password, phone):
-        self.adminID = None,
-        self.first_name = first_name,
-        self.last_name = last_name,
-        self.username = username,
-        self.password = password,
-        self.date_of_birth = date_of_birth,
+        self.adminID = None
+        self.first_name = first_name
+        self.last_name = last_name
+        self.username = username
+        self.password = password
+        self.date_of_birth = date_of_birth
         self.phone = phone
 
     def insert_admin(self):  # Insert an existing instance of a admin into the database

@@ -1,5 +1,5 @@
 import config
-from camp import Camp
+from volunteer import Volunteer
 
 
 
@@ -14,3 +14,12 @@ from camp import Camp
 
 # Test update
 #Camp.update_camp(1, location="Liverpool")
+
+#Volunteer.create_volunteer(first_name="James", last_name="Smith", username="smithy",
+                          password="123", date_of_birth="05/06/1995", phone=23452345,
+                          account_status="Active", campID=1)
+#vol1 = Volunteer(first_name="James", last_name="Smith", username="smithy",
+#                           password="123", date_of_birth="05/06/1995", phone=23452345,
+#                           account_status="Active", campID=1)
+
+#vol1.insert_volunteer()
