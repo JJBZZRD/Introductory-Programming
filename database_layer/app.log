@@ -1,0 +1,138 @@
+root - 
+            CREATE TABLE IF NOT EXISTS refugees (
+                refugeeID INTEGER PRIMARY KEY,
+                first_name TEXT NOT NULL,
+                last_name TEXT NOT NULL,
+                date_of_birth TEXT NOT NULL,
+                familyID INTEGER,
+                campID INTEGER NOT NULL,
+                medical_condition TEXT
+            )
+        
+root - BEGIN 
+root - 
+            INSERT INTO refugees (
+            first_name, last_name, date_of_birth, familyID, campID, medical_condition) 
+            VALUES ('Jim', 'John', '05/06/1954', 2, 4, 'Is dead')
+        
+root - SELECT last_insert_rowid() FROM refugees
+root - 
+            INSERT INTO refugees (
+            first_name, last_name, date_of_birth, familyID, campID, medical_condition) 
+            VALUES ('Greg', 'sterg', '05/06/1954', 2, 4, 'Is dead')
+        
+root - SELECT last_insert_rowid() FROM refugees
+root - SELECT * FROM refugees
+root - UPDATE refugees SET first_name = 'Hob' WHERE refugeeID = 2
+root - SELECT * FROM refugees
+root - DELETE FROM refugees WHERE refugeeID = 2
+root - COMMIT
+root - SELECT * FROM refugees
+root - SELECT * FROM refugees WHERE first_name = 'Jim' AND last_name = 'John'
+root - SELECT * FROM refugees
+INFO:root:
+            CREATE TABLE IF NOT EXISTS refugees (
+                refugeeID INTEGER PRIMARY KEY,
+                first_name TEXT NOT NULL,
+                last_name TEXT NOT NULL,
+                date_of_birth TEXT NOT NULL,
+                familyID INTEGER,
+                campID INTEGER NOT NULL,
+                medical_condition TEXT
+            )
+        
+INFO:root:BEGIN 
+INFO:root:
+            INSERT INTO refugees (
+            first_name, last_name, date_of_birth, familyID, campID, medical_condition) 
+            VALUES ('Jim', 'John', '05/06/1954', 2, 4, 'Is dead')
+        
+INFO:root:SELECT last_insert_rowid() FROM refugees
+INFO:root:
+            INSERT INTO refugees (
+            first_name, last_name, date_of_birth, familyID, campID, medical_condition) 
+            VALUES ('Greg', 'sterg', '05/06/1954', 2, 4, 'Is dead')
+        
+INFO:root:SELECT last_insert_rowid() FROM refugees
+INFO:root:SELECT * FROM refugees
+INFO:root:UPDATE refugees SET first_name = 'Hob' WHERE refugeeID = 2
+INFO:root:SELECT * FROM refugees
+INFO:root:DELETE FROM refugees WHERE refugeeID = 2
+INFO:root:COMMIT
+INFO:root:SELECT * FROM refugees
+INFO:root:SELECT * FROM refugees WHERE first_name = 'Jim' AND last_name = 'John'
+INFO:root:SELECT * FROM refugees
+INFO:root:
+            CREATE TABLE IF NOT EXISTS camps (
+                campID INTEGER PRIMARY KEY,
+                location TEXT,
+                max_shelter INTEGER,
+                water INTEGER,
+                max_water INTEGER,
+                food INTEGER,
+                max_food INTEGER,
+                medical_supplies INTEGER,
+                max_medical_supplies INTEGER,
+                planID INTEGER
+            )
+        
+INFO:root:BEGIN 
+INFO:root:
+            INSERT INTO camps (
+                location, max_shelter, water, max_water, food, max_food, medical_supplies,
+                max_medical_supplies, planID) 
+            VALUES ('Jim', 500, 678, 1000, 4, 45, 34, 50, 1)
+        
+INFO:root:SELECT last_insert_rowid() FROM camps
+INFO:root:
+            INSERT INTO camps (
+                location, max_shelter, water, max_water, food, max_food, medical_supplies,
+                max_medical_supplies, planID) 
+            VALUES ('Greg', 100, 678, 1000, 4, 45, 34, 50, 1)
+        
+INFO:root:SELECT last_insert_rowid() FROM camps
+INFO:root:SELECT * FROM camps
+INFO:root:UPDATE camps SET location = 'Hob' WHERE campID = 2
+INFO:root:SELECT * FROM camps
+INFO:root:DELETE FROM camps WHERE campID = 2
+INFO:root:COMMIT
+INFO:root:SELECT * FROM camps
+INFO:root:SELECT * FROM camps WHERE location = 'Jim' AND max_shelter = 500
+INFO:root:SELECT * FROM camps
+INFO:root:
+            CREATE TABLE IF NOT EXISTS camps (
+                campID INTEGER PRIMARY KEY,
+                location TEXT,
+                max_shelter INTEGER,
+                water INTEGER,
+                max_water INTEGER,
+                food INTEGER,
+                max_food INTEGER,
+                medical_supplies INTEGER,
+                max_medical_supplies INTEGER,
+                planID INTEGER
+            )
+        
+INFO:root:BEGIN 
+INFO:root:
+            INSERT INTO camps (
+                location, max_shelter, water, max_water, food, max_food, medical_supplies,
+                max_medical_supplies, planID) 
+            VALUES ('Jim', 500, 678, 1000, 4, 45, 34, 50, 1)
+        
+INFO:root:SELECT last_insert_rowid() FROM camps
+INFO:root:
+            INSERT INTO camps (
+                location, max_shelter, water, max_water, food, max_food, medical_supplies,
+                max_medical_supplies, planID) 
+            VALUES ('Greg', 100, 678, 1000, 4, 45, 34, 50, 1)
+        
+INFO:root:SELECT last_insert_rowid() FROM camps
+INFO:root:SELECT * FROM camps
+INFO:root:UPDATE camps SET location = 'Hob' WHERE campID = 2
+INFO:root:SELECT * FROM camps
+INFO:root:DELETE FROM camps WHERE campID = 2
+INFO:root:COMMIT
+INFO:root:SELECT * FROM camps
+INFO:root:SELECT * FROM camps WHERE location = 'Jim' AND max_shelter = 500
+INFO:root:SELECT * FROM camps
