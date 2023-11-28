@@ -19,6 +19,8 @@ class Refugee:  # Refugee class has attributes matching columns in table
         """
         cursor.execute(sql, (self.first_name, self.last_name, self.date_of_birth,
                              self.familyID, self.campID, self.medical_condition))
+        conn.commit()
+
         self.refugeeID = cursor.execute("SELECT last_insert_rowid() FROM refugees").fetchone()[0]
 
     @classmethod    # Insert a refugee into the database without creating a new instance
@@ -53,6 +55,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
 
         params.append(refugeeID)
         cursor.execute(f"""UPDATE refugees SET {', '.join(query)} WHERE refugeeID = ?""", params)
+        conn.commit()
 
     @staticmethod
     def delete_refugee(refugeeID):  # Delete a refugee by selecting on refugeeID

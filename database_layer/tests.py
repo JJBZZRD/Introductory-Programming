@@ -1,5 +1,16 @@
 import config
-from volunteer import Volunteer
+from camp import Camp
 
 
-Jim = Volunteer(first_name="Jim", last_name="Jo", username="tcyv", password="123", date_of)
+
+# Test create
+#Camp.create_camp(location="London", max_shelter=50, water=20, max_water=50, food=30, max_food=50, medical_supplies=40,
+#              max_medical_supplies=100, planID=1)
+
+# Test insert
+#summer = Camp(location="Bristol", max_shelter=23, water=34, max_water=67, food=45, max_food=56, medical_supplies=45,
+#              max_medical_supplies=45, planID=2)
+#summer.insert_camp()
+
+# Test update
+#Camp.update_camp(1, location="Liverpool")

@@ -24,6 +24,8 @@ class Camp:  # Camp class has attributes matching columns in table
         """
         cursor.execute(sql, (self.location, self.max_shelter, self.water, self.max_water, self.food,
                              self.max_food, self.medical_supplies, self.max_medical_supplies, self.planID))
+        conn.commit()
+
         self.campID = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
 
     @classmethod  # Insert a camp into the database without creating a new instance
@@ -70,6 +72,7 @@ class Camp:  # Camp class has attributes matching columns in table
 
         params.append(campID)
         cursor.execute(f"""UPDATE camps SET {', '.join(query)} WHERE campID = ?""", params)
+        conn.commit()
 
     @staticmethod
     def delete_camp(campID):  # Delete a camp by selecting on campID
@@ -162,7 +165,6 @@ class Camp:  # Camp class has attributes matching columns in table
             params.append(f"{planID}%")
 
         cursor.execute(f"SELECT * FROM camps WHERE {' AND '.join(query)}", params)
-
         return cursor.fetchall()
 
     @staticmethod

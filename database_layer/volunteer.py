@@ -21,6 +21,8 @@ class Volunteer:
         """
         cursor.execute(sql, (self.first_name, self.last_name, self.username,
                              self.password, self.date_of_birth, self.phone, self.account_status, self.campID))
+        conn.comit()
+
         self.volunteerID = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
 
     @classmethod  # Insert a volunteer into the database without creating a new instance
@@ -61,6 +63,7 @@ class Volunteer:
 
         params.append(volunteerID)
         cursor.execute(f"""UPDATE volunteers SET {', '.join(query)} WHERE volunteerID = ?""", params)
+        conn.commit()
 
     @staticmethod
     def delete_volunteer(volunteerID):  # Delete a volunteer by selecting on volunteerID

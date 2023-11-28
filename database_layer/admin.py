@@ -19,6 +19,8 @@ class Admin:
         """
         cursor.execute(sql, (self.first_name, self.last_name, self.username,
                              self.password, self.date_of_birth, self.phone))
+        conn.commit()
+
         self.adminID = cursor.execute("SELECT last_insert_rowid() FROM admins").fetchone()[0]
 
     @classmethod  # Insert a admin into the database without creating a new instance
@@ -53,6 +55,7 @@ class Admin:
 
         params.append(adminID)
         cursor.execute(f"""UPDATE admins SET {', '.join(query)} WHERE adminID = ?""", params)
+        conn.commit()
 
     @staticmethod
     def delete_admin(adminID):  # Delete a admin by selecting on adminID
