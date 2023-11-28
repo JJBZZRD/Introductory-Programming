@@ -131,6 +131,3 @@ class Refugee:  # Refugee class has attributes matching columns in table
     def get_all_refugees():  # Gets all refugees. Returns a list of tuples.
         cursor.execute("SELECT * FROM refugees")
         return cursor.fetchall()
-
-
-Refugee.create_refugees_table()

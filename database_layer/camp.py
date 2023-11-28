@@ -169,6 +169,3 @@ class Camp:  # Camp class has attributes matching columns in table
     def get_all_camps():  # Gets all camps. Returns a list of tuples.
         cursor.execute("SELECT * FROM camps")
         return cursor.fetchall()
-
-
-Camp.create_camps_table()

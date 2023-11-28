@@ -141,4 +141,3 @@ class Volunteer:
     def get_all_volunteers():  # Gets all volunteers. Returns a list of tuples.
         cursor.execute("SELECT * FROM volunteers")
         return cursor.fetchall()
-

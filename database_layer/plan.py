@@ -132,6 +132,3 @@ class Plan:  # Plan class has attributes matching columns in table
     def get_all_plans():  # Gets all plans. Returns a list of tuples.
         cursor.execute("SELECT * FROM plans")
         return cursor.fetchall()
-
-
-Plan.create_plans_table()
