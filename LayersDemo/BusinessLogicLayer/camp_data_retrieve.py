@@ -12,12 +12,11 @@ class CampDataRetrieve:
         camp_infor = []
         try:
             match filter:
-                case "name":
-                    if value:
-                        camp_infor = DataAccess.get_camp_by_name(value)
                 case "id":
                     if value:
-                        camp_infor = DaraAccess.get_camp_by_id(value)
+                        camp_infor = DataAccess.get_camp_by_id(value)
+                case "name":
+                        camp_infor = DaraAccess.get_camp_by_name(value)
                 case "volunteer":
                     camp_infor = DataAccess.get_camp_by_volunteer(value)
                 case "admin":
