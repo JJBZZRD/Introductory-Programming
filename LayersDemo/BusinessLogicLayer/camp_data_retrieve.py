@@ -4,7 +4,7 @@ from DataAccessLayer.data_access import DataAccess
 class CampDataRetrieve:
 
     @staticmethod
-    def get_camp():
+    def get_camps():
         return DataAccess.get_all_camp()
 
     @staticmethod
