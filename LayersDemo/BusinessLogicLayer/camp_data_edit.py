@@ -1,54 +1,45 @@
-from DataAccessLayer.user_data_access import UserDataAccess
-from DataAccessLayer.data_access import DataAccess
+from DataLayer.camp import Camp
+from DataLayer.plan import Plan
 import util
+
 
 class CampDataEdit:
 
     @staticmethod
-    def update_camp(id, name = None, volunteer = None, capacity = None, shelters = None, food = None, water = None, medical = None, other = None):
+    def update_camp(campID, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
+                    medical_supplies=None, max_medical_supplies=None, planID=None):
         # get variables
-        camp = UserDataAccess.get_camp_by_id(id)
-        if name:
-            camp.name = name
-        if volunteer:
-            camp.volunteer = volunteer
-        if capacity:
-            camp.capacity = capacity
-        if shelters:
-            camp.shelters = shelters
-        if food:
-            volunteer.camp = food
+        camp = Camp.get_campID(campID)
+        # if name:
+        #    camp.name = name
+        if location:
+            camp.location = location
+        if max_shelter:
+            camp.max_shelter = max_shelter
         if water:
-            volunteer.username = water
-        if medical:
-            volunteer.password = medical
-        if other:
-            volunteer.other = other
+            camp.water = water
+        if max_water:
+            camp.max_water = max_water
+        if food:
+            camp.food = food
+        if max_food:
+            camp.max_food = max_food
+        if medical_supplies:
+            camp.medical_supplies = medical_supplies
+        if max_medical_supplies:
+            camp.max_medical_supplies = max_medical_supplies
+        if planID:
+            camp.planID = planID
 
         # validate
-        if util.is_num(name):
-            return "You should enter a string to camp name."
-            
-        if util.is_num(volunteer):
-            return "You should enter a string to volunteer."
+        if util.is_country(location):
+            return "You should enter a country name for real."
 
-        if util.is_num(capacity):
-            if not util.is_positive(capacity):
-                return "Cannot enter a negative value to capacity of new refugees."
+        if util.is_num(max_shelter):
+            if not util.is_positive(max_shelter):
+                return "Cannot enter a negative value to max_shelter."
         else:
-            return "You should enter a number to volunteer."
-
-        if util.is_num(shelters):
-            if not util.is_positive(shelters):
-                return "Cannot enter a negative value to shelters."
-        else:
-            return "You should enter a number to shelters."
-
-        if util.is_num(food):
-            if not util.is_positive(food):
-                return "Cannot enter a negative value to food level."
-        else:
-            return "You should enter a number to food level."
+            return "You should enter a number to max_shelter."
 
         if util.is_num(water):
             if not util.is_positive(water):
@@ -56,17 +47,50 @@ class CampDataEdit:
         else:
             return "You should enter a number to water level."
 
-        if util.is_num(medical):
-            if not util.is_positive(medical):
-                return "Cannot enter a negative value to medical level."
+        if util.is_num(max_water):
+            if not util.is_positive(max_water):
+                return "Cannot enter a negative value to max_water."
         else:
-            return "You should enter a number to medical level."
+            return "You should enter a number to max_water."
 
-        if util.is_num(other):
-            if not util.is_positive(other):
-                return "Cannot enter a negative value to ..."
+        if util.is_num(food):
+            if not util.is_positive(food):
+                return "Cannot enter a negative value to food level."
         else:
-            return "You should enter a number to ..."
+            return "You should enter a number to food level."
 
-        return DataAccess.update_camp(camp)
+        if util.is_num(max_food):
+            if not util.is_positive(max_food):
+                return "Cannot enter a negative value to max_food."
+        else:
+            return "You should enter a number to max_food."
 
+        if util.is_num(medical_supplies):
+            if not util.is_positive(medical_supplies):
+                return "Cannot enter a negative value to medical_supplies."
+        else:
+            return "You should enter a number to medical_supplies."
+
+        if util.is_num(max_medical_supplies):
+            if not util.is_positive(max_medical_supplies):
+                return "Cannot enter a negative value to max_medical_supplies."
+        else:
+            return "You should enter a number to max_medical_supplies."
+
+        if util.is_num(planID):
+            if not Plan.get_planID(planID):
+                return "Cannot find this planID. Please try again."
+        else:
+            return "You should enter a number to planID."
+
+        return Camp.update_camp(camp)
+
+    @staticmethod  # Insert a camp into the database without creating a new instance
+    def create_camp(location, max_shelter, water, max_water, food, max_food, medical_supplies,
+                    max_medical_supplies, planID):
+        return Camp.create_camp(None, location, max_shelter, water, max_water, food, max_food, medical_supplies,
+                                max_medical_supplies, planID)
+
+    @staticmethod
+    def delete_camp(campID):
+        return Camp.delete_camp(campID)
