@@ -21,7 +21,7 @@ class Camp:  # Camp class has attributes matching columns in table
                 location, max_shelter, water, max_water, food, max_food, medical_supplies,
                 max_medical_supplies, planID) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """
+            """
         cursor.execute(sql, (self.location, self.max_shelter, self.water, self.max_water, self.food,
                              self.max_food, self.medical_supplies, self.max_medical_supplies, self.planID))
         conn.commit()

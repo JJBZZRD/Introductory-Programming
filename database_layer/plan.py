@@ -16,7 +16,7 @@ class Plan:  # Plan class has attributes matching columns in table
             INSERT INTO plans (
                 start_date, end_date, name, region, event_name, description) 
             VALUES (?, ?, ?, ?, ?, ?)
-        """
+            """
         cursor.execute(sql, (self.start_date, self.end_date, self.region, self.name, self.event_name,
                              self.description))
         conn.commit()

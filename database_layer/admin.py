@@ -16,7 +16,7 @@ class Admin:
             INSERT INTO admins (
             first_name, last_name, username, password, date_of_birth, phone) 
             VALUES (?, ?, ?, ?, ?, ?)
-        """
+            """
         cursor.execute(sql, (self.first_name, self.last_name, self.username,
                              self.password, self.date_of_birth, self.phone))
         conn.commit()

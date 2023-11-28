@@ -16,7 +16,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
             INSERT INTO refugees (
             first_name, last_name, date_of_birth, familyID, campID, medical_condition) 
             VALUES (?, ?, ?, ?, ?, ?)
-        """
+            """
         cursor.execute(sql, (self.first_name, self.last_name, self.date_of_birth,
                              self.familyID, self.campID, self.medical_condition))
         conn.commit()

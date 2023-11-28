@@ -18,7 +18,7 @@ class Volunteer:
             INSERT INTO volunteers (
             first_name, last_name, username, password, date_of_birth, phone, account_status, campID) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """
+            """
         cursor.execute(sql, (self.first_name, self.last_name, self.username,
                              self.password, self.date_of_birth, self.phone, self.account_status, self.campID))
         conn.commit()
@@ -155,7 +155,7 @@ class Volunteer:
         cursor.execute("SELECT * FROM volunteers")
         return cursor.fetchall()
 
-    @staticmethod  # Returns all usernames of active volunteers only.
+    @staticmethod  # Returns all usernames of active volunteers only. Perhaps useful for the login.
     def active_volunteer_usernames():
         sql = "SELECT username FROM volunteers WHERE account_status = 'Active'"
         cursor.execute(sql)
