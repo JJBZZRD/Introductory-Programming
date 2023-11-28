@@ -5,19 +5,11 @@ import util
 class CampDataEdit:
 
     @staticmethod
-    def undate_camp_name(name, new_name):
-        camp = UserDataAccess.get_camp_by_name(name)
-        if new_name:
-            camp.name = new_name
-        # validate
-        if util.is_num(new_name):
-            return "You should enter a string to camp name."
-        return DataAccess.update_camp(camp)
-
-    @staticmethod
-    def update_camp(name, volunteer = None, capacity = None, shelters = None, food = None, water = None, medical = None, other = None):
+    def update_camp(id, name = None, volunteer = None, capacity = None, shelters = None, food = None, water = None, medical = None, other = None):
         # get variables
-        camp = UserDataAccess.get_camp_by_name(name)
+        camp = UserDataAccess.get_camp_by_id(id)
+        if name:
+            camp.name = name
         if volunteer:
             camp.volunteer = volunteer
         if capacity:
@@ -34,6 +26,9 @@ class CampDataEdit:
             volunteer.other = other
 
         # validate
+        if util.is_num(name):
+            return "You should enter a string to camp name."
+            
         if util.is_num(volunteer):
             return "You should enter a string to volunteer."
 
