@@ -75,7 +75,7 @@ class ModifyEntries(tk.Frame):
             entry.insert(0, placeholder)
 
     def create_buttons(self):
-        save_record = ttk.Button(self.lower_frame, text=self.button_labels, command=self.get_inputs)
+        save_record = ttk.Button(self.lower_frame, text=self.button_labels, command=self.on_click_save_record)
         save_record.grid(column=5, row=4, padx=5, pady=5)
 
         spacer_button = ttk.Button(self.lower_frame, text=self.button_labels)
@@ -88,12 +88,22 @@ class ModifyEntries(tk.Frame):
         spacer_frame = ttk.Frame(self.lower_frame, height=0, width=spacer_width)
         spacer_frame.grid(column=0, row=4)
 
-    def get_inputs(self):
+    def on_click_save_record(self):
+        # takes the entry field values
         inputs = []
         for key in self.entry_fields:
             inputs.append(self.entry_fields[key].get())
+        
+        # try to update data using the business logic function
 
         print(tuple(inputs))
+
+        # if returns true 
+            # return success message utility
+
+        # if returns list
+            # return error message utility with error list as input?
+
 
 
 class NewPlan(ModifyEntries):
