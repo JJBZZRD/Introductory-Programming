@@ -1,5 +1,7 @@
-from DataAccessLayer.user_data_access import UserDataAccess
-from DataAccessLayer.data_access import DataAccess
+from DataLayer.volunteer import *
+from DataLayer.refugee import *
+from DataLayer.admin import *
+from DataLayer.config import *
 import util
 
 class PersonDataEdit:
@@ -32,7 +34,7 @@ class PersonDataEdit:
     
     @staticmethod
     def delete_volunteer(id):
-        return UserDataAccess.delete_volunteer(id)
+        return Volunteer.delete_volunteer(id)
     
     @staticmethod
     def create_volunteer(id, first_name = None, last_name = None, camp = None, username = None, password = None):
