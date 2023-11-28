@@ -5,22 +5,25 @@ import util
 class PersonDataEdit:
 
     @staticmethod
-    def update_volunteer(id, first_name = None, last_name = None, phone_num = None, camp = None, username = None, password = None):
+    def update_volunteer(id, first_name = None, last_name = None, phone_num = None, camp_id = None, username = None, password = None):
         # get variables
         volunteer = UserDataAccess.get_volunteer_by_id(id)
-        if first_name:
-            volunteer.first_name = first_name
-        if last_name:
-            volunteer.last_name = last_name
-        if phone_num:
-            volunteer.phone_num = phone_num
-        if camp:
-            volunteer.camp = camp
-        if username:
-            volunteer.username = username
-        if password:
-            volunteer.password = password
 
+        try:
+            if first_name:
+                volunteer.first_name = first_name.strip()
+            if last_name:
+                volunteer.last_name = last_name.strip()
+            if phone_num:
+                volunteer.phone_num = phone_num.strip()
+            if camp_id:
+                volunteer.camp_id = camp_id
+            if username:
+                volunteer.username = username
+            if password:
+                volunteer.password = password
+        except:
+            return "Invalid inputs, please check and try again"
         # validate
         if not util.is_phone_format(phone_num):
            return "Incorrect phone number format"

@@ -15,9 +15,11 @@ class PersonDataRetrieve:
                     if value:
                         volunteers = DataAccess.get_volunteers_by_name(value)
                 case "camp":
-                    volunteers = DataAccess.get_volunteers_by_camp(value)
+                    if value:
+                        volunteers = DataAccess.get_volunteers_by_camp(value)
                 case "plan":
-                    volunteers = DataAccess.get_volunteers_by_plan(value)
+                    if value:
+                        volunteers = DataAccess.get_volunteers_by_plan(value)
                 case _:
                     return "You need to specify the filter name and value"
         except:
@@ -37,7 +39,8 @@ class PersonDataRetrieve:
                     if value:
                         refugees = DataAccess.get_refugees_by_name(value)
                 case "camp":
-                    refugees = DataAccess.get_refugees_by_camp(value)
+                    if value:
+                        refugees = DataAccess.get_refugees_by_camp(value)
                 case _:
                     return "You need to specify the filter name and value"
         except:
