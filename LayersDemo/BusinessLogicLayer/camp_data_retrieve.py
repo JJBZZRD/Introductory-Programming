@@ -16,7 +16,7 @@ class CampDataRetrieve:
                     if value:
                         camp_infor = DataAccess.get_camp_by_id(value)
                 case "name":
-                        camp_infor = DaraAccess.get_camp_by_name(value)
+                        camp_infor = DataAccess.get_camp_by_name(value)
                 case "volunteer":
                     camp_infor = DataAccess.get_camp_by_volunteer(value)
                 case "admin":
