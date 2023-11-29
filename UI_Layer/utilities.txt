@@ -1,0 +1,30 @@
+def populate_overview_tab(self, tab):
+        additional_resources_frame = tk.Frame(tab, bg='lightgray', bd=2, relief='groove')
+        additional_resources_frame.pack(side='right', fill='y', padx=(5, 0))
+        tk.Label(additional_resources_frame, text="Additional Resources Available", bg='lightgray').pack(pady=10)
+        tk.Label(additional_resources_frame, text="[Data]", bg='lightgray').pack()
+
+        canvas = tk.Canvas(tab, bg='white')
+        canvas.pack(expand=True, fill='both', side='left')
+        camps_data = {'Camp 1': [('Tents', 80), ('Food', 60), ('Water', 50), ('Medicine', 30)],
+                      'Camp 2': [('Tents', 40), ('Food', 90), ('Water', 70), ('Medicine', 20)],
+                      'Camp 3': [('Tents', 50), ('Food', 30), ('Water', 80), ('Medicine', 60)]}
+        bar_width = 20
+        bar_spacing = 10
+        max_bar_height = max(max(value for label, value in camp) for camp in camps_data.values())
+        y_offset = 250
+        camp_spacing = canvas.winfo_reqwidth() / (len(camps_data) + 1)
+        print(camp_spacing)
+        for i, (camp, resources) in enumerate(camps_data.items()):
+            x_offset = camp_spacing * (i + 1)
+            self.draw_barchart(canvas, resources, x_offset, y_offset, bar_width, bar_spacing, max_bar_height, 'gray')
+            canvas.create_text(x_offset + (len(resources) * (bar_width + bar_spacing)) / 2, y_offset + 30, text=camp, anchor='n')
+
+    def draw_barchart(self, canvas, data, x_offset, y_offset, bar_width, bar_spacing, max_bar_height, bar_color):
+        for i, (label, value) in enumerate(data):
+            x0 = x_offset + i * (bar_width + bar_spacing)
+            y1 = y_offset - (value / max_bar_height) * 200
+            canvas.create_rectangle(x0, y_offset, x0 + bar_width, y1, fill=bar_color)
+            canvas.create_text(x0 + (bar_width / 2), y_offset + 10, text=label, anchor='n')
+
+            
