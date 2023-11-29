@@ -9,27 +9,27 @@ class CampDataEdit:
     def update_camp(campID, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
                     medical_supplies=None, max_medical_supplies=None, planID=None):
         # get variables
-        camp = Camp.get_campID(campID)
+        camp_infor = Camp.get_campID(campID)
         # if name:
         #    camp.name = name
         if location:
-            camp.location = location
+            camp_infor.location = location
         if max_shelter:
-            camp.max_shelter = max_shelter
+            camp_infor.max_shelter = max_shelter
         if water:
-            camp.water = water
+            camp_infor.water = water
         if max_water:
-            camp.max_water = max_water
+            camp_infor.max_water = max_water
         if food:
-            camp.food = food
+            camp_infor.food = food
         if max_food:
-            camp.max_food = max_food
+            camp_infor.max_food = max_food
         if medical_supplies:
-            camp.medical_supplies = medical_supplies
+            camp_infor.medical_supplies = medical_supplies
         if max_medical_supplies:
-            camp.max_medical_supplies = max_medical_supplies
+            camp_infor.max_medical_supplies = max_medical_supplies
         if planID:
-            camp.planID = planID
+            camp_infor.planID = planID
 
         # validate
         if util.is_country(location):
@@ -83,13 +83,17 @@ class CampDataEdit:
         else:
             return "You should enter a number to planID."
 
-        return Camp.update_camp(camp)
+        camp_obj = Camp(camp_infor)
+
+        return camp_obj
 
     @staticmethod  # Insert a camp into the database without creating a new instance
     def create_camp(location, max_shelter, water, max_water, food, max_food, medical_supplies,
                     max_medical_supplies, planID):
-        return Camp.create_camp(None, location, max_shelter, water, max_water, food, max_food, medical_supplies,
-                                max_medical_supplies, planID)
+        camp_infor = Camp.create_camp(None, location, max_shelter, water, max_water, food, max_food, medical_supplies,
+                                      max_medical_supplies, planID)
+        camp_obj = Camp(camp_infor)
+        return camp_obj
 
     @staticmethod
     def delete_camp(campID):
