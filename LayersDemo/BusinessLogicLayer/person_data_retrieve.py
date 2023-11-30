@@ -1,11 +1,19 @@
-from DataAccessLayer.data_access import DataAccess
+from DataLayer.volunteer import *
 
 class PersonDataRetrieve:
 
     @staticmethod
     def get_volunteers():
-        return DataAccess.get_all_volunteers()
+        volunteers = []
+        volunteer_tuples = Volunteer.get_all_volunteers() 
+        #returns volunteers in tuples [(vol1_name, vol1_id, ...), (vol2_name, vol2_id,...)]
+        
+        for volunteer_tuple in volunteer_tuples:
+            volunteer = Volunteer(volunteer_tuple)
+            volunteers.append(volunteer)
 
+        return volunteers
+    
     @staticmethod
     def get_volunteers(filter, value):
         volunteers = []
