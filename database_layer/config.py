@@ -32,8 +32,8 @@ def create_database():
         last_name TEXT,
         username TEXT UNIQUE,
         password TEXT,
-        date_of_birth Text,
-        phone INTEGER
+        date_of_birth TEXT,
+        phone TEXT
         )
         """
 
@@ -79,7 +79,7 @@ def create_database():
         username TEXT UNIQUE,
         password TEXT,
         date_of_birth Text,
-        phone INTEGER,
+        phone TEXT,
         account_status INTEGER CHECK (account_status IN ('Active', 'Inactive')),
         campID INTEGER,
         FOREIGN KEY (campID) REFERENCES camps(campID)

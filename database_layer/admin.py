@@ -27,6 +27,8 @@ class Admin:
     def create_admin(cls, first_name, last_name, username, password, date_of_birth, phone):
         admin = Admin(first_name, last_name, username, password, date_of_birth, phone)
         admin.insert_admin()
+        adminID = cursor.execute("SELECT last_insert_rowid() FROM admins").fetchone()[0]
+        return Admin.get_adminID(adminID=adminID)
 
     @staticmethod  # Update an admin by selecting on adminID
     def update_admin(adminID, first_name=None, last_name=None, username=None,
@@ -56,11 +58,17 @@ class Admin:
         params.append(adminID)
         cursor.execute(f"""UPDATE admins SET {', '.join(query)} WHERE adminID = ?""", params)
         conn.commit()
+        return Admin.get_adminID(adminID=adminID)
 
     @staticmethod
     def delete_admin(adminID):  # Delete a admin by selecting on adminID
         cursor.execute("DELETE FROM admins WHERE adminID = ?", (adminID,))
+        rows_deleted = cursor.rowcount
         conn.commit()
+        if rows_deleted > 0:
+            print(f"Admin {adminID} has been deleted")
+        else:
+            print(f"Admin {adminID} has not been deleted")
 
     @staticmethod
     def get_adminID(adminID):  # Get admin details by selecting on adminID. Returns a list of tuples.

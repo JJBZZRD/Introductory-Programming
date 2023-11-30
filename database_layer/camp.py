@@ -1,4 +1,5 @@
 from config import conn, cursor
+from plan import Plan
 
 
 class Camp:  # Camp class has attributes matching columns in table
@@ -33,7 +34,12 @@ class Camp:  # Camp class has attributes matching columns in table
                     max_medical_supplies, planID):
         camp = Camp(location, max_shelter, water, max_water, food, max_food, medical_supplies,
                     max_medical_supplies, planID)
-        camp.insert_camp()
+        if Camp.check_planID_exist(planID) is not None:
+            camp.insert_camp()
+            campID = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
+            return Camp.get_campID(campID=campID)
+        else:
+            return False
 
     @staticmethod  # Update a camp by selecting on campID
     def update_camp(campID, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
@@ -73,11 +79,17 @@ class Camp:  # Camp class has attributes matching columns in table
         params.append(campID)
         cursor.execute(f"""UPDATE camps SET {', '.join(query)} WHERE campID = ?""", params)
         conn.commit()
+        return Camp.get_campID(campID=campID)
 
     @staticmethod
     def delete_camp(campID):  # Delete a camp by selecting on campID
         cursor.execute("DELETE FROM camps WHERE campID = ?", (campID,))
+        rows_deleted = cursor.rowcount
         conn.commit()
+        if rows_deleted > 0:
+            print(f"Camp {campID} has been deleted")
+        else:
+            print(f"Admin {campID} has not been deleted")
 
     @staticmethod
     def get_campID(campID):  # Get camp details by selecting on campID. Returns a list of tuples.
@@ -171,3 +183,11 @@ class Camp:  # Camp class has attributes matching columns in table
     def get_all_camps():  # Gets all camps. Returns a list of tuples.
         cursor.execute("SELECT * FROM camps")
         return cursor.fetchall()
+
+    @staticmethod
+    def check_planID_exist(planID):
+        plan = Plan.get_planID(planID)
+        if plan is not None:
+            return True
+        else:
+            return False
