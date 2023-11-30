@@ -1,0 +1,43 @@
+import tkinter as tk
+#from UI_dashboard import AdminDashboard, VolunteerDashboard
+#from UI_manage_list import PlanList
+
+
+class LoginScreen(tk.Frame):
+    def __init__(self, root, show_screen, *args, **kwargs):
+        super().__init__(root, **kwargs)
+        self.root = root
+        self.show_screen = show_screen
+        self.setup_login_screen()
+
+    def setup_login_screen(self):
+        tk.Label(self, text="Username:").pack()
+        username_entry = tk.Entry(self)
+        username_entry.pack()
+
+        tk.Label(self, text="Password:").pack()
+        password_entry = tk.Entry(self, show="*")
+        password_entry.pack()
+
+        admin_login_button = tk.Button(self, text="Admin Login", command=self.login_as_admin) #to be replaced with one button
+        admin_login_button.pack(pady=5)
+
+        volunteer_login_button = tk.Button(self, text="Volunteer Login", command=self.on_login_click)
+        volunteer_login_button.pack(pady=5)
+
+    def login_as_admin(self):
+        self.show_screen('PlanList')
+
+    def on_login_click(self):
+        self.show_screen('VolunteerDashboard', 1) #placeholder for actual logic
+
+
+        # placeholder validationt/login logic"
+        # loginAttempt = logic.login()
+
+        # if loginAttempt == False:
+        #     message_popup('Invalid userid or password')
+        # else:
+        #     user = loginAttempt
+        #     if user.type == 'volunteer':
+        #         self.show_screen('volunteerDashboard', user.id)
