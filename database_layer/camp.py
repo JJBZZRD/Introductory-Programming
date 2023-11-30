@@ -39,8 +39,7 @@ class Camp:  # Camp class has attributes matching columns in table
             campID = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
             return Camp.get_campID(campID=campID)
         else:
-            return False
-
+            return 'Plan planID does not exist'
     @staticmethod  # Update a camp by selecting on campID
     def update_camp(campID, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
                     medical_supplies=None, max_medical_supplies=None, planID=None):

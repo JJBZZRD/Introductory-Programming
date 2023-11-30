@@ -32,7 +32,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
             refugeeID = cursor.execute("SELECT last_insert_rowid() FROM refugees").fetchone()[0]
             return refugee.get_refugeeID(refugeeID=refugeeID)
         else:
-            return False
+            return 'Camp campID does not exist'
 
     @staticmethod  # Update a refugee by selecting on refugeeID
     def update_refugee(refugeeID, first_name=None, last_name=None, date_of_birth=None,

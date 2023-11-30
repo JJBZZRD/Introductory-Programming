@@ -38,7 +38,7 @@ class Volunteer:
             volunteerID = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
             return Volunteer.get_volunteerID(volunteerID)
         else:
-            return False
+            return 'Camp camID does not exist'
 
     @staticmethod  # Update an volunteer by selecting on volunteerID
     def update_volunteer(volunteerID, first_name=None, last_name=None, username=None,
