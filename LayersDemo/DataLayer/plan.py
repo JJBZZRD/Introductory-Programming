@@ -16,9 +16,11 @@ class Plan:  # Plan class has attributes matching columns in table
             INSERT INTO plans (
                 start_date, end_date, name, region, event_name, description) 
             VALUES (?, ?, ?, ?, ?, ?)
-        """
+            """
         cursor.execute(sql, (self.start_date, self.end_date, self.region, self.name, self.event_name,
                              self.description))
+        conn.commit()
+
         self.planID = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
 
     @classmethod  # Insert a plan into the database without creating a new instance
@@ -53,6 +55,7 @@ class Plan:  # Plan class has attributes matching columns in table
 
         params.append(planID)
         cursor.execute(f"""UPDATE plans SET {', '.join(query)} WHERE planID = ?""", params)
+        conn.commit()
 
     @staticmethod
     def delete_plan(planID):  # Delete a plan by selecting on planID
@@ -132,6 +135,3 @@ class Plan:  # Plan class has attributes matching columns in table
     def get_all_plans():  # Gets all plans. Returns a list of tuples.
         cursor.execute("SELECT * FROM plans")
         return cursor.fetchall()
-
-
-Plan.create_plans_table()
