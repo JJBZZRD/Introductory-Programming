@@ -1,8 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-#from UI_dashboard import AdminDashboard
-#from UI_modify_entries import NewPlan
-
 
 class ManageList(tk.Frame):
     def __init__(self, root, show_screen, *args, **kwargs):
@@ -76,11 +73,9 @@ class ManageList(tk.Frame):
 
     def switch_to_admin_dashboard(self, event=None):
         self.show_screen('AdminDashboard')
-        self.destroy()
 
     def switch_to_new_plan(self, event=None):
         self.show_screen('NewPlan')
-        self.destroy()
 
 
 class PlanList(ManageList):
