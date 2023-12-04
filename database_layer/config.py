@@ -3,7 +3,6 @@ import os
 import sys
 import logging
 
-logging.basicConfig(filename='app.log', filemode='a', level=logging.INFO)
 
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
@@ -18,10 +17,14 @@ else:
         running_mode = 'Interactive'
 
 dbpath = os.path.join(application_path, "database.db")
+logpath = os.path.join(application_path, "app_log.log")
+
+logging.basicConfig(filename=logpath, filemode='a', level=logging.INFO)
 
 conn = sqlite3.connect(dbpath)
 cursor = conn.cursor()
 conn.set_trace_callback(logging.info)
+
 
 
 def create_database():
