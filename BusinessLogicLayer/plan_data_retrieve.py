@@ -16,26 +16,37 @@ class PlanDataRetrieve:
 
     @staticmethod
     def get_plan(filter, value):
-        plan = []
         try:
             match filter:
                 case "name":
                     if value:
-                        plan = Plan.get_plan(name=value)
+                        plan_tuple = Plan.get_plan(name=value)
                 case "start date":
-                    plan = Plan.get_plan(start_date=value)
+                    plan_tuple = Plan.get_plan(start_date=value)
                 case "type":
-                    plan = Plan.get_plan(type=value)
+                    plan_tuple = Plan.get_plan(type=value)
                 case "region":
-                    plan = Plan.get_plan(region=value)
+                    plan_tuple = Plan.get_plan(region=value)
                 case "id":
-                    plan = Plan.get_plan(planID=value)
+                    plan_tuple = Plan.get_plan(planID=value)
                 case "event name":
-                    plan = Plan.get_plan(event_name=value)
+                    plan_tuple = Plan.get_plan(event_name=value)
                 case "description":
-                    plan = Plan.get_plan(description=value)
+                    plan_tuple = Plan.get_plan(description=value)
                 case _:
                     return "You need to specify the filter name and attribute"
         except:
             return "Invalid inputs for get_plan(filter, value)"
-        return plan
+        
+        for plan in plan_tuple:
+            if type(plan_tuple) is tuple:
+                pass
+            else:
+                return plan_tuple
+
+        plans = []
+        for plan in plan_tuple:
+            plan_obj = Plan(plan)
+            plans.append(plan_obj)
+
+        return plans
