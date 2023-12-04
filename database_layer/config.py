@@ -26,7 +26,6 @@ cursor = conn.cursor()
 conn.set_trace_callback(logging.info)
 
 
-
 def create_database():
     admin_table = """
     CREATE TABLE IF NOT EXISTS admins(

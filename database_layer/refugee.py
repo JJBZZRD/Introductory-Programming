@@ -12,6 +12,10 @@ class Refugee:  # Refugee class has attributes matching columns in table
         self.campID = campID
         self.medical_condition = medical_condition
 
+    def __iter__(self):
+        yield "a", self.a
+        yield "b", self.b
+
     def insert_refugee(self):  # Insert an existing instance of a refugee into the database
         sql = """
             INSERT INTO refugees (
