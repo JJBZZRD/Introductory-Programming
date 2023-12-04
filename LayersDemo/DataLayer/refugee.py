@@ -1,4 +1,5 @@
 from config import conn, cursor
+from camp import Camp
 
 
 class Refugee:  # Refugee class has attributes matching columns in table
@@ -26,7 +27,12 @@ class Refugee:  # Refugee class has attributes matching columns in table
     @classmethod    # Insert a refugee into the database without creating a new instance
     def create_refugee(cls, first_name, last_name, date_of_birth, familyID, campID, medical_condition):
         refugee = Refugee(first_name, last_name, date_of_birth, familyID, campID, medical_condition)
-        refugee.insert_refugee()
+        if Refugee.check_campID_exist(campID) is not None:
+            refugee.insert_refugee()
+            refugeeID = cursor.execute("SELECT last_insert_rowid() FROM refugees").fetchone()[0]
+            return refugee.get_refugeeID(refugeeID=refugeeID)
+        else:
+            return 'Camp campID does not exist'
 
     @staticmethod  # Update a refugee by selecting on refugeeID
     def update_refugee(refugeeID, first_name=None, last_name=None, date_of_birth=None,
@@ -56,11 +62,17 @@ class Refugee:  # Refugee class has attributes matching columns in table
         params.append(refugeeID)
         cursor.execute(f"""UPDATE refugees SET {', '.join(query)} WHERE refugeeID = ?""", params)
         conn.commit()
+        return Refugee.get_refugeeID(refugeeID=refugeeID)
 
     @staticmethod
     def delete_refugee(refugeeID):  # Delete a refugee by selecting on refugeeID
         cursor.execute("DELETE FROM refugees WHERE refugeeID = ?", (refugeeID,))
+        rows_deleted = cursor.rowcount
         conn.commit()
+        if rows_deleted > 0:
+            print(f"Refugee {refugeeID} has been deleted")
+        else:
+            print(f"Refugee {refugeeID} has not been deleted")
 
     @staticmethod
     def get_refugeeID(refugeeID):  # Get refugee details by selecting on refugeeID. Returns a list of tuples.
@@ -134,3 +146,11 @@ class Refugee:  # Refugee class has attributes matching columns in table
     def get_all_refugees():  # Gets all refugees. Returns a list of tuples.
         cursor.execute("SELECT * FROM refugees")
         return cursor.fetchall()
+
+    @staticmethod
+    def check_campID_exist(campID):
+        camp = Camp.get_campID(campID)
+        if camp is not None:
+            return True
+        else:
+            return False

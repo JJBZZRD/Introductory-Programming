@@ -3,11 +3,10 @@ import os
 import sys
 import logging
 
-logging.basicConfig(filename='app.log', filemode='a', level=logging.INFO)
 
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     application_path = os.path.dirname(sys.executable)
-    running_mode = 'Frozen/executable'
+    running_mode = "Frozen/executable"
 else:
     try:
         app_full_path = os.path.realpath(__file__)
@@ -15,13 +14,17 @@ else:
         running_mode = "Non-interactive (e.g. 'python main.py')"
     except NameError:
         application_path = os.getcwd()
-        running_mode = 'Interactive'
+        running_mode = "Interactive"
 
 dbpath = os.path.join(application_path, "database.db")
+logpath = os.path.join(application_path, "log_files/queries.log")
+
+logging.basicConfig(filename=logpath, filemode='a', level=logging.INFO)
 
 conn = sqlite3.connect(dbpath)
 cursor = conn.cursor()
 conn.set_trace_callback(logging.info)
+
 
 
 def create_database():
@@ -32,8 +35,8 @@ def create_database():
         last_name TEXT,
         username TEXT UNIQUE,
         password TEXT,
-        date_of_birth Text,
-        phone INTEGER
+        date_of_birth TEXT,
+        phone TEXT
         )
         """
 
@@ -79,7 +82,7 @@ def create_database():
         username TEXT UNIQUE,
         password TEXT,
         date_of_birth Text,
-        phone INTEGER,
+        phone TEXT,
         account_status INTEGER CHECK (account_status IN ('Active', 'Inactive')),
         campID INTEGER,
         FOREIGN KEY (campID) REFERENCES camps(campID)
