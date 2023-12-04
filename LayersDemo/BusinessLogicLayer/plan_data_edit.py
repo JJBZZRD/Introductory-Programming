@@ -1,15 +1,13 @@
-from DataAccessLayer.data_access import DataAccess
-from DataAccessLayer.data_access import UserDataAccess
+from DataLayer.plan import Plan
 import util
 from datetime import datetime
-import random
 
 
 class PlanEdit:
 
     @staticmethod
-    def create_plan(name, start_date, end_date, plan_type, region, event, description):
-        for attr in [name, start_date, plan_type, region, event, description]:
+    def create_plan(start_date, end_date, name, region, event_name, description):
+        for attr in [start_date, end_date, name, region, event_name, description]:
             if not attr:
                 raise ValueError("Please provide {}".format(attr))
 
@@ -17,19 +15,18 @@ class PlanEdit:
                 raise ValueError("Please provide the correct input type for {}".format(attr))
 
         start_date = util.validate_date(start_date, None)
-        return UserDataAccess.create_plan(name, start_date, end_date, plan_type, region, event, description)
+        return Plan.create_plan(start_date, end_date, name, region, event_name, description)
 
     @staticmethod
-    def update_plan(plan_id, name=None, start_date=None, end_date=None, plan_type=None, region=None, event=None, description=None):
-        plan = DataAccess.get_plan_by_plan_id(plan_id)
+    def update_plan(planID, start_date=None, end_date=None, name=None, region=None, event_name=None, description=None):
+        plan = Plan.get_plan(planID)
 
         try:
             name = util.validate_name(name)
             start_date = util.validate_date(start_date, None)
             end_date = util.validate_date(start_date, end_date)
-            plan_type = util.validate_plan_type(plan_type)
             region = util.validate_region(region)
-            event = util.validate_event(event)
+            event_name = util.validate_event(event_name)
             description = util.validate_description(description)
         except ValueError:
             print("Invalid input")
@@ -38,27 +35,27 @@ class PlanEdit:
             plan.name = name
         if start_date:
             plan.start_date = start_date
-        if plan_type:
-            plan.plan_type = plan_type
+        if end_date:
+            plan.end_date = end_date
         if region:
             plan.region = region
-        if event:
-            plan.event = event
+        if event_name:
+            plan.event = event_name
         if description:
             plan.description = description
-        return UserDataAccess.update_plan(plan_id, name, start_date, plan_type, region, event, description)
+        return Plan.update_plan(planID, start_date, end_date, name, region, event_name, description)
 
     @staticmethod
-    def end_plan(plan_id, start_date, end_date):
-        plan = DataAccess.get_plan_by_plan_id(plan_id)
+    def end_plan(planID, start_date, end_date):
+        plan = Plan.get_plan(planID)
         end_date = util.validate_date(start_date, end_date)
 
         if end_date:
             plan.end_date = end_date
 
             if datetime.today().date() == end_date:
-                return UserDataAccess.update_plan(plan_id, end_date)
+                return Plan.update_plan(planID, end_date)
 
     @staticmethod
-    def delete_plan(plan_id):
-        return UserDataAccess.delete_plan(plan_id)
+    def delete_plan(planID):
+        return Plan.delete_plan(planID)
