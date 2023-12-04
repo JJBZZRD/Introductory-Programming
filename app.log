@@ -1,0 +1,270 @@
+INFO:root:
+    CREATE TABLE IF NOT EXISTS admins(
+        adminID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT UNIQUE,
+        password TEXT,
+        date_of_birth Text,
+        phone INTEGER
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS plans (
+        planID INTEGER PRIMARY KEY,
+        start_date TEXT,
+        end_date TEXT,
+        name TEXT,
+        region TEXT,
+        event_name TEXT,
+        description TEXT
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS camps (
+        campID INTEGER PRIMARY KEY,
+        location TEXT,
+        max_shelter INTEGER,
+        water INTEGER,
+        max_water INTEGER,
+        food INTEGER,
+        max_food INTEGER,
+        medical_supplies INTEGER,
+        max_medical_supplies INTEGER,
+        planID INTEGER,
+        FOREIGN KEY (planID) REFERENCES plans(planID)
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS volunteers(
+        volunteerID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT UNIQUE,
+        password TEXT,
+        date_of_birth Text,
+        phone INTEGER,
+        account_status INTEGER CHECK (account_status IN ('Active', 'Inactive')),
+        campID INTEGER,
+        FOREIGN KEY (campID) REFERENCES camps(campID)
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS refugees (
+        refugeeID INTEGER PRIMARY KEY,
+        first_name TEXT,
+        last_name TEXT,
+        date_of_birth TEXT,
+        familyID INTEGER,
+        medical_condition TEXT,
+        campID INTEGER,
+        FOREIGN KEY (campID) REFERENCES camps(campID)
+        )
+        
+INFO:root:BEGIN 
+INFO:root:
+    CREATE TABLE IF NOT EXISTS admins(
+        adminID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT UNIQUE,
+        password TEXT,
+        date_of_birth Text,
+        phone INTEGER
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS plans (
+        planID INTEGER PRIMARY KEY,
+        start_date TEXT,
+        end_date TEXT,
+        name TEXT,
+        region TEXT,
+        event_name TEXT,
+        description TEXT
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS camps (
+        campID INTEGER PRIMARY KEY,
+        location TEXT,
+        max_shelter INTEGER,
+        water INTEGER,
+        max_water INTEGER,
+        food INTEGER,
+        max_food INTEGER,
+        medical_supplies INTEGER,
+        max_medical_supplies INTEGER,
+        planID INTEGER,
+        FOREIGN KEY (planID) REFERENCES plans(planID)
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS volunteers(
+        volunteerID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT UNIQUE,
+        password TEXT,
+        date_of_birth Text,
+        phone INTEGER,
+        account_status INTEGER CHECK (account_status IN ('Active', 'Inactive')),
+        campID INTEGER,
+        FOREIGN KEY (campID) REFERENCES camps(campID)
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS refugees (
+        refugeeID INTEGER PRIMARY KEY,
+        first_name TEXT,
+        last_name TEXT,
+        date_of_birth TEXT,
+        familyID INTEGER,
+        medical_condition TEXT,
+        campID INTEGER,
+        FOREIGN KEY (campID) REFERENCES camps(campID)
+        )
+        
+INFO:root:BEGIN 
+INFO:root:
+    CREATE TABLE IF NOT EXISTS admins(
+        adminID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT UNIQUE,
+        password TEXT,
+        date_of_birth Text,
+        phone INTEGER
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS plans (
+        planID INTEGER PRIMARY KEY,
+        start_date TEXT,
+        end_date TEXT,
+        name TEXT,
+        region TEXT,
+        event_name TEXT,
+        description TEXT
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS camps (
+        campID INTEGER PRIMARY KEY,
+        location TEXT,
+        max_shelter INTEGER,
+        water INTEGER,
+        max_water INTEGER,
+        food INTEGER,
+        max_food INTEGER,
+        medical_supplies INTEGER,
+        max_medical_supplies INTEGER,
+        planID INTEGER,
+        FOREIGN KEY (planID) REFERENCES plans(planID)
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS volunteers(
+        volunteerID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT UNIQUE,
+        password TEXT,
+        date_of_birth Text,
+        phone INTEGER,
+        account_status INTEGER CHECK (account_status IN ('Active', 'Inactive')),
+        campID INTEGER,
+        FOREIGN KEY (campID) REFERENCES camps(campID)
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS refugees (
+        refugeeID INTEGER PRIMARY KEY,
+        first_name TEXT,
+        last_name TEXT,
+        date_of_birth TEXT,
+        familyID INTEGER,
+        medical_condition TEXT,
+        campID INTEGER,
+        FOREIGN KEY (campID) REFERENCES camps(campID)
+        )
+        
+INFO:root:BEGIN 
+INFO:root:
+    CREATE TABLE IF NOT EXISTS admins(
+        adminID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT UNIQUE,
+        password TEXT,
+        date_of_birth Text,
+        phone INTEGER
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS plans (
+        planID INTEGER PRIMARY KEY,
+        start_date TEXT,
+        end_date TEXT,
+        name TEXT,
+        region TEXT,
+        event_name TEXT,
+        description TEXT
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS camps (
+        campID INTEGER PRIMARY KEY,
+        location TEXT,
+        max_shelter INTEGER,
+        water INTEGER,
+        max_water INTEGER,
+        food INTEGER,
+        max_food INTEGER,
+        medical_supplies INTEGER,
+        max_medical_supplies INTEGER,
+        planID INTEGER,
+        FOREIGN KEY (planID) REFERENCES plans(planID)
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS volunteers(
+        volunteerID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT UNIQUE,
+        password TEXT,
+        date_of_birth Text,
+        phone INTEGER,
+        account_status INTEGER CHECK (account_status IN ('Active', 'Inactive')),
+        campID INTEGER,
+        FOREIGN KEY (campID) REFERENCES camps(campID)
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS refugees (
+        refugeeID INTEGER PRIMARY KEY,
+        first_name TEXT,
+        last_name TEXT,
+        date_of_birth TEXT,
+        familyID INTEGER,
+        medical_condition TEXT,
+        campID INTEGER,
+        FOREIGN KEY (campID) REFERENCES camps(campID)
+        )
+        
+INFO:root:BEGIN 
+INFO:root:
+            INSERT INTO volunteers (
+            first_name, last_name, username, password, date_of_birth, phone, account_status, campID) 
+            VALUES ('Soran', 'Test', 'aaa', 'bbb', '1/1/2000', '07511975055', 'Active', 1)
+            
+INFO:root:COMMIT
+INFO:root:SELECT last_insert_rowid() FROM volunteers
+INFO:root:BEGIN 
+INFO:root:
+            INSERT INTO volunteers (
+            first_name, last_name, username, password, date_of_birth, phone, account_status, campID) 
+            VALUES ('Soran', 'Test', 'aaa', 'bbb', '1/1/2000', '07511975055', 'Active', 1)
+            
+INFO:root:SELECT * FROM volunteers
