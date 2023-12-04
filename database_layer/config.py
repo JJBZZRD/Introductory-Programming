@@ -4,9 +4,9 @@ import sys
 import logging
 
 
-if getattr(sys, 'frozen', False):
+if getattr(sys, "frozen", False):
     application_path = os.path.dirname(sys.executable)
-    running_mode = 'Frozen/executable'
+    running_mode = "Frozen/executable"
 else:
     try:
         app_full_path = os.path.realpath(__file__)
@@ -14,10 +14,10 @@ else:
         running_mode = "Non-interactive (e.g. 'python main.py')"
     except NameError:
         application_path = os.getcwd()
-        running_mode = 'Interactive'
+        running_mode = "Interactive"
 
 dbpath = os.path.join(application_path, "database.db")
-logpath = os.path.join(application_path, "app_log.log")
+logpath = os.path.join(application_path, "log_files/queries.log")
 
 logging.basicConfig(filename=logpath, filemode='a', level=logging.INFO)
 
