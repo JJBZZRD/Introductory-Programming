@@ -46,7 +46,7 @@ class PlanDataRetrieve:
 
         plans = []
         for plan in plan_tuple:
-            plan_obj = Plan(plan)
+            plan_obj = Plan.from_tuple(plan)
             plans.append(plan_obj)
 
         return plans

@@ -11,9 +11,8 @@ class Plan:  # Plan class has attributes matching columns in table
         self.event_name = event_name
         self.description = description
 
-    def __init__(self, plan_tuple):
+    def from_tuple(self, plan_tuple):
         self.planID, self.start_date, self.end_date, self.region, self.name, self.event_name, self.description = plan_tuple
-        pass
 
     def insert_plan(self):  # Insert an existing instance of a plan into the database
         sql = """
