@@ -11,6 +11,9 @@ class Admin:
         self.date_of_birth = date_of_birth
         self.phone = phone
 
+    def __init__(self, info):
+        self.adminID, self.first_name,
+
     def insert_admin(self):  # Insert an existing instance of a admin into the database
         sql = """
             INSERT INTO admins (

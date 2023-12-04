@@ -35,7 +35,9 @@ from refugee import Refugee
 #Plan.create_plan(start_date='11/12/2023', end_date='11/12/2024', name='Hi', region='England', event_name='Earthquake', description='description')
 #print(Plan.update_plan(2, name="Wally"))
 
-print(Refugee.create_refugee(first_name='bbb', last_name='bbb', date_of_birth='11/02/2000', familyID=1, campID=1, medical_condition='is dead'))
+#print(Refugee.create_refugee(first_name='bbb', last_name='bbb', date_of_birth='11/02/2000', familyID=1, campID=1, medical_condition='is dead'))
+
+print(Volunteer.create_volunteer("John", "Smith", "smith", "123", "11/12/2002", "07329839284", 1))
 
 
 

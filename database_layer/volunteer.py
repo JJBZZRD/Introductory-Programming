@@ -13,6 +13,21 @@ class Volunteer:
         self.phone = phone
         self.campID = campID
 
+    def __init__(self, info):
+        self.first_name, self.last_name, self.username, self.password, self.date_of_birth, self.phone, self.campID = info
+
+    '''def print_statements(self):
+        print(self.volunteerID)
+        print(self.first_name)
+        print(self.last_name)
+        print(self.username)
+        print(self.password)
+        print(self.date_of_birth)
+        print(self.phone)
+        print(self.campID)'''
+
+
+
     def insert_volunteer(self):  # Insert an existing instance of a volunteer into the database
         try:
             sql = """
@@ -39,6 +54,18 @@ class Volunteer:
             return Volunteer.get_volunteerID(volunteerID)
         else:
             return 'Camp camID does not exist'
+
+    @classmethod
+    def create_volunteer_tuple(self, info):
+        volunteer = Volunteer(info)
+        campID = info[-1]
+        if Volunteer.check_campID_exist(campID) is not None:
+            volunteer.insert_volunteer()
+            volunteerID = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
+            return Volunteer.get_volunteerID(volunteerID)
+        else:
+            return 'Camp camID does not exist'
+
 
     @staticmethod  # Update an volunteer by selecting on volunteerID
     def update_volunteer(volunteerID, first_name=None, last_name=None, username=None,
