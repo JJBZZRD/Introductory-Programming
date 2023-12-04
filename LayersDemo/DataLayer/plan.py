@@ -1,4 +1,4 @@
-from config import conn, cursor
+from DataLayer.config import conn, cursor
 
 
 class Plan:  # Plan class has attributes matching columns in table

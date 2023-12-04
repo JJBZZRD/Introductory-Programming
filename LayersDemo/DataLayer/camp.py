@@ -1,5 +1,5 @@
-from config import conn, cursor
-from plan import Plan
+from DataLayer.config import conn, cursor
+from DataLayer.plan import Plan
 
 
 class Camp:  # Camp class has attributes matching columns in table

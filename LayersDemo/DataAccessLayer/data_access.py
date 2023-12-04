@@ -1,2 +1,0 @@
-class DataAccess:
-    pass

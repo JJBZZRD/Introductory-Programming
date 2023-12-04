@@ -1,5 +1,5 @@
-from config import conn, cursor
-from camp import Camp
+from DataLayer.config import conn, cursor
+from DataLayer.camp import Camp
 
 
 class Volunteer:
@@ -12,6 +12,10 @@ class Volunteer:
         self.date_of_birth = date_of_birth
         self.phone = phone
         self.campID = campID
+
+    # def __init__(self, volunteer_tuple):
+    #     self.volunteerID, self.first_name = volunteer_tuple
+    #     pass
 
     def insert_volunteer(self):  # Insert an existing instance of a volunteer into the database
         try:
