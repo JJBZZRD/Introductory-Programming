@@ -19,16 +19,16 @@ class LoginScreen(tk.Frame):
         password_entry = tk.Entry(self, show="*")
         password_entry.pack()
 
-        admin_login_button = tk.Button(self, text="Admin Login", command=self.login_as_admin) #to be replaced with one button
+        admin_login_button = tk.Button(self, text="Admin Login", command=self.on_login_as_admin_click) #to be replaced with one button
         admin_login_button.pack(pady=5)
 
-        volunteer_login_button = tk.Button(self, text="Volunteer Login", command=self.on_login_click)
+        volunteer_login_button = tk.Button(self, text="Volunteer Login", command=self.on_volunteer_login_click())
         volunteer_login_button.pack(pady=5)
 
-    def login_as_admin(self):
-        self.show_screen('PlanList')
+    def on_login_as_admin_click(self):
+        self.show_screen('PlanList', 1)
 
-    def on_login_click(self):
+    def on_volunteer_login_click(self):
         self.show_screen('VolunteerDashboard', 1) #placeholder for actual logic
 
 
@@ -40,4 +40,6 @@ class LoginScreen(tk.Frame):
         # else:
         #     user = loginAttempt
         #     if user.type == 'volunteer':
+        #         self.show_screen('volunteerDashboard', user.id)
+        #     if user.type == 'admin
         #         self.show_screen('volunteerDashboard', user.id)
