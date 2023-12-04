@@ -16,7 +16,7 @@ class Dashboard(tk.Frame):
     
     
     def populate_camp_tab(self, tab, camp):
-        print(f"Populating tab for Camp ID: {camp.campID}")  # Debug print
+        print(f"Populating tab for Camp ID: {camp.campID}")
 
         # Split the frame into left and right sections
         left_frame = tk.Frame(tab, bg='white')
@@ -50,13 +50,11 @@ class Dashboard(tk.Frame):
         search_button = ttk.Button(search_frame, text="Search")
         search_button.pack(side='left', padx=5)
 
-        # Dynamically display refugee list
         refugees_listbox = tk.Listbox(parent)
         for refugee in refugees:
             refugees_listbox.insert(tk.END, f"{refugee.first_name} {refugee.last_name} - {refugee.medical_condition}")
         refugees_listbox.pack(pady=10, expand=True, fill='both')
 
-        # Manage refugees button (placeholder)
         manage_refugees_button = ttk.Button(parent, text="Manage Refugees", command=lambda: self.show_screen('RefugeeList'))
         manage_refugees_button.pack(pady=5)
 
@@ -137,17 +135,13 @@ class AdminDashboard(Dashboard):
             camp_frame.pack(side='left', fill='both', expand=True, padx=10, pady=10)
             tk.Label(camp_frame, text=f"Camp {camp.campID}", font=('Arial', 16, 'bold')).pack(pady=(5, 10))
 
-            # Use the centralized method to create resource frames for each camp
             self.create_resource_frame(camp_frame, camp)
 
             ttk.Button(camp_frame, text="Edit Camp", command=lambda cn=camp.campID: self.show_screen('EditCamp', cn)).pack(pady=5)
 
-        # Section for additional resources
         additional_resources_frame = tk.Frame(tab, bg='lightgray', bd=2, relief='groove')
         additional_resources_frame.pack(side='right', fill='y', padx=(5, 0))
         tk.Label(additional_resources_frame, text="Additional Resources Available", bg='lightgray').pack(pady=10)
 
-        # Display additional resources using the centralized method
         for resource_name, (amount, capacity) in planAdditionalResources.items():
-            # Modified to use create_resource_frame for additional resources
             self.create_resource_frame(additional_resources_frame, resource_name, amount, capacity)
