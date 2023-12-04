@@ -19,7 +19,6 @@ class PlanEdit:
 
     @staticmethod
     def update_plan(planID, name, plan_type, region, description, start_date)
-        plan = Plan.get_plan(planID)
 
         name = util.validate_name(name)
         plan_type = util.validate_plan_type(plan_type)
