@@ -2,14 +2,29 @@ from config import conn, cursor
 
 
 class Plan:  # Plan class has attributes matching columns in table
-    def __init__(self, start_date, end_date, name, region, event_name, description):
-        self.planID = None
-        self.start_date = start_date
-        self.end_date = end_date
-        self.region = region
-        self.name = name
-        self.event_name = event_name
-        self.description = description
+    def __init__(self, *args):
+        # Check if the first argument is a tuple and has the correct number of elements
+        if len(args) == 1 and isinstance(args[0], tuple) and len(args[0]) in {6, 7}:
+            # Unpack the tuple
+            unpacked_args = args[0]
+        elif len(args) in {6, 7}:
+            # Args are individual parameters
+            unpacked_args = args
+        else:
+            raise ValueError("Invalid arguments to Plan constructor")
+
+        # Assign values with default None for planID
+        self.planID = unpacked_args[0] if len(unpacked_args) == 7 else None
+        self.start_date, self.end_date, self.name, self.region, self.event_name, self.description = unpacked_args[-6:]
+
+    def print_self(self):
+        print(self.planID)
+        print(self.start_date)
+        print(self.end_date)
+        print(self.name)
+        print(self.region)
+        print(self.event_name)
+        print(self.description)
 
     def insert_plan(self):  # Insert an existing instance of a plan into the database
         sql = """

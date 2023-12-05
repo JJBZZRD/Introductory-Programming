@@ -17,9 +17,9 @@ else:
         running_mode = "Interactive"
 
 dbpath = os.path.join(application_path, "database.db")
-logpath = os.path.join(application_path, "log_files/queries.log")
+query_log_path = os.path.join(application_path, "log_files/queries.log")
 
-logging.basicConfig(filename=logpath, filemode='a', level=logging.INFO)
+logging.basicConfig(filename=query_log_path, filemode='a', level=logging.INFO)
 
 conn = sqlite3.connect(dbpath)
 cursor = conn.cursor()
