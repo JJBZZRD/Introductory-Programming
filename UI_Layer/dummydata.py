@@ -88,10 +88,11 @@ plan1 = Plan(1,"2021-04-06 00:00:00", "2024-11-05 00:00:00", 1, "llpbfkwc", "kej
 plan2 = Plan(2,"2022-11-24 00:00:00", "2025-03-20 00:00:00", 2, "musqqfqi", "ndcxysnm", "juuaeanpfylklqyeawqp")
 
 class Camp:  # Camp class has attributes matching columns in table
-    def __init__(self, campID, location, max_shelter, water, max_water, food, max_food, medical_supplies,
+    def __init__(self, campID, location, shelter,max_shelter, water, max_water, food, max_food, medical_supplies,
                  max_medical_supplies, planID):
         self.campID = campID
         self.location = location
+        self.shelter = shelter
         self.max_shelter = max_shelter
         self.water = water
         self.max_water = max_water
@@ -101,12 +102,12 @@ class Camp:  # Camp class has attributes matching columns in table
         self.max_medical_supplies = max_medical_supplies
         self.planID = planID 
 
-camp1 = Camp(1, 'france',330, 2064, 5588, 1751, 8266, 169, 640, 1)
-camp2 = Camp(2, 'japan', 480, 1741, 6238, 4373, 5147, 367, 903, 1)
-camp3 = Camp(3, 'US', 466, 3995, 7022, 1547, 9832, 435, 978, 1)
-camp4 = Camp(4, 'Germany',310, 2066, 5510, 4763, 8174, 359, 829, 2)
-camp5 = Camp(5, 'Italy',485, 1975, 8688, 2961, 7004, 386, 749, 2)
-camp6 = Camp(6, 'Dundee',428, 4698, 8122, 2632, 7277, 435, 510, 2)
+camp1 = Camp(1, 'france',330, 390,2064, 5588, 1751, 8266, 169, 640, 1)
+camp2 = Camp(2, 'japan', 480, 560,1741, 6238, 4373, 5147, 367, 903, 1)
+camp3 = Camp(3, 'US', 466, 560, 3995,7022, 1547, 9832, 435, 978, 1)
+camp4 = Camp(4, 'Germany',310, 320,2066, 5510, 4763, 8174, 359, 829, 2)
+camp5 = Camp(5, 'Italy',485, 340,1975, 8688, 2961, 7004, 386, 749, 2)
+camp6 = Camp(6, 'Dundee',428, 570,4698, 8122, 2632, 7277, 435, 510, 2)
 
 class Volunteer:
     def __init__(self, volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID):

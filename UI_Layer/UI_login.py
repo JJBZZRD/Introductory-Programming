@@ -1,6 +1,8 @@
 import tkinter as tk
 #from UI_dashboard import AdminDashboard, VolunteerDashboard
 #from UI_manage_list import PlanList
+from dummydata import admin
+from dummydata import volunteer1
 
 
 class LoginScreen(tk.Frame):
@@ -30,11 +32,12 @@ class LoginScreen(tk.Frame):
 
         #admin_acount = admin()   this will be a an admin account object passed to the set_user method on succesfful login
 
-        self.set_user(admin_account)
-        self.show_screen('PlanList', 1)
+        self.set_user(admin)
+        self.show_screen('PlanList', admin, add_to_history=False)
+
 
     def on_volunteer_login_click(self):
-        self.show_screen('VolunteerDashboard', 1) #placeholder for actual logic
+        self.show_screen('VolunteerDashboard', volunteer1, add_to_history=False)
 
 
         # placeholder validationt/login logic"
