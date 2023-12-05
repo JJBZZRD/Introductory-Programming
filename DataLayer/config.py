@@ -105,5 +105,7 @@ def create_database():
 
     cursor.execute(refugees_table)
 
+    conn.commit()
+
 
 create_database()

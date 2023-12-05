@@ -1,20 +1,28 @@
-import sqlite3
+from config import conn, cursor
+
 
 def insert_dummy_data():
+    plans_data = """
     INSERT INTO plans (planID, start_date, end_date, name, region, event_name, description) VALUES
     (1, '2023-01-01', '2023-12-31', 'Wylfa Nuclear Meltdown', 'Wylfa', 'Nuclear Crisis Management', 'Emergency response to nuclear meltdown'),
     (2, '2023-01-01', '2023-12-31', 'London Virus Outbreak', 'London', 'Virus Containment Effort', 'Response to widespread virus outbreak in London'),
     (3, '2023-01-01', '2023-12-31', 'Paris Earthquake Response', 'Paris', 'Earthquake Relief', 'Relief efforts for earthquake in Paris');
+    """
 
+    cursor.execute(plans_data)
 
+    admin_data = """
     INSERT INTO admins (adminID, first_name, last_name, username, password, date_of_birth, phone) VALUES
     (1, 'Alice', 'Smith', 'alice123', 'pass123', '1980-01-01', '555-0101'),
     (2, 'Bob', 'Johnson', 'bob123', 'pass123', '1981-02-01', '555-0102'),
     (3, 'Carol', 'Williams', 'carol123', 'pass123', '1982-03-01', '555-0103'),
     (4, 'David', 'Brown', 'david123', 'pass123', '1983-04-01', '555-0104'),
     (5, 'Eve', 'Jones', 'eve123', 'pass123', '1984-05-01', '555-0105');
+    """
 
+    cursor.execute(admin_data)
 
+    camp_data = """
     INSERT INTO camps (campID, location, max_shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID) VALUES
     (1, 'Camden', 71, 409, 562, 478, 593, 164, 214, 2),
     (2, 'Greenwich', 198, 103, 190, 335, 502, 57, 119, 2),
@@ -36,8 +44,11 @@ def insert_dummy_data():
     (18, 'La Chapelle', 88, 174, 434, 200, 435, 162, 240, 3),
     (19, 'Oberkampf', 98, 461, 603, 184, 274, 170, 252, 3),
     (20, 'Shoreditch', 63, 360, 552, 415, 653, 166, 250, 2);
+    """
 
+    cursor.execute(camp_data)
 
+    volunteer_data = """
     INSERT INTO volunteers VALUES
     (1, 'Michael', 'Williams', 'jjones1', 'pass', '1986-03-25', '555-812-5460', 'Active', 11),
     (2, 'Elizabeth', 'Garcia', 'lrodriguez2', 'pass', '1998-04-07', '555-416-1396', 'Active', 5),
@@ -109,8 +120,11 @@ def insert_dummy_data():
     (68, 'Robert', 'Martinez', 'rmartinez68', 'pass', '1978-05-30', '555-678-9012', 'Active', 12),
     (69, 'Linda', 'Smith', 'lsmith69', 'pass', '1987-01-05', '555-789-0123', 'Inactive', 1),
     (70, 'John', 'Johnson', 'jjohnson70', 'pass', '1975-07-13', '555-890-1234', 'Active', 2);
+    """
 
+    cursor.execute(volunteer_data)
 
+    refugee_data = """
     INSERT INTO refugees (refugeeID, first_name, last_name, date_of_birth, familyID, medical_condition, campID) VALUES
     (1, 'Oliver', 'Brown', '1981-07-19', 74, 'Diabetes', 7),
     (2, 'James', 'Evans', '1990-05-20', 69, 'Heart Disease', 4),
@@ -312,3 +326,13 @@ def insert_dummy_data():
     (198, 'George', 'Thomas', '1986-11-09', 34, 'Allergies', 6),
     (199, 'Charlotte', 'Wilson', '1980-08-18', 65, 'Diabetes', 3),
     (200, 'Isabelle', 'Roberts', '1984-07-18', 23, 'Asthma', 7);
+    """
+
+    cursor.execute(refugee_data)
+
+    conn.commit()
+
+
+insert_dummy_data()
+
+conn.close()
