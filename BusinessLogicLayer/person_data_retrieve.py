@@ -11,16 +11,14 @@ class PersonDataRetrieve:
     def login(username, password):
         # Validate the user's cre dentials using the UserDataAccess class
         volunteer_tuples = Volunteer.get_volunteer(username=username, password=password)
-        volunteers = parse_result('Volunteer', volunteer_tuples)
-        return volunteers
+        return parse_result('Volunteer', volunteer_tuples)
 
     @staticmethod
     def get_all_volunteers():
         volunteer_tuples = Volunteer.get_all_volunteers() 
         # returns volunteers in list of tuples 
         # [(1, 'Soran', 'Test', 'aaa', 'bbb', '1/1/2000', 7511975055, 'Active', 1), ...] 
-        volunteers = parse_result(volunteer_tuples)
-        return volunteers
+        return parse_result(volunteer_tuples)
     
     @staticmethod
     def get_volunteers(filter, value):
@@ -46,15 +44,13 @@ class PersonDataRetrieve:
             except:
                 return "Invalid inputs for get_volunteers(filter, value)"
         
-            volunteers = parse_result('Volunteer', volunteer_tuples)
+            return parse_result('Volunteer', volunteer_tuples)
 
-            return volunteers
     
     @staticmethod
     def get_all_refugees():
         refugee_tuples = Refugee.get_all_refugees() 
-        refugees = parse_result('Refugee', refugee_tuples)
-        return refugees
+        return parse_result('Refugee', refugee_tuples)
 
     @staticmethod
     def get_refugees(filter, value):
@@ -84,7 +80,4 @@ class PersonDataRetrieve:
             except:
                 return "Invalid inputs for get_refugees(filter, value)"
         
-            refugees = parse_result('Refugee', refugee_tuples)
-
-            return refugees
-    
+            return parse_result('Refugee', refugee_tuples)
