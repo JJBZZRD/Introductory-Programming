@@ -30,3 +30,16 @@ def parse_result(class_name, query_result):
         for record in r:
             record.display_info()
     return r
+
+def parse_results(class_name, query_result_1, query_result_2):
+    r = "Invalid input"
+    success_1 = not isinstance(query_result_1, str)
+    success_2 = not isinstance(query_result_2, str)
+    if success_1 and not success_2:
+        r = parse_result(class_name, query_result_1)
+    elif not success_1 and success_2:
+        r = parse_result(class_name, query_result_2)
+    elif success_1 and success_2:
+        r = parse_result(class_name, query_result_1 + query_result_2)
+    return r
+    

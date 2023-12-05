@@ -8,6 +8,13 @@ from util import *
 class PersonDataRetrieve:
 
     @staticmethod
+    def login(username, password):
+        # Validate the user's cre dentials using the UserDataAccess class
+        volunteer_tuples = Volunteer.get_volunteer(username=username, password=password)
+        volunteers = parse_result('Volunteer', volunteer_tuples)
+        return volunteers
+
+    @staticmethod
     def get_all_volunteers():
         volunteer_tuples = Volunteer.get_all_volunteers() 
         # returns volunteers in list of tuples 
@@ -27,10 +34,7 @@ class PersonDataRetrieve:
                     case "name":
                         res1 = Volunteer.get_volunteer(first_name=value)
                         res2 = Volunteer.get_volunteer(last_name=value)
-                        if isinstance(res1, str) or isinstance(res2, str):
-                            return "Invalid input"
-                        else:
-                            volunteer_tuples = res1+res2
+                        return parse_results('Volunteer', res1, res2)
                     case "camp_id":
                         volunteer_tuples = Volunteer.get_volunteer(campID=value)
                     case "plan_id":
@@ -49,7 +53,7 @@ class PersonDataRetrieve:
     @staticmethod
     def get_all_refugees():
         refugee_tuples = Refugee.get_all_refugees() 
-        refugees = parse_result(refugee_tuples)
+        refugees = parse_result('Refugee', refugee_tuples)
         return refugees
 
     @staticmethod
@@ -64,10 +68,7 @@ class PersonDataRetrieve:
                     case "name":
                         res1 = Refugee.get_refugee(first_name=value)
                         res2 = Refugee.get_refugee(last_name=value)
-                        if isinstance(res1, str) or isinstance(res2, str):
-                            return "Invalid input"
-                        else:
-                            refugee_tuples = res1+res2
+                        return parse_results('Refugee', res1, res2)
                     case "camp_id":
                         refugee_tuples = Refugee.get_refugee(campID=value)
                     case "plan_id":
