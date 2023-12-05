@@ -1,8 +1,9 @@
-from .config import conn, cursor
+from config import conn, cursor
+from camp import Camp
 
 
 class Volunteer:
-    def __init__(self, first_name, last_name, username, password, date_of_birth, phone, account_status, campID):
+    def __init__(self, first_name, last_name, username, password, date_of_birth, phone, campID):
         self.volunteerID = None
         self.first_name = first_name
         self.last_name = last_name
@@ -10,7 +11,6 @@ class Volunteer:
         self.password = password
         self.date_of_birth = date_of_birth
         self.phone = phone
-        self.account_status = account_status
         self.campID = campID
 
     def insert_volunteer(self):  # Insert an existing instance of a volunteer into the database
@@ -20,15 +20,20 @@ class Volunteer:
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """
         cursor.execute(sql, (self.first_name, self.last_name, self.username,
-                             self.password, self.date_of_birth, self.phone, self.account_status, self.campID))
+                             self.password, self.date_of_birth, self.phone, "Active", self.campID))
         conn.commit()
 
         self.volunteerID = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
 
     @classmethod  # Insert a volunteer into the database without creating a new instance
-    def create_volunteer(cls, first_name, last_name, username, password, date_of_birth, phone, account_status, campID):
-        volunteer = Volunteer(first_name, last_name, username, password, date_of_birth, phone, account_status, campID)
-        volunteer.insert_volunteer()
+    def create_volunteer(cls, first_name, last_name, username, password, date_of_birth, phone, campID):
+        volunteer = Volunteer(first_name, last_name, username, password, date_of_birth, phone, campID)
+        if Volunteer.check_campID_exist(campID):
+            volunteer.insert_volunteer()
+            volunteerID = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
+            return volunteer.get_volunteer(volunteerID=volunteerID)
+        else:
+            return 'Camp campID does not exist'
 
     @staticmethod  # Update an volunteer by selecting on volunteerID
     def update_volunteer(volunteerID, first_name=None, last_name=None, username=None,
@@ -64,11 +69,17 @@ class Volunteer:
         params.append(volunteerID)
         cursor.execute(f"""UPDATE volunteers SET {', '.join(query)} WHERE volunteerID = ?""", params)
         conn.commit()
+        return Volunteer.get_volunteerID(volunteerID=volunteerID)
 
     @staticmethod
     def delete_volunteer(volunteerID):  # Delete a volunteer by selecting on volunteerID
         cursor.execute("DELETE FROM volunteers WHERE volunteerID = ?", (volunteerID,))
+        rows_deleted = cursor.rowcount
         conn.commit()
+        if rows_deleted > 0:
+            print(f"Volunteer {volunteerID} has been deleted")
+        else:
+            print(f"Volunteer {volunteerID} has not been deleted")
 
     @staticmethod
     def get_volunteerID(volunteerID):  # Get volunteer details by selecting on volunteerID. Returns a list of tuples.
@@ -160,3 +171,11 @@ class Volunteer:
         sql = "SELECT username FROM volunteers WHERE account_status = 'Active'"
         cursor.execute(sql)
         return cursor.fetchall()
+
+    @staticmethod
+    def check_campID_exist(campID):
+        camp = Camp.get_campID(campID)
+        if camp is not None:
+            return True
+        else:
+            return False

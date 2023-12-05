@@ -1,6 +1,5 @@
 import config
-from refugee import Refugee
-from plan import Plan
+from volunteer import Volunteer
 
 
 
@@ -24,10 +23,3 @@ from plan import Plan
 #                           account_status="Active", campID=1)
 
 #vol1.insert_volunteer()
-
-testRefugee = ("Bill", "Smith", "06/05/1950", 2, 2, "Asthma")
-
-testPlan = ("11/12/2023", "11/12/2024", "test", "testRegion", "earthquake", "earthquake2")
-
-p1 = Plan(testPlan)
-p1.print_self()

@@ -34,7 +34,7 @@ class Camp:  # Camp class has attributes matching columns in table
                     max_medical_supplies, planID):
         camp = Camp(location, max_shelter, water, max_water, food, max_food, medical_supplies,
                     max_medical_supplies, planID)
-        if Camp.check_planID_exist(planID) is not None:
+        if Camp.check_planID_exist(planID):
             camp.insert_camp()
             campID = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
             return Camp.get_campID(campID=campID)

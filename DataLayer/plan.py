@@ -42,6 +42,8 @@ class Plan:  # Plan class has attributes matching columns in table
     def create_plan(cls, start_date, end_date, name, region, event_name, description):
         plan = Plan(start_date, end_date, name, region, event_name, description)
         plan.insert_plan()
+        planID = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
+        return Plan.get_planID(planID=planID)
 
     @staticmethod  # Update a plan by selecting on planID
     def update_plan(planID, start_date=None, end_date=None, name=None, region=None, event_name=None, description=None):
@@ -71,11 +73,17 @@ class Plan:  # Plan class has attributes matching columns in table
         params.append(planID)
         cursor.execute(f"""UPDATE plans SET {', '.join(query)} WHERE planID = ?""", params)
         conn.commit()
+        return Plan.get_plan(planID=planID)
 
     @staticmethod
     def delete_plan(planID):  # Delete a plan by selecting on planID
         cursor.execute("DELETE FROM plans WHERE planID = ?", (planID,))
+        rows_deleted = cursor.rowcount
         conn.commit()
+        if rows_deleted > 0:
+            print(f"Plan {planID} has been deleted")
+        else:
+            print(f"Plan {planID} has not been deleted")
 
     @staticmethod
     def get_planID(planID):  # Get plan details by selecting on planID. Returns a list of tuples.

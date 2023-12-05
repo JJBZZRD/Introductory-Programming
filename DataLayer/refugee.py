@@ -28,7 +28,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
     @classmethod    # Insert a refugee into the database without creating a new instance
     def create_refugee(cls, first_name, last_name, date_of_birth, familyID, campID, medical_condition):
         refugee = Refugee(first_name, last_name, date_of_birth, familyID, campID, medical_condition)
-        if Refugee.check_campID_exist(campID) is not None:
+        if Refugee.check_campID_exist(campID):
             refugee.insert_refugee()
             refugeeID = cursor.execute("SELECT last_insert_rowid() FROM refugees").fetchone()[0]
             return refugee.get_refugeeID(refugeeID=refugeeID)
