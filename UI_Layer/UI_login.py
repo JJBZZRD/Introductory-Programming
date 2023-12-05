@@ -22,7 +22,7 @@ class LoginScreen(tk.Frame):
         admin_login_button = tk.Button(self, text="Admin Login", command=self.on_login_as_admin_click) #to be replaced with one button
         admin_login_button.pack(pady=5)
 
-        volunteer_login_button = tk.Button(self, text="Volunteer Login", command=self.on_volunteer_login_click())
+        volunteer_login_button = tk.Button(self, text="Volunteer Login", command=self.on_volunteer_login_click)
         volunteer_login_button.pack(pady=5)
 
     def on_login_as_admin_click(self):

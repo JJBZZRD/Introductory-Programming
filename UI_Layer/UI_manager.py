@@ -17,12 +17,13 @@ class UIManager:
             'NewCamp': me.NewCamp, 'EditCamp': me.EditCamp, 'NewVolunteer': me.NewVolunteer, 'EditVolunteer': me.EditVolunteer
         }
 
-    def show_screen(self, screen_name: str, *args):
+    def show_screen(self, screen_name: str, nav=False, *args):
         print(f"Showing screen: {screen_name}")
         self.clear_screen()
-
-        self.current_page_position += 1
-        self.page_history = self.page_history[:self.current_page_position] + [(screen_name, args)]
+        
+        if nav == False:
+            self.current_page_position += 1
+            self.page_history = self.page_history[:self.current_page_position] + [(screen_name, args)]
 
         screen_class = self.possible_screens.get(screen_name)
         if not screen_class:
@@ -62,7 +63,7 @@ class UIManager:
             return
 
         screen_name, args = self.page_history[self.current_page_position]
-        self.show_screen(screen_name, *args)
+        self.show_screen(screen_name,nav=True,*args)
 
     def reset_history(self):
         self.page_history = []
