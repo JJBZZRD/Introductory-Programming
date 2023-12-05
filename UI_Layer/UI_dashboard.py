@@ -5,13 +5,13 @@ from dummydata import refugee1, refugee2
 
 
 class Dashboard(tk.Frame):
-    def __init__(self, root, show_screen, *args, **kwargs):
-        super().__init__(root, **kwargs)
+    def __init__(self, root, show_screen, screen_data):
+        super().__init__(root)
         self.root = root
-        self.setup_dashboard(*args)
+        self.setup_dashboard(screen_data)
         self.show_screen = show_screen
 
-    def setup_dashboard(self):
+    def setup_dashboard(self, screen_data):
         raise NotImplementedError("Subclasses should implement this method to setup the dashboard layout")
     
     
@@ -31,39 +31,62 @@ class Dashboard(tk.Frame):
         # Create refugees section in right frame
         self.create_refugees_section(right_frame, camp)
 
+
     def create_refugees_section(self, parent, camp):
-        # Title for the refugees section
-        # refugees = logic.getrefugees(camp, camp.campID)
-
-        refugees = [refugee1, refugee2]#placeholder
-
         refugees_title = tk.Label(parent, text=f"Refugees in Camp {camp.campID}", font=('Arial', 16, 'bold'))
         refugees_title.pack(pady=10)
 
-        # Search and filter frame (placeholders for future functionality)
+        # Search and filter frame
         search_frame = tk.Frame(parent, bg='white')
         search_frame.pack(pady=5, fill='x')
         search_entry = tk.Entry(search_frame)
         search_entry.pack(side='left', padx=5, expand=True, fill='x')
-        filter_button = ttk.Button(search_frame, text="Filter")
+
+        filter_button = ttk.Button(search_frame, text="Filter", command=lambda: self.filter_refugees(search_entry.get(), 'camp'))
         filter_button.pack(side='left', padx=5)
-        search_button = ttk.Button(search_frame, text="Search")
+
+        search_button = ttk.Button(search_frame, text="Search", command=lambda: self.search_refugees(search_entry.get()))
         search_button.pack(side='left', padx=5)
 
-        refugees_listbox = tk.Listbox(parent)
-        for refugee in refugees:
-            refugees_listbox.insert(tk.END, f"{refugee.first_name} {refugee.last_name} - {refugee.medical_condition}")
-        refugees_listbox.pack(pady=10, expand=True, fill='both')
+        self.refugees_listbox = tk.Listbox(parent)
+        self.refugees_listbox.pack(pady=10, expand=True, fill='both')
 
-        manage_refugees_button = ttk.Button(parent, text="Manage Refugees", command=lambda: self.show_screen('RefugeeList'))
+        try:
+            # Fetch and display refugees based on filter and value
+            filter_type = 'camp'  # Default filter type
+            filter_value = camp.campID  # Default filter value
+
+            if search_entry.get():
+                filter_type = 'name'
+                filter_value = search_entry.get()
+
+            #self.refugees = DataAccess.get_refugees(filter_type, filter_value)
+            self.refugees = [refugee1,refugee2]
+
+            for refugee in self.refugees:
+                listbox_entry = f"{refugee.first_name} {refugee.last_name} - {refugee.medical_condition}"
+                self.refugees_listbox.insert(tk.END, listbox_entry)
+                self.refugees_listbox.bind('<Double-1>', self.on_refugee_double_click)
+        except Exception as e:
+            print(f"Error fetching refugees: {str(e)}")
+
+        manage_refugees_button = ttk.Button(parent, text="Manage Refugees", command=lambda: self.show_screen('RefugeeList', camp))
         manage_refugees_button.pack(pady=5)
+
+    def on_refugee_double_click(self, event):
+        index = self.refugees_listbox.curselection()
+        if index:
+            selected_index = index[0]
+            selected_refugee = self.refugees[selected_index]  # Retrieve from instance variable
+            self.show_screen('EditRefugee', selected_refugee)
 
 
     def create_resource_frame(self, parent, camp):
         resources = {
             'Water': (camp.water, camp.max_water),
             'Food': (camp.food, camp.max_food),
-            'Medical Supplies': (camp.medical_supplies, camp.max_medical_supplies)
+            'Medical Supplies': (camp.medical_supplies, camp.max_medical_supplies),
+            'Shelter': (camp.shelter, camp.max_shelter)
         }
 
         for resource_name, (amount, capacity) in resources.items():
@@ -77,20 +100,11 @@ class Dashboard(tk.Frame):
             # ttk.Button(resource_frame, text="-", width=2, command=...).pack(side='left')
             # ttk.Button(resource_frame, text="+", width=2, command=...).pack(side='left')
 
-    def adjust_resource(self, adjustment):
-        new_amount = self.amount + adjustment
-        if 0 <= new_amount <= self.capacity:
-            self.amount = new_amount
-            self.amount_label.config(text=f"{self.amount}/{self.capacity}")
-            if self.adjust_callback:
-                self.adjust_callback(self.resource_name, new_amount)
-
 
 class VolunteerDashboard(Dashboard):
-    def setup_dashboard(self, userID):
-        # Assuming logic.getvolunteer and logic.getcamp are functions that fetch volunteer and camp data
-        # VolunteerUser = logic.getvolunteer(userID)  
-        # VolunteerCamp = logic.getcamp(VolunteerUser.campID)
+    def setup_dashboard(self, volunteer):
+        #logic.getcamp are functions that fetch volunteer and camp data
+        # self.Camp = logic.getcamp(volunteer)
 
         # Directly using camp1 for this example
         self.camp = camp1

@@ -1,11 +1,13 @@
 import tkinter as tk
 #from UI_dashboard import AdminDashboard, VolunteerDashboard
 #from UI_manage_list import PlanList
+from dummydata import admin
+from dummydata import volunteer1
 
 
 class LoginScreen(tk.Frame):
-    def __init__(self, root, show_screen, *args, **kwargs):
-        super().__init__(root, **kwargs)
+    def __init__(self, root, show_screen):
+        super().__init__(root)
         self.root = root
         self.show_screen = show_screen
         self.setup_login_screen()
@@ -26,10 +28,11 @@ class LoginScreen(tk.Frame):
         volunteer_login_button.pack(pady=5)
 
     def on_login_as_admin_click(self):
-        self.show_screen('PlanList', 1)
+        self.show_screen('PlanList', admin, nav=False)
+
 
     def on_volunteer_login_click(self):
-        self.show_screen('VolunteerDashboard', 1) #placeholder for actual logic
+        self.show_screen('VolunteerDashboard', volunteer1, nav=False)
 
 
         # placeholder validationt/login logic"
