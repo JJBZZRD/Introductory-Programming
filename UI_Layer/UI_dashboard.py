@@ -53,7 +53,7 @@ class Dashboard(tk.Frame):
         filter_type = 'camp' if not filter_value else 'name'
 
         # self.refugees = PersonDataRetrieve.get_refugees(filter_type, filter_value)
-        self.refugee = [refugee1, refugee2]
+        self.refugees = [refugee1, refugee2]
 
         self.refugees_listbox.delete(0, tk.END)
         if not self.refugees:
@@ -66,7 +66,7 @@ class Dashboard(tk.Frame):
         self.refugees_listbox.bind('<Double-1>', self.on_refugee_double_click)
 
 
-    def on_refugee_double_click(self, refugee):
+    def on_refugee_double_click(self, event=None):
         index = self.refugees_listbox.curselection()
         if index:
             selected_index = index[0]
