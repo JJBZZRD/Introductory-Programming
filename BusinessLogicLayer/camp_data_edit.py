@@ -1,5 +1,7 @@
 from DataLayer.camp import Camp
 from DataLayer.plan import Plan
+import business_logic_util
+from camp_data_retrieve import CampDataRetrieve
 import util
 
 
@@ -9,30 +11,31 @@ class CampDataEdit:
     def update_camp(campID, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
                     medical_supplies=None, max_medical_supplies=None, planID=None):
         # get variables
-        camp_infor = Camp.get_campID(campID)
-        # if name:
-        #    camp.name = name
-        if location:
-            camp_infor.location = location
-        if max_shelter:
-            camp_infor.max_shelter = max_shelter
-        if water:
-            camp_infor.water = water
-        if max_water:
-            camp_infor.max_water = max_water
-        if food:
-            camp_infor.food = food
-        if max_food:
-            camp_infor.max_food = max_food
-        if medical_supplies:
-            camp_infor.medical_supplies = medical_supplies
-        if max_medical_supplies:
-            camp_infor.max_medical_supplies = max_medical_supplies
-        if planID:
-            camp_infor.planID = planID
+        camp = CampDataRetrieve.get_camp('campID', campID)
 
+        try:
+            if location:
+                camp.location = location.strip()
+            if max_shelter:
+                camp.max_shelter = max_shelter
+            if water:
+                camp.water = water
+            if max_water:
+                camp.max_water = max_water
+            if food:
+                camp.food = food
+            if max_food:
+                camp.max_food = food
+            if medical_supplies:
+                camp.medical_supplies = medical_supplies
+            if max_medical_supplies:
+                camp.max_medical_supplies = max_medical_supplies
+            if planID:
+                camp.planID = planID
+        except:
+            return "Invalid inputs, please check and try again"
         # validate
-        if util.is_country(location):
+        if not util.is_country(location):
             return "You should enter a country name for real."
 
         if util.is_num(max_shelter):
@@ -83,17 +86,16 @@ class CampDataEdit:
         else:
             return "You should enter a number to planID."
 
-        camp_obj = Camp(camp_infor)
+        camp_tuples = Camp.update_camp(campID, location, max_shelter, water, max_water, food,
+                                       max_food, medical_supplies, max_medical_supplies, planID)
 
-        return camp_obj
+        return util.parse_result('Camp', camp_tuples)
 
     @staticmethod  # Insert a camp into the database without creating a new instance
-    def create_camp(location, max_shelter, water, max_water, food, max_food, medical_supplies,
+    def create_camp(campID, location, max_shelter, water, max_water, food, max_food, medical_supplies,
                     max_medical_supplies, planID):
-        camp_infor = Camp.create_camp(None, location, max_shelter, water, max_water, food, max_food, medical_supplies,
-                                      max_medical_supplies, planID)
-        camp_obj = Camp(camp_infor)
-        return camp_obj
+        return Camp.create_camp(location, max_shelter, water, max_water, food, max_food, medical_supplies,
+                                max_medical_supplies, planID)
 
     @staticmethod
     def delete_camp(campID):
