@@ -5,7 +5,7 @@ from dummydata import refugee1, refugee2
 
 
 class Dashboard(tk.Frame):
-    def __init__(self, root, show_screen, screen_data):
+    def __init__(self, root, show_screen, screen_data, *args):
         super().__init__(root)
         self.root = root
         self.setup_dashboard(screen_data)

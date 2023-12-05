@@ -45,11 +45,12 @@ class UIManager:
             self.header.destroy()
             self.header = None
         elif self.header is None and screen_class is not LoginScreen:
-            self.header = UIHeader(self.root, self.show_screen, self.page_nav, self.reset_history, self.logged_in_user)
+            self.header = UIHeader(self.root, self.show_screen, screen_data, self.set_user, self.page_nav, self.reset_history, self.logged_in_user)
             self.header.pack(side='top', fill='x')
 
         self.current_screen = screen_class(self.root, self.show_screen, screen_data, self.set_user, self.page_nav, *args)
         self.current_screen.pack(expand=True, fill='both')
+        print(self.page_history)
 
     def clear_screen(self):
         if self.current_screen is not None:

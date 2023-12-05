@@ -2,9 +2,10 @@ import tkinter as tk
 from tkinter import ttk
 
 class ManageList(tk.Frame):
-    def __init__(self, root, show_screen, *args, **kwargs):
+    def __init__(self, root, show_screen, screen_data, *args, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
+        self.screen_data = screen_data
         self.show_screen = show_screen
         self.setup_list()
         self.list_type = None

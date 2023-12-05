@@ -6,9 +6,10 @@ from dummydata import volunteer1
 
 
 class LoginScreen(tk.Frame):
-    def __init__(self, root, show_screen, set_user, *args, **kwargs):
+    def __init__(self, root, show_screen, screen_data,set_user, *args, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
+        self.screen_data = screen_data
         self.show_screen = show_screen
         self.set_user = set_user
         self.setup_login_screen()
@@ -37,6 +38,7 @@ class LoginScreen(tk.Frame):
 
 
     def on_volunteer_login_click(self):
+        self.set_user(volunteer1)
         self.show_screen('VolunteerDashboard', volunteer1, add_to_history=False)
 
 

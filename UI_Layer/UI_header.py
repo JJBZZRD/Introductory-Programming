@@ -2,13 +2,14 @@ import tkinter as tk
 
 
 class UIHeader(tk.Frame):
-    def __init__(self, root, show_screen, page_nav, reset_history, logged_in_user, *args, **kwargs):
+    def __init__(self, root, show_screen, screen_data, set_user, page_nav, reset_history, logged_in_user, *args, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
         self.logged_in_user = logged_in_user
         self.show_screen = show_screen
         self.page_nav = page_nav
         self.reset_history = reset_history
+        self.screen_data = screen_data
         self.create_header()
 
     def create_header(self):
@@ -18,7 +19,7 @@ class UIHeader(tk.Frame):
         logo_label.pack(side=tk.LEFT, padx=(10, 20))
 
         # logged_in_user is a user object and .name provides the username
-        camp_label = tk.Label(header, text="Logged in as: " + self.logged_in_user.Fname, bg="white",
+        camp_label = tk.Label(header, text="Logged in as: " + self.logged_in_user.first_name, bg="white",
                               font=("Helvetica", 16))  #
         camp_label.pack(side=tk.LEFT)
 
