@@ -11,7 +11,7 @@ class Dashboard(tk.Frame):
         self.setup_dashboard(screen_data)
         self.show_screen = show_screen
 
-    def setup_dashboard(self, screen_data):
+    def setup_dashboard(self, *args):
         raise NotImplementedError("Subclasses should implement this method to setup the dashboard layout")
     
     
@@ -31,7 +31,6 @@ class Dashboard(tk.Frame):
         # Create refugees section in right frame
         self.create_refugees_section(right_frame, camp)
 
-
     def create_refugees_section(self, parent, camp):
         refugees_title = tk.Label(parent, text=f"Refugees in Camp {camp.campID}", font=('Arial', 16, 'bold'))
         refugees_title.pack(pady=10)
@@ -42,42 +41,48 @@ class Dashboard(tk.Frame):
         search_entry = tk.Entry(search_frame)
         search_entry.pack(side='left', padx=5, expand=True, fill='x')
 
-        filter_button = ttk.Button(search_frame, text="Filter", command=lambda: self.filter_refugees(search_entry.get(), 'camp'))
+        filter_button = ttk.Button(search_frame, text="Filter/Search", command=self.update_refugees_list(search_entry))
         filter_button.pack(side='left', padx=5)
-
-        search_button = ttk.Button(search_frame, text="Search", command=lambda: self.search_refugees(search_entry.get()))
-        search_button.pack(side='left', padx=5)
 
         self.refugees_listbox = tk.Listbox(parent)
         self.refugees_listbox.pack(pady=10, expand=True, fill='both')
 
         try:
             # Fetch and display refugees based on filter and value
-            filter_type = 'camp'  # Default filter type
-            filter_value = camp.campID  # Default filter value
-
-            if search_entry.get():
-                filter_type = 'name'
-                filter_value = search_entry.get()
-
-            #self.refugees = DataAccess.get_refugees(filter_type, filter_value)
-            self.refugees = [refugee1,refugee2]
-
-            for refugee in self.refugees:
-                listbox_entry = f"{refugee.first_name} {refugee.last_name} - {refugee.medical_condition}"
-                self.refugees_listbox.insert(tk.END, listbox_entry)
-                self.refugees_listbox.bind('<Double-1>', self.on_refugee_double_click)
+            self.update_refugees_list(search_entry)()
         except Exception as e:
-            print(f"Error fetching refugees: {str(e)}")
+            pass
 
-        manage_refugees_button = ttk.Button(parent, text="Manage Refugees", command=lambda: self.show_screen('RefugeeList', camp))
+        manage_refugees_button = ttk.Button(parent, text="Manage Refugees", command=lambda: self.show_screen('RefugeeList', self.camp))
         manage_refugees_button.pack(pady=5)
 
-    def on_refugee_double_click(self, event):
+    def update_refugees_list(self,search_entry):
+        def update():
+            filter_type = 'camp' if not search_entry.get() else 'name'
+            filter_value = self.camp.campID if not search_entry.get() else search_entry.get()
+
+            try:
+                self.refugees = [refugee1, refugee2]  # placeholder
+                # self.refugees = self.data_access.get_refugees(filter_type, filter_value)
+                self.refugees_listbox.delete(0, tk.END)
+
+                for refugee in self.refugees:
+                    listbox_entry = f"{refugee.first_name} {refugee.last_name} - {refugee.medical_condition}"
+                    self.refugees_listbox.insert(tk.END, listbox_entry)
+
+                    # Bind the double-click event to a lambda function
+                    self.refugees_listbox.bind('<Double-1>', lambda event, r=refugee: self.on_refugee_double_click(r))
+            except Exception as e:
+                self.show_error_message(f"Error fetching refugees: {str(e)}")
+
+        return update
+
+
+    def on_refugee_double_click(self, refugee):
         index = self.refugees_listbox.curselection()
         if index:
             selected_index = index[0]
-            selected_refugee = self.refugees[selected_index]  # Retrieve from instance variable
+            selected_refugee = self.refugees[selected_index]
             self.show_screen('EditRefugee', selected_refugee)
 
 
@@ -119,28 +124,24 @@ class VolunteerDashboard(Dashboard):
         self.populate_camp_tab(camp_tab, self.camp)
 
 class AdminDashboard(Dashboard):
-    def setup_dashboard(self, planID):
-        # Plan camps = logic.getcamps(id, AdminUser.planID)
-        # Directly using list of campsts for this example
-        self.planCamps = [camp1, camp2, camp3]
-
-        # additional_resouces = logic.getresouces(id, adminUser.planID)
-        self.additional_resources = {'Food': [40, 100], 'Water': [30, 80], 'Medicine': [10, 60]}
-
+    def setup_dashboard(self, planCamps):
+        self.planCamps = [camp1, camp2, camp3]  # placeholders
+        self.additional_resources = {'Food': [40, 100], 'Water': [30, 80], 'Medicine': [10, 60], 'Shelter': [10,90]} #placeholders
         self.create_admin_tabs(self.planCamps, self.additional_resources)
     
-    def create_admin_tabs(self, planCamps, planAdditionalResources):
+    def create_admin_tabs(self, planCamps, additional_resources):
+        self.planCamps = planCamps
         self.tab_control = ttk.Notebook(self)
         self.overview_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(self.overview_tab, text='Overview')
-        self.populate_overview_tab(self.overview_tab, planCamps, planAdditionalResources)
-        for camp in planCamps:
+        self.populate_overview_tab(self.overview_tab, self.planCamps, additional_resources)
+        for camp in self.planCamps:
             tab = ttk.Frame(self.tab_control)
             self.tab_control.add(tab, text=f'Camp {camp.campID}')
             self.populate_camp_tab(tab, camp)
         self.tab_control.pack(expand=1, fill="both")
 
-    def populate_overview_tab(self, tab, planCamps, planAdditionalResources):
+    def populate_overview_tab(self, tab, planCamps, additional_resources):
         camps_frame = tk.Frame(tab)
         camps_frame.pack(side='left', fill='both', expand=True)
 
@@ -157,5 +158,4 @@ class AdminDashboard(Dashboard):
         additional_resources_frame.pack(side='right', fill='y', padx=(5, 0))
         tk.Label(additional_resources_frame, text="Additional Resources Available", bg='lightgray').pack(pady=10)
 
-        for resource_name, (amount, capacity) in planAdditionalResources.items():
-            self.create_resource_frame(additional_resources_frame, resource_name, amount, capacity)
+        self.create_resource_frame(additional_resources_frame, camp1)

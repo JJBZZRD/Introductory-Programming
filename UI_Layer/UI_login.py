@@ -6,7 +6,7 @@ from dummydata import volunteer1
 
 
 class LoginScreen(tk.Frame):
-    def __init__(self, root, show_screen):
+    def __init__(self, root, show_screen, screen_data=None):
         super().__init__(root)
         self.root = root
         self.show_screen = show_screen
@@ -28,11 +28,11 @@ class LoginScreen(tk.Frame):
         volunteer_login_button.pack(pady=5)
 
     def on_login_as_admin_click(self):
-        self.show_screen('PlanList', admin, nav=False)
+        self.show_screen('PlanList', admin, add_to_history=False)
 
 
     def on_volunteer_login_click(self):
-        self.show_screen('VolunteerDashboard', volunteer1, nav=False)
+        self.show_screen('VolunteerDashboard', volunteer1, add_to_history=False)
 
 
         # placeholder validationt/login logic"
