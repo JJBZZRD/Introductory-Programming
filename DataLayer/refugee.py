@@ -3,8 +3,8 @@ from camp import Camp
 
 
 class Refugee:  # Refugee class has attributes matching columns in table
-    def __init__(self, first_name, last_name, date_of_birth, familyID, campID, medical_condition):
-        self.refugeeID = None
+    def __init__(self, id, first_name, last_name, date_of_birth, familyID, campID, medical_condition):
+        self.refugeeID = id
         self.first_name = first_name
         self.last_name = last_name
         self.date_of_birth = date_of_birth
@@ -12,6 +12,20 @@ class Refugee:  # Refugee class has attributes matching columns in table
         self.campID = campID
         self.medical_condition = medical_condition
 
+    def display_info(self):
+        print(f"Refugee ID: {self.refugeeID}")
+        print(f"First Name: {self.first_name}")
+        print(f"Last Name: {self.last_name}")
+        print(f"Date of Birth: {self.date_of_birth}")
+        print(f"Family ID: {self.familyID}")
+        print(f"Camp ID: {self.campID}")
+        print(f"Medical Condition: {self.medical_condition}")
+        print()
+
+    @classmethod
+    def init_from_tuple(cls, tuple):
+        return cls(*tuple)
+    
     def insert_refugee(self):  # Insert an existing instance of a refugee into the database
         sql = """
             INSERT INTO refugees (
