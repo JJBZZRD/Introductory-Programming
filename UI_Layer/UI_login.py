@@ -4,10 +4,11 @@ import tkinter as tk
 
 
 class LoginScreen(tk.Frame):
-    def __init__(self, root, show_screen, *args, **kwargs):
+    def __init__(self, root, show_screen, set_user, *args, **kwargs):
         super().__init__(root, **kwargs)
         self.root = root
         self.show_screen = show_screen
+        self.set_user = set_user
         self.setup_login_screen()
 
     def setup_login_screen(self):
@@ -26,6 +27,10 @@ class LoginScreen(tk.Frame):
         volunteer_login_button.pack(pady=5)
 
     def on_login_as_admin_click(self):
+
+        #admin_acount = admin()   this will be a an admin account object passed to the set_user method on succesfful login
+
+        self.set_user(admin_account)
         self.show_screen('PlanList', 1)
 
     def on_volunteer_login_click(self):

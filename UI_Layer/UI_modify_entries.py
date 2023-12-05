@@ -180,3 +180,4 @@ class EditVolunteer(ModifyEntries):
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
+        print(self.entry_fields)
