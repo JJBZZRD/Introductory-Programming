@@ -1,15 +1,18 @@
+import os, sys
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(CURRENT_DIR))
 from DataLayer.volunteer import *
 
 class PersonDataRetrieve:
 
     @staticmethod
-    def get_volunteers():
+    def get_all_volunteers():
         volunteers = []
         volunteer_tuples = Volunteer.get_all_volunteers() 
-        #returns volunteers in tuples [(vol1_name, vol1_id, ...), (vol2_name, vol2_id,...)]
-        
+        #returns volunteers in tuples [(1, 'Soran', 'Test', 'aaa', 'bbb', '1/1/2000', 7511975055, 'Active', 1)] 
         for volunteer_tuple in volunteer_tuples:
-            volunteer = Volunteer(volunteer_tuple)
+            volunteer = Volunteer.init_from_tuple(volunteer_tuple)
+            volunteer.display_info()
             volunteers.append(volunteer)
 
         return volunteers

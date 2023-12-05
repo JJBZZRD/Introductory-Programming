@@ -3,8 +3,8 @@ from DataLayer.camp import Camp
 
 
 class Volunteer:
-    def __init__(self, first_name, last_name, username, password, date_of_birth, phone, campID):
-        self.volunteerID = None
+    def __init__(self, id, first_name, last_name, username, password, date_of_birth, phone, account_status, campID):
+        self.volunteerID = id
         self.first_name = first_name
         self.last_name = last_name
         self.username = username
@@ -12,10 +12,23 @@ class Volunteer:
         self.date_of_birth = date_of_birth
         self.phone = phone
         self.campID = campID
+        self.account_status = account_status
 
-    # def __init__(self, volunteer_tuple):
-    #     self.volunteerID, self.first_name = volunteer_tuple
-    #     pass
+    @classmethod
+    def init_from_tuple(cls, volunteer_tuple):
+        return cls(*volunteer_tuple)
+
+    def display_info(self):
+        print(f"Volunteer ID: {self.volunteerID}")
+        print(f"First Name: {self.first_name}")
+        print(f"Last Name: {self.last_name}")
+        print(f"Username: {self.username}")
+        print(f"Password: {self.password}")
+        print(f"Date of Birth: {self.date_of_birth}")
+        print(f"Phone: {self.phone}")
+        print(f"Camp ID: {self.campID}")
+        print(f"Account Status: {self.account_status}")
+        print()
 
     def insert_volunteer(self):  # Insert an existing instance of a volunteer into the database
         try:
