@@ -6,6 +6,19 @@ import UI_modify_entries as me
 
 
 class UIManager:
+    """
+    Handles page rendering, navigation history, and user session management.
+
+    Attributes:
+        root (tkinter.Tk): The root window of the tkinter application.
+        current_screen (tkinter.Frame): The currently displayed screen/frame in the application.
+        page_history (list): A list to track the navigation history of screens.
+        current_page_position (int): The current position in the navigation history.
+        header (UIHeader): The header component of the UI, if applicable.
+        possible_screens (dict): A dictionary mapping screen names to their respective classes.
+        logged_in_user: The user object representing the currently logged-in user, if any.
+    """
+    
     def __init__(self, root):
         self.root = root
         self.current_screen = None
@@ -21,11 +34,22 @@ class UIManager:
             'EditVolunteer': me.EditVolunteer
         }
         self.logged_in_user = None
+        
 
-    def show_screen(self, screen_name: str, screen_data=None, add_to_history=True, *args):
+    def show_screen(self, screen_name: str, screen_data: any = None, add_to_history: bool = True, *args):
+        """
+        Displays the specified screen in the UI. Manages the header and updates navigation history.
+
+        Args:
+            screen_name (str): Next screen to be displayed.
+            screen_data (optional): Data to be passed to the next screen. Defaults to None.
+            add_to_history (bool, optional): If True, adds the screen to the navigation history. Defaults to True.
+            *args: Additional arguments to be passed to the screen constructor.
+        """
+        
         print(f"Showing screen: {screen_name}")
         self.clear_screen()
-
+        
         if add_to_history:
             # The following if statement checks to see if the current page is the last item in the history.
             # If not the page history is reduced to include pages only up to the current page
@@ -37,6 +61,7 @@ class UIManager:
             self.current_page_position += 1
 
         screen_class = self.possible_screens.get(screen_name)
+        
         if not screen_class:
             print(f"Screen not found: {screen_name}")
             return

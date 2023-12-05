@@ -1,6 +1,4 @@
 import tkinter as tk
-#from UI_dashboard import AdminDashboard, VolunteerDashboard
-#from UI_manage_list import PlanList
 from dummydata import admin
 from dummydata import volunteer1
 

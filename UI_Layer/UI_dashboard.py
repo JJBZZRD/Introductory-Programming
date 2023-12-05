@@ -2,8 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 from dummydata import camp1, camp2, camp3
 from dummydata import refugee1, refugee2
-
-
 class Dashboard(tk.Frame):
     def __init__(self, root, show_screen, screen_data, *args):
         super().__init__(root)
@@ -28,54 +26,44 @@ class Dashboard(tk.Frame):
 
         ttk.Button(left_frame, text="Edit Camp", command=lambda: self.show_screen('EditCamp', camp.campID)).pack(pady=5)
 
-        # Create refugees section in right frame
         self.create_refugees_section(right_frame, camp)
 
     def create_refugees_section(self, parent, camp):
         refugees_title = tk.Label(parent, text=f"Refugees in Camp {camp.campID}", font=('Arial', 16, 'bold'))
         refugees_title.pack(pady=10)
-
-        # Search and filter frame
+        
         search_frame = tk.Frame(parent, bg='white')
         search_frame.pack(pady=5, fill='x')
         search_entry = tk.Entry(search_frame)
         search_entry.pack(side='left', padx=5, expand=True, fill='x')
+        
+        self.search_entry = tk.Entry(search_frame)
+        self.search_entry.pack(side='left', padx=5, expand=True, fill='x')
 
-        filter_button = ttk.Button(search_frame, text="Filter/Search", command=self.update_refugees_list(search_entry))
+        filter_button = ttk.Button(search_frame, text="Filter/Search", command=self.update_refugees_list)
         filter_button.pack(side='left', padx=5)
 
         self.refugees_listbox = tk.Listbox(parent)
         self.refugees_listbox.pack(pady=10, expand=True, fill='both')
 
-        try:
-            # Fetch and display refugees based on filter and value
-            self.update_refugees_list(search_entry)()
-        except Exception as e:
-            pass
+        self.update_refugees_list()
 
-        manage_refugees_button = ttk.Button(parent, text="Manage Refugees", command=lambda: self.show_screen('RefugeeList', self.camp))
-        manage_refugees_button.pack(pady=5)
+    def update_refugees_list(self):
+        filter_value = self.search_entry.get().strip()
+        filter_type = 'camp' if not filter_value else 'name'
 
-    def update_refugees_list(self,search_entry):
-        def update():
-            filter_type = 'camp' if not search_entry.get() else 'name'
-            filter_value = self.camp.campID if not search_entry.get() else search_entry.get()
+        # self.refugees = PersonDataRetrieve.get_refugees(filter_type, filter_value)
+        self.refugee = [refugee1, refugee2]
 
-            try:
-                self.refugees = [refugee1, refugee2]  # placeholder
-                # self.refugees = self.data_access.get_refugees(filter_type, filter_value)
-                self.refugees_listbox.delete(0, tk.END)
-
-                for refugee in self.refugees:
-                    listbox_entry = f"{refugee.first_name} {refugee.last_name} - {refugee.medical_condition}"
-                    self.refugees_listbox.insert(tk.END, listbox_entry)
-
-                    # Bind the double-click event to a lambda function
-                    self.refugees_listbox.bind('<Double-1>', lambda event, r=refugee: self.on_refugee_double_click(r))
-            except Exception as e:
-                self.show_error_message(f"Error fetching refugees: {str(e)}")
-
-        return update
+        self.refugees_listbox.delete(0, tk.END)
+        if not self.refugees:
+            self.refugees_listbox.insert(tk.END, "No matching refugees found.")
+        else:
+            for refugee in self.refugees:
+                listbox_entry = f"{refugee.first_name} {refugee.last_name} - {refugee.medical_condition}"
+                self.refugees_listbox.insert(tk.END, listbox_entry)
+        
+        self.refugees_listbox.bind('<Double-1>', self.on_refugee_double_click)
 
 
     def on_refugee_double_click(self, refugee):
@@ -87,26 +75,55 @@ class Dashboard(tk.Frame):
 
 
     def create_resource_frame(self, parent, camp):
-        resources = {
-            'Water': (camp.water, camp.max_water),
-            'Food': (camp.food, camp.max_food),
-            'Medical Supplies': (camp.medical_supplies, camp.max_medical_supplies),
-            'Shelter': (camp.shelter, camp.max_shelter)
-        }
+            resources = {
+                'Water': (camp.water, camp.max_water),
+                'Food': (camp.food, camp.max_food),
+                'Medical Supplies': (camp.medical_supplies, camp.max_medical_supplies),
+                'Shelter': (camp.shelter, camp.max_shelter)
+            }
 
-        for resource_name, (amount, capacity) in resources.items():
-            resource_frame = tk.Frame(parent)
-            resource_frame.pack(fill='x', expand=True)
+            resource_labels = {}
 
-            tk.Label(resource_frame, text=f"{resource_name}:").pack(side='left')
-            amount_label = tk.Label(resource_frame, text=f"{amount}/{capacity}")
-            amount_label.pack(side='left')
+            for resource_name, (amount, capacity) in resources.items():
+                resource_frame = tk.Frame(parent)
+                resource_frame.pack(fill='x', expand=True)
 
-            # ttk.Button(resource_frame, text="-", width=2, command=...).pack(side='left')
-            # ttk.Button(resource_frame, text="+", width=2, command=...).pack(side='left')
+                tk.Label(resource_frame, text=f"{resource_name}:").pack(side='left')
+                amount_label = tk.Label(resource_frame, text=f"{amount}/{capacity}")
+                amount_label.pack(side='left')
+                resource_labels[resource_name] = amount_label
+
+                def update_resource(resource_name, increment):
+                    current_amount, current_capacity = resources[resource_name]
+                    new_amount = max(0, min(current_amount + increment, current_capacity))  
+
+                    if resource_name == 'Water':
+                        camp.water = new_amount
+                    elif resource_name == 'Food':
+                        camp.food = new_amount
+                    elif resource_name == 'Medical Supplies':
+                        camp.medical_supplies = new_amount
+                    elif resource_name == 'Shelter':
+                        camp.shelter = new_amount
+
+                    self.update_camp(camp.campID, water=camp.water, food=camp.food, 
+                                    medical_supplies=camp.medical_supplies, shelter=camp.shelter)
+
+                    amount_label = resource_labels[resource_name]
+                    amount_label.config(text=f"{new_amount}/{current_capacity}")
+
+                increase_button = tk.Button(resource_frame, text="+", command=lambda res=resource_name: update_resource(res, 1))
+                decrease_button = tk.Button(resource_frame, text="-", command=lambda res=resource_name: update_resource(res, -1))
+
+                increase_button.pack(side='left')
+                decrease_button.pack(side='left')
 
 
 class VolunteerDashboard(Dashboard):
+    """
+    Takes in a volunteer object and displays a dashboard with information on that volunteer's camp.
+
+    """
     def setup_dashboard(self, volunteer):
         #logic.getcamp are functions that fetch volunteer and camp data
         # self.Camp = logic.getcamp(volunteer)
@@ -124,6 +141,12 @@ class VolunteerDashboard(Dashboard):
         self.populate_camp_tab(camp_tab, self.camp)
 
 class AdminDashboard(Dashboard):
+    """
+    Takes in a list of camp objects TBD and displays a dashboard with information on each camp.
+    
+    Includes an overview tab with information on all camps + additional resources. Also incudes a tab for each invidual camp.
+    """
+    
     def setup_dashboard(self, planCamps):
         self.planCamps = [camp1, camp2, camp3]  # placeholders
         self.additional_resources = {'Food': [40, 100], 'Water': [30, 80], 'Medicine': [10, 60], 'Shelter': [10,90]} #placeholders
