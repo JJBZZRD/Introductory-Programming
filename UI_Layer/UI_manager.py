@@ -22,8 +22,12 @@ class UIManager:
         self.clear_screen()
         
         if nav == False:
-            self.current_page_position += 1
-            self.page_history = self.page_history[:self.current_page_position] + [(screen_name, args)]
+            if self.current_page_position != len(self.page_history)-1:
+                self.page_history = self.page_history[:self.current_page_position]
+
+            self.page_history.append((screen_name,  ))
+
+        self.current_page_position += 1
 
         screen_class = self.possible_screens.get(screen_name)
         if not screen_class:
@@ -63,7 +67,7 @@ class UIManager:
             return
 
         screen_name, args = self.page_history[self.current_page_position]
-        self.show_screen(screen_name,nav=True,*args)
+        self.show_screen(screen_name,True,*args)
 
     def reset_history(self):
         self.page_history = []
