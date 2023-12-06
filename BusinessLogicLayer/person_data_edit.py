@@ -1,10 +1,7 @@
-import os, sys
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(CURRENT_DIR))
 from DataLayer.volunteer import Volunteer
 from DataLayer.refugee import Refugee
 from person_data_retrieve import PersonDataRetrieve
-from util import *
+import util
 
 class PersonDataEdit:
 
@@ -33,35 +30,54 @@ class PersonDataEdit:
         except:
             return "Invalid inputs, please check and try again"
         # validate
-        if not is_phone_format(phone_num):
+        if not util.is_phone_format(phone_num):
            return "Incorrect phone number format"
         
         volunteer_tuples = Volunteer.update_volunteer(id, first_name, last_name, username, password, date_of_birth, phone_num, account_status, camp_id)
 
-        return parse_result('Volunteer', volunteer_tuples)
+        return util.parse_result('Volunteer', volunteer_tuples)
     
     @staticmethod
     def delete_volunteer(id):
-        return Volunteer.delete_volunteer(id)
+        res = Volunteer.delete_volunteer(id)
+        return 'not' not in res
     
     @staticmethod
-    def create_volunteer(id, first_name = None, last_name = None, camp = None, username = None, password = None):
-        return UserDataAccess.create_volunteer(first_name, last_name, camp, username, password)
+    def create_volunteer(first_name = None, last_name = None, camp_id = None, username = None, password = None, date_of_birth = None, phone = None):
+        volunteer_tuples = Volunteer.create_volunteer(first_name, last_name, username, password, date_of_birth, phone, camp_id)
+        return util.parse_result('Volunteer', volunteer_tuples)
     
     @staticmethod
-    def create_refugee(first_name, last_name, camp):
-        return UserDataAccess.create_refugee(first_name, last_name, camp)
+    def create_refugee(first_name, last_name, date_of_birth, family_id, camp_id, medical_condition):
+        refugee_tuples = Refugee.create_refugee(first_name, last_name, date_of_birth, family_id, camp_id, medical_condition)
+        return util.parse_result('Refugee', refugee_tuples)
+
     
     @staticmethod
-    def update_refugee(id, first_name = None, last_name = None):
-        refugee = DataAccess.get_refugee_by_id(id)
-        if first_name:
-            refugee.first_name = first_name
-        if last_name:
-            refugee.last_name = last_name 
-        return UserDataAccess.update_refugee(id, first_name, last_name)
+    def update_refugee(id, first_name = None, last_name = None, date_of_birth = None, family_id = None, camp_id = None, medical_condition = None):
+        refugees = PersonDataRetrieve.get_refugees('id', id)
+        refugee = refugees[0]
+        try:
+            if first_name:
+                refugee.first_name = first_name.strip()
+            if last_name:
+                refugee.last_name = last_name.strip()
+            if date_of_birth:
+                refugee.date_of_birth = date_of_birth
+            if camp_id:
+                refugee.campID = camp_id
+            if family_id:
+                refugee.familyID = family_id
+            if medical_condition:
+                refugee.medical_condition = medical_condition
+        except:
+            return "Invalid inputs, please check and try again"
+        
+        refugee_tupples = Refugee.update_refugee(id, first_name, last_name, date_of_birth, family_id, camp_id, medical_condition)
+
+        return util.parse_result('Refugee', refugee_tupples)
     
     @staticmethod
     def delete_refugee(id):
-        return UserDataAccess.delete_refugee(id)
-    
+        res = Refugee.delete_refugee(id)
+        return 'not' not in res 
