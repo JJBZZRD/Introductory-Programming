@@ -28,7 +28,7 @@ class Plan:  # Plan class has attributes matching columns in table
         self.planID = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
 
     @classmethod  # Insert a plan into the database without creating a new instance
-    def create_plan(cls, id, start_date, end_date, name, region, event_name, description):
+    def create_plan(cls, start_date, end_date, name, region, event_name, description):
         plan = Plan(id, start_date, end_date, name, region, event_name, description)
         plan.insert_plan()
         planID = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
