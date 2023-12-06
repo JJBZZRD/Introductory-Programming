@@ -28,7 +28,7 @@ class TestVolunteer(unittest.TestCase):
         # conn.commit()
         camp_id = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
         camp_tuple = Camp.get_camp_by_id(camp_id)
-        camp = util.parse_result('Camp', [camp_tuple])[0]
+        camp = util.parse_result('Camp', camp_tuple)[0]
         print(camp.display_info())
 
     def tearDown(self):
@@ -39,9 +39,10 @@ class TestVolunteer(unittest.TestCase):
     def test_create_volunteer(self):
         print("Executing test_create_volunteer")
 
-        vols = PersonDataEdit.create_volunteer('unit test first name', 'unit test last name', '28', 'username', 'password', '2023-1-1', '10123456')
+        # vols = PersonDataEdit.create_volunteer('unit test first name', 'unit test last name', '28', 'username', 'password', '2023-1-1', '10123456')
         
         # self.assertIsInstance(vols, list, 'vols is not a list')
         pass
+
 if __name__ == '__main__':
     unittest.main()

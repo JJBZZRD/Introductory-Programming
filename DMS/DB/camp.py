@@ -27,7 +27,7 @@ class Camp:  # Camp class has attributes matching columns in table
     @staticmethod
     def get_camp_by_id(campID):  # Get camp details by selecting on campID. Returns a list of tuples.
         cursor.execute("SELECT * FROM camps WHERE campID = ?", (campID,))
-        return cursor.fetchone()
+        return [cursor.fetchone()]
 
     @classmethod  # Insert a camp into the database without creating a new instance
     def create_camp(cls, camp_tuple):
@@ -43,8 +43,7 @@ class Camp:  # Camp class has attributes matching columns in table
                                  max_food, medical_supplies, max_medical_supplies, planID))
             conn.commit()
             camp_id = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
-            camp_tuple = Camp.get_camp_by_id(camp_id)
-            return [camp_tuple]
+            return Camp.get_camp_by_id(camp_id)
         else:
             return 'Plan planID does not exist'
         
@@ -86,7 +85,7 @@ class Camp:  # Camp class has attributes matching columns in table
         params.append(campID)
         cursor.execute(f"""UPDATE camps SET {', '.join(query)} WHERE campID = ?""", params)
         conn.commit()
-        return Camp.get_campID(campID=campID)
+        return Camp.get_camp_by_id(campID)
 
     @staticmethod
     def delete_camp(campID):  # Delete a camp by selecting on campID
