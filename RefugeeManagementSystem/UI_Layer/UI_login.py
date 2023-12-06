@@ -1,6 +1,6 @@
 import tkinter as tk
-from dummydata import admin
-from dummydata import volunteer1
+from .dummydata import admin
+from .dummydata import volunteer1
 
 
 class LoginScreen(tk.Frame):
