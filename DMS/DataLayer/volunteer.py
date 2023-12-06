@@ -1,16 +1,17 @@
-from .config import conn, cursor
-from .camp import Camp
+from config import conn, cursor
+from camp import Camp
 
 
 class Volunteer:
-    def __init__(self, id, first_name, last_name, username, password, date_of_birth, phone, account_status, campID):
-        self.volunteerID = id
+    def __init__(self, volunteerID, first_name, last_name, username, password, date_of_birth, phone, campID, account_status):
+        self.volunteerID = volunteerID
         self.first_name = first_name
         self.last_name = last_name
         self.username = username
         self.password = password
         self.date_of_birth = date_of_birth
         self.phone = phone
+        self.account_status = account_status
         self.campID = campID
         self.account_status = account_status
 
@@ -30,32 +31,26 @@ class Volunteer:
         print(f"Account Status: {self.account_status}")
         print()
 
-    def insert_volunteer(self):  # Insert an existing instance of a volunteer into the database
-        try:
+    @classmethod
+    def init_from_tuple(cls, volunteer_tuple):
+        return cls(*volunteer_tuple)
+
+    @classmethod  # Insert a volunteer into the database without creating a new instance
+    def create_volunteer(cls, volunteer_tuple):
+        first_name, last_name, username, password, date_of_birth, phone, campID = volunteer_tuple
+        if Volunteer.check_campID_exist(campID):
             sql = """
                 INSERT INTO volunteers (
                 first_name, last_name, username, password, date_of_birth, phone, account_status, campID) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """
-            cursor.execute(sql, (self.first_name, self.last_name, self.username,
-                                 self.password, self.date_of_birth, self.phone, 'Active', self.campID))
-
+                """
+            cursor.execute(sql, (first_name, last_name, username,
+                                 password, date_of_birth, phone, "Active", campID))
             conn.commit()
-            self.volunteerID = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
-        except Exception as e:
-            print(f"Error inserting volunteer: {e}")
-            conn.rollback()
-            return None
-
-    @classmethod  # Insert a volunteer into the database without creating a new instance
-    def create_volunteer(cls, first_name, last_name, username, password, date_of_birth, phone, campID):
-        volunteer = Volunteer(first_name, last_name, username, password, date_of_birth, phone, campID)
-        if Volunteer.check_campID_exist(campID) is not None:
-            volunteer.insert_volunteer()
             volunteerID = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
-            return Volunteer.get_volunteerID(volunteerID)
+            return volunteerID
         else:
-            return 'Camp camID does not exist'
+            return 'Camp campID does not exist'
 
     @staticmethod  # Update an volunteer by selecting on volunteerID
     def update_volunteer(volunteerID, first_name=None, last_name=None, username=None,
@@ -119,14 +114,14 @@ class Volunteer:
             query.append("volunteerID = ?")
             params.append(volunteerID)
         if first_name is not None:
-            query.append("first_name = ?")
-            params.append(first_name)
+            query.append("first_name LIKE ?")
+            params.append(f"{first_name}")
         if last_name is not None:
-            query.append("last_name = ?")
-            params.append(last_name)
+            query.append("last_name LIKE ?")
+            params.append(f"{last_name}%")
         if username is not None:
-            query.append("username = ?")
-            params.append(username)
+            query.append("username LIKE ?")
+            params.append(f"{username}%")
         if password is not None:
             query.append("password = ?")
             params.append(password)
@@ -201,3 +196,15 @@ class Volunteer:
             return True
         else:
             return False
+
+    @staticmethod
+    def get_by_planID(planID):
+        query = []
+        params = []
+        camps = Camp.get_camp(planID=planID)
+        campIDs = [camps[i][0] for i in range(len(camps))]
+        for campID in campIDs:
+            query.append("campID = ?")
+            params.append(campID)
+        cursor.execute(f"""SELECT * FROM volunteers WHERE {' OR '.join(query)}""", params)
+        return cursor.fetchall()
