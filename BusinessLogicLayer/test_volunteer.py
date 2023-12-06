@@ -1,13 +1,10 @@
-import os, sys
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(CURRENT_DIR))
 import unittest
 import sqlite3
-from person_data_retrieve import *
-from person_data_edit import *
-from DataLayer.config import *
-from DataLayer.camp import *
-from DataLayer.plan import *
+from .person_data_retrieve import *
+from .person_data_edit import *
+from ..DataLayer.config import *
+from ..DataLayer.camp import *
+from ..DataLayer.plan import *
 
 class TestVolunteer(unittest.TestCase):
 

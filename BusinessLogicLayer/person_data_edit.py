@@ -1,7 +1,7 @@
-from DataLayer.volunteer import Volunteer
-from DataLayer.refugee import Refugee
-from person_data_retrieve import PersonDataRetrieve
-import util
+from ..DataLayer.volunteer import Volunteer
+from ..DataLayer.refugee import Refugee
+from .person_data_retrieve import PersonDataRetrieve
+from .. import util
 
 class PersonDataEdit:
 
