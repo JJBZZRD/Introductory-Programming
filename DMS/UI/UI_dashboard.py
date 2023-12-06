@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from .UI_utlities import create_filterable_treeview 
-from ..BusinessLogicLayer.person_data_retrieve import PersonDataRetrieve
+from ..Logic.person_data_retrieve import PersonDataRetrieve
 
 class Dashboard(tk.Frame):
     def __init__(self, ui_manager, *args):
