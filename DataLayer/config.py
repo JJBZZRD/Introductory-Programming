@@ -83,8 +83,8 @@ def create_database():
         password TEXT,
         date_of_birth TEXT,
         phone TEXT,
-        account_status INTEGER CHECK (account_status IN ('Active', 'Inactive')),
-        campID INTEGER NOT NULL,
+        account_status TEXT CHECK (account_status IN ('Admin', 'Active', 'Inactive')),
+        campID INTEGER,
         FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
         )
         """

@@ -3,9 +3,9 @@ from plan import Plan
 
 
 class Camp:  # Camp class has attributes matching columns in table
-    def __init__(self, location, max_shelter, water, max_water, food, max_food, medical_supplies,
+    def __init__(self, campID, location, max_shelter, water, max_water, food, max_food, medical_supplies,
                  max_medical_supplies, planID):
-        self.campID = None
+        self.campID = campID
         self.location = location
         self.max_shelter = max_shelter
         self.water = water
@@ -16,28 +16,25 @@ class Camp:  # Camp class has attributes matching columns in table
         self.max_medical_supplies = max_medical_supplies
         self.planID = planID
 
-    def insert_camp(self):  # Insert an existing instance of a camp into the database
-        sql = """
-            INSERT INTO camps (
-                location, max_shelter, water, max_water, food, max_food, medical_supplies,
-                max_medical_supplies, planID) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """
-        cursor.execute(sql, (self.location, self.max_shelter, self.water, self.max_water, self.food,
-                             self.max_food, self.medical_supplies, self.max_medical_supplies, self.planID))
-        conn.commit()
-
-        self.campID = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
+    @classmethod
+    def init_from_tuple(cls, camp_tuple):
+        return cls(*camp_tuple)
 
     @classmethod  # Insert a camp into the database without creating a new instance
-    def create_camp(cls, location, max_shelter, water, max_water, food, max_food, medical_supplies,
-                    max_medical_supplies, planID):
-        camp = Camp(location, max_shelter, water, max_water, food, max_food, medical_supplies,
-                    max_medical_supplies, planID)
+    def create_camp(cls, camp_tuple):
+        location, max_shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID = camp_tuple
         if Camp.check_planID_exist(planID):
-            camp.insert_camp()
+            sql = """
+                INSERT INTO camps (
+                    location, max_shelter, water, max_water, food, max_food, medical_supplies,
+                    max_medical_supplies, planID) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """
+            cursor.execute(sql, (location, max_shelter, water, max_water, food,
+                                 max_food, medical_supplies, max_medical_supplies, planID))
+            conn.commit()
             campID = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
-            return Camp.get_campID(campID=campID)
+            return campID
         else:
             return 'Plan planID does not exist'
         
@@ -108,8 +105,8 @@ class Camp:  # Camp class has attributes matching columns in table
             query.append("campID = ?")
             params.append(campID)
         if location is not None:
-            query.append("location = ?")
-            params.append(location)
+            query.append("location LIKE ?")
+            params.append(f"{location}%")
         if max_shelter is not None:
             query.append("max_shelter = ?")
             params.append(max_shelter)

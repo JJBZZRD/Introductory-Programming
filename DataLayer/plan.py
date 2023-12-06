@@ -2,48 +2,31 @@ from config import conn, cursor
 
 
 class Plan:  # Plan class has attributes matching columns in table
-    def __init__(self, *args):
-        # Check if the first argument is a tuple and has the correct number of elements
-        if len(args) == 1 and isinstance(args[0], tuple) and len(args[0]) in {6, 7}:
-            # Unpack the tuple
-            unpacked_args = args[0]
-        elif len(args) in {6, 7}:
-            # Args are individual parameters
-            unpacked_args = args
-        else:
-            raise ValueError("Invalid arguments to Plan constructor")
+    def __init__(self, planID, start_date, end_date, name, region, event_name, description):
+        self.planID = planID
+        self.start_date = start_date
+        self.end_date = end_date
+        self.name = name
+        self.region = region
+        self.event_name = event_name
+        self.description = description
 
-        # Assign values with default None for planID
-        self.planID = unpacked_args[0] if len(unpacked_args) == 7 else None
-        self.start_date, self.end_date, self.name, self.region, self.event_name, self.description = unpacked_args[-6:]
+    @classmethod
+    def init_from_tuple(cls, plan_tuple):
+        return cls(*plan_tuple)
 
-    def print_self(self):
-        print(self.planID)
-        print(self.start_date)
-        print(self.end_date)
-        print(self.name)
-        print(self.region)
-        print(self.event_name)
-        print(self.description)
-
-    def insert_plan(self):  # Insert an existing instance of a plan into the database
+    @classmethod  # Insert a plan into the database
+    def create_plan(cls, plan_tuple):
+        start_date, end_date, name, region, event_name, description = plan_tuple
         sql = """
             INSERT INTO plans (
                 start_date, end_date, name, region, event_name, description) 
             VALUES (?, ?, ?, ?, ?, ?)
             """
-        cursor.execute(sql, (self.start_date, self.end_date, self.region, self.name, self.event_name,
-                             self.description))
+        cursor.execute(sql, (start_date, end_date, name, region, event_name, description))
         conn.commit()
-
-        self.planID = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
-
-    @classmethod  # Insert a plan into the database without creating a new instance
-    def create_plan(cls, start_date, end_date, name, region, event_name, description):
-        plan = Plan(start_date, end_date, name, region, event_name, description)
-        plan.insert_plan()
         planID = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
-        return Plan.get_planID(planID=planID)
+        return planID
 
     @staticmethod  # Update a plan by selecting on planID
     def update_plan(planID, start_date=None, end_date=None, name=None, region=None, event_name=None, description=None):
@@ -107,17 +90,17 @@ class Plan:  # Plan class has attributes matching columns in table
             query.append("end_date = ?")
             params.append(end_date)
         if name is not None:
-            query.append("name = ?")
-            params.append(name)
+            query.append("name LIKE ?")
+            params.append(f"{name}%")
         if region is not None:
-            query.append("region = ?")
-            params.append(region)
+            query.append("region LIKE ?")
+            params.append(f"{region}%")
         if event_name is not None:
-            query.append("event_name = ?")
-            params.append(event_name)
+            query.append("event_name LIKE ?")
+            params.append(f"{event_name}%")
         if description is not None:
-            query.append("description = ?")
-            params.append(description)
+            query.append("description LIKE ?")
+            params.append(f"{description}%")
 
         cursor.execute(f"""SELECT * FROM plans WHERE {' AND '.join(query)}""", params)
         return cursor.fetchall()

@@ -3,35 +3,33 @@ from camp import Camp
 
 
 class Refugee:  # Refugee class has attributes matching columns in table
-    def __init__(self, first_name, last_name, date_of_birth, familyID, campID, medical_condition):
-        self.refugeeID = None
-        self.first_name = first_name
-        self.last_name = last_name
-        self.date_of_birth = date_of_birth
-        self.familyID = familyID
-        self.campID = campID
-        self.medical_condition = medical_condition
+    def __init__(self, refugeeID, first_name, last_name, date_of_birth, familyID, campID, medical_condition):
+        refugeeID = refugeeID
+        first_name = first_name
+        last_name = last_name
+        date_of_birth = date_of_birth
+        familyID = familyID
+        campID = campID
+        medical_condition = medical_condition
 
-
-    def insert_refugee(self):  # Insert an existing instance of a refugee into the database
-        sql = """
-            INSERT INTO refugees (
-            first_name, last_name, date_of_birth, familyID, campID, medical_condition) 
-            VALUES (?, ?, ?, ?, ?, ?)
-            """
-        cursor.execute(sql, (self.first_name, self.last_name, self.date_of_birth,
-                             self.familyID, self.campID, self.medical_condition))
-        conn.commit()
-
-        self.refugeeID = cursor.execute("SELECT last_insert_rowid() FROM refugees").fetchone()[0]
+    @classmethod
+    def init_from_tuple(cls, refugee_tuple):
+        return cls(*refugee_tuple)
 
     @classmethod    # Insert a refugee into the database without creating a new instance
-    def create_refugee(cls, first_name, last_name, date_of_birth, familyID, campID, medical_condition):
-        refugee = Refugee(first_name, last_name, date_of_birth, familyID, campID, medical_condition)
+    def create_refugee(cls, refugee_tuple):
+        first_name, last_name, date_of_birth, familyID, campID, medical_condition = refugee_tuple
         if Refugee.check_campID_exist(campID):
-            refugee.insert_refugee()
+            sql = """
+                INSERT INTO refugees (
+                first_name, last_name, date_of_birth, familyID, campID, medical_condition) 
+                VALUES (?, ?, ?, ?, ?, ?)
+                """
+            cursor.execute(sql, (first_name, last_name, date_of_birth,
+                                 familyID, campID, medical_condition))
+            conn.commit()
             refugeeID = cursor.execute("SELECT last_insert_rowid() FROM refugees").fetchone()[0]
-            return refugee.get_refugeeID(refugeeID=refugeeID)
+            return refugeeID
         else:
             return 'Camp campID does not exist'
 
@@ -91,11 +89,11 @@ class Refugee:  # Refugee class has attributes matching columns in table
             query.append("refugeeID = ?")
             params.append(refugeeID)
         if first_name is not None:
-            query.append("first_name = ?")
-            params.append(first_name)
+            query.append("first_name LIKE ?")
+            params.append(f"{first_name}%")
         if last_name is not None:
-            query.append("last_name = ?")
-            params.append(last_name)
+            query.append("last_name LIKE ?")
+            params.append(f"{last_name}%")
         if date_of_birth is not None:
             query.append("date_of_birth = ?")
             params.append(date_of_birth)
@@ -106,8 +104,8 @@ class Refugee:  # Refugee class has attributes matching columns in table
             query.append("campID = ?")
             params.append(campID)
         if medical_condition is not None:
-            query.append("medical_condition = ?")
-            params.append(medical_condition)
+            query.append("medical_condition LIKE ?")
+            params.append(f"{medical_condition}%")
 
         cursor.execute(f"""SELECT * FROM refugees WHERE {' AND '.join(query)}""", params)
         return cursor.fetchall()
@@ -155,3 +153,15 @@ class Refugee:  # Refugee class has attributes matching columns in table
             return True
         else:
             return False
+
+    @staticmethod
+    def get_by_planID(planID):
+        query = []
+        params = []
+        camps = Camp.get_camp(planID=planID)
+        campIDs = [camps[i][0] for i in range(len(camps))]
+        for campID in campIDs:
+            query.append("campID = ?")
+            params.append(campID)
+        cursor.execute(f"""SELECT * FROM refugees WHERE {' OR '.join(query)}""", params)
+        return cursor.fetchall()
