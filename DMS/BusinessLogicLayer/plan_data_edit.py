@@ -6,8 +6,8 @@ from . import business_logic_util
 class PlanEdit:
 
     @staticmethod
-    def create_plan(name, plan_type, region, description, start_date, end_date=None):
-        for attr in [name, plan_type, region, description, start_date]:
+    def create_plan(name, event_name, region, description, start_date, end_date=None):
+        for attr in [name, event_name, region, description, start_date]:
             if not attr:
                 return "Please provide {}".format(attr)
 
@@ -17,15 +17,14 @@ class PlanEdit:
         start_date = business_logic_util.validate_date(start_date)
         end_date = business_logic_util.validate_end_date(start_date, end_date)
 
-        plan_tuple = (start_date, end_date, name, region, plan_type, description)
+        plan_tuple = (start_date, end_date, name, region, event_name, description)
 
-        return Plan.create_plan('Plan', plan_tuple)
+        return Plan.create_plan(plan_tuple)
 
     @staticmethod
-    def update_plan(planID, name, plan_type, region, description, start_date, end_date):
+    def update_plan(planID, name, event_name, region, description, start_date, end_date):
 
         name = business_logic_util.validate_name(name)
-        plan_type = business_logic_util.validate_plan_type(plan_type)
         region = business_logic_util.validate_region(region)
         event_name = business_logic_util.validate_event(event_name)
         description = business_logic_util.validate_description(description)
