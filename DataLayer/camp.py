@@ -20,6 +20,10 @@ class Camp:  # Camp class has attributes matching columns in table
     def init_from_tuple(cls, camp_tuple):
         return cls(*camp_tuple)
 
+    def display_info(self):
+        return [str(self.campID), str(self.location), str(self.max_shelter), str(self.water), str(self.max_water), str(self.food), str(self.max_food),
+                str(self.medical_supplies), str(self.max_medical_supplies), str(self.planID)]
+
     @classmethod  # Insert a camp into the database without creating a new instance
     def create_camp(cls, camp_tuple):
         location, max_shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID = camp_tuple
