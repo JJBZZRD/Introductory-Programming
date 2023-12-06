@@ -17,7 +17,9 @@ class PlanEdit:
         start_date = business_logic_util.validate_date(start_date)
         end_date = business_logic_util.validate_end_date(start_date, end_date)
 
-        return Plan.create_plan(start_date, end_date, name, region, plan_type, description)
+        plan_tuple = (start_date, end_date, name, region, plan_type, description)
+
+        return Plan.create_plan('Plan', plan_tuple)
 
     @staticmethod
     def update_plan(planID, name, plan_type, region, description, start_date, end_date):
@@ -34,7 +36,7 @@ class PlanEdit:
         else:
             end_date = None
 
-        return Plan.update_plan(planID, start_date, end_date, name, region, None, description)
+        return Plan.update_plan(planID, start_date, end_date, name, region, event_name, description)
 
     @staticmethod
     def end_plan(planID, start_date, end_date):
