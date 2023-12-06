@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from dummydata import plan1, plan2
+from .dummydata import plan1, plan2
 
 
 class ManageList(tk.Frame):
@@ -9,12 +9,13 @@ class ManageList(tk.Frame):
         self.root = ui_manager.root
         self.screen_data = ui_manager.screen_data
         self.show_screen = ui_manager.show_screen
+        self.tree_item_to_object = {}
         self.setup_list()
         self.list_type = None
         self.result_headers = None
         self.results = None
         self.search_field = None
-        self.tree_item_to_object = {}
+
 
     def setup_list(self):
         raise NotImplementedError("Subclasses should implement this method to setup the different lists")
@@ -68,7 +69,7 @@ class ManageList(tk.Frame):
             results_list.heading(i, text=i)
             results_list.column(i, anchor='center')
 
-        self.tree_item_to_object = {}
+        #self.tree_item_to_object = {}
 
         # Insert items into the Treeview and populate the dictionary
         for result in self.results:
@@ -84,6 +85,8 @@ class ManageList(tk.Frame):
         # Place the Treeview on the grid
         results_list.grid(column=0, row=3, columnspan=13)
 
+        print("Tree items to objects:", self.tree_item_to_object)
+
     def on_item_double_click(self, event):
         # Identify the Treeview widget
         tree = event.widget
@@ -91,13 +94,16 @@ class ManageList(tk.Frame):
         # Get the selected item
         result_id = tree.selection()[0]
 
+        print("Current tree_item_to_object dictionary:", self.tree_item_to_object)
         print("Clicked item ID:", result_id)
 
         # Retrieve the associated object from the dictionary
         associated_object = self.tree_item_to_object[result_id]
 
-        # Call the method with the associated object
-        self.switch_to_admin_dashboard(associated_object)
+        if associated_object:
+            self.switch_to_admin_dashboard(associated_object)
+        else:
+            print("no asssociated object")
 
     def switch_to_admin_dashboard(self, result):
         self.show_screen('AdminDashboard', result)
@@ -107,11 +113,11 @@ class ManageList(tk.Frame):
 
 
 class PlanList(ManageList):
-
     def setup_list(self):
         self.list_type = ['Manage Plans', 'Add New Plan']
         self.result_headers = ['Plan ID', 'Plan Name', 'Region', 'Event Name', 'Description', 'Start Date', 'End Date']
         self.results = [plan1, plan2]
+        #self.tree_item_to_object = {}
         self.create_title()
         self.create_search()
         self.create_results()
