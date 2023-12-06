@@ -22,6 +22,7 @@ query_log_path = os.path.join(application_path, "log_files/queries.log")
 logging.basicConfig(filename=query_log_path, filemode='a', level=logging.INFO)
 
 conn = sqlite3.connect(dbpath)
+conn.execute("PRAGMA foreign_keys = ON")
 cursor = conn.cursor()
 conn.set_trace_callback(logging.info)
 
@@ -32,7 +33,7 @@ def create_database():
         adminID INTEGER PRIMARY KEY,
         first_name TEXT, 
         last_name TEXT,
-        username TEXT UNIQUE,
+        username TEXT,
         password TEXT,
         date_of_birth TEXT,
         phone TEXT
@@ -66,8 +67,8 @@ def create_database():
         max_food INTEGER,
         medical_supplies INTEGER,
         max_medical_supplies INTEGER,
-        planID INTEGER,
-        FOREIGN KEY (planID) REFERENCES plans(planID)
+        planID INTEGER NOT NULL,
+        FOREIGN KEY (planID) REFERENCES plans(planID) ON DELETE CASCADE ON UPDATE CASCADE
         )
         """
 
@@ -80,11 +81,11 @@ def create_database():
         last_name TEXT,
         username TEXT UNIQUE,
         password TEXT,
-        date_of_birth Text,
+        date_of_birth TEXT,
         phone TEXT,
         account_status INTEGER CHECK (account_status IN ('Active', 'Inactive')),
-        campID INTEGER,
-        FOREIGN KEY (campID) REFERENCES camps(campID)
+        campID INTEGER NOT NULL,
+        FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
         )
         """
 
@@ -98,8 +99,8 @@ def create_database():
         date_of_birth TEXT,
         familyID INTEGER,
         medical_condition TEXT,
-        campID INTEGER,
-        FOREIGN KEY (campID) REFERENCES camps(campID)
+        campID INTEGER NOT NULL,
+        FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
         )
         """
 
