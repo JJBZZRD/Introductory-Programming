@@ -1,7 +1,7 @@
 
 import config
-from volunteer import Volunteer
-from plan import Plan
+from .volunteer import Volunteer
+from .plan import Plan
 
 
 

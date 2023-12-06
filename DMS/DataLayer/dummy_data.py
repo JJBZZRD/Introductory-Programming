@@ -1,4 +1,4 @@
-from config import conn, cursor
+from .config import conn, cursor
 
 
 def insert_dummy_data():

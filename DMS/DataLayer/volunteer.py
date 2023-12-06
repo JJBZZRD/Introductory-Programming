@@ -1,5 +1,5 @@
-from config import conn, cursor
-from camp import Camp
+from .config import conn, cursor
+from .camp import Camp
 
 
 class Volunteer:
