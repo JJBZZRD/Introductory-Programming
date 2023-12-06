@@ -51,5 +51,15 @@ class PlanEdit:
         return Plan.delete_plan(planID)
     
     # @staticmethod
-    # def plan_status(planID, start_date, end_date):
+    # def plan_status(planID):
     #     plan = Plan.get_plan(planID)
+        
+    #     if not plan:
+    #         return "Plan"
+
+    #     plan_end_date = datetime.strptime(plan[3], '%d%m%Y').date()
+
+    #     if plan_end_date < datetime.now().date():
+    #         return False
+    #     else:
+    #         return True
