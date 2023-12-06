@@ -139,48 +139,7 @@ class Camp:  # Camp class has attributes matching columns in table
 
         cursor.execute(f"""SELECT * FROM camps WHERE {' AND '.join(query)}""", params)
         return cursor.fetchall()
-
-    @staticmethod  # Similar to the get_camp function but using sqlite like to create a sort of search function.
-    def search_camp(campID=None, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
-                     medical_supplies=None, max_medical_supplies=None, planID=None):
-
-        query = []
-        params = []
-
-        if campID is not None:
-            query.append("campID LIKE ?")
-            params.append(f"{campID}%")
-        if location is not None:
-            query.append("location LIKE ?")
-            params.append(f"{location}%")
-        if max_shelter is not None:
-            query.append("max_shelter LIKE ?")
-            params.append(f"{max_shelter}%")
-        if water is not None:
-            query.append("water LIKE ?")
-            params.append(f"{water}%")
-        if max_water is not None:
-            query.append("max_water LIKE ?")
-            params.append(f"{max_water}%")
-        if food is not None:
-            query.append("food LIKE ?")
-            params.append(f"{food}%")
-        if max_food is not None:
-            query.append("max_food LIKE ?")
-            params.append(f"{max_food}%")
-        if medical_supplies is not None:
-            query.append("medical_supplies LIKE ?")
-            params.append(f"{medical_supplies}%")
-        if max_medical_supplies is not None:
-            query.append("max_medical_supplies LIKE ?")
-            params.append(f"{max_medical_supplies}%")
-        if planID is not None:
-            query.append("planID LIKE ?")
-            params.append(f"{planID}%")
-
-        cursor.execute(f"SELECT * FROM camps WHERE {' AND '.join(query)}", params)
-        return cursor.fetchall()
-
+    
     @staticmethod
     def get_all_camps():  # Gets all camps. Returns a list of tuples.
         cursor.execute("SELECT * FROM camps")

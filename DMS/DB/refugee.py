@@ -70,7 +70,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
         params.append(refugeeID)
         cursor.execute(f"""UPDATE refugees SET {', '.join(query)} WHERE refugeeID = ?""", params)
         conn.commit()
-        return Refugee.get_refugee_by_id(refugeeID=refugeeID)
+        return Refugee.get_refugee_by_id(refugeeID)
 
     @staticmethod
     def delete_refugee(refugeeID):  # Delete a refugee by selecting on refugeeID
@@ -108,37 +108,6 @@ class Refugee:  # Refugee class has attributes matching columns in table
         if campID is not None:
             query.append("campID = ?")
             params.append(campID)
-        if medical_condition is not None:
-            query.append("medical_condition LIKE ?")
-            params.append(f"{medical_condition}%")
-
-        cursor.execute(f"""SELECT * FROM refugees WHERE {' AND '.join(query)}""", params)
-        return cursor.fetchall()
-
-    @staticmethod  # Similar to the get_refugee function but using sqlite like to create a sort of search function.
-    def search_refugee(refugeeID=None, first_name=None, last_name=None, date_of_birth=None,
-                    familyID=None, campID=None, medical_condition=None):
-        query = []
-        params = []
-
-        if refugeeID is not None:
-            query.append("refugeeID LIKE ?")
-            params.append(f"{refugeeID}%")
-        if first_name is not None:
-            query.append("first_name LIKE ?")
-            params.append(f"{first_name}%")
-        if last_name is not None:
-            query.append("last_name LIKE ?")
-            params.append(f"{last_name}%")
-        if date_of_birth is not None:
-            query.append("date_of_birth LIKE ?")
-            params.append(f"{date_of_birth}%")
-        if familyID is not None:
-            query.append("familyID LIKE ?")
-            params.append(f"{familyID}%")
-        if campID is not None:
-            query.append("campID LIKE ?")
-            params.append(f"{campID}%")
         if medical_condition is not None:
             query.append("medical_condition LIKE ?")
             params.append(f"{medical_condition}%")

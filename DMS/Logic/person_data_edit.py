@@ -52,14 +52,14 @@ class PersonDataEdit:
     
     @staticmethod
     def create_refugee(first_name, last_name, date_of_birth, family_id, camp_id, medical_condition):
-        refugee_tuples = Refugee.create_refugee(first_name, last_name, date_of_birth, family_id, camp_id, medical_condition)
+        t = (first_name, last_name, date_of_birth, family_id, camp_id, medical_condition)
+        refugee_tuples = Refugee.create_refugee(t)
         return util.parse_result('Refugee', refugee_tuples)
 
     
     @staticmethod
     def update_refugee(id, first_name = None, last_name = None, date_of_birth = None, family_id = None, camp_id = None, medical_condition = None):
-        refugees = PersonDataRetrieve.get_refugees('id', id)
-        refugee = refugees[0]
+        refugee = PersonDataRetrieve.get_refugees('id', id)[0]
         try:
             if first_name:
                 refugee.first_name = first_name.strip()

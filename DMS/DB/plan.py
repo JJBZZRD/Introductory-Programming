@@ -109,38 +109,6 @@ class Plan:  # Plan class has attributes matching columns in table
         cursor.execute(f"""SELECT * FROM plans WHERE {' AND '.join(query)}""", params)
         return cursor.fetchall()
 
-    @staticmethod  # Similar to the get_plan function but using sqlite like to create a sort of search function.
-    def search_plan(planID=None, start_date=None, end_date=None, name=None, region=None, event_name=None,
-                 description=None):
-
-        query = []
-        params = []
-
-        if planID is not None:
-            query.append("planID like ?")
-            params.append(f"{planID}%")
-        if start_date is not None:
-            query.append("start_date like ?")
-            params.append(f"{start_date}%")
-        if end_date is not None:
-            query.append("end_date like ?")
-            params.append(f"{end_date}%")
-        if name is not None:
-            query.append("name like ?")
-            params.append(f"{name}%")
-        if region is not None:
-            query.append("region like ?")
-            params.append(f"{region}%")
-        if event_name is not None:
-            query.append("event_name like ?")
-            params.append(f"{event_name}%")
-        if description is not None:
-            query.append("description like ?")
-            params.append(f"{description}%")
-
-        cursor.execute(f"""SELECT * FROM plans WHERE {' AND '.join(query)}""", params)
-        return cursor.fetchall()
-
     @staticmethod
     def get_all_plans():  # Gets all plans. Returns a list of tuples.
         cursor.execute("SELECT * FROM plans")
