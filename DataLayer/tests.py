@@ -32,3 +32,5 @@ Plan.create_plan(plan4_tuple)
 
 plan_search_test = Plan.get_plan(name="Mon")
 print(plan_search_test)
+
+Plan.__repr__()

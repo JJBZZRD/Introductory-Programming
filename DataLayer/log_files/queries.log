@@ -6403,3 +6403,129 @@ INFO:root:
         
 INFO:root:SELECT * FROM camps WHERE planID = 1
 INFO:root:SELECT * FROM volunteers WHERE campID = 3 OR campID = 7 OR campID = 8 OR campID = 10 OR campID = 15
+INFO:root:
+    CREATE TABLE IF NOT EXISTS admins(
+        adminID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT,
+        password TEXT,
+        date_of_birth TEXT,
+        phone TEXT
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS plans (
+        planID INTEGER PRIMARY KEY,
+        start_date TEXT,
+        end_date TEXT,
+        name TEXT,
+        region TEXT,
+        event_name TEXT,
+        description TEXT
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS camps (
+        campID INTEGER PRIMARY KEY,
+        location TEXT,
+        max_shelter INTEGER,
+        water INTEGER,
+        max_water INTEGER,
+        food INTEGER,
+        max_food INTEGER,
+        medical_supplies INTEGER,
+        max_medical_supplies INTEGER,
+        planID INTEGER NOT NULL,
+        FOREIGN KEY (planID) REFERENCES plans(planID) ON DELETE CASCADE ON UPDATE CASCADE
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS volunteers(
+        volunteerID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT UNIQUE,
+        password TEXT,
+        date_of_birth TEXT,
+        phone TEXT,
+        account_status TEXT CHECK (account_status IN ('Admin', 'Active', 'Inactive')),
+        campID INTEGER,
+        FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS refugees (
+        refugeeID INTEGER PRIMARY KEY,
+        first_name TEXT,
+        last_name TEXT,
+        date_of_birth TEXT,
+        familyID INTEGER,
+        medical_condition TEXT,
+        campID INTEGER NOT NULL,
+        FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS admins(
+        adminID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT,
+        password TEXT,
+        date_of_birth TEXT,
+        phone TEXT
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS plans (
+        planID INTEGER PRIMARY KEY,
+        start_date TEXT,
+        end_date TEXT,
+        name TEXT,
+        region TEXT,
+        event_name TEXT,
+        description TEXT
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS camps (
+        campID INTEGER PRIMARY KEY,
+        location TEXT,
+        max_shelter INTEGER,
+        water INTEGER,
+        max_water INTEGER,
+        food INTEGER,
+        max_food INTEGER,
+        medical_supplies INTEGER,
+        max_medical_supplies INTEGER,
+        planID INTEGER NOT NULL,
+        FOREIGN KEY (planID) REFERENCES plans(planID) ON DELETE CASCADE ON UPDATE CASCADE
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS volunteers(
+        volunteerID INTEGER PRIMARY KEY,
+        first_name TEXT, 
+        last_name TEXT,
+        username TEXT UNIQUE,
+        password TEXT,
+        date_of_birth TEXT,
+        phone TEXT,
+        account_status TEXT CHECK (account_status IN ('Admin', 'Active', 'Inactive')),
+        campID INTEGER,
+        FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
+        )
+        
+INFO:root:
+    CREATE TABLE IF NOT EXISTS refugees (
+        refugeeID INTEGER PRIMARY KEY,
+        first_name TEXT,
+        last_name TEXT,
+        date_of_birth TEXT,
+        familyID INTEGER,
+        medical_condition TEXT,
+        campID INTEGER NOT NULL,
+        FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
+        )
+        

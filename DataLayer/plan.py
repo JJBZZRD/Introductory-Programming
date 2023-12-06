@@ -141,3 +141,8 @@ class Plan:  # Plan class has attributes matching columns in table
     def get_all_plans():  # Gets all plans. Returns a list of tuples.
         cursor.execute("SELECT * FROM plans")
         return cursor.fetchall()
+
+    def __repr__(self):
+        return f'Plan("{self.planID}", "{self.start_date}", "{self.end_date}", "{self.name}", "{self.region}", "{self.event_name}", "{self.description}")'
+
+
