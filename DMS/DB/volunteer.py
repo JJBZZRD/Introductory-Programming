@@ -25,7 +25,7 @@ class Volunteer:
     @staticmethod
     def get_volunteer_by_id(volunteerID):  # Get volunteer details by selecting on volunteerID. Returns a list of tuples.
         cursor.execute("SELECT * FROM volunteers WHERE volunteerID = ?", (volunteerID,))
-        return cursor.fetchone()
+        return [cursor.fetchone()]
 
     @classmethod  # Insert a volunteer into the database without creating a new instance
     def create_volunteer(cls, volunteer_tuple):
@@ -40,8 +40,7 @@ class Volunteer:
                                  password, date_of_birth, phone, "Active", campID))
             conn.commit()
             volunteer_id = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
-            volunteer_tuple = Volunteer.get_volunteer_by_id(volunteer_id)
-            return [volunteer_tuple]
+            return Volunteer.get_volunteer_by_id(volunteer_id)
         else:
             return 'Camp campID does not exist'
 

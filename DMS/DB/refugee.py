@@ -23,7 +23,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
     @staticmethod
     def get_refugee_by_id(refugeeID):  # Get refugee details by selecting on refugeeID. Returns a list of tuples.
         cursor.execute("SELECT * FROM refugees WHERE refugeeID = ?", (refugeeID,))
-        return cursor.fetchone()
+        return [cursor.fetchone()]
 
     @classmethod    # Insert a refugee into the database without creating a new instance
     def create_refugee(cls, refugee_tuple):
@@ -38,8 +38,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
                                  familyID, campID, medical_condition))
             conn.commit()
             refugee_id = cursor.execute("SELECT last_insert_rowid() FROM refugees").fetchone()[0]
-            refugee_tuple = Refugee.get_refugee_by_id(refugee_id)
-            return [refugee_tuple]
+            return Refugee.get_refugee_by_id(refugee_id)
         else:
             return 'Camp campID does not exist'
 

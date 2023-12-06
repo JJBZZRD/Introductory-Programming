@@ -21,7 +21,7 @@ class Plan:  # Plan class has attributes matching columns in table
     @staticmethod
     def get_plan_by_id(planID):  # Get plan details by selecting on planID. Returns a list of tuples.
         cursor.execute("SELECT * FROM plans WHERE planID = ?", (planID,))
-        return cursor.fetchone()
+        return [cursor.fetchone()]
 
     @classmethod  # Insert a plan into the database
     def create_plan(cls, plan_tuple):
@@ -34,8 +34,8 @@ class Plan:  # Plan class has attributes matching columns in table
         cursor.execute(sql, (start_date, end_date, name, region, event_name, description))
         conn.commit()
         plan_id = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
-        plan_tuple = Plan.get_plan_by_id(plan_id)
-        return [plan_tuple]
+        return Plan.get_plan_by_id(plan_id)
+
 
     @staticmethod  # Update a plan by selecting on planID
     def update_plan(planID, start_date=None, end_date=None, name=None, region=None, event_name=None, description=None):
