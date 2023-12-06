@@ -3,7 +3,7 @@ from camp import Camp
 
 
 class Volunteer:
-    def __init__(self, volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID):
+    def __init__(self, volunteerID, first_name, last_name, username, password, date_of_birth, phone, campID, account_status):
         self.volunteerID = volunteerID
         self.first_name = first_name
         self.last_name = last_name
@@ -17,6 +17,10 @@ class Volunteer:
     @classmethod
     def init_from_tuple(cls, volunteer_tuple):
         return cls(*volunteer_tuple)
+
+    def display_info(self):
+        return [str(self.volunteerID), self.first_name, self.last_name, self.username, self.password,
+                self.date_of_birth, self.phone, self.account_status, str(self.campID)]
 
     @classmethod  # Insert a volunteer into the database without creating a new instance
     def create_volunteer(cls, volunteer_tuple):
