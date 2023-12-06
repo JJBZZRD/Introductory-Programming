@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
-from dummydata import camp1, camp2, camp3
-from dummydata import refugee1, refugee2
+from .UI_utlities import create_filterable_treeview 
+from ..BusinessLogicLayer.person_data_retrieve import PersonDataRetrieve
+
 class Dashboard(tk.Frame):
     def __init__(self, ui_manager, *args):
         super().__init__(ui_manager.root)
@@ -27,48 +28,25 @@ class Dashboard(tk.Frame):
 
         self.create_refugees_section(right_frame, camp)
 
+    import tkinter.ttk as ttk
+
     def create_refugees_section(self, parent, camp):
         refugees_title = tk.Label(parent, text=f"Refugees in Camp {camp.campID}", font=('Arial', 16, 'bold'))
         refugees_title.pack(pady=10)
-        
-        search_frame = tk.Frame(parent, bg='white')
-        search_frame.pack(pady=5, fill='x')
-        
-        search_entry = tk.Entry(search_frame)
-        search_entry.pack(side='left', padx=5, expand=True, fill='x')
 
-        filter_button = ttk.Button(search_frame, text="Filter/Search", command=lambda: self.update_refugees_list(search_entry, refugees_listbox))
-        filter_button.pack(side='left', padx=5)
+        data_retrieval_methods = {
+            'all': PersonDataRetrieve.get_refugees,
+            'all': [refugee1, refugee2],
+            'filtered': PersonDataRetrieve.get_refugees,
+            'filtered': [refugee1, refugee2],
+        }
 
-        refugees_listbox = tk.Listbox(parent)
-        refugees_listbox.pack(pady=10, expand=True, fill='both')
-        refugees_listbox.bind('<Double-1>', lambda event, lb=refugees_listbox: self.on_refugee_double_click(event, lb))
+        refugees_treeview = create_filterable_treeview(parent, data_retrieval_methods, ['Name', 'Medical Condition'], self.on_refugee_double_click)
 
-        self.update_refugees_list(search_entry, refugees_listbox)
-
-    def update_refugees_list(self, search_entry, refugees_listbox):
-        filter_value = search_entry.get().strip()
-        filter_type = 'camp' if not filter_value else 'name'
-
-        # Assuming self.refugees is a list of refugee objects
-        # self.refugees = PersonDataRetrieve.get_refugees(filter_type, filter_value)
-        self.refugees = [refugee1, refugee2]  # Placeholder data
-
-        refugees_listbox.delete(0, tk.END)
-        if not self.refugees:
-            refugees_listbox.insert(tk.END, "No matching refugees found.")
-        else:
-            for refugee in self.refugees:
-                listbox_entry = f"{refugee.first_name} {refugee.last_name} - {refugee.medical_condition}"
-                refugees_listbox.insert(tk.END, listbox_entry)
-
-    def on_refugee_double_click(self, event, listbox):
-        index = listbox.curselection()
-        print("Selected index:", index)
-
-        if index:
-            selected_index = index[0]
-            selected_refugee = self.refugees[selected_index]
+    def on_refugee_double_click(self, event, treeview):
+        item = treeview.focus()
+        if item:
+            selected_refugee = self.refugees[int(treeview.item(item, "text")) - 1]
             self.show_screen('EditRefugee', selected_refugee)
 
     def create_resource_frame(self, parent, camp):

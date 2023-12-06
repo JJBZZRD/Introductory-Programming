@@ -1,4 +1,4 @@
-from DataLayer.volunteer import *
+from ..DataLayer.volunteer import *
 
 class PersonDataRetrieve:
 

@@ -1,5 +1,5 @@
 import tkinter as tk
-from UI_manager import UIManager
+from .UI_Layer.UI_manager import UIManager
 
 
 if __name__ == "__main__":

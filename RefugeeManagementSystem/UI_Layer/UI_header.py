@@ -1,6 +1,5 @@
 import tkinter as tk
 
-
 class UIHeader(tk.Frame):
     def __init__(self, ui_manager, *args, **kwargs):
         super().__init__(ui_manager.root, **kwargs)

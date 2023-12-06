@@ -1,5 +1,4 @@
 # Import the UserDataAccess class from the DataAccessLayer package
-from DataAccessLayer.user_data_access import UserDataAccess
 
 class AuthenticationService:
     """
@@ -20,11 +19,7 @@ class AuthenticationService:
         :return: Boolean indicating the result of the authentication process.
         """
         # Validate the user's credentials using the UserDataAccess class
-        if UserDataAccess.validate_user(username, password):
-            return UserDataAccess.get_user(username, password)
-        else:
-            return False
-
+        pass
     # @staticmethod
     # def logout():
     #     return "login_page"
