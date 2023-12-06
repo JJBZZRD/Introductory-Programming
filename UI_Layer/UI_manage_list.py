@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+from dummydata import plan1, plan2
+
 
 class ManageList(tk.Frame):
     def __init__(self, ui_manager, **kwargs):
@@ -12,6 +14,7 @@ class ManageList(tk.Frame):
         self.result_headers = None
         self.results = None
         self.search_field = None
+        self.tree_item_to_object = {}
 
     def setup_list(self):
         raise NotImplementedError("Subclasses should implement this method to setup the different lists")
@@ -57,7 +60,7 @@ class ManageList(tk.Frame):
         # then each list within thi list will populate the row from the treeview widget under the appropriate header
 
     def create_results(self):
-        #this method creates the results list for a chosen subclass
+        # this method creates the results list for a chosen subclass
         results_list = ttk.Treeview(self, columns=self.result_headers, show='headings')
 
         # this lets us change the header values depending on what are being passed
@@ -65,15 +68,39 @@ class ManageList(tk.Frame):
             results_list.heading(i, text=i)
             results_list.column(i, anchor='center')
 
-        for i in self.results:
-            results_list.insert('', 'end', values=i)
+        self.tree_item_to_object = {}
 
-        results_list.bind('<Double-1>', self.switch_to_admin_dashboard)
+        # Insert items into the Treeview and populate the dictionary
+        for result in self.results:
+            result_id = results_list.insert('', 'end', values=result.get_info())
+            self.tree_item_to_object[result_id] = result
 
+
+        print("Tree items to objects:", self.tree_item_to_object)
+
+        # Bind double-click event
+        results_list.bind('<Double-1>', lambda event: self.on_item_double_click(event))
+
+        # Place the Treeview on the grid
         results_list.grid(column=0, row=3, columnspan=13)
 
-    def switch_to_admin_dashboard(self, event=None):
-        self.show_screen('AdminDashboard')
+    def on_item_double_click(self, event):
+        # Identify the Treeview widget
+        tree = event.widget
+
+        # Get the selected item
+        result_id = tree.selection()[0]
+
+        print("Clicked item ID:", result_id)
+
+        # Retrieve the associated object from the dictionary
+        associated_object = self.tree_item_to_object[result_id]
+
+        # Call the method with the associated object
+        self.switch_to_admin_dashboard(associated_object)
+
+    def switch_to_admin_dashboard(self, result):
+        self.show_screen('AdminDashboard', result)
 
     def switch_to_new_plan(self, event=None):
         self.show_screen('NewPlan')
@@ -83,9 +110,8 @@ class PlanList(ManageList):
 
     def setup_list(self):
         self.list_type = ['Manage Plans', 'Add New Plan']
-        self.result_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
-        self.results = [['1', 'Austerity relief', 'economic collapse', 'United Kingdom',
-                         'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']] #
+        self.result_headers = ['Plan ID', 'Plan Name', 'Region', 'Event Name', 'Description', 'Start Date', 'End Date']
+        self.results = [plan1, plan2]
         self.create_title()
         self.create_search()
         self.create_results()

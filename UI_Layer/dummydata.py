@@ -84,6 +84,10 @@ class Plan:  # Plan class has attributes matching columns in table
         self.event_name = event_name
         self.description = description
 
+
+    def get_info(self):
+        return [self.planID, self.name, self.region, self.event_name, self.description, self.start_date, self.end_date]
+
 plan1 = Plan(1,"2021-04-06 00:00:00", "2024-11-05 00:00:00", 1, "llpbfkwc", "kejwwboo", "hojngythjcbrknhwxngu")
 plan2 = Plan(2,"2022-11-24 00:00:00", "2025-03-20 00:00:00", 2, "musqqfqi", "ndcxysnm", "juuaeanpfylklqyeawqp")
 
