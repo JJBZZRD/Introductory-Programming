@@ -20,6 +20,10 @@ class Camp:  # Camp class has attributes matching columns in table
     def init_from_tuple(cls, camp_tuple):
         return cls(*camp_tuple)
 
+    def display_info(self):
+        return [str(self.campID), str(self.location), str(self.max_shelter), str(self.water), str(self.max_water), str(self.food), str(self.max_food),
+                str(self.medical_supplies), str(self.max_medical_supplies), str(self.planID)]
+
     @classmethod  # Insert a camp into the database without creating a new instance
     def create_camp(cls, camp_tuple):
         location, max_shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID = camp_tuple
@@ -79,52 +83,14 @@ class Camp:  # Camp class has attributes matching columns in table
         return Camp.get_campID(campID=campID)
 
     @staticmethod
-    def get_camp(filter, filename, infor):
-        """
-        Display the camp information based on the campName
-
-        Parameters:
-            campName (str): the camp name.
-            filename (str): the csv file that stores the camp information, including camp name, volunteer, and resources
-            infor (str): the information that want to display.
-
-        Returns:
-            float: the information you want to show
-            or
-            False: if the information is not found in the csv file or file does not exist.
-        """
-        """
-        match filter:
-            case "name":
-                if value:
-                    volunteers = DataAccess.get_camp_by_name(value)
-            case "volunteer":
-                volunteers = DataAccess.get_camp_by_volunteer(value)
-            case "admin":
-                volunteers = DataAccess.get_camp_by_admin(value)
-            case _:
-                return "You need to specify the filter name and value"
-        return volunteers
-        """
-        try:
-            file_instance = open(filename, encoding='UTF8')
-            csv_reader = csv.reader(file_instance)
-            first_row = next(csv_reader, None)
-
-            var = first_row.index(infor) if infor in first_row else None
-
-            if var is not None:
-                for line in csv_reader:
-                    if campName == line[0]:
-                        return line[var]
-            else:
-                # the case that the information is not found in the CSV file
-                print("Information '{", infor, "}' not found in the CSV file.")
-                return False
-        except FileNotFoundError:
-            # the case where the CSV file doesn't exist
-            print("Error: '" + filename + "' file not found.")
-            return False
+    def delete_camp(campID):  # Delete a camp by selecting on campID
+        cursor.execute("DELETE FROM camps WHERE campID = ?", (campID,))
+        rows_deleted = cursor.rowcount
+        conn.commit()
+        if rows_deleted > 0:
+            print(f"Camp {campID} has been deleted")
+        else:
+            print(f"Admin {campID} has not been deleted")
 
     @staticmethod
     def get_campID(campID):  # Get camp details by selecting on campID. Returns a list of tuples.

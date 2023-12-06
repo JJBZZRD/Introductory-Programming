@@ -13,27 +13,14 @@ class Volunteer:
         self.phone = phone
         self.account_status = account_status
         self.campID = campID
-        self.account_status = account_status
 
     @classmethod
     def init_from_tuple(cls, volunteer_tuple):
         return cls(*volunteer_tuple)
 
     def display_info(self):
-        print(f"Volunteer ID: {self.volunteerID}")
-        print(f"First Name: {self.first_name}")
-        print(f"Last Name: {self.last_name}")
-        print(f"Username: {self.username}")
-        print(f"Password: {self.password}")
-        print(f"Date of Birth: {self.date_of_birth}")
-        print(f"Phone: {self.phone}")
-        print(f"Camp ID: {self.campID}")
-        print(f"Account Status: {self.account_status}")
-        print()
-
-    @classmethod
-    def init_from_tuple(cls, volunteer_tuple):
-        return cls(*volunteer_tuple)
+        return [str(self.volunteerID), self.first_name, self.last_name, self.username, self.password,
+                self.date_of_birth, self.phone, self.account_status, str(self.campID)]
 
     @classmethod  # Insert a volunteer into the database without creating a new instance
     def create_volunteer(cls, volunteer_tuple):
@@ -183,7 +170,7 @@ class Volunteer:
         cursor.execute("SELECT * FROM volunteers")
         return cursor.fetchall()
 
-    @staticmethod  # Returns all usernames of active volunteers only.
+    @staticmethod  # Returns all usernames of active volunteers only. Perhaps useful for the login.
     def active_volunteer_usernames():
         sql = "SELECT username FROM volunteers WHERE account_status = 'Active'"
         cursor.execute(sql)

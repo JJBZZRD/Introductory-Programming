@@ -15,6 +15,9 @@ class Plan:  # Plan class has attributes matching columns in table
     def init_from_tuple(cls, plan_tuple):
         return cls(*plan_tuple)
 
+    def display_info(self):
+        return [str(self.planID), str(self.start_date), str(self.end_date), str(self.name), str(self.region), str(self.event_name), str(self.description)]
+
     @classmethod  # Insert a plan into the database
     def create_plan(cls, plan_tuple):
         start_date, end_date, name, region, event_name, description = plan_tuple
@@ -71,7 +74,7 @@ class Plan:  # Plan class has attributes matching columns in table
     @staticmethod
     def get_planID(planID):  # Get plan details by selecting on planID. Returns a list of tuples.
         cursor.execute("SELECT * FROM plans WHERE planID = ?", (planID,))
-        return [cursor.fetchone()]
+        return cursor.fetchone()
 
     @staticmethod  # Get plan details by selecting on any combination of attributes. Can be used to find the
     # planID which can then be used in the delete and update methods. Returns a list of tuples.

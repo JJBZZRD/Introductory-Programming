@@ -1,5 +1,4 @@
-
-import config
+from . import config
 from .volunteer import Volunteer
 from .plan import Plan
 
@@ -29,7 +28,9 @@ from .plan import Plan
 
 plan4_tuple = ("05/07/2024", "05/07/2024", "Monkey Rampage", "Bristol", "Monkey Rampage in Bristol", "Monkeys are rampaging through Bristol")
 
-Plan.create_plan(plan4_tuple)
-
+#Plan.create_plan(plan4_tuple)
+plan4 = Plan.init_from_tuple(plan4_tuple)
 plan_search_test = Plan.get_plan(name="Mon")
 print(plan_search_test)
+
+print(plan4.__repr__())

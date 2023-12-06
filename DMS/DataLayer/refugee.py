@@ -4,17 +4,21 @@ from .camp import Camp
 
 class Refugee:  # Refugee class has attributes matching columns in table
     def __init__(self, refugeeID, first_name, last_name, date_of_birth, familyID, campID, medical_condition):
-        refugeeID = refugeeID
-        first_name = first_name
-        last_name = last_name
-        date_of_birth = date_of_birth
-        familyID = familyID
-        campID = campID
-        medical_condition = medical_condition
+        self.refugeeID = refugeeID
+        self.first_name = first_name
+        self.last_name = last_name
+        self.date_of_birth = date_of_birth
+        self.familyID = familyID
+        self.campID = campID
+        self.medical_condition = medical_condition
 
     @classmethod
     def init_from_tuple(cls, refugee_tuple):
         return cls(*refugee_tuple)
+
+    def display_info(self):
+        return [str(self.refugeeID), self.first_name, self.last_name, self.date_of_birth, str(self.familyID),
+                str(self.campID), self.medical_condition]
 
     @classmethod    # Insert a refugee into the database without creating a new instance
     def create_refugee(cls, refugee_tuple):
