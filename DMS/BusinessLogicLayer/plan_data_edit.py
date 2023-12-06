@@ -1,6 +1,6 @@
-from DataLayer.plan import Plan
+from ..DataLayer.plan import Plan
 from datetime import datetime
-from BusinessLogicLayer import business_logic_util
+from . import business_logic_util
 
 
 class PlanEdit:

@@ -1,10 +1,5 @@
-import os
-import sys
-
-CURRENT_DIR = os.path.dirname(os.path.abspath(r'path'))
-sys.path.append(CURRENT_DIR)
-from util import *
-
+from ..util import *
+from ..DataLayer.camp import Camp
 
 class CampDataRetrieve:
 

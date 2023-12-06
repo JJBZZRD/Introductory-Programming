@@ -1,13 +1,9 @@
-import os
-import sys
-
-CURRENT_DIR = os.path.dirname(os.path.abspath(r'path'))
-sys.path.append(CURRENT_DIR)
-from camp_data_retrieve import CampDataRetrieve
 from camp_data_edit import CampDataEdit
-from DataLayer.plan import Plan
-from DataLayer.camp import Camp
-from util import *
+from ..DataLayer.camp import Camp
+from ..DataLayer.plan import Plan
+from .camp_data_retrieve import CampDataRetrieve
+from .. import util
+
 
 new_plan = Plan.create_plan('2023-12-04', None, 'test Plan', 'test region', 'test event name', 'aaaaaa')
 

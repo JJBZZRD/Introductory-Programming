@@ -1,11 +1,8 @@
-import os, sys
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(CURRENT_DIR))
 import re
 from datetime import datetime
-from DataLayer.volunteer import Volunteer
-from DataLayer.refugee import Refugee
-from DataLayer.plan import Plan
+from .DataLayer.volunteer import Volunteer
+from .DataLayer.refugee import Refugee
+from .DataLayer.plan import Plan
 
 def is_phone_format(phone_num):
     phone_pattern = re.compile(r'^\+\d+$')
