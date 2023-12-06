@@ -31,13 +31,6 @@ def parse_result(class_name, query_result):
             record.display_info()
     return r
 
-# def is_country(value):
-#     countries = [i.name for i in pc.countries]
-#     if value in countries:
-#         return True
-#     else:
-#         return False
-
 def parse_results(class_name, query_result_1, query_result_2):
     r = "Invalid input"
     success_1 = not isinstance(query_result_1, str)
