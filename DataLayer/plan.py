@@ -16,7 +16,8 @@ class Plan:  # Plan class has attributes matching columns in table
         return cls(*plan_tuple)
 
     def display_info(self):
-        return [str(self.planID), str(self.start_date), str(self.end_date), str(self.name), str(self.region), str(self.event_name), str(self.description)]
+        return [str(self.planID), str(self.start_date), str(self.end_date), str(self.name), str(self.region),
+                str(self.event_name), str(self.description)]
 
     @classmethod  # Insert a plan into the database
     def create_plan(cls, plan_tuple):

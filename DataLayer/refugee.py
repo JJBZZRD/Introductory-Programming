@@ -17,8 +17,8 @@ class Refugee:  # Refugee class has attributes matching columns in table
         return cls(*refugee_tuple)
 
     def display_info(self):
-        return [str(self.refugeeID), self.first_name, self.last_name, self.date_of_birth, str(self.familyID),
-                str(self.campID), self.medical_condition]
+        return [str(self.refugeeID), str(self.first_name), str(self.last_name), str(self.date_of_birth),
+                str(self.familyID), str(self.campID), str(self.medical_condition)]
 
     @classmethod    # Insert a refugee into the database without creating a new instance
     def create_refugee(cls, refugee_tuple):
