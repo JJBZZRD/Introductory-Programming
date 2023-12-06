@@ -175,7 +175,7 @@ class AdminDashboard(Dashboard):
 
             self.create_resource_frame(camp_frame, camp)
 
-            ttk.Button(camp_frame, text="Edit Camp", command=lambda cn=camp.campID: self.show_screen('EditCamp', cn)).pack(pady=5)
+            ttk.Button(camp_frame, text="Edit Camp", command=lambda cn=camp: self.show_screen('EditCamp', cn)).pack(pady=5)
 
         additional_resources_frame = tk.Frame(tab, bg='lightgray', bd=2, relief='groove')
         additional_resources_frame.pack(side='right', fill='y', padx=(5, 0))
