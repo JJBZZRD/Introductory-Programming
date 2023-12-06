@@ -149,8 +149,10 @@ class EditCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Camp']
-        self.modifiable_variables = ['Camp Name', 'Refugees', 'Volunteers', 'Water Level', 'Food Level',
+        self.modifiable_variables = ['Location', 'Shelter', 'Water Level', 'Food Level',
                                      'Medical supply']
+        self.current_data = [self.screen_data.location, self.screen_data.shelter, self.screen_data.water,
+                                     self.screen_data.food, self.screen_data.medical_supplies]
         self.button_labels = 'Save Changes'
         self.entry_fields = {}
         self.create_title()
@@ -181,4 +183,42 @@ class EditVolunteer(ModifyEntries):
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
-        print(self.entry_fields)
+        #print(self.entry_fields)
+
+
+class NewRefugee(ModifyEntries):
+    def setup_modify(self):
+        self.lower_frame = tk.Frame(self)
+        self.modify_type = ['New Refugee']
+        self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp']
+        self.button_labels = 'Create'
+        self.entry_fields = {}
+        self.create_title()
+        self.create_entry_fields()
+        self.create_buttons()
+
+
+class EditRefugee(ModifyEntries):
+    def setup_modify(self):
+        self.lower_frame = tk.Frame(self)
+        self.modify_type = ['Edit Refugee']
+        self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Family ID', 'Camp ID', 'Medical Condition']
+        self.button_labels = 'Save Changes'
+        self.current_data = [self.screen_data.first_name, self.screen_data.last_name, self.screen_data.date_of_birth, self.screen_data.familyID, self.screen_data.campID, self.screen_data.medical_condition]
+        self.entry_fields = {}
+        self.create_title()
+        self.create_entry_fields()
+        self.create_buttons()
+
+
+class EditPersonalDetails(ModifyEntries):
+    def setup_modify(self):
+        self.lower_frame = tk.Frame(self)
+        self.modify_type = ['Edit Personal Details']
+        self.modifiable_variables = ['First Name', 'Last Name', 'User Name', 'Date of Birth', 'Phone Number']
+        self.button_labels = 'Save Changes'
+        self.current_data = [self.screen_data.first_name, self.screen_data.last_name, self.screen_data.username, self.screen_data.date_of_birth, self.screen_data.phone]
+        self.entry_fields = {}
+        self.create_title()
+        self.create_entry_fields()
+        self.create_buttons()

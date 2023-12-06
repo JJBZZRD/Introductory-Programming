@@ -52,4 +52,4 @@ class UIHeader(tk.Frame):
 
 
     def open_settings(self):
-        self.show_screen('EditVolunteer', self.logged_in_user)
+        self.show_screen('EditPersonalDetails', self.logged_in_user)

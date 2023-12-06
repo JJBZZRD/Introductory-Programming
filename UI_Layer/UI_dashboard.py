@@ -24,7 +24,7 @@ class Dashboard(tk.Frame):
 
         self.create_resource_frame(left_frame, camp)
 
-        ttk.Button(left_frame, text="Edit Camp", command=lambda: self.show_screen('EditCamp', camp.campID)).pack(pady=5)
+        ttk.Button(left_frame, text="Edit Camp", command=lambda: self.show_screen('EditCamp', camp)).pack(pady=5)
 
         self.create_refugees_section(right_frame, camp)
 
