@@ -16,7 +16,6 @@ class Dashboard(tk.Frame):
     def populate_camp_tab(self, tab, camp):
         print(f"Populating tab for Camp ID: {camp.campID}")
 
-        # Split the frame into left and right sections
         left_frame = tk.Frame(tab, bg='white')
         right_frame = tk.Frame(tab, bg='white')
         left_frame.pack(side='left', fill='both', expand=True)
@@ -34,45 +33,43 @@ class Dashboard(tk.Frame):
         
         search_frame = tk.Frame(parent, bg='white')
         search_frame.pack(pady=5, fill='x')
+        
         search_entry = tk.Entry(search_frame)
         search_entry.pack(side='left', padx=5, expand=True, fill='x')
-        
-        self.search_entry = tk.Entry(search_frame)
-        self.search_entry.pack(side='left', padx=5, expand=True, fill='x')
 
-        filter_button = ttk.Button(search_frame, text="Filter/Search", command=self.update_refugees_list)
+        filter_button = ttk.Button(search_frame, text="Filter/Search", command=lambda: self.update_refugees_list(search_entry, refugees_listbox))
         filter_button.pack(side='left', padx=5)
 
-        self.refugees_listbox = tk.Listbox(parent)
-        self.refugees_listbox.pack(pady=10, expand=True, fill='both')
+        refugees_listbox = tk.Listbox(parent)
+        refugees_listbox.pack(pady=10, expand=True, fill='both')
+        refugees_listbox.bind('<Double-1>', lambda event, lb=refugees_listbox: self.on_refugee_double_click(event, lb))
 
-        self.update_refugees_list()
+        self.update_refugees_list(search_entry, refugees_listbox)
 
-    def update_refugees_list(self):
-        filter_value = self.search_entry.get().strip()
+    def update_refugees_list(self, search_entry, refugees_listbox):
+        filter_value = search_entry.get().strip()
         filter_type = 'camp' if not filter_value else 'name'
 
+        # Assuming self.refugees is a list of refugee objects
         # self.refugees = PersonDataRetrieve.get_refugees(filter_type, filter_value)
-        self.refugees = [refugee1, refugee2]
+        self.refugees = [refugee1, refugee2]  # Placeholder data
 
-        self.refugees_listbox.delete(0, tk.END)
+        refugees_listbox.delete(0, tk.END)
         if not self.refugees:
-            self.refugees_listbox.insert(tk.END, "No matching refugees found.")
+            refugees_listbox.insert(tk.END, "No matching refugees found.")
         else:
             for refugee in self.refugees:
                 listbox_entry = f"{refugee.first_name} {refugee.last_name} - {refugee.medical_condition}"
-                self.refugees_listbox.insert(tk.END, listbox_entry)
-        
-        self.refugees_listbox.bind('<Double-1>', self.on_refugee_double_click)
+                refugees_listbox.insert(tk.END, listbox_entry)
 
+    def on_refugee_double_click(self, event, listbox):
+        index = listbox.curselection()
+        print("Selected index:", index)
 
-    def on_refugee_double_click(self, event=None):
-        index = self.refugees_listbox.curselection()
         if index:
             selected_index = index[0]
             selected_refugee = self.refugees[selected_index]
             self.show_screen('EditRefugee', selected_refugee)
-
 
     def create_resource_frame(self, parent, camp):
             resources = {
