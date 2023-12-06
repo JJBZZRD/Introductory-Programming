@@ -1,6 +1,6 @@
-from ..DataLayer.plan import Plan
+from ..DB.plan import Plan
 from datetime import datetime
-from . import business_logic_util
+from . import logic_util
 
 
 class PlanEdit:
@@ -14,8 +14,8 @@ class PlanEdit:
             if not isinstance(attr, str):
                 return "Please provide the correct input type for {}".format(attr)
 
-        start_date = business_logic_util.validate_date(start_date)
-        end_date = business_logic_util.validate_end_date(start_date, end_date)
+        start_date = logic_util.validate_date(start_date)
+        end_date = logic_util.validate_end_date(start_date, end_date)
 
         plan_tuple = (start_date, end_date, name, region, event_name, description)
 
@@ -24,14 +24,14 @@ class PlanEdit:
     @staticmethod
     def update_plan(planID, name, event_name, region, description, start_date, end_date):
 
-        name = business_logic_util.validate_name(name)
-        region = business_logic_util.validate_region(region)
-        event_name = business_logic_util.validate_event(event_name)
-        description = business_logic_util.validate_description(description)
-        start_date = business_logic_util.validate_date(start_date)
+        name = logic_util.validate_name(name)
+        region = logic_util.validate_region(region)
+        event_name = logic_util.validate_event(event_name)
+        description = logic_util.validate_description(description)
+        start_date = logic_util.validate_date(start_date)
 
         if end_date:
-            end_date = business_logic_util.validate_end_date(start_date, end_date)
+            end_date = logic_util.validate_end_date(start_date, end_date)
         else:
             end_date = None
 
@@ -39,7 +39,7 @@ class PlanEdit:
 
     @staticmethod
     def end_plan(planID, start_date, end_date):
-        end_date = business_logic_util.validate_end_date(start_date, end_date)
+        end_date = logic_util.validate_end_date(start_date, end_date)
 
         if end_date:
             if datetime.today().date() == end_date:

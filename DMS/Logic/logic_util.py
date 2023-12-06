@@ -1,6 +1,3 @@
-import os, sys
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(CURRENT_DIR))
 import re
 # import pycountry as pc
 from datetime import datetime

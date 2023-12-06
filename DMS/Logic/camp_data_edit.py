@@ -1,5 +1,5 @@
-from ..DataLayer.camp import Camp
-from ..DataLayer.plan import Plan
+from ..DB.camp import Camp
+from ..DB.plan import Plan
 from .camp_data_retrieve import CampDataRetrieve
 from .. import util
 

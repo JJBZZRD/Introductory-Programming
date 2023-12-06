@@ -2,14 +2,11 @@ import unittest
 import sqlite3
 from .person_data_retrieve import *
 from .person_data_edit import *
-from .plan_data_retrieve import *
-from .plan_data_edit import *
-from ..DataLayer.config import *
-from ..DataLayer.camp import *
-from ..DataLayer.plan import *
+from ..DB.config import *
+from ..DB.camp import *
+from ..DB.plan import *
 
-
-class TestPlan(unittest.TestCase):
+class TestVolunteer(unittest.TestCase):
 
     def setUp(self):
         # Set up a temporary SQLite database for testing
@@ -17,6 +14,17 @@ class TestPlan(unittest.TestCase):
         self.connection = sqlite3.connect(':memory:')
         self.cursor = self.connection.cursor()
         create_database()
+        sql = """
+            INSERT INTO plans (start_date, name) 
+            VALUES ('2023-01-01', 'soran unit test plan');
+        """
+        sql2 = """
+            INSERT INTO camps (planID)
+            VALUES ((SELECT planID from plans WHERE name = 'soran unit test plan'));
+        """
+        cursor.execute(sql)
+        cursor.execute(sql2)
+        conn.commit()
 
     def tearDown(self) -> None:
         print("Tearing down resources after the test")
@@ -24,11 +32,6 @@ class TestPlan(unittest.TestCase):
 
     def test_create_volunteer(self):
         print("Executing test_create_volunteer")
-
-        plans = PlanEdit.create_plan("name", "type", "region", "description", "04122023", "05122023")
-
-        self.assertIsInstance(plans, list, "plans is not a list")
-
         # vols = PersonDataEdit.create_volunteer('unit test first name', 'unit test last name', 'username', 'password', '2023-1-1', '10123456', 'camp_1')
         
         # self.assertIsInstance(vols, list, 'vols is not a list')

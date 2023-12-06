@@ -1,4 +1,4 @@
-from ..DataLayer.plan import Plan
+from ..DB.plan import Plan
 from .. import util
 
 

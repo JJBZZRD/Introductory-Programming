@@ -1,5 +1,5 @@
 from ..util import *
-from ..DataLayer.camp import Camp
+from ..DB.camp import Camp
 
 class CampDataRetrieve:
 
