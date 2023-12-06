@@ -32,7 +32,7 @@ class PlanEdit:
 
     @staticmethod
     def end_plan(planID, start_date, end_date):
-        end_date = util.validate_end_date(start_date, end_date)
+        end_date = business_logic_util.validate_end_date(start_date, end_date)
 
         if end_date:
             if datetime.today().date() == end_date:
