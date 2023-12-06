@@ -3,6 +3,7 @@ from datetime import datetime
 from .DB.volunteer import Volunteer
 from .DB.refugee import Refugee
 from .DB.plan import Plan
+from .DB.camp import Camp
 
 def is_phone_format(phone_num):
     phone_pattern = re.compile(r'^\+\d+$')
@@ -25,10 +26,12 @@ def parse_result(class_name, query_result):
                 r = [Refugee.init_from_tuple(row) for row in query_result]
             case 'Plan':
                 r = [Plan.init_from_tuple(row) for row in query_result]
+            case 'Camp':
+                r = [Camp.init_from_tuple(row) for row in query_result]
             case _:
                 pass
-        for record in r:
-            record.display_info()
+        # for record in r:
+        #     record.display_info()
     return r
 
 def parse_results(class_name, query_result_1, query_result_2):

@@ -5,6 +5,7 @@ from .person_data_edit import *
 from ..DB.config import *
 from ..DB.camp import *
 from ..DB.plan import *
+from .. import util
 
 class TestVolunteer(unittest.TestCase):
 
@@ -24,15 +25,21 @@ class TestVolunteer(unittest.TestCase):
         """
         cursor.execute(sql)
         cursor.execute(sql2)
-        conn.commit()
+        # conn.commit()
+        camp_id = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
+        camp_tuple = Camp.get_camp_by_id(camp_id)
+        camp = util.parse_result('Camp', [camp_tuple])[0]
+        print(camp.display_info())
 
-    def tearDown(self) -> None:
+    def tearDown(self):
         print("Tearing down resources after the test")
+        self.connection.rollback()
         self.connection.close()
 
     def test_create_volunteer(self):
         print("Executing test_create_volunteer")
-        # vols = PersonDataEdit.create_volunteer('unit test first name', 'unit test last name', 'username', 'password', '2023-1-1', '10123456', 'camp_1')
+
+        vols = PersonDataEdit.create_volunteer('unit test first name', 'unit test last name', '28', 'username', 'password', '2023-1-1', '10123456')
         
         # self.assertIsInstance(vols, list, 'vols is not a list')
         pass

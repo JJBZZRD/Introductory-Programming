@@ -44,7 +44,10 @@ class PersonDataEdit:
     
     @staticmethod
     def create_volunteer(first_name = None, last_name = None, camp_id = None, username = None, password = None, date_of_birth = None, phone = None):
-        volunteer_tuples = Volunteer.create_volunteer(first_name, last_name, username, password, date_of_birth, phone, camp_id)
+
+        t = (first_name, last_name, username, password, date_of_birth, phone, camp_id)
+        volunteer_tuples = Volunteer.create_volunteer(t)
+        # print(volunteer_tuples)
         return util.parse_result('Volunteer', volunteer_tuples)
     
     @staticmethod

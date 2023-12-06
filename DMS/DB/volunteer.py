@@ -22,6 +22,11 @@ class Volunteer:
         return [str(self.volunteerID), self.first_name, self.last_name, self.username, self.password,
                 self.date_of_birth, self.phone, self.account_status, str(self.campID)]
 
+    @staticmethod
+    def get_volunteer_by_id(volunteerID):  # Get volunteer details by selecting on volunteerID. Returns a list of tuples.
+        cursor.execute("SELECT * FROM volunteers WHERE volunteerID = ?", (volunteerID,))
+        return cursor.fetchone()
+
     @classmethod  # Insert a volunteer into the database without creating a new instance
     def create_volunteer(cls, volunteer_tuple):
         first_name, last_name, username, password, date_of_birth, phone, campID = volunteer_tuple
@@ -34,8 +39,9 @@ class Volunteer:
             cursor.execute(sql, (first_name, last_name, username,
                                  password, date_of_birth, phone, "Active", campID))
             conn.commit()
-            volunteerID = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
-            return volunteerID
+            volunteer_id = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
+            volunteer_tuple = Volunteer.get_volunteer_by_id(volunteer_id)
+            return [volunteer_tuple]
         else:
             return 'Camp campID does not exist'
 
@@ -73,7 +79,7 @@ class Volunteer:
         params.append(volunteerID)
         cursor.execute(f"""UPDATE volunteers SET {', '.join(query)} WHERE volunteerID = ?""", params)
         conn.commit()
-        return Volunteer.get_volunteerID(volunteerID=volunteerID)
+        return Volunteer.get_volunteer_by_id(volunteerID=volunteerID)
 
     @staticmethod
     def delete_volunteer(volunteerID):  # Delete a volunteer by selecting on volunteerID
@@ -85,10 +91,6 @@ class Volunteer:
         else:
             print(f"Volunteer {volunteerID} has not been deleted")
 
-    @staticmethod
-    def get_volunteerID(volunteerID):  # Get volunteer details by selecting on volunteerID. Returns a list of tuples.
-        cursor.execute("SELECT * FROM volunteers WHERE volunteerID = ?", (volunteerID,))
-        return cursor.fetchone()
 
     @staticmethod  # Get volunteer details by selecting on any combination of attributes. Can be used to find the
     # volunteerID which can then be used in the delete and update methods. Returns a list of tuples.

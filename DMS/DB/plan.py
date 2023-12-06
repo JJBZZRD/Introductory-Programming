@@ -18,6 +18,11 @@ class Plan:  # Plan class has attributes matching columns in table
     def display_info(self):
         return [str(self.planID), str(self.start_date), str(self.end_date), str(self.name), str(self.region), str(self.event_name), str(self.description)]
 
+    @staticmethod
+    def get_plan_by_id(planID):  # Get plan details by selecting on planID. Returns a list of tuples.
+        cursor.execute("SELECT * FROM plans WHERE planID = ?", (planID,))
+        return cursor.fetchone()
+
     @classmethod  # Insert a plan into the database
     def create_plan(cls, plan_tuple):
         start_date, end_date, name, region, event_name, description = plan_tuple
@@ -28,8 +33,9 @@ class Plan:  # Plan class has attributes matching columns in table
             """
         cursor.execute(sql, (start_date, end_date, name, region, event_name, description))
         conn.commit()
-        planID = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
-        return planID
+        plan_id = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
+        plan_tuple = Plan.get_plan_by_id(plan_id)
+        return [plan_tuple]
 
     @staticmethod  # Update a plan by selecting on planID
     def update_plan(planID, start_date=None, end_date=None, name=None, region=None, event_name=None, description=None):
@@ -70,11 +76,6 @@ class Plan:  # Plan class has attributes matching columns in table
             print(f"Plan {planID} has been deleted")
         else:
             print(f"Plan {planID} has not been deleted")
-
-    @staticmethod
-    def get_planID(planID):  # Get plan details by selecting on planID. Returns a list of tuples.
-        cursor.execute("SELECT * FROM plans WHERE planID = ?", (planID,))
-        return cursor.fetchone()
 
     @staticmethod  # Get plan details by selecting on any combination of attributes. Can be used to find the
     # planID which can then be used in the delete and update methods. Returns a list of tuples.

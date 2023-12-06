@@ -20,6 +20,11 @@ class Refugee:  # Refugee class has attributes matching columns in table
         return [str(self.refugeeID), self.first_name, self.last_name, self.date_of_birth, str(self.familyID),
                 str(self.campID), self.medical_condition]
 
+    @staticmethod
+    def get_refugee_by_id(refugeeID):  # Get refugee details by selecting on refugeeID. Returns a list of tuples.
+        cursor.execute("SELECT * FROM refugees WHERE refugeeID = ?", (refugeeID,))
+        return cursor.fetchone()
+
     @classmethod    # Insert a refugee into the database without creating a new instance
     def create_refugee(cls, refugee_tuple):
         first_name, last_name, date_of_birth, familyID, campID, medical_condition = refugee_tuple
@@ -32,8 +37,9 @@ class Refugee:  # Refugee class has attributes matching columns in table
             cursor.execute(sql, (first_name, last_name, date_of_birth,
                                  familyID, campID, medical_condition))
             conn.commit()
-            refugeeID = cursor.execute("SELECT last_insert_rowid() FROM refugees").fetchone()[0]
-            return refugeeID
+            refugee_id = cursor.execute("SELECT last_insert_rowid() FROM refugees").fetchone()[0]
+            refugee_tuple = Refugee.get_refugee_by_id(refugee_id)
+            return [refugee_tuple]
         else:
             return 'Camp campID does not exist'
 
@@ -65,7 +71,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
         params.append(refugeeID)
         cursor.execute(f"""UPDATE refugees SET {', '.join(query)} WHERE refugeeID = ?""", params)
         conn.commit()
-        return Refugee.get_refugeeID(refugeeID=refugeeID)
+        return Refugee.get_refugee_by_id(refugeeID=refugeeID)
 
     @staticmethod
     def delete_refugee(refugeeID):  # Delete a refugee by selecting on refugeeID
@@ -77,10 +83,6 @@ class Refugee:  # Refugee class has attributes matching columns in table
         else:
             print(f"Refugee {refugeeID} has not been deleted")
 
-    @staticmethod
-    def get_refugeeID(refugeeID):  # Get refugee details by selecting on refugeeID. Returns a list of tuples.
-        cursor.execute("SELECT * FROM refugees WHERE refugeeID = ?", (refugeeID,))
-        return cursor.fetchone()
 
     @staticmethod  # Get refugee details by selecting on any combination of attributes. Can be used to find the
     # refugeeID which can then be used in the delete and update methods. Returns a list of tuples.

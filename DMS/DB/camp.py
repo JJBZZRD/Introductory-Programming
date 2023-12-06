@@ -24,6 +24,11 @@ class Camp:  # Camp class has attributes matching columns in table
         return [str(self.campID), str(self.location), str(self.max_shelter), str(self.water), str(self.max_water), str(self.food), str(self.max_food),
                 str(self.medical_supplies), str(self.max_medical_supplies), str(self.planID)]
 
+    @staticmethod
+    def get_camp_by_id(campID):  # Get camp details by selecting on campID. Returns a list of tuples.
+        cursor.execute("SELECT * FROM camps WHERE campID = ?", (campID,))
+        return cursor.fetchone()
+
     @classmethod  # Insert a camp into the database without creating a new instance
     def create_camp(cls, camp_tuple):
         location, max_shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID = camp_tuple
@@ -37,8 +42,9 @@ class Camp:  # Camp class has attributes matching columns in table
             cursor.execute(sql, (location, max_shelter, water, max_water, food,
                                  max_food, medical_supplies, max_medical_supplies, planID))
             conn.commit()
-            campID = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
-            return campID
+            camp_id = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
+            camp_tuple = Camp.get_camp_by_id(camp_id)
+            return [camp_tuple]
         else:
             return 'Plan planID does not exist'
         
@@ -92,10 +98,6 @@ class Camp:  # Camp class has attributes matching columns in table
         else:
             print(f"Admin {campID} has not been deleted")
 
-    @staticmethod
-    def get_campID(campID):  # Get camp details by selecting on campID. Returns a list of tuples.
-        cursor.execute("SELECT * FROM camps WHERE campID = ?", (campID,))
-        return cursor.fetchone()
 
     @staticmethod  # Get camp details by selecting on any combination of attributes. Can be used to find the
     # campID which can then be used in the delete and update methods. Returns a list of tuples.
