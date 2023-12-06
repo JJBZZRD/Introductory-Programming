@@ -36,9 +36,7 @@ class Dashboard(tk.Frame):
 
         data_retrieval_methods = {
             'all': PersonDataRetrieve.get_refugees,
-            'all': [refugee1, refugee2],
             'filtered': PersonDataRetrieve.get_refugees,
-            'filtered': [refugee1, refugee2],
         }
 
         refugees_treeview = create_filterable_treeview(parent, data_retrieval_methods, ['Name', 'Medical Condition'], self.on_refugee_double_click)
