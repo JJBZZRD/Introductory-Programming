@@ -5,6 +5,7 @@ import re
 from datetime import datetime
 from DataLayer.volunteer import Volunteer
 from DataLayer.refugee import Refugee
+from DataLayer.plan import Plan
 
 def is_phone_format(phone_num):
     phone_pattern = re.compile(r'^\+\d+$')
@@ -25,6 +26,8 @@ def parse_result(class_name, query_result):
                 r = [Volunteer.init_from_tuple(row) for row in query_result]
             case 'Refugee':
                 r = [Refugee.init_from_tuple(row) for row in query_result]
+            case 'Plan':
+                r = [Plan.init_from_tuple(row) for row in query_result]
             case _:
                 pass
         for record in r:

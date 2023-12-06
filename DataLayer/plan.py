@@ -2,8 +2,8 @@ from .config import conn, cursor
 
 
 class Plan:  # Plan class has attributes matching columns in table
-    def __init__(self, start_date, end_date, name, region, event_name, description):
-        self.planID = None
+    def __init__(self, id, start_date, end_date, name, region, event_name, description):
+        self.planID = id
         self.start_date = start_date
         self.end_date = end_date
         self.region = region
@@ -11,8 +11,9 @@ class Plan:  # Plan class has attributes matching columns in table
         self.event_name = event_name
         self.description = description
 
-    def from_tuple(self, plan_tuple):
-        self.planID, self.start_date, self.end_date, self.region, self.name, self.event_name, self.description = plan_tuple
+    @classmethod
+    def init_from_tuple(cls, plan_tuple):
+       return cls(*plan_tuple)
 
     def insert_plan(self):  # Insert an existing instance of a plan into the database
         sql = """
@@ -27,8 +28,8 @@ class Plan:  # Plan class has attributes matching columns in table
         self.planID = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
 
     @classmethod  # Insert a plan into the database without creating a new instance
-    def create_plan(cls, start_date, end_date, name, region, event_name, description):
-        plan = Plan(start_date, end_date, name, region, event_name, description)
+    def create_plan(cls, id, start_date, end_date, name, region, event_name, description):
+        plan = Plan(id, start_date, end_date, name, region, event_name, description)
         plan.insert_plan()
         planID = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
         return Plan.get_planID(planID=planID)
@@ -76,7 +77,7 @@ class Plan:  # Plan class has attributes matching columns in table
     @staticmethod
     def get_planID(planID):  # Get plan details by selecting on planID. Returns a list of tuples.
         cursor.execute("SELECT * FROM plans WHERE planID = ?", (planID,))
-        return cursor.fetchone()
+        return [cursor.fetchone()]
 
     @staticmethod  # Get plan details by selecting on any combination of attributes. Can be used to find the
     # planID which can then be used in the delete and update methods. Returns a list of tuples.

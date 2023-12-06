@@ -6,7 +6,7 @@ from BusinessLogicLayer import business_logic_util
 class PlanEdit:
 
     @staticmethod
-    def create_plan(name, plan_type, region, description, start_date):
+    def create_plan(name, plan_type, region, description, start_date, end_date=None):
         for attr in [name, plan_type, region, description, start_date]:
             if not attr:
                 return "Please provide {}".format(attr)
@@ -15,20 +15,26 @@ class PlanEdit:
                 return "Please provide the correct input type for {}".format(attr)
 
         start_date = business_logic_util.validate_date(start_date)
-        return Plan.create_plan(start_date, None, name, region, None, description)
+        end_date = business_logic_util.validate_end_date(start_date, end_date)
+
+        return Plan.create_plan(12, start_date, end_date, name, region, plan_type, description)
 
     @staticmethod
-    def update_plan(planID, name, plan_type, region, description, start_date):
+    def update_plan(planID, name, plan_type, region, description, start_date, end_date):
 
         name = business_logic_util.validate_name(name)
         plan_type = business_logic_util.validate_plan_type(plan_type)
-        # end_date = util.validate_end_date(start_date, end_date)
         region = business_logic_util.validate_region(region)
-        # event_name = util.validate_event(event_name)
+        event_name = business_logic_util.validate_event(event_name)
         description = business_logic_util.validate_description(description)
         start_date = business_logic_util.validate_date(start_date)
 
-        return Plan.update_plan(planID, start_date, None, name, region, None, description)
+        if end_date:
+            end_date = business_logic_util.validate_end_date(start_date, end_date)
+        else:
+            end_date = None
+
+        return Plan.update_plan(planID, start_date, end_date, name, region, None, description)
 
     @staticmethod
     def end_plan(planID, start_date, end_date):
@@ -43,3 +49,7 @@ class PlanEdit:
     @staticmethod
     def delete_plan(planID):
         return Plan.delete_plan(planID)
+    
+    # @staticmethod
+    # def plan_status(planID, start_date, end_date):
+    #     plan = Plan.get_plan(planID)
