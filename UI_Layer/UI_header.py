@@ -2,14 +2,13 @@ import tkinter as tk
 
 
 class UIHeader(tk.Frame):
-    def __init__(self, root, show_screen, screen_data, set_user, page_nav, reset_history, logged_in_user, *args, **kwargs):
-        super().__init__(root, **kwargs)
-        self.root = root
-        self.logged_in_user = logged_in_user
-        self.show_screen = show_screen
-        self.page_nav = page_nav
-        self.reset_history = reset_history
-        self.screen_data = screen_data
+    def __init__(self, ui_manager, *args, **kwargs):
+        super().__init__(ui_manager.root, **kwargs)
+        self.root = ui_manager.root
+        self.logged_in_user = ui_manager.logged_in_user
+        self.show_screen = ui_manager.show_screen
+        self.page_nav = ui_manager.page_nav
+        self.reset_history = ui_manager.reset_history
         self.create_header()
 
     def create_header(self):
@@ -48,8 +47,9 @@ class UIHeader(tk.Frame):
         logout_button.pack(side=tk.RIGHT, padx=(0, 10))
 
     def logout(self):
-        self.show_screen('LoginScreen')
         self.reset_history()
+        self.show_screen('LoginScreen')
+
 
     def open_settings(self):
         self.show_screen('EditVolunteer', self.logged_in_user)

@@ -6,11 +6,11 @@ from tkinter import ttk
 # produces varients of the pages to modfiy camps, plans, refugees, volunteers (and admins as personal details) There
 # will be two varients for each subclass. adding new records and modfiying existing records
 class ModifyEntries(tk.Frame):
-    def __init__(self, root, show_screen, screen_data, *args, **kwargs):
-        super().__init__(root, **kwargs)
-        self.root = root
-        self.screen_data = screen_data
-        self.show_screen = show_screen
+    def __init__(self, ui_manager, **kwargs):
+        super().__init__(ui_manager.root, **kwargs)
+        self.root = ui_manager.root
+        self.screen_data = ui_manager.screen_data
+        self.show_screen = ui_manager.show_screen
         self.lower_frame = None
         self.modify_type = None  # this passes the title name information from the subclass to the 'def create_title(self):' method
         self.modifiable_variables: list = []  # this allows the subclass to pass the list of entry names to the ' def create_entry_fields(self):' method

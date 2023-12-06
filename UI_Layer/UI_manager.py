@@ -18,7 +18,7 @@ class UIManager:
         possible_screens (dict): A dictionary mapping screen names to their respective classes.
         logged_in_user: The user object representing the currently logged-in user, if any.
     """
-    
+
     def __init__(self, root):
         self.root = root
         self.current_screen = None
@@ -34,7 +34,7 @@ class UIManager:
             'EditVolunteer': me.EditVolunteer
         }
         self.logged_in_user = None
-        
+        self.screen_data = None
 
     def show_screen(self, screen_name: str, screen_data: any = None, add_to_history: bool = True, *args):
         """
@@ -46,22 +46,29 @@ class UIManager:
             add_to_history (bool, optional): If True, adds the screen to the navigation history. Defaults to True.
             *args: Additional arguments to be passed to the screen constructor.
         """
-        
+
         print(f"Showing screen: {screen_name}")
         self.clear_screen()
-        
+
+        screen_class = self.possible_screens.get(screen_name)
+
+        if screen_data is not None:
+            self.screen_data = screen_data
+        else:
+            self.screen_data = None
+
         if add_to_history:
             # The following if statement checks to see if the current page is the last item in the history.
             # If not the page history is reduced to include pages only up to the current page
             if self.current_page_position != len(self.page_history) - 1:
-                self.page_history = self.page_history[:self.current_page_position]
+                self.page_history = self.page_history[:self.current_page_position + 1]
 
-            self.page_history.append((screen_name, screen_data))
+            # The following if statement makes sure that pressing the same button multiple times doesn't add
+            # to the page history or position
+            if screen_class is LoginScreen or (len(self.page_history) > 0 and screen_name != self.page_history[-1][0]):
+                self.page_history.append((screen_name, screen_data))
+                self.current_page_position += 1
 
-            self.current_page_position += 1
-
-        screen_class = self.possible_screens.get(screen_name)
-        
         if not screen_class:
             print(f"Screen not found: {screen_name}")
             return
@@ -70,12 +77,17 @@ class UIManager:
             self.header.destroy()
             self.header = None
         elif self.header is None and screen_class is not LoginScreen:
-            self.header = UIHeader(self.root, self.show_screen, screen_data, self.set_user, self.page_nav, self.reset_history, self.logged_in_user)
+            self.header = UIHeader(self, *args)
             self.header.pack(side='top', fill='x')
 
-        self.current_screen = screen_class(self.root, self.show_screen, screen_data, self.set_user, self.page_nav, *args)
+        self.current_screen = screen_class(self, *args)
         self.current_screen.pack(expand=True, fill='both')
-        print(self.page_history)
+
+        list = []
+        for i in self.page_history:
+            list.append(i[0])
+
+        print(list)
 
     def clear_screen(self):
         if self.current_screen is not None:
@@ -114,4 +126,3 @@ class UIManager:
 
     def set_user(self, user):
         self.logged_in_user = user
-

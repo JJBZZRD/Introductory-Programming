@@ -3,11 +3,11 @@ from tkinter import ttk
 from dummydata import camp1, camp2, camp3
 from dummydata import refugee1, refugee2
 class Dashboard(tk.Frame):
-    def __init__(self, root, show_screen, screen_data, *args):
-        super().__init__(root)
-        self.root = root
-        self.setup_dashboard(screen_data)
-        self.show_screen = show_screen
+    def __init__(self, ui_manager, *args):
+        super().__init__(ui_manager.root)
+        self.root = ui_manager.root
+        self.setup_dashboard(ui_manager.screen_data)
+        self.show_screen = ui_manager.show_screen
 
     def setup_dashboard(self, *args):
         raise NotImplementedError("Subclasses should implement this method to setup the dashboard layout")

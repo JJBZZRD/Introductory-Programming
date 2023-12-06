@@ -4,12 +4,11 @@ from dummydata import volunteer1
 
 
 class LoginScreen(tk.Frame):
-    def __init__(self, root, show_screen, screen_data,set_user, *args, **kwargs):
-        super().__init__(root, **kwargs)
-        self.root = root
-        self.screen_data = screen_data
-        self.show_screen = show_screen
-        self.set_user = set_user
+    def __init__(self, ui_manager, **kwargs):
+        super().__init__(ui_manager.root, **kwargs)
+        self.root = ui_manager.root
+        self.show_screen = ui_manager.show_screen
+        self.set_user = ui_manager.set_user
         self.setup_login_screen()
 
     def setup_login_screen(self):
@@ -32,12 +31,12 @@ class LoginScreen(tk.Frame):
         #admin_acount = admin()   this will be a an admin account object passed to the set_user method on succesfful login
 
         self.set_user(admin)
-        self.show_screen('PlanList', admin, add_to_history=False)
+        self.show_screen('PlanList', admin)
 
 
     def on_volunteer_login_click(self):
         self.set_user(volunteer1)
-        self.show_screen('VolunteerDashboard', volunteer1, add_to_history=False)
+        self.show_screen('VolunteerDashboard', volunteer1)
 
 
         # placeholder validationt/login logic"

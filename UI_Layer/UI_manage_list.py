@@ -2,11 +2,11 @@ import tkinter as tk
 from tkinter import ttk
 
 class ManageList(tk.Frame):
-    def __init__(self, root, show_screen, screen_data, *args, **kwargs):
-        super().__init__(root, **kwargs)
-        self.root = root
-        self.screen_data = screen_data
-        self.show_screen = show_screen
+    def __init__(self, ui_manager, **kwargs):
+        super().__init__(ui_manager.root, **kwargs)
+        self.root = ui_manager.root
+        self.screen_data = ui_manager.screen_data
+        self.show_screen = ui_manager.show_screen
         self.setup_list()
         self.list_type = None
         self.result_headers = None
@@ -85,7 +85,7 @@ class PlanList(ManageList):
         self.list_type = ['Manage Plans', 'Add New Plan']
         self.result_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
         self.results = [['1', 'Austerity relief', 'economic collapse', 'United Kingdom',
-                         'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']]
+                         'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']] #
         self.create_title()
         self.create_search()
         self.create_results()
