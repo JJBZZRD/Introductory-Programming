@@ -1,7 +1,7 @@
 import tkinter as tk
 from .dummydata import admin
 from .dummydata import volunteer1
-
+from ..Logic.person_data_retrieve import PersonDataRetrieve
 
 class LoginScreen(tk.Frame):
     def __init__(self, ui_manager, **kwargs):
@@ -30,8 +30,24 @@ class LoginScreen(tk.Frame):
 
         #admin_acount = admin()   this will be a an admin account object passed to the set_user method on succesfful login
 
-        self.set_user(admin)
-        self.show_screen('PlanList', admin)
+        # self.set_user(admin)
+        # self.show_screen('PlanList', admin)
+
+        res = PersonDataRetrieve.login(self.username_entry, self.password_entry)
+
+        if isinstance(res, str):
+            # return invalid login message
+            pass
+        elif len(res) != 1:
+            # return invalid login message
+            pass 
+        else:
+            self.set_user(res[0])
+            if res[0].campID is None:
+                screen = 'PlanList'
+            else:
+                screen = 'VolunteerDashboard'
+            self.show_screen(screen, res[0])
 
 
     def on_volunteer_login_click(self):
