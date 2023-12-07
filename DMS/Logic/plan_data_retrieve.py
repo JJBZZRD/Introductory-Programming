@@ -7,7 +7,7 @@ class PlanDataRetrieve:
     @staticmethod
     def get_plans():
         plan_tuples = Plan.get_all_plans()
-        return util.parse_result(plan_tuples)
+        return util.parse_result('Plan', plan_tuples)
 
     @staticmethod
     def get_plan(filter, value):
