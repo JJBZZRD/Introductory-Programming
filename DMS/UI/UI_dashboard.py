@@ -6,6 +6,7 @@ from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.camp_data_edit import CampDataEdit
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 
+
 class Dashboard(tk.Frame):
     def __init__(self, ui_manager, *args):
         super().__init__(ui_manager.root)
@@ -27,7 +28,9 @@ class Dashboard(tk.Frame):
 
         refugees_frame = tk.Frame(left_frame, bg='white')
         refugees_frame.pack(fill='x', pady=5)
-        refugees_title = tk.Label(refugees_frame, text="Refugees:")
+        
+        current_capacity = CampDataRetrieve.get_camp(campID=camp.campID)[0].max_shelter
+        refugees_title = tk.Label(refugees_frame, text="Capacity usage: placeholder/" + str(current_capacity))
         refugees_title.pack(side='top')
 
 
@@ -41,15 +44,19 @@ class Dashboard(tk.Frame):
         statistics_frame.pack(fill='x', pady=5)
         statistics_title = tk.Label(statistics_frame, text="Statistics:")
         statistics_title.pack(side='top')
-
-
-        self.create_resource_frame(resources_frame, camp)
+        
+        self.populate_statistics_frame(statistics_frame, camp)
+        
+        self.populate_resource_frame(resources_frame, camp)
 
         ttk.Button(left_frame, text="Edit Camp", command=lambda: self.show_screen('EditCamp', camp)).pack(pady=5)
 
-        self.create_refugees_section(right_frame, camp)
+        self.populate_refugees_section(right_frame, camp)
+        
+        ttk.Button(right_frame, text="Manage Refugees", command=lambda: self.show_screen('ManageRefugees', camp)).pack(pady=5)
 
-    def create_refugees_section(self, parent, camp):
+
+    def populate_refugees_section(self, parent, camp):
         refugees_title = tk.Label(parent, text=f"Refugees in Camp {camp.campID}", font=('Arial', 16, 'bold'))
         refugees_title.pack(pady=10)
         
@@ -85,10 +92,10 @@ class Dashboard(tk.Frame):
 
     def update_refugees_list(self, camp, search_entry, refugees_treeview):
         filter_value = search_entry.get().strip()
-        
+
         print(camp.campID)
             
-        self.refugees = PersonDataRetrieve.get_refugees(camp_id=camp.campID, filter_value=filter_value)
+        self.refugees = PersonDataRetrieve.get_refugees(camp_id=camp.campID, name=filter_value)
 
         if not self.refugees:
             refugees_treeview.insert("", "end", text="No matching refugees found.")
@@ -103,7 +110,10 @@ class Dashboard(tk.Frame):
             selected_refugee = self.refugees[int(treeview.item(item, "text")) - 1]
             self.show_screen('EditRefugee', selected_refugee)
         
-    def create_resource_frame(self, parent, camp):
+    def populate_resource_frame(self, parent, camp):
+        
+        camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
+
         resources = {
             'Water': (camp.water),
             'Food': (camp.food),
@@ -113,7 +123,7 @@ class Dashboard(tk.Frame):
         resource_labels = {}
         days_left_labels = {}
 
-        for resource_name, (amount) in resources.items():
+        for resource_name, amount in resources.items():
             resource_frame = tk.Frame(parent)
             resource_frame.pack(fill='x', expand=True)
 
@@ -137,11 +147,36 @@ class Dashboard(tk.Frame):
             increase_button.pack(side='left')
             decrease_button.pack(side='left')
 
-            days_left_label = tk.Label(resource_frame, text="Estimated Days Left: 10")  # Example dummy value
+            resource_key = resource_name.lower().replace(' ', '_')
+            days_left = camp_resources_estimation[resource_key] if resource_key in camp_resources_estimation else "N/A"
+            days_left_label = tk.Label(resource_frame, text=f"Estimated Days Left: {days_left}")
             days_left_label.pack(side='left')
             days_left_labels[resource_name] = days_left_label
+            
+    def populate_statistics_frame(self, parent, camp):
+        statistics_frame = tk.Frame(parent)
+        statistics_frame.pack(fill='x', expand=True)
 
+        # Dummy functions to be filled in later
+        def get_number_of_families():
+            return 0
 
+        def get_average_age():
+            return 0
+
+        def get_number_of_dead():
+            return 0
+
+        tk.Label(statistics_frame, text="Number of families:").grid(row=0, column=0)
+        tk.Label(statistics_frame, text=get_number_of_families()).grid(row=0, column=1)
+
+        tk.Label(statistics_frame, text="Average age:").grid(row=1, column=0)
+        tk.Label(statistics_frame, text=get_average_age()).grid(row=1, column=1)
+
+        tk.Label(statistics_frame, text="Dead:").grid(row=2, column=0)
+        tk.Label(statistics_frame, text=get_number_of_dead()).grid(row=2, column=1)
+
+        # Populate the labels with the dummy functions
 class VolunteerDashboard(Dashboard):
     """
     Takes in a volunteer object and displays a dashboard with information on that volunteer's camp.
@@ -151,6 +186,8 @@ class VolunteerDashboard(Dashboard):
         #logic.getcamp are functions that fetch volunteer and camp data
         self.volunteer = volunteer
         # Directly using camp1 for this example
+        temp = CampDataRetrieve.get_camp(campID=volunteer.campID)
+        print(temp)
         self.camp = CampDataRetrieve.get_camp(campID=volunteer.campID)[0]
 
         # Create and add a new tab for the volunteer's camp
@@ -196,7 +233,7 @@ class AdminDashboard(Dashboard):
             camp_frame.pack(side='left', fill='both', expand=True, padx=10, pady=10)
             tk.Label(camp_frame, text=f"Camp {camp.campID}", font=('Arial', 16, 'bold')).pack(pady=(5, 10))
 
-            self.create_resource_frame(camp_frame, camp)
+            self.populate_resource_frame(camp_frame, camp)
 
             ttk.Button(camp_frame, text="Edit Camp", command=lambda cn=camp: self.show_screen('EditCamp', cn)).pack(pady=5)
 
@@ -204,4 +241,4 @@ class AdminDashboard(Dashboard):
         additional_resources_frame.pack(side='right', fill='y', padx=(5, 0))
         tk.Label(additional_resources_frame, text="Additional Resources Available", bg='lightgray').pack(pady=10)
 
-        self.create_resource_frame(additional_resources_frame, additional_resources)
+        self.populate_resource_frame(additional_resources_frame, additional_resources)

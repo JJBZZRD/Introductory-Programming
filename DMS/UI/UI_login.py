@@ -1,8 +1,5 @@
 import tkinter as tk
-from .dummydata import admin
-from .dummydata import volunteer1
 from ..Logic.person_data_retrieve import PersonDataRetrieve
-
 class LoginScreen(tk.Frame):
     def __init__(self, ui_manager, **kwargs):
         super().__init__(ui_manager.root, **kwargs)
@@ -25,13 +22,11 @@ class LoginScreen(tk.Frame):
 
         volunteer_login_button = tk.Button(self, text="Volunteer Login", command=self.on_volunteer_login_click)
         volunteer_login_button.pack(pady=5)
+        
+        for person in PersonDataRetrieve.get_all_volunteers():
+            print(person.display_info())
 
     def on_login_as_admin_click(self):
-
-        #admin_acount = admin()   this will be a an admin account object passed to the set_user method on succesfful login
-
-        self.set_user(admin)
-        self.show_screen('PlanList', admin)
 
         res = PersonDataRetrieve.login(self.username_entry, self.password_entry)
 
@@ -48,6 +43,8 @@ class LoginScreen(tk.Frame):
             else:
                 screen = 'VolunteerDashboard'
             self.show_screen(screen, res[0])
+            
+        
 
 
     def on_volunteer_login_click(self):
@@ -55,14 +52,3 @@ class LoginScreen(tk.Frame):
         self.show_screen('VolunteerDashboard', volunteer1)
 
 
-        # placeholder validationt/login logic"
-        # loginAttempt = logic.login()
-
-        # if loginAttempt == False:
-        #     message_popup('Invalid userid or password')
-        # else:
-        #     user = loginAttempt
-        #     if user.type == 'volunteer':
-        #         self.show_screen('volunteerDashboard', user.id)
-        #     if user.type == 'admin
-        #         self.show_screen('volunteerDashboard', user.id)
