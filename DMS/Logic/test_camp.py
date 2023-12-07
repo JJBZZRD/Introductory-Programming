@@ -65,6 +65,16 @@ class TestCamp(unittest.TestCase):
 
         pass
 
+    def test_get_camp_resources(self):
+        print("\nExecuting get_camp_resources")
+
+        camp_f = CampDataRetrieve.get_camp_resources(campID=1)
+        print(camp_f)
+
+        self.assertIsInstance(camp_f, list, "camp_f is not a list")
+
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()
