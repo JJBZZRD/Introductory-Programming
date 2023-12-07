@@ -1,0 +1,10 @@
+**/.DS_Store
+.gitignore
+**/__pycache__/
+.DS_Store
+.vscode/launch.json
+**/database.db
+**/log_files/
+**/.idea/
+DMS/DB/log_files/queries.log
+DMS/DB/database.db
