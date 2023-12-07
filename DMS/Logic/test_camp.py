@@ -1,17 +1,10 @@
-import os
-import sys
-
-CURRENT_DIR = os.path.dirname(
-    os.path.abspath(r"path of config"))
-sys.path.append(CURRENT_DIR)
 import unittest
 import sqlite3
-from camp_data_retrieve import CampDataRetrieve
-from camp_data_edit import CampDataEdit
-from DataLayer.plan import Plan
-from DataLayer.camp import Camp
-from util import *
-from DataLayer.config import *
+from ..DB.camp import Camp
+from ..DB.plan import Plan
+from .camp_data_retrieve import CampDataRetrieve
+from .camp_data_edit import CampDataEdit
+from ..DB.config import *
 
 
 class TestCamp(unittest.TestCase):

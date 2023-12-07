@@ -1,17 +1,12 @@
-import os
-import sys
-
-CURRENT_DIR = os.path.dirname(os.path.abspath(r"path of config"))
-sys.path.append(CURRENT_DIR)
-from util import *
-
+from .. import util
+from ..DB.camp import Camp
 
 class CampDataRetrieve:
 
     @staticmethod
     def get_all_camps():
         camp_tuples = Camp.get_all_camps()
-        return parse_result('Camp', camp_tuples)
+        return util.parse_result('Camp', camp_tuples)
 
     @staticmethod
     def get_camp(campID=None, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
@@ -19,4 +14,4 @@ class CampDataRetrieve:
         camp_tuples = Camp.get_camp(campID, location, max_shelter, water, max_water, food, max_food,
                                     medical_supplies, max_medical_supplies, planID)
         # add more validation procedure in the future
-        return parse_result('Camp', camp_tuples)
+        return util.parse_result('Camp', camp_tuples)
