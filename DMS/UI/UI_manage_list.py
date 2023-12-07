@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from .dummydata import plan1, plan2
+import time
 
 
 class ManageList(tk.Frame):
@@ -10,22 +11,46 @@ class ManageList(tk.Frame):
         self.screen_data = ui_manager.screen_data
         self.show_screen = ui_manager.show_screen
         self.tree_item_to_object = {}
-        self.setup_list()
+        self.results_list = None
         self.list_type = None
-        self.result_headers = None
-        self.results = None
+        self.list_headers = None
+        self.list_data = None
         self.search_field = None
-
+        self.switch_to_page = None
+        self.setup_list()
 
     def setup_list(self):
         raise NotImplementedError("Subclasses should implement this method to setup the different lists")
 
-    def result_list(self):
-        # need to gather the search bar value. there needs to be a backend update to gather the
-        # associated results from the search. this will have to be in array value.
-        # the collected results will be assigned to the self.results value.
-        # the create_result will then be recalled to display the new list
-        pass
+    def update_results_list(self, filter, searchbar):
+        print((filter, searchbar))
+
+        #the following displays a dismissible pop up if the filter is not changed from default
+        if filter == 'Filter':
+            popup = tk.Toplevel(self.root)
+
+            # Set the title of the popup window
+            popup.title("Popup Window")
+
+            # Add some content to the popup
+            msg = tk.Label(popup, text="Please select a search filter")
+            msg.pack(padx=20, pady=20)
+
+            # Add a dismiss button
+            dismiss_button = tk.Button(popup, text="Dismiss", command=popup.destroy)
+            dismiss_button.pack(pady=10)
+            return
+
+        self.results_list.destroy()
+
+        # extracting the searched objects
+        search_results = [plan1, plan1, plan2, plan2] # the list of objects returned by the logic layer, currently dummy
+
+        #setting the internal results to the updated value
+        self.list_data = search_results
+
+        self.create_results()
+
 
     def create_title(self):
         # this method creates the title and add entry button for each list
@@ -43,17 +68,16 @@ class ManageList(tk.Frame):
         # search_frame = tk.Frame(self.root)
         # search_frame.pack()
 
-        search_filters = ttk.Combobox(self, values=self.result_headers, state="readonly")
+        search_filters = ttk.Combobox(self, values=self.list_headers, state="readonly")
         search_filters.set("Filter")  # set default value
         search_filters.grid(column=5, row=2, padx=5)
         # search_filters.bind('<<ComboboxSelected>>', )
 
         search_bar = ttk.Entry(self, width=100)
         search_bar.grid(column=6, row=2, padx=5)
-        self.search_field = search_bar.get()
         # search_bar.pack(padx=10, pady=5)
 
-        search_button = ttk.Button(self, text='Search', command=self.result_list)
+        search_button = ttk.Button(self, text='Search', command=lambda: self.update_results_list(search_filters.get(), search_bar.get()))
         search_button.grid(column=7, row=2)
         # search_button.pack(side='right', padx=10, pady=5)
 
@@ -62,30 +86,30 @@ class ManageList(tk.Frame):
 
     def create_results(self):
         # this method creates the results list for a chosen subclass
-        results_list = ttk.Treeview(self, columns=self.result_headers, show='headings')
+        self.results_list = ttk.Treeview(self, columns=self.list_headers, show='headings')
 
         # this lets us change the header values depending on what are being passed
-        for i in self.result_headers:
-            results_list.heading(i, text=i)
-            results_list.column(i, anchor='center')
+        for i in self.list_headers:
+            self.results_list.heading(i, text=i)
+            self.results_list.column(i, anchor='center')
 
         #self.tree_item_to_object = {}
 
         # Insert items into the Treeview and populate the dictionary
-        for result in self.results:
-            result_id = results_list.insert('', 'end', values=result.get_info())
+        for result in self.list_data:
+            result_id = self.results_list.insert('', 'end', values=result.get_info())
             self.tree_item_to_object[result_id] = result
 
 
-        print("Tree items to objects:", self.tree_item_to_object)
+        #print("Tree items to objects:", self.tree_item_to_object)
 
         # Bind double-click event
-        results_list.bind('<Double-1>', lambda event: self.on_item_double_click(event))
+        self.results_list.bind('<Double-1>', lambda event: self.on_item_double_click(event))
 
         # Place the Treeview on the grid
-        results_list.grid(column=0, row=3, columnspan=13)
+        self.results_list.grid(column=0, row=3, columnspan=13)
 
-        print("Tree items to objects:", self.tree_item_to_object)
+        #print("Tree items to objects:", self.tree_item_to_object)
 
     def on_item_double_click(self, event):
         # Identify the Treeview widget
@@ -94,19 +118,16 @@ class ManageList(tk.Frame):
         # Get the selected item
         result_id = tree.selection()[0]
 
-        print("Current tree_item_to_object dictionary:", self.tree_item_to_object)
-        print("Clicked item ID:", result_id)
+        #print("Current tree_item_to_object dictionary:", self.tree_item_to_object)
+        #print("Clicked item ID:", result_id)
 
         # Retrieve the associated object from the dictionary
         associated_object = self.tree_item_to_object[result_id]
 
         if associated_object:
-            self.switch_to_admin_dashboard(associated_object)
+            self.show_screen(self.switch_to_page, associated_object)
         else:
             print("no asssociated object")
-
-    def switch_to_admin_dashboard(self, result):
-        self.show_screen('AdminDashboard', result)
 
     def switch_to_new_plan(self, event=None):
         self.show_screen('NewPlan')
@@ -115,9 +136,9 @@ class ManageList(tk.Frame):
 class PlanList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Plans', 'Add New Plan']
-        self.result_headers = ['Plan ID', 'Plan Name', 'Region', 'Event Name', 'Description', 'Start Date', 'End Date']
-        self.results = [plan1, plan2]
-        #self.tree_item_to_object = {}
+        self.list_headers = ['Plan ID', 'Plan Name', 'Region', 'Event Name', 'Description', 'Start Date', 'End Date']
+        self.list_data = [plan1, plan2] # self.screen_data.get_objects()
+        self.switch_to_page = 'AdminDashboard'
         self.create_title()
         self.create_search()
         self.create_results()
@@ -127,9 +148,10 @@ class VolunteerList(ManageList):
 
     def setup_list(self):
         self.list_type = ['Manage Volunteers', 'Add New Volunteer']
-        self.result_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
-        self.results = [['1', 'Austerity relief', 'economic collapse', 'United Kingdom',
+        self.list_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
+        self.list_data = [['1', 'Austerity relief', 'economic collapse', 'United Kingdom',
                          'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']]
+        self.switch_to_page = 'EditVolunteer'
         self.create_title()
         self.create_search()
         self.create_results()
@@ -139,9 +161,10 @@ class RefugeeList(ManageList):
 
     def setup_list(self):
         self.list_type = ['Manage Refugees', 'Add New Refugee']
-        self.result_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
-        self.results = [['1', 'Austerity relief', 'economic collapse', 'United Kingdom',
+        self.list_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
+        self.list_data = [['1', 'Austerity relief', 'economic collapse', 'United Kingdom',
                          'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']]
+        self.switch_to_page = 'EditRefugee'
         self.create_title()
         self.create_search()
         self.create_results()
