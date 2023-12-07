@@ -24,7 +24,22 @@ class ManageList(tk.Frame):
 
     def update_results_list(self, filter, searchbar):
         print((filter, searchbar))
-        # need a way of making filter pass nothing to the filter in the logic?
+
+        #the following displays a dismissible pop up if the filter is not changed from default
+        if filter == 'Filter':
+            popup = tk.Toplevel(self.root)
+
+            # Set the title of the popup window
+            popup.title("Popup Window")
+
+            # Add some content to the popup
+            msg = tk.Label(popup, text="Please select a search filter")
+            msg.pack(padx=20, pady=20)
+
+            # Add a dismiss button
+            dismiss_button = tk.Button(popup, text="Dismiss", command=popup.destroy)
+            dismiss_button.pack(pady=10)
+            return
 
         self.results_list.destroy()
 
