@@ -32,9 +32,9 @@ class TestVolunteer(unittest.TestCase):
         camp_tuple = Camp.get_camp_by_id(camp_id)
         camp = util.parse_result('Camp', camp_tuple)[0]
         print(camp.display_info())
-        sql3 = """
-        INSERT INTO refugees (campID, first_name, last_name)
-        VALUES({camp_id}, 'aaa', 'bbb')
+        sql3 = f"""
+        INSERT INTO refugees (campID, first_name, last_name, date_of_birth)
+        VALUES({camp_id}, 'aaa', 'bbb', '1111-11-11')
         """
         cursor.execute(sql3)
 
@@ -45,9 +45,11 @@ class TestVolunteer(unittest.TestCase):
 
     def test_create_volunteer(self):
         print("Executing test_create_volunteer")
-        plan = PlanDataRetrieve.get_plan()
-        camps = CampDataRetrieve.get_camp()
-        refugees = PersonDataRetrieve.get_refugees(camp_id=1)
+        plan = PlanDataRetrieve.get_plan(name='soran unit test plan')[0]
+        camp = CampDataRetrieve.get_camp(planID=plan.planID)[0]
+        print(camp.display_info())
+        refugees = PersonDataRetrieve.get_refugees(camp_id=camp.campID)
+        print(refugees)
 
 if __name__ == '__main__':
     unittest.main()
