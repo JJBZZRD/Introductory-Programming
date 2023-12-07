@@ -30,8 +30,8 @@ class LoginScreen(tk.Frame):
 
         #admin_acount = admin()   this will be a an admin account object passed to the set_user method on succesfful login
 
-        # self.set_user(admin)
-        # self.show_screen('PlanList', admin)
+        self.set_user(admin)
+        self.show_screen('PlanList', admin)
 
         res = PersonDataRetrieve.login(self.username_entry, self.password_entry)
 

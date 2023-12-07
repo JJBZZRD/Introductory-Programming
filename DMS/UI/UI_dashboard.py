@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 
-from .UI_utlities import create_filterable_treeview 
 from ..Logic.person_data_retrieve import PersonDataRetrieve
 from ..Logic.camp_data_retrieve import CampDataRetrieve
+from ..Logic.camp_data_edit import CampDataEdit
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 
 class Dashboard(tk.Frame):
@@ -25,13 +25,31 @@ class Dashboard(tk.Frame):
         left_frame.pack(side='left', fill='both', expand=True)
         right_frame.pack(side='right', fill='both', expand=True)
 
-        self.create_resource_frame(left_frame, camp)
+        refugees_frame = tk.Frame(left_frame, bg='white')
+        refugees_frame.pack(fill='x', pady=5)
+        refugees_title = tk.Label(refugees_frame, text="Refugees:")
+        refugees_title.pack(side='top')
+
+
+        resources_frame = tk.Frame(left_frame, bg='white')
+        resources_frame.pack(fill='x', pady=5)
+        resources_title = tk.Label(resources_frame, text="Resources:")
+        resources_title.pack(side='top')
+
+
+        statistics_frame = tk.Frame(left_frame, bg='white')
+        statistics_frame.pack(fill='x', pady=5)
+        statistics_title = tk.Label(statistics_frame, text="Statistics:")
+        statistics_title.pack(side='top')
+
+
+        self.create_resource_frame(resources_frame, camp)
 
         ttk.Button(left_frame, text="Edit Camp", command=lambda: self.show_screen('EditCamp', camp)).pack(pady=5)
 
         self.create_refugees_section(right_frame, camp)
 
-    import tkinter.ttk as ttk
+
 
     def create_refugees_section(self, parent, camp):
         refugees_title = tk.Label(parent, text=f"Refugees in Camp {camp.campID}", font=('Arial', 16, 'bold'))
@@ -39,35 +57,48 @@ class Dashboard(tk.Frame):
         
         search_frame = tk.Frame(parent, bg='white')
         search_frame.pack(pady=5, fill='x')
-        
+
         search_entry = tk.Entry(search_frame)
         search_entry.pack(side='left', padx=5, expand=True, fill='x')
         search_entry.insert(0, camp.campID)
-
-        filter_button = ttk.Button(search_frame, text="Filter/Search", command=lambda: self.update_refugees_list(search_entry, refugees_treeview))
+        
+        refugees_treeview = ttk.Treeview(parent, columns=("Name", "Medical Condition"))
+        
+        filter_button = ttk.Button(search_frame, text="Filter/Search", command=lambda: self.update_refugees_list(camp, search_entry, refugees_treeview))
         filter_button.pack(side='left', padx=5)
 
-        refugees_treeview = ttk.Treeview(parent, columns=("Name", "Medical Condition"))
         refugees_treeview.pack(pady=10, expand=True, fill='both')
         refugees_treeview.bind('<Double-1>', lambda event, tv=refugees_treeview: self.on_refugee_double_click(event, tv))
 
         refugees_treeview.heading("#0", text="ID")
+        refugees_treeview.column("#0", width=50, anchor='center')
+        refugees_treeview.heading("Name", text="Name")
+        refugees_treeview.column("Name", width=150)
+        refugees_treeview.heading("Medical Condition", text="Medical Condition")
+        refugees_treeview.column("Medical Condition", width=150)
+
+        self.update_refugees_list(camp, search_entry, refugees_treeview)
         refugees_treeview.column("#0", width=150, anchor='center')
         refugees_treeview.heading("Name", text="Name")
         refugees_treeview.column("Name", width=150)
         refugees_treeview.heading("Medical Condition", text="Medical Condition")
         refugees_treeview.column("Medical Condition", width=150)
 
-        self.update_refugees_list(search_entry, refugees_treeview) 
+        self.update_refugees_list(camp, search_entry, refugees_treeview) 
 
-    def update_refugees_list(self, search_entry, refugees_treeview):
+    def update_refugees_list(self, camp, search_entry, refugees_treeview):
         filter_value = search_entry.get().strip()
-        filter_type = 'camp' if not filter_value else 'name'
-
         if not filter_value:
-            filter_value = ''
+            campID = camp.campID
+            filter_value = f'campID={campID}'
+        else:
+            filter_value = f'name={filter_value}'
+            
+        print(filter_value)
 
-        self.refugees = PersonDataRetrieve.get_refugees(filter_type, filter_value)
+        self.refugees = PersonDataRetrieve.get_refugees(campID=camp.campID, name=filter_value)
+        
+        print(self.refugees)
 
         if isinstance(self.refugees, str):
             print(self.refugees)
@@ -87,48 +118,42 @@ class Dashboard(tk.Frame):
             self.show_screen('EditRefugee', selected_refugee)
         
     def create_resource_frame(self, parent, camp):
-            resources = {
-                'Water': (camp.water, camp.max_water),
-                'Food': (camp.food, camp.max_food),
-                'Medical Supplies': (camp.medical_supplies, camp.max_medical_supplies),
-                'Shelter': (camp.max_shelter, camp.max_shelter)
-            }
+        resources = {
+            'Water': (camp.water),
+            'Food': (camp.food),
+            'Medical Supplies': (camp.medical_supplies),
+        }
 
-            resource_labels = {}
+        resource_labels = {}
+        days_left_labels = {}
 
-            for resource_name, (amount, capacity) in resources.items():
-                resource_frame = tk.Frame(parent)
-                resource_frame.pack(fill='x', expand=True)
+        for resource_name, (amount) in resources.items():
+            resource_frame = tk.Frame(parent)
+            resource_frame.pack(fill='x', expand=True)
 
-                tk.Label(resource_frame, text=f"{resource_name}:").pack(side='left')
-                amount_label = tk.Label(resource_frame, text=f"{amount}/{capacity}")
-                amount_label.pack(side='left')
-                resource_labels[resource_name] = amount_label
+            tk.Label(resource_frame, text=f"{resource_name}:").pack(side='left')
+            amount_label = tk.Label(resource_frame, text=f"{amount}")
+            amount_label.pack(side='left')
+            resource_labels[resource_name] = amount_label
 
-                def update_resource(resource_name, increment):
-                    current_amount, current_capacity = resources[resource_name]
-                    new_amount = max(0, min(current_amount + increment, current_capacity))  
+            def update_resource(resource_name, increment):
+                current_amount, current_capacity = resources[resource_name]
+                new_amount = max(0, min(current_amount + increment, current_capacity))
 
-                    if resource_name == 'Water':
-                        camp.water = new_amount
-                    elif resource_name == 'Food':
-                        camp.food = new_amount
-                    elif resource_name == 'Medical Supplies':
-                        camp.medical_supplies = new_amount
-                    elif resource_name == 'Shelter':
-                        camp.shelter = new_amount
+                CampDataEdit.update_camp(camp.campID, **{resource_name.lower().replace(' ', '_'): new_amount})
 
-                    self.update_camp(camp.campID, water=camp.water, food=camp.food, 
-                                    medical_supplies=camp.medical_supplies, shelter=camp.shelter)
+                amount_label = resource_labels[resource_name]
+                amount_label.config(text=f"{new_amount}/{current_capacity}")
 
-                    amount_label = resource_labels[resource_name]
-                    amount_label.config(text=f"{new_amount}/{current_capacity}")
+            increase_button = tk.Button(resource_frame, text="+", command=lambda res=resource_name: update_resource(res, 1))
+            decrease_button = tk.Button(resource_frame, text="-", command=lambda res=resource_name: update_resource(res, -1))
 
-                increase_button = tk.Button(resource_frame, text="+", command=lambda res=resource_name: update_resource(res, 1))
-                decrease_button = tk.Button(resource_frame, text="-", command=lambda res=resource_name: update_resource(res, -1))
+            increase_button.pack(side='left')
+            decrease_button.pack(side='left')
 
-                increase_button.pack(side='left')
-                decrease_button.pack(side='left')
+            days_left_label = tk.Label(resource_frame, text="Estimated Days Left: 10")  # Example dummy value
+            days_left_label.pack(side='left')
+            days_left_labels[resource_name] = days_left_label
 
 
 class VolunteerDashboard(Dashboard):
@@ -140,7 +165,7 @@ class VolunteerDashboard(Dashboard):
         #logic.getcamp are functions that fetch volunteer and camp data
         self.volunteer = volunteer
         # Directly using camp1 for this example
-        self.camp = CampDataRetrieve.get_camp('campID',volunteer.campID)[0]
+        self.camp = CampDataRetrieve.get_camp(campID=volunteer.campID)[0]
 
         # Create and add a new tab for the volunteer's camp
         self.tab_control = ttk.Notebook(self)
@@ -159,8 +184,9 @@ class AdminDashboard(Dashboard):
     """
     
     def setup_dashboard(self, plan):
-        self.planCamps = CampDataRetrieve.get_camp('planID',plan.planID)[0]
-        self.additional_resources = {'Food': [40, 100], 'Water': [30, 80], 'Medicine': [10, 60], 'Shelter': [10,90]} 
+        self.plan = plan
+        self.planCamps = CampDataRetrieve.get_camp(planID=plan.planID)
+        self.additional_resources = {'Food': [40, 100], 'Water': [30, 80], 'Medicine': [10, 60], 'Shelter': [10,90]} #placeholders
         self.create_admin_tabs(self.planCamps, self.additional_resources)
     
     def create_admin_tabs(self, planCamps, additional_resources):
