@@ -24,9 +24,9 @@ class ManageList(tk.Frame):
         raise NotImplementedError("Subclasses should implement this method to setup the different lists")
 
     def update_results_list(self, filter, searchbar):
-        print((self.filter_matching[filter], searchbar))
+        # print((self.filter_matching[filter], searchbar))
 
-        #the following displays a dismissible pop up if the filter is not changed from default
+        # the following displays a dismissible pop up if the filter is not changed from default
         if filter == 'Filter':
             popup = tk.Toplevel(self.root)
 
@@ -51,11 +51,9 @@ class ManageList(tk.Frame):
         # extracting the searched objects
         self.list_data = PlanDataRetrieve.get_plan(self.filter_matching[filter], searchbar)
 
-        #setting the internal results to the updated value
-
+        # setting the internal results to the updated value
 
         self.create_results()
-
 
     def create_title(self):
         # this method creates the title and add entry button for each list
@@ -82,7 +80,8 @@ class ManageList(tk.Frame):
         search_bar.grid(column=6, row=2, padx=5)
         # search_bar.pack(padx=10, pady=5)
 
-        search_button = ttk.Button(self, text='Search', command=lambda: self.update_results_list(search_filters.get(), search_bar.get()))
+        search_button = ttk.Button(self, text='Search',
+                                   command=lambda: self.update_results_list(search_filters.get(), search_bar.get()))
         search_button.grid(column=7, row=2)
         # search_button.pack(side='right', padx=10, pady=5)
 
@@ -98,15 +97,14 @@ class ManageList(tk.Frame):
             self.results_list.heading(i, text=i)
             self.results_list.column(i, anchor='center')
 
-        #self.tree_item_to_object = {}
+        # self.tree_item_to_object = {}
 
         # Insert items into the Treeview and populate the dictionary
         for result in self.list_data:
             result_id = self.results_list.insert('', 'end', values=result.display_info())
             self.tree_item_to_object[result_id] = result
 
-
-        #print("Tree items to objects:", self.tree_item_to_object)
+        # print("Tree items to objects:", self.tree_item_to_object)
 
         # Bind double-click event
         self.results_list.bind('<Double-1>', lambda event: self.on_item_double_click(event))
@@ -114,7 +112,7 @@ class ManageList(tk.Frame):
         # Place the Treeview on the grid
         self.results_list.grid(column=0, row=3, columnspan=13)
 
-        #print("Tree items to objects:", self.tree_item_to_object)
+        # print("Tree items to objects:", self.tree_item_to_object)
 
     def on_item_double_click(self, event):
         # Identify the Treeview widget
@@ -123,8 +121,8 @@ class ManageList(tk.Frame):
         # Get the selected item
         result_id = tree.selection()[0]
 
-        #print("Current tree_item_to_object dictionary:", self.tree_item_to_object)
-        #print("Clicked item ID:", result_id)
+        # print("Current tree_item_to_object dictionary:", self.tree_item_to_object)
+        # print("Clicked item ID:", result_id)
 
         # Retrieve the associated object from the dictionary
         associated_object = self.tree_item_to_object[result_id]
@@ -151,13 +149,26 @@ class PlanList(ManageList):
         self.create_results()
 
 
+class CampList(ManageList):
+    def setup_list(self):
+        self.list_type = ['Manage Camps', 'Add New Camp']
+        self.list_headers = ['Camp ID', 'Country', 'Max Shelter', 'Water', 'Max Water', 'Food', 'Max_Food',
+                             'Medical Supplies', 'Max Medical Supplies', 'Plan ID']
+        self.list_data = PlanDataRetrieve.get_plans()
+        self.switch_to_page = 'EditCamp'
+        self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Max Shelter': 'max_shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max_Food': 'max_food',
+                                'Medical Supplies': 'medical_supplies', 'Max Medical Supplies': 'max_medical_supplies', 'Plan ID': 'planID'}
+        self.create_title()
+        self.create_search()
+        self.create_results()
+
+
 class VolunteerList(ManageList):
 
     def setup_list(self):
         self.list_type = ['Manage Volunteers', 'Add New Volunteer']
         self.list_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
-        self.list_data = [['1', 'Austerity relief', 'economic collapse', 'United Kingdom',
-                         'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']]
+        self.list_data = None  # to be provided by logid layer
         self.switch_to_page = 'EditVolunteer'
         self.create_title()
         self.create_search()
@@ -170,7 +181,7 @@ class RefugeeList(ManageList):
         self.list_type = ['Manage Refugees', 'Add New Refugee']
         self.list_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
         self.list_data = [['1', 'Austerity relief', 'economic collapse', 'United Kingdom',
-                         'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']]
+                           'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']]
         self.switch_to_page = 'EditRefugee'
         self.create_title()
         self.create_search()
