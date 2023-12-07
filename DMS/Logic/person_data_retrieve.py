@@ -14,9 +14,11 @@ class PersonDataRetrieve:
     def get_all_volunteers():
         volunteer_tuples = Volunteer.get_all_volunteers() 
         # returns volunteers in list of tuples 
-        # [(1, 'Soran', 'Test', 'aaa', 'bbb', '1/1/2000', 7511975055, 'Active', 1), ...] 
-        return util.parse_result(volunteer_tuples)
-    
+        # [(1, 'Soran', 'Test', 'aaa', 'bbb', '1/1/2000', 7511975055, 'Active', 1), ...]
+        if volunteer_tuples: 
+            return util.parse_result(volunteer_tuples)
+        else:
+            return "There is no volunteer"
     # deprecate, use the version that takes multiple args instead
     # @staticmethod
     # def get_volunteers(filter, value):

@@ -48,8 +48,8 @@ class TestVolunteer(unittest.TestCase):
         plan = PlanDataRetrieve.get_plan(name='soran unit test plan')[0]
         camp = CampDataRetrieve.get_camp(planID=plan.planID)[0]
         print(camp.display_info())
-        refugees = PersonDataRetrieve.get_refugees(camp_id=camp.campID)
-        print(refugees)
-
+        refugee = PersonDataRetrieve.get_refugees(camp_id=camp.campID)[0]
+        print(refugee.display_info())
+        print(Refugee.get_refugee(campID=1))
 if __name__ == '__main__':
     unittest.main()
