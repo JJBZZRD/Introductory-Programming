@@ -17,7 +17,7 @@ class ModifyEntries(tk.Frame):
         self.current_data = []  # this information is passed to be displayed in the entry fields only if it is an edit entry variant subclass being called
         self.entry_fields = {}  # this variable creates a dictionary that allows you to extract the values from the entry fields in 'def create_entry_fields(self):'
         self.button_labels = None
-        self.display_delete_button = False
+        self.button_list = {}
         self.setup_modify()
 
     def setup_modify(self):
@@ -74,13 +74,18 @@ class ModifyEntries(tk.Frame):
             entry.insert(0, placeholder)
 
     def create_buttons(self):
-        save_record = ttk.Button(self.lower_frame, text=self.button_labels[0], command=self.on_click_save_record)
-        save_record.grid(column=5, row=4, padx=5, pady=5)
-        if self.display_delete_button:
-            save_record = ttk.Button(self.lower_frame, text=self.button_labels[1], command=self.on_click_save_record)
-            save_record.grid(column=5, row=3, padx=5, pady=5)
+        #save_record = ttk.Button(self.lower_frame, text=self.button_labels[0], command=self.on_click_save_record)
+        #save_record.grid(column=5, row=4, padx=5, pady=5)
+        # if self.display_delete_button:
+        #     save_record = ttk.Button(self.lower_frame, text=self.button_labels[1], command=self.on_click_save_record)
+        #     save_record.grid(column=5, row=3, padx=5, pady=5)
+        #
+        for i, button in enumerate(self.button_labels):
+            new_button = ttk.Button(self.lower_frame, text=button, command=lambda b=button: self.button_click_function(b))
+            new_button.grid(column=5, row=4-i, padx=5, pady=5)
+            self.button_list.update({button: new_button})
 
-        spacer_button = ttk.Button(self.lower_frame, text=self.button_labels[1])
+        spacer_button = ttk.Button(self.lower_frame, text=self.button_labels[0])
         spacer_button.grid()
 
         spacer_width = spacer_button.winfo_reqwidth() + 10
@@ -90,15 +95,34 @@ class ModifyEntries(tk.Frame):
         spacer_frame = ttk.Frame(self.lower_frame, height=0, width=spacer_width)
         spacer_frame.grid(column=0, row=4)
 
-    def on_click_save_record(self):
+    def button_click_function(self, button):
+
+        match button:
+            case 'Save Changes':
+                inputs = []
+                for key in self.entry_fields:
+                    inputs.append(self.entry_fields[key].get())
+                print(tuple(inputs))
+                # try to update data using the business logic function
+
+            case 'Delete':
+                # logic for deleting object passed into screen data
+
+                pass
+            case 'Deactivate':
+
+                # logic for deactivating volunteer account
+                pass
+            case 'Create':
+
+                # logic for deactivating volunteer account
+                pass
+
+
         # takes the entry field values
-        inputs = []
-        for key in self.entry_fields:
-            inputs.append(self.entry_fields[key].get())
 
-        # try to update data using the business logic function
 
-        print(tuple(inputs))
+
 
         # if returns true 
         # return success message utility
@@ -112,7 +136,7 @@ class NewPlan(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Plan']
         self.modifiable_variables = ['Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
-        self.button_labels = 'Create'
+        self.button_labels = ['Create']
         self.current_data = None
         self.entry_fields = {}
         self.create_title()
@@ -138,7 +162,7 @@ class NewCamp(ModifyEntries):
         self.modify_type = ['New Camp']
         self.modifiable_variables = ['Camp Name', 'Refugees', 'Volunteers', 'Water Level', 'Food Level',
                                      'Medical supply']
-        self.button_labels = 'Create'
+        self.button_labels = ['Create']
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
@@ -155,7 +179,6 @@ class EditCamp(ModifyEntries):
                              self.screen_data.food, self.screen_data.medical_supplies]
         self.button_labels = ['Save Changes', 'Delete']
         self.entry_fields = {}
-        self.display_delete_button = True
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -166,7 +189,7 @@ class NewVolunteer(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Volunteer']
         self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp']
-        self.button_labels = 'Create'
+        self.button_labels = ['Create']
         # self.display_delete_button = False
         self.entry_fields = {}
         self.create_title()
@@ -179,10 +202,9 @@ class EditVolunteer(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Volunteer']
         self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp']
-        self.button_labels = ['Save Changes', 'Delete']
+        self.button_labels = ['Save Changes', 'Deactivate']
         self.current_data = ['JJ', 'Buzzard', '24/03/1997', '07780364693', 'camp1']
         self.entry_fields = {}
-        self.display_delete_button = True
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -194,7 +216,7 @@ class NewRefugee(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Refugee']
         self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp']
-        self.button_labels = 'Create'
+        self.button_labels = ['Create']
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
@@ -211,7 +233,6 @@ class EditRefugee(ModifyEntries):
         self.current_data = [self.screen_data.first_name, self.screen_data.last_name, self.screen_data.date_of_birth,
                              self.screen_data.familyID, self.screen_data.campID, self.screen_data.medical_condition]
         self.entry_fields = {}
-        self.display_delete_button = True
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -222,11 +243,10 @@ class EditPersonalDetails(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Personal Details']
         self.modifiable_variables = ['First Name', 'Last Name', 'User Name', 'Date of Birth', 'Phone Number']
-        self.button_labels = ['Save Changes', 'Delete']
+        self.button_labels = ['Save Changes', 'Delete', 'Deactivate']
         self.current_data = [self.screen_data.first_name, self.screen_data.last_name, self.screen_data.username,
                              self.screen_data.date_of_birth, self.screen_data.phone]
         self.entry_fields = {}
-        self.display_delete_button = True
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
