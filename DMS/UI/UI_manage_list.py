@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from .dummydata import plan1, plan2
-import time
+from ..Logic.plan_data_retrieve import PlanDataRetrieve
 
 
 class ManageList(tk.Frame):
@@ -17,13 +17,14 @@ class ManageList(tk.Frame):
         self.list_data = None
         self.search_field = None
         self.switch_to_page = None
+        self.filter_matching = {}
         self.setup_list()
 
     def setup_list(self):
         raise NotImplementedError("Subclasses should implement this method to setup the different lists")
 
     def update_results_list(self, filter, searchbar):
-        print((filter, searchbar))
+        print((self.filter_matching[filter], searchbar))
 
         #the following displays a dismissible pop up if the filter is not changed from default
         if filter == 'Filter':
@@ -43,11 +44,15 @@ class ManageList(tk.Frame):
 
         self.results_list.destroy()
 
+        if searchbar == '':
+            self.list_data = PlanDataRetrieve.get_plans()
+            self.create_results()
+
         # extracting the searched objects
-        search_results = [plan1, plan1, plan2, plan2] # the list of objects returned by the logic layer, currently dummy
+        self.list_data = PlanDataRetrieve.get_plan(self.filter_matching[filter], searchbar)
 
         #setting the internal results to the updated value
-        self.list_data = search_results
+
 
         self.create_results()
 
@@ -97,7 +102,7 @@ class ManageList(tk.Frame):
 
         # Insert items into the Treeview and populate the dictionary
         for result in self.list_data:
-            result_id = self.results_list.insert('', 'end', values=result.get_info())
+            result_id = self.results_list.insert('', 'end', values=result.display_info())
             self.tree_item_to_object[result_id] = result
 
 
@@ -137,8 +142,10 @@ class PlanList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Plans', 'Add New Plan']
         self.list_headers = ['Plan ID', 'Plan Name', 'Region', 'Event Name', 'Description', 'Start Date', 'End Date']
-        self.list_data = [plan1, plan2] # self.screen_data.get_objects()
+        self.list_data = PlanDataRetrieve.get_plans()
         self.switch_to_page = 'AdminDashboard'
+        self.filter_matching = {'Plan ID': 'id', 'Plan Name': 'name', 'Region': 'region', 'Event Name': 'event name',
+                                'Description': 'description', 'Start Date': 'start date', 'End Date': 'end date'}
         self.create_title()
         self.create_search()
         self.create_results()
