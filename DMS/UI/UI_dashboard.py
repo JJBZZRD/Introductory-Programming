@@ -159,7 +159,7 @@ class AdminDashboard(Dashboard):
     """
     
     def setup_dashboard(self, plan):
-        self.planCamps = PlanDataRetrieve.get_camps(planID=plan.planID)
+        self.planCamps = PlanDataRetrieve.get_camps(plan.planID)
         self.additional_resources = {'Food': [40, 100], 'Water': [30, 80], 'Medicine': [10, 60], 'Shelter': [10,90]} 
         self.create_admin_tabs(self.planCamps, self.additional_resources)
     
