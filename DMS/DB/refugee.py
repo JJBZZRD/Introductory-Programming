@@ -11,6 +11,8 @@ class Refugee:  # Refugee class has attributes matching columns in table
         self.familyID = familyID
         self.campID = campID
         self.medical_condition = medical_condition
+        self.age = 0
+        self.band = None
 
     @classmethod
     def init_from_tuple(cls, refugee_tuple):
