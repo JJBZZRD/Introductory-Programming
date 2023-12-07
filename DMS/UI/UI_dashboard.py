@@ -1,7 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
+
 from .UI_utlities import create_filterable_treeview 
 from ..Logic.person_data_retrieve import PersonDataRetrieve
+from ..Logic.camp_data_retrieve import CampDataRetrieve
+from ..Logic.plan_data_retrieve import PlanDataRetrieve
 
 class Dashboard(tk.Frame):
     def __init__(self, ui_manager, *args):
@@ -33,26 +36,62 @@ class Dashboard(tk.Frame):
     def create_refugees_section(self, parent, camp):
         refugees_title = tk.Label(parent, text=f"Refugees in Camp {camp.campID}", font=('Arial', 16, 'bold'))
         refugees_title.pack(pady=10)
+        
+        search_frame = tk.Frame(parent, bg='white')
+        search_frame.pack(pady=5, fill='x')
+        
+        search_entry = tk.Entry(search_frame)
+        search_entry.pack(side='left', padx=5, expand=True, fill='x')
+        search_entry.insert(0, camp.campID)
 
-        data_retrieval_methods = {
-            'all': PersonDataRetrieve.get_refugees,
-            'filtered': PersonDataRetrieve.get_refugees,
-        }
+        filter_button = ttk.Button(search_frame, text="Filter/Search", command=lambda: self.update_refugees_list(search_entry, refugees_treeview))
+        filter_button.pack(side='left', padx=5)
 
-        refugees_treeview = create_filterable_treeview(parent, data_retrieval_methods, ['Name', 'Medical Condition'], self.on_refugee_double_click)
+        refugees_treeview = ttk.Treeview(parent, columns=("Name", "Medical Condition"))
+        refugees_treeview.pack(pady=10, expand=True, fill='both')
+        refugees_treeview.bind('<Double-1>', lambda event, tv=refugees_treeview: self.on_refugee_double_click(event, tv))
 
+        refugees_treeview.heading("#0", text="ID")
+        refugees_treeview.column("#0", width=150, anchor='center')
+        refugees_treeview.heading("Name", text="Name")
+        refugees_treeview.column("Name", width=150)
+        refugees_treeview.heading("Medical Condition", text="Medical Condition")
+        refugees_treeview.column("Medical Condition", width=150)
+
+        self.update_refugees_list(search_entry, refugees_treeview) 
+
+    def update_refugees_list(self, search_entry, refugees_treeview):
+        filter_value = search_entry.get().strip()
+        filter_type = 'camp' if not filter_value else 'name'
+
+        if not filter_value:
+            filter_value = ''
+
+        self.refugees = PersonDataRetrieve.get_refugees(filter_type, filter_value)
+
+        if isinstance(self.refugees, str):
+            print(self.refugees)
+        else:
+            refugees_treeview.delete(*refugees_treeview.get_children())
+            if not self.refugees:
+                refugees_treeview.insert("", "end", text="No matching refugees found.")
+            else:
+                for refugee in self.refugees:
+                    print(refugee.__dict__) 
+                    refugees_treeview.insert("", "end", text=refugee.refugeeID, values=(f"{refugee.first_name} {refugee.last_name}", refugee.medical_condition))
+    
     def on_refugee_double_click(self, event, treeview):
         item = treeview.focus()
         if item:
             selected_refugee = self.refugees[int(treeview.item(item, "text")) - 1]
             self.show_screen('EditRefugee', selected_refugee)
-
+        
     def create_resource_frame(self, parent, camp):
             resources = {
                 'Water': (camp.water, camp.max_water),
                 'Food': (camp.food, camp.max_food),
                 'Medical Supplies': (camp.medical_supplies, camp.max_medical_supplies),
-                'Shelter': (camp.shelter, camp.max_shelter)
+                'Shelter': (camp.max_shelter, camp.max_shelter)
             }
 
             resource_labels = {}
@@ -99,10 +138,9 @@ class VolunteerDashboard(Dashboard):
     """
     def setup_dashboard(self, volunteer):
         #logic.getcamp are functions that fetch volunteer and camp data
-        # self.Camp = logic.getcamp(volunteer)
-
+        self.volunteer = volunteer
         # Directly using camp1 for this example
-        self.camp = camp1
+        self.camp = CampDataRetrieve.get_camp('campID',volunteer.campID)[0]
 
         # Create and add a new tab for the volunteer's camp
         self.tab_control = ttk.Notebook(self)
@@ -120,9 +158,9 @@ class AdminDashboard(Dashboard):
     Includes an overview tab with information on all camps + additional resources. Also incudes a tab for each invidual camp.
     """
     
-    def setup_dashboard(self, planCamps):
-        self.planCamps = [camp1, camp2, camp3]  # placeholders
-        self.additional_resources = {'Food': [40, 100], 'Water': [30, 80], 'Medicine': [10, 60], 'Shelter': [10,90]} #placeholders
+    def setup_dashboard(self, plan):
+        self.planCamps = PlanDataRetrieve.get_camps(planID=plan.planID)
+        self.additional_resources = {'Food': [40, 100], 'Water': [30, 80], 'Medicine': [10, 60], 'Shelter': [10,90]} 
         self.create_admin_tabs(self.planCamps, self.additional_resources)
     
     def create_admin_tabs(self, planCamps, additional_resources):
@@ -154,4 +192,4 @@ class AdminDashboard(Dashboard):
         additional_resources_frame.pack(side='right', fill='y', padx=(5, 0))
         tk.Label(additional_resources_frame, text="Additional Resources Available", bg='lightgray').pack(pady=10)
 
-        self.create_resource_frame(additional_resources_frame, camp1)
+        self.create_resource_frame(additional_resources_frame, additional_resources)
