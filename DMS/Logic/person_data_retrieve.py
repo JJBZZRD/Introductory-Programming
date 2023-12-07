@@ -7,7 +7,10 @@ class PersonDataRetrieve:
     @staticmethod
     def login(username, password):
         # Validate the user's cre dentials using the UserDataAccess class
-        volunteer_tuples = Volunteer.get_volunteer(username=username, password=password, account_status='Active')
+        if username == 'admin':
+            volunteer_tuples = Volunteer.get_volunteer(username=username, password=password)
+        else:
+            volunteer_tuples = Volunteer.get_volunteer(username=username, password=password, account_status='Active')
         return util.parse_result('Volunteer', volunteer_tuples)
 
     @staticmethod
@@ -15,8 +18,10 @@ class PersonDataRetrieve:
         volunteer_tuples = Volunteer.get_all_volunteers() 
         # returns volunteers in list of tuples 
         # [(1, 'Soran', 'Test', 'aaa', 'bbb', '1/1/2000', 7511975055, 'Active', 1), ...]
+        # print(f'volunteer_tuples: {volunteer_tuples}')
+
         if volunteer_tuples: 
-            return util.parse_result(volunteer_tuples)
+            return util.parse_result('Volunteer', volunteer_tuples)
         else:
             return "There is no volunteer"
     # deprecate, use the version that takes multiple args instead

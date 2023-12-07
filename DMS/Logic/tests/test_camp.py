@@ -1,10 +1,10 @@
 import unittest
 import sqlite3
-from ..DB.camp import Camp
-from ..DB.plan import Plan
-from .camp_data_retrieve import CampDataRetrieve
-from .camp_data_edit import CampDataEdit
-from ..DB.config import *
+from ...DB.camp import Camp
+from ...DB.plan import Plan
+from ..camp_data_retrieve import CampDataRetrieve
+from ..camp_data_edit import CampDataEdit
+from ...DB.config import *
 
 
 class TestCamp(unittest.TestCase):
