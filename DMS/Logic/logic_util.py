@@ -1,7 +1,6 @@
 import re
 # import pycountry as pc
 from datetime import datetime
-from .DB.countries import *
 
 
 
@@ -17,14 +16,6 @@ def is_num(value):
 def is_positive(value):
     num = float(value)
     return num > 0
-
-
-def is_country(value):
-    countries = get_all_countries()
-    if value in countries:
-        return True
-    else:
-        return False
 
 def validate_date(date):
     try:
