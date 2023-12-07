@@ -114,3 +114,36 @@ class Plan:  # Plan class has attributes matching columns in table
     def get_all_plans():  # Gets all plans. Returns a list of tuples.
         cursor.execute("SELECT * FROM plans")
         return cursor.fetchall()
+
+    @staticmethod
+    def total_resources(planID):
+        from .camp import Camp as pc
+        shelter = []
+        food = []
+        water = []
+        medical_supplies = []
+        total_shelter = 0
+        total_food = 0
+        total_water = 0
+        total_medical_supplies = 0
+        camps_tuples = pc.get_camp(planID=planID)
+        campIDs = [camps_tuples[i][0] for i in range(len(camps_tuples))]
+        for campID in campIDs:
+            camps = pc.get_camp_by_id(campID)
+            s = camps[0][2]
+            shelter.append(s)
+            f = camps[0][5]
+            food.append(f)
+            w = camps[0][3]
+            water.append(w)
+            m = camps[0][7]
+            medical_supplies.append(m)
+        for i in shelter:
+            total_shelter += i
+        for i in food:
+            total_food += i
+        for i in water:
+            total_water += i
+        for i in medical_supplies:
+            total_medical_supplies += i
+        return [total_food, total_water, total_shelter, total_medical_supplies]
