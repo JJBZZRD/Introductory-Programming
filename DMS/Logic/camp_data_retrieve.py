@@ -2,6 +2,7 @@ from .. import util
 from ..DB.camp import Camp
 from ..DB.plan import Plan
 from ..DB.refugee import Refugee
+import datetime
 
 class CampDataRetrieve:
 
@@ -69,7 +70,7 @@ class CampDataRetrieve:
 
         if planID:
             if util.is_num(planID):
-                if not Plan.get_planID(planID):
+                if not Plan.get_plan_by_id(planID):
                     return "Cannot find this planID. Please try again."
             else:
                 return "You should enter a number to planID."
