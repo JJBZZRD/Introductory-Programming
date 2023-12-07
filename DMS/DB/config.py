@@ -28,19 +28,6 @@ conn.set_trace_callback(logging.info)
 
 
 def create_database():
-    admin_table = """
-    CREATE TABLE IF NOT EXISTS admins(
-        adminID INTEGER PRIMARY KEY,
-        first_name TEXT, 
-        last_name TEXT,
-        username TEXT,
-        password TEXT,
-        date_of_birth TEXT,
-        phone TEXT
-        )
-        """
-
-    cursor.execute(admin_table)
 
     plans_table = """
     CREATE TABLE IF NOT EXISTS plans (
@@ -97,14 +84,21 @@ def create_database():
         first_name TEXT,
         last_name TEXT,
         date_of_birth TEXT,
+        gender TEXT CHECK (gender IN ('Male', 'Female', 'Other')),
         familyID INTEGER,
         medical_condition TEXT,
+        vital_status TEXT CHECK (vital_status IN ('Alive', 'Deceased'))
         campID INTEGER NOT NULL,
         FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
         )
         """
 
     cursor.execute(refugees_table)
+
+    countries_table = """
+    CREATE TABLE IF NOT EXISTS countries (
+        country TEXT PRIMARY KEY)
+        """
 
     conn.commit()
 
