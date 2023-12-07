@@ -96,7 +96,7 @@ class Dashboard(tk.Frame):
             
         print(filter_value)
 
-        self.refugees = PersonDataRetrieve.get_refugees(campID=camp.campID, name=filter_value)
+        self.refugees = PersonDataRetrieve.get_refugees(camp_id=camp.campID, name=filter_value)
         
         print(self.refugees)
 
