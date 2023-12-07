@@ -49,8 +49,6 @@ class Dashboard(tk.Frame):
 
         self.create_refugees_section(right_frame, camp)
 
-
-
     def create_refugees_section(self, parent, camp):
         refugees_title = tk.Label(parent, text=f"Refugees in Camp {camp.campID}", font=('Arial', 16, 'bold'))
         refugees_title.pack(pady=10)
@@ -60,7 +58,6 @@ class Dashboard(tk.Frame):
 
         search_entry = tk.Entry(search_frame)
         search_entry.pack(side='left', padx=5, expand=True, fill='x')
-        search_entry.insert(0, camp.campID)
         
         refugees_treeview = ttk.Treeview(parent, columns=("Name", "Medical Condition"))
         
@@ -88,28 +85,17 @@ class Dashboard(tk.Frame):
 
     def update_refugees_list(self, camp, search_entry, refugees_treeview):
         filter_value = search_entry.get().strip()
-        if not filter_value:
-            campID = camp.campID
-            filter_value = f'campID={campID}'
-        else:
-            filter_value = f'name={filter_value}'
-            
-        print(filter_value)
-
-        self.refugees = PersonDataRetrieve.get_refugees(camp_id=camp.campID, name=filter_value)
         
-        print(self.refugees)
+        print(camp.campID)
+            
+        self.refugees = PersonDataRetrieve.get_refugees(camp_id=camp.campID, filter_value=filter_value)
 
-        if isinstance(self.refugees, str):
-            print(self.refugees)
+        if not self.refugees:
+            refugees_treeview.insert("", "end", text="No matching refugees found.")
         else:
-            refugees_treeview.delete(*refugees_treeview.get_children())
-            if not self.refugees:
-                refugees_treeview.insert("", "end", text="No matching refugees found.")
-            else:
-                for refugee in self.refugees:
-                    print(refugee.__dict__) 
-                    refugees_treeview.insert("", "end", text=refugee.refugeeID, values=(f"{refugee.first_name} {refugee.last_name}", refugee.medical_condition))
+            for refugee in self.refugees:
+                print(refugee.__dict__) 
+                refugees_treeview.insert("", "end", text=refugee.refugeeID, values=(f"{refugee.first_name} {refugee.last_name}", refugee.medical_condition))
     
     def on_refugee_double_click(self, event, treeview):
         item = treeview.focus()
