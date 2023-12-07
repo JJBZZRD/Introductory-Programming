@@ -4,6 +4,7 @@ from .DB.volunteer import Volunteer
 from .DB.refugee import Refugee
 from .DB.plan import Plan
 from .DB.camp import Camp
+from .DB.countries import *
 
 def is_phone_format(phone_num):
     phone_pattern = re.compile(r'^\+\d+$')
@@ -15,6 +16,13 @@ def is_num(value):
 def is_positive(value):
     num = float(value)
     return num > 0
+
+def is_country(value):
+    countries = get_all_countries()
+    if value in countries:
+        return True
+    else:
+        return False
 
 def parse_result(class_name, query_result):
     r = "Invalid input"
