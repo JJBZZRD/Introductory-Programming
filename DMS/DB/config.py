@@ -35,7 +35,7 @@ def create_database():
         start_date TEXT,
         end_date TEXT,
         name TEXT,
-        region TEXT,
+        country TEXT,
         event_name TEXT,
         description TEXT
         )
@@ -86,9 +86,9 @@ def create_database():
         date_of_birth TEXT,
         gender TEXT CHECK (gender IN ('Male', 'Female', 'Other')),
         familyID INTEGER,
-        medical_condition TEXT,
-        vital_status TEXT CHECK (vital_status IN ('Alive', 'Deceased'))
         campID INTEGER NOT NULL,
+        medical_condition TEXT,
+        vital_status TEXT CHECK (vital_status IN ('Alive', 'Deceased')),
         FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
         )
         """
@@ -99,6 +99,8 @@ def create_database():
     CREATE TABLE IF NOT EXISTS countries (
         country TEXT PRIMARY KEY)
         """
+
+    cursor.execute(countries_table)
 
     conn.commit()
 
