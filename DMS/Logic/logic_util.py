@@ -78,14 +78,11 @@ def validate(value, message):
 def validate_name(name: str):
     return validate(name, "Invalid name")
 
-def validate_plan_type(plan_type: str):
-    return validate(plan_type, "Invalid plan type")
+def validate_country(country: str):
+    return validate(country, "Invalid region")
 
-def validate_region(region: str):
-    return validate(region, "Invalid region")
-
-# def validate_event(event: str):
-#     return validate(event, "Invalid event")
+def validate_event(event: str):
+    return validate(event, "Invalid event")
 
 def validate_description(description: str):
     return validate(description, "Invalid description")
