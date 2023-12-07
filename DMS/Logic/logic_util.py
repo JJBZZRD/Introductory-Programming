@@ -1,6 +1,7 @@
 import re
 # import pycountry as pc
 from datetime import datetime
+from .DB.countries import *
 
 
 
@@ -19,7 +20,7 @@ def is_positive(value):
 
 
 def is_country(value):
-    countries = [i.name for i in pc.countries]
+    countries = get_all_countries()
     if value in countries:
         return True
     else:
