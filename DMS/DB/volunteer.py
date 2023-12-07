@@ -90,7 +90,6 @@ class Volunteer:
         else:
             print(f"Volunteer {volunteerID} has not been deleted")
 
-
     @staticmethod  # Get volunteer details by selecting on any combination of attributes. Can be used to find the
     # volunteerID which can then be used in the delete and update methods. Returns a list of tuples.
     def get_volunteer(volunteerID=None, first_name=None, last_name=None, username=None,
