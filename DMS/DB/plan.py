@@ -2,12 +2,12 @@ from .config import conn, cursor
 
 
 class Plan:  # Plan class has attributes matching columns in table
-    def __init__(self, planID, start_date, end_date, name, region, event_name, description):
+    def __init__(self, planID, start_date, end_date, name, country, event_name, description):
         self.planID = planID
         self.start_date = start_date
         self.end_date = end_date
         self.name = name
-        self.region = region
+        self.country = country
         self.event_name = event_name
         self.description = description
 
@@ -16,7 +16,7 @@ class Plan:  # Plan class has attributes matching columns in table
         return cls(*plan_tuple)
 
     def display_info(self):
-        return [str(self.planID), str(self.name), str(self.region), str(self.event_name), str(self.description),
+        return [str(self.planID), str(self.name), str(self.country), str(self.event_name), str(self.description),
                 str(self.start_date), str(self.end_date)]
 
     @staticmethod
@@ -26,20 +26,20 @@ class Plan:  # Plan class has attributes matching columns in table
 
     @classmethod  # Insert a plan into the database
     def create_plan(cls, plan_tuple):
-        start_date, end_date, name, region, event_name, description = plan_tuple
+        start_date, end_date, name, country, event_name, description = plan_tuple
         sql = """
             INSERT INTO plans (
-                start_date, end_date, name, region, event_name, description) 
+                start_date, end_date, name, country, event_name, description) 
             VALUES (?, ?, ?, ?, ?, ?)
             """
-        cursor.execute(sql, (start_date, end_date, name, region, event_name, description))
+        cursor.execute(sql, (start_date, end_date, name, country, event_name, description))
         conn.commit()
         plan_id = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
         return Plan.get_plan_by_id(plan_id)
 
 
     @staticmethod  # Update a plan by selecting on planID
-    def update_plan(planID, start_date=None, end_date=None, name=None, region=None, event_name=None, description=None):
+    def update_plan(planID, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None):
 
         query = []
         params = []
@@ -53,9 +53,9 @@ class Plan:  # Plan class has attributes matching columns in table
         if name is not None:
             query.append("name = ?")
             params.append(name)
-        if region is not None:
-            query.append("region = ?")
-            params.append(region)
+        if country is not None:
+            query.append("country = ?")
+            params.append(country)
         if event_name is not None:
             query.append("event_name = ?")
             params.append(event_name)
@@ -80,7 +80,7 @@ class Plan:  # Plan class has attributes matching columns in table
 
     @staticmethod  # Get plan details by selecting on any combination of attributes. Can be used to find the
     # planID which can then be used in the delete and update methods. Returns a list of tuples.
-    def get_plan(planID=None, start_date=None, end_date=None, name=None, region=None, event_name=None, description=None):
+    def get_plan(planID=None, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None):
 
         query = []
         params = []
@@ -97,9 +97,9 @@ class Plan:  # Plan class has attributes matching columns in table
         if name is not None:
             query.append("name LIKE ?")
             params.append(f"{name}%")
-        if region is not None:
-            query.append("region LIKE ?")
-            params.append(f"{region}%")
+        if country is not None:
+            query.append("country LIKE ?")
+            params.append(f"{country}%")
         if event_name is not None:
             query.append("event_name LIKE ?")
             params.append(f"{event_name}%")
