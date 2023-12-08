@@ -19,8 +19,8 @@ def is_positive(value):
 
 def is_country(value):
     countries = get_all_countries()
-    print(value)
-    print(countries)
+    # print(value)
+    # print(countries)
     if value in countries:
         return True
     else:

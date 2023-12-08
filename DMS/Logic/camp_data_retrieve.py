@@ -85,17 +85,17 @@ class CampDataRetrieve:
         estimation = []
         resources_name = ['water', 'food']
         refugees = PersonDataRetrieve.get_refugees(camp_id=campID)
-        if len(refugees) >0:
-            print("found some refs")
-            for refugee in refugees:
-                print(refugee.display_info())
-        else:
-            print("NO ref")
-            # return []
+        # if len(refugees) >0:
+        #     # print("found some refs")
+        #     # for refugee in refugees:
+        #     #     print(refugee.display_info())
+        # else:
+        #     print("NO ref")
+        #     return []
         camp = CampDataRetrieve.get_camp(campID=campID)
         if len(camp) >0:
             camp = camp[0]
-            print(camp.display_info())
+            # print(camp.display_info())
         else:
             print("NO CAMP")
             # return []
@@ -103,8 +103,7 @@ class CampDataRetrieve:
         cost = 1
         cost_med = 1
         for refugee in refugees:
-            print('aaa')
-            print(refugee.display_info())
+            # print(refugee.display_info())
             current_date = datetime.now()
             try:
                 birth_date = datetime.strptime(refugee.date_of_birth, '%d-%m-%Y')
