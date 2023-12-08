@@ -17,11 +17,9 @@ class Dashboard(tk.Frame):
     def setup_dashboard(self, *args):
         raise NotImplementedError("Subclasses should implement this method to setup the dashboard layout")
     
-    
     def populate_camp_tab(self, tab, camp):
         print(f"Populating tab for Camp ID: {camp.campID}")
 
-        # Main left and right frames
         left_frame = tk.Frame(tab, bg='white')
         right_frame = tk.Frame(tab, bg='white')
         left_frame.pack(side='left', fill='both', expand=True)
@@ -51,7 +49,7 @@ class Dashboard(tk.Frame):
 
         ttk.Button(left_frame, text="Edit Camp", command=lambda: self.show_screen('EditCamp', camp)).pack(pady=5)
         self.populate_refugees_section(right_frame, camp)
-        ttk.Button(right_frame, text="Manage Refugees", command=lambda: self.show_screen('ManageRefugees', camp)).pack(pady=5)
+        ttk.Button(right_frame, text="Manage Refugees", command=lambda: self.show_screen('RefugeesList', camp)).pack(pady=5)
 
 
     def populate_refugees_section(self, parent, camp):
@@ -80,6 +78,7 @@ class Dashboard(tk.Frame):
         refugees_treeview.column("Medical Condition", width=150)
 
         self.update_refugees_list(camp, search_entry, refugees_treeview)
+        
         refugees_treeview.column("#0", width=150, anchor='center')
         refugees_treeview.heading("Name", text="Name")
         refugees_treeview.column("Name", width=150)
@@ -102,26 +101,12 @@ class Dashboard(tk.Frame):
                 print(refugee.__dict__) 
                 refugees_treeview.insert("", "end", text=refugee.refugeeID, values=(f"{refugee.first_name} {refugee.last_name}", refugee.triage_category))
     
-    def on_refugee_double_click(self, event, treeview):
+    def on_refugee_double_click(self, _, treeview):
         item = treeview.focus()
         if item:
             selected_refugee = self.refugees[int(treeview.item(item, "text")) - 1]
             self.show_screen('EditRefugee', selected_refugee)
         
-    def populate_resource_frame(self, parent, camp):
-        camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
-
-        resources = {
-            'Water': camp.water,
-            'Food': camp.food,
-            'Medical Supplies': camp.medical_supplies,
-        }
-
-        self.resource_labels = {}
-        self.days_left_labels = {}
-
-        for index, (resource_name, amount) in enumerate(resources.items()):
-            self.create_resource_frame(parent, camp, camp_resources_estimation, resource_name, amount, index)
 
     def populate_resource_frame(self, parent, camp):
         camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
@@ -136,7 +121,7 @@ class Dashboard(tk.Frame):
             resource_frame.pack(fill='x', expand=True)
 
             create_resource_amount_frame(resource_frame, resource_name, amount)
-            create_bottom_frame(resource_frame, resource_name, index)
+            create_days_left_frame(resource_frame, resource_name, index)
 
         def create_resource_amount_frame(frame, resource_name, amount):
             top_frame = tk.Frame(frame)
@@ -144,11 +129,11 @@ class Dashboard(tk.Frame):
 
             tk.Label(top_frame, text=f"{resource_name}:").pack(side='left')
             tk.Label(top_frame, text=str(amount)).pack(side='left')
-
-            tk.Button(top_frame, text="+", command=lambda: self.update_resource(camp, frame, resource_name, 1)).pack(side='left')
+                        
             tk.Button(top_frame, text="-", command=lambda: self.update_resource(camp, frame, resource_name, -1)).pack(side='left')
+            tk.Button(top_frame, text="+", command=lambda: self.update_resource(camp, frame, resource_name, 1)).pack(side='left')
 
-        def create_bottom_frame(frame, resource_name, index):
+        def create_days_left_frame(frame, resource_name, index):
             bottom_frame = tk.Frame(frame)
             bottom_frame.pack(fill='x', expand=True)
 
@@ -158,14 +143,13 @@ class Dashboard(tk.Frame):
         for index, (resource_name, amount) in enumerate(resources.items()):
             create_resource_frame(resource_name, amount, index)
 
-
     def update_resource(self, camp, resource_frame, resource_name, increment):
         resource_key = resource_name.lower().replace(' ', '_')
         current_amount = getattr(camp, resource_key)
         new_amount = max(0, current_amount + increment)
 
         if CampDataEdit.update_camp(camp.campID, **{resource_key: new_amount}):
-            setattr(camp, resource_key, new_amount)  # Update the camp object
+            setattr(camp, resource_key, new_amount)
 
 
             top_frame = resource_frame.winfo_children()[0]
@@ -183,7 +167,6 @@ class Dashboard(tk.Frame):
                 days_left_label.config(text=f"Days of {resource_name} Left: {days_left}")
 
             resource_frame.update()
-
 
             
     def populate_statistics_frame(self, parent, camp):
@@ -216,23 +199,19 @@ class VolunteerDashboard(Dashboard):
 
     """
     def setup_dashboard(self, volunteer):
-        #logic.getcamp are functions that fetch volunteer and camp data
         print(" ========= setup_dashboard ============ ")
         self.volunteer = volunteer
         print(volunteer.display_info())
         print(volunteer.campID)
-        # Directly using camp1 for this example
         camp = CampDataRetrieve.get_camp(campID=volunteer.campID)[0]
         print(camp.display_info)
         self.camp = CampDataRetrieve.get_camp(campID=volunteer.campID)[0]
 
-        # Create and add a new tab for the volunteer's camp
         self.tab_control = ttk.Notebook(self)
         camp_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(camp_tab, text=f'Camp {self.camp.campID}')
         self.tab_control.pack(expand=1, fill="both")
 
-        # Populate the newly created tab with camp information
         self.populate_camp_tab(camp_tab, self.camp)
 
 class AdminDashboard(Dashboard):
@@ -246,13 +225,16 @@ class AdminDashboard(Dashboard):
         self.plan = plan
         self.planCamps = CampDataRetrieve.get_camp(planID=plan.planID)
         
+        additional_resources_list = PlanDataRetrieve.get_resources(plan.planID)
+
         self.additional_resources = {
-            'Water': self.planCamps[0].water,
-            'Food': self.planCamps[0].food,
-            'Medical Supplies': self.planCamps[0].medical_supplies,
+            'Food': additional_resources_list[0],
+            'Water': additional_resources_list[1],
+            'Shelter': additional_resources_list[2],
+            'Medical Supplies': additional_resources_list[3],
         }
-        
-        self.create_admin_tabs(self.planCamps, self.additional_resources)
+
+        self.create_admin_tabs(self.planCamps, plan, self.additional_resources)        
     
     def create_admin_tabs(self, planCamps, additional_resources):
         self.planCamps = planCamps
@@ -267,20 +249,42 @@ class AdminDashboard(Dashboard):
         self.tab_control.pack(expand=1, fill="both")
 
     def populate_overview_tab(self, tab, planCamps, additional_resources):
-        camps_frame = tk.Frame(tab)
+        self.create_camps_frame(tab, planCamps)
+        self.create_additional_resources_frame(tab, additional_resources)
+
+    def create_camps_frame(self, parent, planCamps):
+        camps_frame = tk.Frame(parent, bg='lightgray')
         camps_frame.pack(side='left', fill='both', expand=True)
 
         for camp in planCamps:
-            camp_frame = tk.Frame(camps_frame, borderwidth=1, relief='solid')
-            camp_frame.pack(side='left', fill='both', expand=True, padx=10, pady=10)
+            camp_frame = tk.Frame(camps_frame, bg='white', borderwidth=1, relief='solid', padx=5, pady=5)
+            camp_frame.pack(side='left', fill='both', expand=True, padx=5, pady=5)
             tk.Label(camp_frame, text=f"Camp {camp.campID}", font=('Arial', 16, 'bold')).pack(pady=(5, 10))
-
             self.populate_resource_frame(camp_frame, camp)
+            ttk.Button(camp_frame, text="Edit Camp", style='TButton').pack(pady=5)
 
-            ttk.Button(camp_frame, text="Edit Camp", command=lambda cn=camp: self.show_screen('EditCamp', cn)).pack(pady=5)
+    def create_additional_resources_frame(self, parent, additional_resources):
+        resources_frame = tk.Frame(parent, bg='lightgray', bd=2, relief='groove')
+        resources_frame.pack(side='right', fill='y', padx=(5, 0))
+        tk.Label(resources_frame, text="Additional Resources Available", bg='lightgray', font=('Arial', 14)).pack(pady=10)
+        for resource_name, amount in additional_resources.items():
+            self.create_resource_amount_frame(resources_frame, resource_name, amount, self.update_additional_resource)
 
-        additional_resources_frame = tk.Frame(tab, bg='lightgray', bd=2, relief='groove')
-        additional_resources_frame.pack(side='right', fill='y', padx=(5, 0))
-        tk.Label(additional_resources_frame, text="Additional Resources Available", bg='lightgray').pack(pady=10)
+    def create_resource_amount_frame(self, frame, resource_name, amount, update_additional_resource):
+        top_frame = tk.Frame(frame, bg='lightgray')
+        top_frame.pack(fill='x', expand=True)
+        tk.Label(top_frame, text=f"{resource_name}:", bg='lightgray', font=('Arial', 12)).pack(side='left')
+        label = tk.Label(top_frame, text=str(amount), bg='lightgray')
+        label.pack(side='left')
+        tk.Button(top_frame, text="+", command=lambda: update_additional_resource(label, resource_name, 1)).pack(side='left')
+        tk.Button(top_frame, text="-", command=lambda: update_additional_resource(label, resource_name, -1)).pack(side='left')
 
-        self.populate_resource_frame(additional_resources_frame, planCamps[0])
+    def update_additional_resource(self, label, resource_name, increment):
+        current_amount = self.additional_resources[resource_name]
+        new_amount = max(0, current_amount + increment)
+        self.additional_resources[resource_name] = new_amount
+
+        label.config(text=str(new_amount))
+
+        # Add code here to persist the updated additional resources to the database 
+
