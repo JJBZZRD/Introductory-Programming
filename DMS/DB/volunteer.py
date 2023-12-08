@@ -19,8 +19,8 @@ class Volunteer:
         return cls(*volunteer_tuple)
 
     def display_info(self):
-        return [str(self.volunteerID), self.first_name, self.last_name, self.username,
-                self.date_of_birth, self.phone, self.account_status, str(self.campID)]
+        return [str(self.volunteerID), str(self.first_name), str(self.last_name), str(self.username),
+                str(self.date_of_birth), str(self.phone), str(self.account_status), str(self.campID)]
 
     @staticmethod
     def get_volunteer_by_id(volunteerID):  # Get volunteer details by selecting on volunteerID. Returns a list of tuples.
