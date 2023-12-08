@@ -97,5 +97,5 @@ class PersonDataRetrieve:
     @staticmethod
     def get_refugees(id=None, name=None, date_of_birth=None, family_id=None, camp_id=None, medical_condition=None):
         refugee_tuple_1 = Refugee.get_refugee(refugeeID=id, first_name=name, date_of_birth=date_of_birth, familyID=family_id, campID=camp_id, medical_condition=medical_condition)
-        refugee_tuple_2 = Refugee.get_refugee(refugeeID=id, last_name=name, date_of_birth=date_of_birth, familyID=family_id, campID=camp_id, medical_condition=medical_condition)
+        refugee_tuple_2 = Refugee.get_refugee(refugeeID=id, last_name=name, date_of_birth=date_of_birth, familyID=family_id, campID=camp_id, medical_conditions=medical_condition)
         return util.parse_results('Refugee', refugee_tuple_1, refugee_tuple_2)
