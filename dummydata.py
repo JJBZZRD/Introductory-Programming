@@ -3,14 +3,14 @@ from datetime import datetime, timedelta
 import string
 
 class Refugee:  # Refugee class has attributes matching columns in table
-    def __init__(self, refugeeID, first_name, last_name, date_of_birth, familyID, campID, medical_condition):
+    def __init__(self, refugeeID, first_name, last_name, date_of_birth, familyID, campID, medical_conditions):
         self.refugeeID = refugeeID
         self.first_name = first_name
         self.last_name = last_name
         self.date_of_birth = date_of_birth
         self.familyID = familyID
         self.campID = campID
-        self.medical_condition = medical_condition  
+        self.medical_conditions = medical_conditions  
 
 refugee1 = Refugee(1,"wobtvhed", "fiimtukd", "1991-01-23 00:00:00", "ejhafm", 1, "Critical")
 refugee2 = Refugee(2,"qhmdapsb", "rcwhasup", "1961-01-21 00:00:00", "fwgpga", 1, "None")

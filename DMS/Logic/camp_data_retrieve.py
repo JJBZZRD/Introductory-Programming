@@ -119,7 +119,7 @@ class CampDataRetrieve:
             else:
                 cost += 0.8
 
-            if refugee.medical_condition is not None:
+            if refugee.medical_conditions is not None:
                 cost_med += 1
 
         for resource in resources_name:

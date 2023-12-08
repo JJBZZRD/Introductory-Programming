@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
-from .dummydata import plan1, plan2
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.person_data_retrieve import PersonDataRetrieve

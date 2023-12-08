@@ -56,7 +56,7 @@ INFO:root:
         last_name TEXT,
         date_of_birth TEXT,
         familyID INTEGER,
-        medical_condition TEXT,
+        medical_conditions TEXT,
         campID INTEGER,
         FOREIGN KEY (campID) REFERENCES camps(campID)
         )
@@ -120,7 +120,7 @@ INFO:root:
         last_name TEXT,
         date_of_birth TEXT,
         familyID INTEGER,
-        medical_condition TEXT,
+        medical_conditions TEXT,
         campID INTEGER,
         FOREIGN KEY (campID) REFERENCES camps(campID)
         )
@@ -184,7 +184,7 @@ INFO:root:
         last_name TEXT,
         date_of_birth TEXT,
         familyID INTEGER,
-        medical_condition TEXT,
+        medical_conditions TEXT,
         campID INTEGER,
         FOREIGN KEY (campID) REFERENCES camps(campID)
         )
@@ -248,7 +248,7 @@ INFO:root:
         last_name TEXT,
         date_of_birth TEXT,
         familyID INTEGER,
-        medical_condition TEXT,
+        medical_conditions TEXT,
         campID INTEGER,
         FOREIGN KEY (campID) REFERENCES camps(campID)
         )
@@ -326,7 +326,7 @@ INFO:root:
         last_name TEXT,
         date_of_birth TEXT,
         familyID INTEGER,
-        medical_condition TEXT,
+        medical_conditions TEXT,
         campID INTEGER,
         FOREIGN KEY (campID) REFERENCES camps(campID)
         )
@@ -389,7 +389,7 @@ INFO:root:
         last_name TEXT,
         date_of_birth TEXT,
         familyID INTEGER,
-        medical_condition TEXT,
+        medical_conditions TEXT,
         campID INTEGER,
         FOREIGN KEY (campID) REFERENCES camps(campID)
         )
@@ -452,7 +452,7 @@ INFO:root:
         last_name TEXT,
         date_of_birth TEXT,
         familyID INTEGER,
-        medical_condition TEXT,
+        medical_conditions TEXT,
         campID INTEGER,
         FOREIGN KEY (campID) REFERENCES camps(campID)
         )
