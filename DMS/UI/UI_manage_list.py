@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
 from .dummydata import plan1, plan2
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 import pandas as pd
@@ -19,6 +20,7 @@ class ManageList(tk.Frame):
         self.search_field = None
         self.switch_to_page = None
         self.filter_matching = {}
+        self.export_name = ''
         self.setup_list()
 
     def setup_list(self):
@@ -86,9 +88,9 @@ class ManageList(tk.Frame):
         search_button.grid(column=7, row=2)
         # search_button.pack(side='right', padx=10, pady=5)
 
-        # we need a list of lists to represent the data to occupy the results list.
-        # then each list within thi list will populate the row from the treeview widget under the appropriate header
-
+        export_data_button = ttk.Button(self, text='Export Results', command=self.export_data)
+        export_data_button.grid(column=8, row=2)
+        
     def create_results(self):
         # this method creates the results list for a chosen subclass
         self.results_list = ttk.Treeview(self, columns=self.list_headers, show='headings')
@@ -137,6 +139,22 @@ class ManageList(tk.Frame):
         self.show_screen('NewPlan')
 
 
+    def export_data(self):
+
+        data_list = [object.display_info() for object in self.list_data]
+
+        df = pd.DataFrame(data_list, columns=self.list_headers)
+        
+        df.to_csv(self.export_name + '.csv', index=False)
+
+        file_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
+
+        if file_path:  # If a file path was selected
+            df.to_csv(file_path, index=False)
+
+            
+
+
 class PlanList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Plans', 'Add New Plan']
@@ -145,6 +163,7 @@ class PlanList(ManageList):
         self.switch_to_page = 'AdminDashboard'
         self.filter_matching = {'Plan ID': 'id', 'Plan Name': 'name', 'Region': 'region', 'Event Name': 'event name',
                                 'Description': 'description', 'Start Date': 'start date', 'End Date': 'end date'}
+        self.export_name = 'Plans'
         self.create_title()
         self.create_search()
         self.create_results()
