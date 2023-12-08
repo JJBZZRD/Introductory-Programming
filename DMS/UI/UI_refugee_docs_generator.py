@@ -3,7 +3,7 @@ from ..Logic.person_data_retrieve import PersonDataRetrieve
 from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 
-def generate_refugee_document(refugee, campID):
+def generate_refugee_document(refugee):
     refugee_details = PersonDataRetrieve.get_refugees(refugeeID=refugee.refugeeID)[0]
 
     # Retrieve camp details
