@@ -72,12 +72,12 @@ class PersonDataEdit:
                 refugee.campID = camp_id
             if family_id:
                 refugee.familyID = family_id
-            if medical_condition:
-                refugee.medical_conditions = medical_condition
+            if medical_conditions:
+                refugee.medical_conditions = medical_conditions
         except:
             return "Invalid inputs, please check and try again"
         
-        refugee_tupples = Refugee.update_refugee(id, first_name, last_name, date_of_birth, family_id, camp_id, medical_condition)
+        refugee_tupples = Refugee.update_refugee(id, first_name, last_name, date_of_birth, family_id, camp_id, medical_conditions)
 
         return util.parse_result('Refugee', refugee_tupples)
     
