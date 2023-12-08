@@ -147,7 +147,7 @@ class Camp:  # Camp class has attributes matching columns in table
 
     @staticmethod
     def check_planID_exist(planID):
-        plan = Plan.get_planID(planID)
+        plan = Plan.get_plan_by_id(planID)
         if plan is not None:
             return True
         else:

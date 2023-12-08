@@ -1,8 +1,9 @@
 from .. import util
 from ..DB.camp import Camp
 from ..DB.plan import Plan
-from ..DB.refugee import Refugee
-import datetime
+# from ..DB.refugee import Refugee
+from ..Logic.person_data_retrieve import PersonDataRetrieve
+from datetime import datetime
 
 class CampDataRetrieve:
 
@@ -83,16 +84,32 @@ class CampDataRetrieve:
     def get_camp_resources(campID):
         estimation = []
         resources_name = ['water', 'food']
-        refugees = Refugee.get_refugee(campID=campID)
-
+        refugees = PersonDataRetrieve.get_refugees(camp_id=campID)
+        if len(refugees) >0:
+            print("found some refs")
+            for refugee in refugees:
+                print(refugee.display_info())
+        else:
+            print("NO ref")
+            # return []
         camp = CampDataRetrieve.get_camp(campID=campID)
-        camp = camp[0]
+        if len(camp) >0:
+            camp = camp[0]
+            print(camp.display_info())
+        else:
+            print("NO CAMP")
+            # return []
 
         cost = 1
         cost_med = 1
         for refugee in refugees:
+            print('aaa')
+            print(refugee.display_info())
             current_date = datetime.now()
-            birth_date = datetime.strptime(refugee.date_of_birth, '%Y-%m-%d')
+            try:
+                birth_date = datetime.strptime(refugee.date_of_birth, '%d-%m-%Y')
+            except:
+                birth_date = datetime.strptime(refugee.date_of_birth, '%d/%m/%Y')
             age = current_date.year - birth_date.year - (
                     (current_date.month, current_date.day) < (birth_date.month, birth_date.day))
             if age < 18:

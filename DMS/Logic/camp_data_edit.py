@@ -11,7 +11,10 @@ class CampDataEdit:
                     medical_supplies=None, max_medical_supplies=None, planID=None):
         # get variables
         camp = CampDataRetrieve.get_camp(campID=campID)
-        camp = camp[0]
+        if len(camp) >0:
+            camp = camp[0]
+        else:
+            return []
         try:
             if location:
                 camp = location
@@ -94,8 +97,8 @@ class CampDataEdit:
             else:
                 return "You should enter a number to planID."
 
-        camp_tuple = [Camp.update_camp(campID, location, max_shelter, water, max_water, food,
-                                       max_food, medical_supplies, max_medical_supplies, planID)]
+        camp_tuple = Camp.update_camp(campID, location, max_shelter, water, max_water, food,
+                                       max_food, medical_supplies, max_medical_supplies, planID)
 
         return util.parse_result('Camp', camp_tuple)
 

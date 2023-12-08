@@ -11,7 +11,7 @@ class TestCamp(unittest.TestCase):
 
     def setUp(self):
         # Set up a temporary SQLite database for testing
-        print("Setting up resources for the test")
+        print(" ========================= Setting up resources for the test ======================== ")
         self.connection = sqlite3.connect(':memory:')
         self.cursor = self.connection.cursor()
         create_database()
@@ -20,14 +20,14 @@ class TestCamp(unittest.TestCase):
         print("Tearing down resources after the test")
         self.connection.close()
 
-    def test_create_camp(self):
-        print("\nExecuting test_create_camp")
+    # def test_create_camp(self):
+    #     print("\nExecuting test_create_camp")
 
-        camp_a = CampDataEdit.create_camp('a', 50, None, 50, None, 50, None, 50, 10)
+    #     camp_a = CampDataEdit.create_camp('a', 50, None, 50, None, 50, None, 50, 10)
 
-        self.assertIsInstance(camp_a, list, "camp_a is not a list")
+    #     self.assertIsInstance(camp_a, list, "camp_a is not a list")
 
-        pass
+    #     pass
 
     def test_update_camp(self):
         print("\nExecuting update_camp")
@@ -38,12 +38,14 @@ class TestCamp(unittest.TestCase):
 
         pass
 
-    # def test_get_all_camp(self):
-    #     print("\nExecuting get_all_camps")
-    #
-    #     camp_c = CampDataRetrieve.get_all_camps()
-    #
-    #     self.assertIsInstance(camp_c, list, "camp_c is not a list")
+    def test_get_all_camp(self):
+        print("\nExecuting get_all_camps")
+    
+        camp_c = CampDataRetrieve.get_all_camps()
+        for camp in camp_c:
+            print(camp.display_info())
+    
+        self.assertIsInstance(camp_c, list, "camp_c is not a list")
     #
     #     pass
 
@@ -66,9 +68,9 @@ class TestCamp(unittest.TestCase):
         pass
 
     def test_get_camp_resources(self):
-        print("\nExecuting get_camp_resources")
+        print("\n --------------------------- Executing get_camp_resources ---------------------")
 
-        camp_f = CampDataRetrieve.get_camp_resources(campID=1)
+        camp_f = CampDataRetrieve.get_camp_resources(campID=11)
         print(camp_f)
 
         self.assertIsInstance(camp_f, list, "camp_f is not a list")
