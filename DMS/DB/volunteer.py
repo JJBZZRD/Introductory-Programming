@@ -3,7 +3,7 @@ from .camp import Camp
 
 
 class Volunteer:
-    def __init__(self, volunteerID, first_name, last_name, username, password, date_of_birth, phone, campID, account_status):
+    def __init__(self, volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID):
         self.volunteerID = volunteerID
         self.first_name = first_name
         self.last_name = last_name

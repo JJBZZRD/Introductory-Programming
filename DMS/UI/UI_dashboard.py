@@ -184,10 +184,13 @@ class VolunteerDashboard(Dashboard):
     """
     def setup_dashboard(self, volunteer):
         #logic.getcamp are functions that fetch volunteer and camp data
+        print(" ========= setup_dashboard ============ ")
         self.volunteer = volunteer
+        print(volunteer.display_info())
+        print(volunteer.campID)
         # Directly using camp1 for this example
-        temp = CampDataRetrieve.get_camp(campID=volunteer.campID)
-        print(temp)
+        camp = CampDataRetrieve.get_camp(campID=volunteer.campID)[0]
+        print(camp.display_info)
         self.camp = CampDataRetrieve.get_camp(campID=volunteer.campID)[0]
 
         # Create and add a new tab for the volunteer's camp
