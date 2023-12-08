@@ -87,7 +87,8 @@ def create_database():
         gender TEXT CHECK (gender IN ('Male', 'Female', 'Other')),
         familyID INTEGER,
         campID INTEGER NOT NULL,
-        medical_condition TEXT,
+        triage_category TEXT (medical_condition IN ('None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate')),
+        medical_conditions Text,
         vital_status TEXT CHECK (vital_status IN ('Alive', 'Deceased')),
         FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
         )
