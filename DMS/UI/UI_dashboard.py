@@ -5,7 +5,7 @@ from ..Logic.person_data_retrieve import PersonDataRetrieve
 from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.camp_data_edit import CampDataEdit
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
-
+from ..Logic.plan_data_edit import PlanEdit
 
 class Dashboard(tk.Frame):
     def __init__(self, ui_manager, *args):
@@ -224,34 +224,39 @@ class AdminDashboard(Dashboard):
     def setup_dashboard(self, plan):
         self.plan = plan
         self.planCamps = CampDataRetrieve.get_camp(planID=plan.planID)
-        
-        additional_resources_list = PlanDataRetrieve.get_resources(plan.planID)
+        self.additional_resources = self.retrieve_additional_resources(plan.planID)
+        self.create_admin_tabs()
 
-        self.additional_resources = {
-            'Food': additional_resources_list[0],
-            'Water': additional_resources_list[1],
-            'Shelter': additional_resources_list[2],
-            'Medical Supplies': additional_resources_list[3],
+    def retrieve_additional_resources(self, planID):
+        resources_list = PlanDataRetrieve.get_resources(planID)
+        return {
+            'Food': resources_list[0],
+            'Water': resources_list[1],
+            'Shelter': resources_list[2],
+            'Medical Supplies': resources_list[3],
         }
 
-        self.create_admin_tabs(self.planCamps, plan, self.additional_resources)        
-    
-    def create_admin_tabs(self, planCamps, additional_resources):
-        self.planCamps = planCamps
+    def create_admin_tabs(self):
         self.tab_control = ttk.Notebook(self)
+        self.setup_overview_tab()
+        self.setup_camp_tabs()
+        self.tab_control.pack(expand=1, fill="both")
+
+    def setup_overview_tab(self):
         self.overview_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(self.overview_tab, text='Overview')
-        self.populate_overview_tab(self.overview_tab, self.planCamps, additional_resources)
+        self.populate_overview_tab(self.overview_tab)
+
+    def setup_camp_tabs(self):
         for camp in self.planCamps:
             tab = ttk.Frame(self.tab_control)
             self.tab_control.add(tab, text=f'Camp {camp.campID}')
             self.populate_camp_tab(tab, camp)
-        self.tab_control.pack(expand=1, fill="both")
 
-    def populate_overview_tab(self, tab, planCamps, additional_resources):
-        self.create_camps_frame(tab, planCamps)
-        self.create_additional_resources_frame(tab, additional_resources)
-
+    def populate_overview_tab(self, tab):
+        self.create_camps_frame(tab, self.planCamps)
+        self.create_additional_resources_frame(tab, self.plan, self.additional_resources)
+    
     def create_camps_frame(self, parent, planCamps):
         camps_frame = tk.Frame(parent, bg='lightgray')
         camps_frame.pack(side='left', fill='both', expand=True)
@@ -263,28 +268,37 @@ class AdminDashboard(Dashboard):
             self.populate_resource_frame(camp_frame, camp)
             ttk.Button(camp_frame, text="Edit Camp", style='TButton').pack(pady=5)
 
-    def create_additional_resources_frame(self, parent, additional_resources):
+    def create_additional_resources_frame(self, parent, plan, additional_resources):
         resources_frame = tk.Frame(parent, bg='lightgray', bd=2, relief='groove')
         resources_frame.pack(side='right', fill='y', padx=(5, 0))
         tk.Label(resources_frame, text="Additional Resources Available", bg='lightgray', font=('Arial', 14)).pack(pady=10)
         for resource_name, amount in additional_resources.items():
-            self.create_resource_amount_frame(resources_frame, resource_name, amount, self.update_additional_resource)
+            self.create_resource_amount_frame(resources_frame, plan, resource_name, amount, self.update_additional_resource)
 
-    def create_resource_amount_frame(self, frame, resource_name, amount, update_additional_resource):
+    def create_resource_amount_frame(self, frame, plan, resource_name, amount, update_additional_resource):
         top_frame = tk.Frame(frame, bg='lightgray')
         top_frame.pack(fill='x', expand=True)
         tk.Label(top_frame, text=f"{resource_name}:", bg='lightgray', font=('Arial', 12)).pack(side='left')
         label = tk.Label(top_frame, text=str(amount), bg='lightgray')
         label.pack(side='left')
-        tk.Button(top_frame, text="+", command=lambda: update_additional_resource(label, resource_name, 1)).pack(side='left')
-        tk.Button(top_frame, text="-", command=lambda: update_additional_resource(label, resource_name, -1)).pack(side='left')
+        tk.Button(top_frame, text="+", command=lambda: update_additional_resource(label, plan, resource_name, 1)).pack(side='left')
+        tk.Button(top_frame, text="-", command=lambda: update_additional_resource(label, plan, resource_name, -1)).pack(side='left')
 
-    def update_additional_resource(self, label, resource_name, increment):
-        current_amount = self.additional_resources[resource_name]
-        new_amount = max(0, current_amount + increment)
-        self.additional_resources[resource_name] = new_amount
+    def update_additional_resource(self, label, plan, resource_name, increment):
+            self.plan = plan
+            current_amount = self.additional_resources[resource_name]
+            new_amount = max(0, current_amount + increment)
+            self.additional_resources[resource_name] = new_amount
+            label.config(text=str(new_amount))
 
-        label.config(text=str(new_amount))
-
-        # Add code here to persist the updated additional resources to the database 
-
+            try:
+                PlanEdit.update_plan(
+                    planID=self.plan.planID,
+                    water=self.additional_resources.get('Water'),
+                    food=self.additional_resources.get('Food'),
+                    shelter=self.additional_resources.get('Shelter'),
+                    medical_supplies=self.additional_resources.get('Medical Supplies')
+                )
+            except Exception as e:
+                print(f"Error updating plan: {e}")
+                # Consider adding user feedback here, e.g., displaying an error message in the UI.
