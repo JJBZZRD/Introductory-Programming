@@ -2,7 +2,7 @@ from .config import conn, cursor
 
 
 class Plan:  # Plan class has attributes matching columns in table
-    def __init__(self, planID, start_date, end_date, name, country, event_name, description):
+    def __init__(self, planID, start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter):
         self.planID = planID
         self.start_date = start_date
         self.end_date = end_date
@@ -10,10 +10,10 @@ class Plan:  # Plan class has attributes matching columns in table
         self.country = country
         self.event_name = event_name
         self.description = description
-        self.water = None
-        self.food = None
-        self.shelter = None
-        self.medical_supplies = None
+        self.water = water
+        self.food = food
+        self.medical_supplies = medical_supplies
+        self.shelter = shelter
         self.end_date_datetime = None
 
     @classmethod

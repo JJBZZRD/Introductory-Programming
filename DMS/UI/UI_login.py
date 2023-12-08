@@ -44,6 +44,8 @@ class LoginScreen(tk.Frame):
         password_entry = tk.Entry(self, show="*")
         password_entry.pack()
 
+        password_entry.bind("<Return>", lambda event: self.login(username_entry.get(), password_entry.get()))
+
         login_button = tk.Button(self, text="Login", command= lambda: self.login(username_entry.get(), password_entry.get()))
         login_button.pack(pady=5)
 
