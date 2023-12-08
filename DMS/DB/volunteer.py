@@ -19,7 +19,7 @@ class Volunteer:
         return cls(*volunteer_tuple)
 
     def display_info(self):
-        return [str(self.volunteerID), self.first_name, self.last_name, self.username, self.password,
+        return [str(self.volunteerID), self.first_name, self.last_name, self.username,
                 self.date_of_birth, self.phone, self.account_status, str(self.campID)]
 
     @staticmethod
