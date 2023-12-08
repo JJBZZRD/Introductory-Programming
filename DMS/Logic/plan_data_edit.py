@@ -22,24 +22,29 @@ class PlanEdit:
         return Plan.create_plan(plan_tuple)
 
     @staticmethod
-    def update_plan(planID, name, event_name, country, description, start_date, end_date):
+    def update_plan(planID=None, name=None, event_name=None, country=None, description=None, start_date=None, end_date=None, water=None, food=None, shelter=None, medical_supplies=None):
 
-        name = logic_util.validate_name(name)
-        country = logic_util.validate_country(country)
-        event_name = logic_util.validate_event(event_name)
-        description = logic_util.validate_description(description)
-        start_date = logic_util.validate_date(start_date)
+        if name:
+            name = logic_util.validate_name(name)
+        if country:
+            country = logic_util.validate_country(country)
+        if event_name:
+            event_name = logic_util.validate_event(event_name)
+        if description:
+            description = logic_util.validate_description(description)
+        if start_date:
+            start_date = logic_util.validate_date(start_date)
 
         if end_date:
             end_date = logic_util.validate_end_date(start_date, end_date)
-            if datetime.today().date() == end_date:
-                return Plan.delete_plan(planID)
-            else: 
-                return Plan.update_plan(planID, start_date, end_date, name, country, event_name, description)
-        else:
-            end_date = None
+        #     if datetime.today().date() == end_date:
+        #         return Plan.delete_plan(planID)
+        #     else: 
+        #         return Plan.update_plan(planID, start_date, end_date, name, country, event_name, description)
+        # else:
+        #     end_date = None
 
-        return Plan.update_plan(planID, start_date, end_date, name, country, event_name, description)
+        return Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies)
 
     # @staticmethod
     # def end_plan(planID, start_date, end_date):
