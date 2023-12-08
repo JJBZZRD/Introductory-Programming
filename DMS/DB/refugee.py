@@ -4,7 +4,7 @@ from .camp import Camp
 
 class Refugee:  # Refugee class has attributes matching columns in table
     def __init__(self, refugeeID, first_name, last_name, date_of_birth, gender, familyID, campID,
-                 medical_condition, vital_status):
+                 triage_category, medical_conditions, vital_status):
         self.refugeeID = refugeeID
         self.first_name = first_name
         self.last_name = last_name
@@ -12,7 +12,8 @@ class Refugee:  # Refugee class has attributes matching columns in table
         self.gender = gender
         self.familyID = familyID
         self.campID = campID
-        self.medical_condition = medical_condition
+        self.triage_category = triage_category
+        self.medical_conditions = medical_conditions
         self.age = 0
         self.band = None
         self.vital_status = vital_status
@@ -24,7 +25,8 @@ class Refugee:  # Refugee class has attributes matching columns in table
     def display_info(self):
         return [str(self.refugeeID), str(self.first_name), str(self.last_name),
                 str(self.date_of_birth), str(self.gender), str(self.familyID),
-                str(self.campID), str(self.medical_condition), str(self.vital_status)]
+                str(self.campID), str(self.triage_category), str(self.medical_conditions),
+                str(self.vital_status)]
 
     @staticmethod
     def get_refugee_by_id(refugeeID):  # Get refugee details by selecting on refugeeID. Returns a list of tuples.
@@ -33,15 +35,16 @@ class Refugee:  # Refugee class has attributes matching columns in table
 
     @classmethod    # Insert a refugee into the database without creating a new instance
     def create_refugee(cls, refugee_tuple):
-        first_name, last_name, date_of_birth, gender, familyID, campID, medical_condition, vital_status = refugee_tuple
+        (first_name, last_name, date_of_birth, gender, familyID, campID, triage_category,
+         medical_conditions, vital_status) = refugee_tuple
         if Refugee.check_campID_exist(campID):
             sql = """
                 INSERT INTO refugees (
-                first_name, last_name, date_of_birth, gender, familyID, campID, medical_condition, vital_status) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                first_name, last_name, date_of_birth, gender, familyID, campID, triage_category, medical_conditions, vital_status) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """
             cursor.execute(sql, (first_name, last_name, date_of_birth, gender,
-                                 familyID, campID, medical_condition, vital_status))
+                                 familyID, campID, triage_category, medical_conditions, vital_status))
             conn.commit()
             refugee_id = cursor.execute("SELECT last_insert_rowid() FROM refugees").fetchone()[0]
             return Refugee.get_refugee_by_id(refugee_id)
@@ -50,7 +53,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
 
     @staticmethod  # Update a refugee by selecting on refugeeID
     def update_refugee(refugeeID, first_name=None, last_name=None, date_of_birth=None, gender=None,
-                       familyID=None, campID=None, medical_condition=None, vital_status=None):
+                       familyID=None, campID=None, triage_category=None, medical_conditions=None, vital_status=None):
         query = []
         params = []
 
@@ -72,9 +75,12 @@ class Refugee:  # Refugee class has attributes matching columns in table
         if campID is not None:
             query.append("campID = ?")
             params.append(campID)
-        if medical_condition is not None:
-            query.append("medical_condition = ?")
-            params.append(medical_condition)
+        if triage_category is not None:
+            query.append("triage_category = ?")
+            params.append(triage_category)
+        if medical_conditions is not None:
+            query.append("medical_conditions = ?")
+            params.append(medical_conditions)
         if vital_status is not None:
             query.append("vital_status = ?")
             params.append(vital_status)
@@ -94,11 +100,11 @@ class Refugee:  # Refugee class has attributes matching columns in table
         else:
             print(f"Refugee {refugeeID} has not been deleted")
 
-
     @staticmethod  # Get refugee details by selecting on any combination of attributes. Can be used to find the
     # refugeeID which can then be used in the delete and update methods. Returns a list of tuples.
     def get_refugee(refugeeID=None, first_name=None, last_name=None, date_of_birth=None, gender=None,
-                    familyID=None, campID=None, medical_condition=None, vital_status=None):
+                    familyID=None, campID=None, triage_category=None, medical_conditions=None,
+                    vital_status=None):
         query = []
         params = []
 
@@ -123,9 +129,12 @@ class Refugee:  # Refugee class has attributes matching columns in table
         if campID is not None:
             query.append("campID = ?")
             params.append(campID)
-        if medical_condition is not None:
-            query.append("medical_condition LIKE ?")
-            params.append(f"{medical_condition}%")
+        if triage_category is not None:
+            query.append("triage_category = ?")
+            params.append(triage_category)
+        if medical_conditions is not None:
+            query.append("medical_conditions LIKE ?")
+            params.append(f"{medical_conditions}%")
         if vital_status is not None:
             query.append("vital_status = ?")
             params.append(vital_status)
@@ -140,7 +149,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
 
     @staticmethod
     def check_campID_exist(campID):
-        camp = Camp.get_campID(campID)
+        camp = Camp.get_camp_by_id(campID)
         if camp is not None:
             return True
         else:
