@@ -86,6 +86,10 @@ class ManageList(tk.Frame):
         search_filters.grid(column=5, row=2, padx=5)
         # search_filters.bind('<<ComboboxSelected>>', )
 
+        activity_status = ttk.Combobox(self, values=['All', 'Active', 'Ended'])
+        activity_status.set("Status")
+        activity_status.grid(column=4, row=2, padx=5)
+
         search_bar = ttk.Entry(self, width=100)
         search_bar.grid(column=6, row=2, padx=5)
         # search_bar.pack(padx=10, pady=5)
@@ -96,7 +100,7 @@ class ManageList(tk.Frame):
         # search_button.pack(side='right', padx=10, pady=5)
 
         export_data_button = ttk.Button(self, text='Export Results', command=self.export_data)
-        export_data_button.grid(column=8, row=2)
+        export_data_button.grid(column=8, row=2, padx=5)
         
     def create_results(self):
         # this method creates the results list for a chosen subclass
@@ -139,6 +143,7 @@ class ManageList(tk.Frame):
 
         if associated_object:
             self.show_screen(self.switch_to_page, associated_object)
+            #print(self.switch_to_page, associated_object)
         else:
             print("no asssociated object")
 
@@ -184,7 +189,7 @@ class CampList(ManageList):
         self.list_type = ['Manage Camps', 'Add New Camp']
         self.list_headers = ['Camp ID', 'Country', 'Max Shelter', 'Water', 'Max Water', 'Food', 'Max_Food',
                              'Medical Supplies', 'Max Medical Supplies', 'Plan ID']
-        self.list_data = PlanDataRetrieve.get_plans()
+        self.list_data = camp.get_camps()
         self.switch_to_page = 'EditCamp'
         self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Max Shelter': 'max_shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max_Food': 'max_food',
                                 'Medical Supplies': 'medical_supplies', 'Max Medical Supplies': 'max_medical_supplies', 'Plan ID': 'planID'}
