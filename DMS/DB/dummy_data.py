@@ -76,10 +76,10 @@ def insert_dummy_data():
     refugee_data = """
     INSERT INTO refugees (refugeeID, first_name, last_name, date_of_birth, gender, familyID, campID, triage_category,
     medical_conditions, vital_status) VALUES
-    (1, 'Aisha', 'Kumar', '08/12/1946', 'Female', 645, 4, 'Standard', 'Asthma, Diabetes','Deceased'),
+    (1, 'Aisha', 'Kumar', '08/12/1946', 'Female', 645, 4, 'Standard', 'Asthma Diabetes','Deceased'),
     (2, 'Liam', 'Nguyen', '16/06/1998', 'Male', 239, 15, 'None', NULL,'Alive'),
     (3, 'Fatima', 'Chen', '05/09/1939', 'Female', 139, 5, 'None', NULL,'Deceased'),
-    (4, 'Gail', 'Khan', '02/06/2006', 'Female', 909, 15, 'Non-Urgent', 'Ehlers-danlos syndrome, Postural orthostatic tachycardia syndrome','Alive'),
+    (4, 'Gail', 'Khan', '02/06/2006', 'Female', 909, 15, 'Non-Urgent', 'Ehlers-danlos syndrome Postural orthostatic tachycardia syndrome','Alive'),
     (5, 'Carlos', 'Garcia', '28/08/1992', 'Male', 834, 11, 'None', NULL, 'Alive'),
     (6, 'Sara', 'Ali', '10/11/2009', 'Female', 633, 16, 'None', NULL,'Alive'),
     (7, 'George', 'Kim', '01/12/1930', 'Male', 171, 11, 'None', NULL,'Alive'),
@@ -92,15 +92,15 @@ def insert_dummy_data():
     (14, 'Lerato', 'Nkosi', '03/01/1978', 'Female', 463, 10, 'Urgent', 'Brain Tumour','Alive'),
     (15, 'Jin', 'Lee', '06/09/2022', 'Male', 19, 10, 'None', NULL,'Alive'),
     (16, 'Shannon', 'OConnor', '23/10/1947', 'Female', 6, 5, 'Very-Urgent', 'Coronary heart disease', 'Alive'),
-    (17, 'Keisha', 'Williams', '21/10/1944', 'Female', 597, 3, 'None', NULL,'Hypertension','Alive'),
+    (17, 'Keisha', 'Williams', '21/10/1944', 'Female', 597, 3, 'None', NULL,'Alive'),
     (18, 'Maria', 'Fernandez', '09/09/2005', 'Female', 516, 9, 'Immediate', 'Heart Failure','Alive'),
     (19, 'Kim', 'Park', '16/10/2015', 'Male', 725, 12, 'Very-Urgent', 'Chronic Obstructive Pulmonary Disease (COPD)','Alive'),
     (20, 'Melissa', 'Smith', '22/08/1956', 'Female', 71, 10, 'None', NULL,'Deceased'),
     (21, 'Stephanie', 'Martinez', '24/03/2023', 'Female', 788, 1, 'None', NULL,'Deceased'),
-    (22, 'Gavin', 'OReilly', '06/04/1950', 'Male', 622, 6, 'Very-Urgent', ,'Alive'),
+    (22, 'Gavin', 'OReilly', '06/04/1950', 'Male', 622, 6, 'Very-Urgent', 'Chronic Obstructive Pulmonary Disease (COPD)','Alive'),
     (23, 'Olivia', 'Brown', '26/03/2021', 'Female', 462, 8, 'None', NULL,'Alive'),
     (24, 'Elliot', 'Moreau', '14/08/1934', 'Male', 747, 17, 'None', NULL,'Alive'),
-    (25, 'Rosemary', 'Johnson', '07/12/2020', 'Female', 971, 19, 'Very-Urgent', 'Alive'),
+    (25, 'Rosemary', 'Johnson', '07/12/2020', 'Female', 971, 19, 'Very-Urgent', 'Chronic Obstructive Pulmonary Disease (COPD)','Alive'),
     (26, 'Kevin', 'Wong', '15/04/1993', 'Male', 678, 10, 'None', NULL,'Deceased'),
     (27, 'Ananya', 'Patel', '05/11/1995', 'Female', 246, 20, 'Standard', 'Coronary heart disease','Alive'),
     (28, 'Alexandra', 'Silva', '25/07/1979', 'Female', 176, 6, 'None', NULL,'Alive'),
@@ -112,7 +112,7 @@ def insert_dummy_data():
     (34, 'Jonathan', 'Carroll', '11/11/1982', 'Male', 830, 8, 'Non-Urgent', 'Anemia','Alive'),
     (35, 'Dawn', 'Harvey', '06/08/1959', 'Female', 182, 17, 'None', NULL,'Alive'),
     (36, 'Shane', 'Lamb', '03/10/1962', 'Male', 228, 4, 'None', NULL,'Alive'),
-    (37, 'Callum', 'Smith', '27/07/1939', 'Male', 931, 14, 'Urgent', 'Alive'),
+    (37, 'Callum', 'Smith', '27/07/1939', 'Male', 931, 14, 'Urgent', 'Asthma','Alive'),
     (38, 'Jade', 'Higgins', '15/09/1980', 'Female', 400, 7, 'None', NULL,'Alive'),
     (39, 'Hazel', 'Cole', '08/09/1957', 'Female', 190, 16, 'None', NULL,'Alive'),
     (40, 'Max', 'Stevens', '18/07/2018', 'Male', 40, 19, 'None', NULL,'Alive'),
@@ -120,7 +120,7 @@ def insert_dummy_data():
     (42, 'Peter', 'Douglas', '20/08/1997', 'Male', 836, 17, 'None', NULL,'Alive'),
     (43, 'Richard', 'Butcher', '10/01/1986', 'Male', 684, 8, 'Non-Urgent', 'Rheumatoid Arthritis','Alive'),
     (44, 'Ross', 'Turner', '31/07/2005', 'Male', 616, 3, 'None', NULL,'Alive'),
-    (45, 'Hollie', 'Fraser', '19/09/1994', 'Female', 652, 10, 'None', NULL,'Alive'),
+    (45, 'Hollie', 'Fraser', '19/09/1994', 'Female', 652, 10, 'None', NULL,'Alive');
     """
 
     cursor.execute(refugee_data)
