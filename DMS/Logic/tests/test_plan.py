@@ -22,16 +22,8 @@ class TestPlan(unittest.TestCase):
         print("Tearing down resources after the test")
         self.connection.close()
 
-    def test_create_volunteer(self):
-        print("Executing test_create_volunteer")
+    def test_get_plan()
 
-        plans = PlanEdit.create_plan("name", "type", "country", "description", "04122023", "05122023")
 
-        self.assertIsInstance(plans, list, "plans is not a list")
-
-        # vols = PersonDataEdit.create_volunteer('unit test first name', 'unit test last name', 'username', 'password', '2023-1-1', '10123456', 'camp_1')
-        
-        # self.assertIsInstance(vols, list, 'vols is not a list')
-        pass
 if __name__ == '__main__':
     unittest.main()

@@ -14,6 +14,7 @@ class Plan:  # Plan class has attributes matching columns in table
         self.food = None
         self.shelter = None
         self.medical_supplies = None
+        self.end_date_datetime = None
 
     @classmethod
     def init_from_tuple(cls, plan_tuple):
@@ -112,18 +113,22 @@ class Plan:  # Plan class has attributes matching columns in table
             params.append(end_date)
         if name is not None:
             query.append("name LIKE ?")
-            params.append(f"{name}%")
+            params.append(f"%{name}%")
         if country is not None:
-            query.append("country LIKE ?")
-            params.append(f"{country}%")
+            query.append("country = ?")
+            params.append(country)
         if event_name is not None:
             query.append("event_name LIKE ?")
-            params.append(f"{event_name}%")
+            params.append(f"%{event_name}%")
         if description is not None:
             query.append("description LIKE ?")
-            params.append(f"{description}%")
-
-        cursor.execute(f"""SELECT * FROM plans WHERE {' AND '.join(query)}""", params)
+            params.append(f"%{description}%")
+        if len(params)==0:
+            q = "SELECT * FROM plans"
+        else:
+            q = f"""SELECT * FROM plans WHERE {' AND '.join(query)}""", params
+        print(q)
+        cursor.execute(q)
         return cursor.fetchall()
 
     @staticmethod

@@ -34,22 +34,23 @@ class PlanDataRetrieve:
                  country=country, event_name=event_name, description=description)
 
         plans = util.parse_result('Plan', plan_tuples)
+        print(f'active = {active}')
         if isinstance(plans, list):
 
             current_date = datetime.now()
             for plan in plans:
                 if plan.end_date:
                     try:
-                        plan.end_date = datetime.strptime(plan.end_date, '%d-%m-%Y')
+                        plan.end_date_datetime = datetime.strptime(plan.end_date, '%d-%m-%Y')
                     except:
-                        plan.end_date = datetime.strptime(plan.end_date, '%d/%m/%Y')
+                        plan.end_date_datetime = datetime.strptime(plan.end_date, '%d/%m/%Y')
 
             if active:
-                plans = [plan for plan in plans if (plan.end_date > current_date or not plan.end_date)]
+                plans = [plan for plan in plans if (plan.end_date_datetime > current_date or not plan.end_date)]
             elif active == None:
                 pass
             else:
-                plans = [plan for plan in plans if plan.end_date < current_date]
+                plans = [plan for plan in plans if plan.end_date_datetime < current_date]
 
             for plan in plans:
                 plan.food, plan.water, plan.shelter, plan.medical_supplies = Plan.get_total_resources(plan.planID)
