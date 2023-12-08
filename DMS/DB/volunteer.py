@@ -141,7 +141,7 @@ class Volunteer:
 
     @staticmethod
     def check_campID_exist(campID):
-        camp = Camp.get_campID(campID)
+        camp = Camp.get_camp_by_id(campID)
         if camp is not None:
             return True
         else:
