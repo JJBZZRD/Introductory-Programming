@@ -35,9 +35,27 @@ class PlanDataRetrieve:
 
         plans = util.parse_result('Plan', plan_tuples)
         if isinstance(plans, list):
+
+            current_date = datetime.now()
+            try:
+                plan.end_date = datetime.strptime(plan.end_date, '%d-%m-%Y')
+            except:
+                plan.end_date = datetime.strptime(plan.end_date, '%d/%m/%Y')
+            if active:
+                plans = [plan for plan in plans if plan.end_date > current_date]
+            elif active == None:
+                pass
+            else:
+                plans = [plan for plan in plans if plan.end_date < current_date]
+
             for plan in plans:
                 plan.food, plan.water, plan.shelter, plan.medical_supplies = Plan.get_total_resources(plan.planID)
+
         return plans
+
+    @staticmethod
+    def get_plan_resources(planID):
+
 
 
     @staticmethod
@@ -54,7 +72,10 @@ class PlanDataRetrieve:
 
         for refugee in refugees:
             current_date = datetime.now()
-            birth_date = datetime.strptime(refugee.date_of_birth, '%Y-%m-%d')
+            try:
+                birth_date = datetime.strptime(refugee.date_of_birth, '%d-%m-%Y')
+            except:
+                birth_date = datetime.strptime(refugee.date_of_birth, '%d/%m/%Y')
             refugee.age = current_date.year - birth_date.year - (
                 (current_date.month, current_date.day) < (birth_date.month, birth_date.day))
             if refugee.age < 18:
