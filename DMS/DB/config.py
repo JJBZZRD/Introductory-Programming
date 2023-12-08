@@ -102,6 +102,15 @@ def create_database():
 
     cursor.execute(countries_table)
 
+    family_table = """
+    CREATE TABLE IF NOT EXISTS family(
+        familyID INTEGER PRIMARY KEY,
+        family_name TEXT,
+        lead_family_memberID TEXT)
+        """
+
+    cursor.execute(family_table)
+
     conn.commit()
 
 
