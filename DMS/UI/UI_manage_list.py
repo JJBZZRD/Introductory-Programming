@@ -69,7 +69,7 @@ class ManageList(tk.Frame):
                 case 'Ended':
                     get_list_input.update({'active': False})
                 
-                case 'Deactivated':
+                case 'inactive':
                     get_list_input.update({'active': False})
                 
 
@@ -101,9 +101,10 @@ class ManageList(tk.Frame):
         search_filters.grid(column=5, row=2, padx=5)
         # search_filters.bind('<<ComboboxSelected>>', )
 
-        activity_status = ttk.Combobox(self, values=self.status_filters)
-        activity_status.set("Status")
-        activity_status.grid(column=4, row=2, padx=5)
+        if self.status_filters:
+            activity_status = ttk.Combobox(self, values=self.status_filters)
+            activity_status.set("Status")
+            activity_status.grid(column=4, row=2, padx=5)
 
         search_bar = ttk.Entry(self, width=100)
         search_bar.grid(column=6, row=2, padx=5)
@@ -239,9 +240,14 @@ class RefugeeList(ManageList):
                 'Date of_Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status']
-        self.switch_to_page = 'EditRefugee'
         self.list_data = PersonDataRetrieve.get_all_refugees()
         self.get_search = PersonDataRetrieve.get_refugees
+        self.switch_to_page = 'EditRefugee'
+        self.filter_matching = {'Refugee ID': 'id', 'First Name': 'name', 'Last Name': 'name',
+                'Date of_Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
+                'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
+                'Vital Status': 'vital_status'}
+        self.export_name = 'Refugees'
         self.create_title()
         self.create_search()
         self.create_results()
