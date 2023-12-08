@@ -14,7 +14,7 @@ class PlanDataRetrieve:
 
     @staticmethod
     def get_plan(planID=None, start_date=None, end_date=None, name=None, 
-                 country=None, event_name=None, description=None):
+                 country=None, event_name=None, description=None, active=None):
         
         #Validate user input
         if name:
@@ -33,7 +33,12 @@ class PlanDataRetrieve:
         plan_tuples = Plan.get_plan(planID=planID, start_date=start_date, end_date=end_date, name=name, 
                  country=country, event_name=event_name, description=description)
 
-        return util.parse_result('Plan', plan_tuples)
+        plans = util.parse_result('Plan', plan_tuples)
+        if isinstance(plans, list):
+            for plan in plans:
+                plan.food, plan.water, plan.shelter, plan.medical_supplies = Plan.get_total_resources(plan.planID)
+        return plans
+
 
     @staticmethod
     def get_plan_resources_estimate(planID):
@@ -41,7 +46,7 @@ class PlanDataRetrieve:
         refugees = util.parse_result(refugees_tuples)
         total_refugees = len(refugees_tuples)
 
-        plan_resources = Plan.get_plan_resources(planID)
+        plan_resources = Plan.get_total_resources(planID)
         #[food, water, shelter, medical supplies]
 
         nutrition_cost = 1

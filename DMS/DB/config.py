@@ -106,7 +106,7 @@ def create_database():
     CREATE TABLE IF NOT EXISTS family(
         familyID INTEGER PRIMARY KEY,
         family_name TEXT,
-        lead_family_memberID TEXT)
+        lead_family_memberID INTEGER)
         """
 
     cursor.execute(family_table)

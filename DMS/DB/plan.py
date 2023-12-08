@@ -10,6 +10,10 @@ class Plan:  # Plan class has attributes matching columns in table
         self.country = country
         self.event_name = event_name
         self.description = description
+        self.water = None
+        self.food = None
+        self.shelter = None
+        self.medical_supplies = None
 
     @classmethod
     def init_from_tuple(cls, plan_tuple):
@@ -116,7 +120,7 @@ class Plan:  # Plan class has attributes matching columns in table
         return cursor.fetchall()
 
     @staticmethod
-    def total_resources(planID):
+    def get_total_resources(planID):
         from .camp import Camp as pc
         shelter = []
         food = []

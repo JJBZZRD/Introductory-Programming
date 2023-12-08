@@ -134,16 +134,16 @@ class Family:  # Family class has attributes matching columns in table
         else:
             return False
 
-    @staticmethod
-    def get_by_planID(planID):
-        query = []
-        params = []
-        camps = Camp.get_camp(planID=planID)
-        campIDs = [camps[i][0] for i in range(len(camps))]
-        for campID in campIDs:
-            query.append("campID = ?")
-            params.append(campID)
-        cursor.execute(f"""SELECT * FROM refugees WHERE {' OR '.join(query)}""", params)
-        return cursor.fetchall()
+    # @staticmethod
+    # def get_by_planID(planID):
+    #     query = []
+    #     params = []
+    #     camps = Camp.get_camp(planID=planID)
+    #     campIDs = [camps[i][0] for i in range(len(camps))]
+    #     for campID in campIDs:
+    #         query.append("campID = ?")
+    #         params.append(campID)
+    #     cursor.execute(f"""SELECT * FROM refugees WHERE {' OR '.join(query)}""", params)
+    #     return cursor.fetchall()
 
 
