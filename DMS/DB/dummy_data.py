@@ -74,15 +74,16 @@ def insert_dummy_data():
     cursor.execute(volunteer_data)
 
     refugee_data = """
-    INSERT INTO refugees (refugeeID, first_name, last_name, date_of_birth, gender, familyID, campID, medical_condition, vital_status) VALUES
-    (1, 'Aisha', 'Kumar', '08/12/1946', 'Female', 645, 4, 'Moderately Ill', 'Deceased'),
+    INSERT INTO refugees (refugeeID, first_name, last_name, date_of_birth, gender, familyID, campID, triage_category,
+    medical_conditions, vital_status) VALUES
+    (1, 'Aisha', 'Kumar', '08/12/1946', 'Female', 645, 4, 'Standard', 'Deceased'),
     (2, 'Liam', 'Nguyen', '16/06/1998', 'Male', 239, 15, 'None', 'Alive'),
     (3, 'Fatima', 'Chen', '05/09/1939', 'Female', 139, 5, 'None', 'Deceased'),
     (4, 'Gail', 'Khan', '02/06/2006', 'Female', 909, 15, 'None', 'Alive'),
     (5, 'Carlos', 'Garcia', '28/08/1992', 'Male', 834, 11, 'None', 'Alive'),
     (6, 'Sara', 'Ali', '10/11/2009', 'Female', 633, 16, 'None', 'Alive'),
     (7, 'George', 'Kim', '01/12/1930', 'Male', 171, 11, 'None', 'Alive'),
-    (8, 'Amina', 'Hassan', '08/07/1990', 'Female', 572, 8, 'Critically Ill', 'Alive'),
+    (8, 'Amina', 'Hassan', '08/07/1990', 'Female', 572, 8, 'Immediate', 'Alive'),
     (9, 'Ivan', 'Petrov', '07/06/1939', 'Male', 428, 1, 'None', 'Deceased'),
     (10, 'Yuki', 'Tanaka', '02/11/1964', 'Female', 49, 14, 'None', 'Alive'),
     (11, 'Mohamed', 'Al-Sayed', '31/03/1987', 'Male', 119, 4, 'None', 'Alive'),
