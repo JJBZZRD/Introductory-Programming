@@ -25,7 +25,7 @@ class TestPlan(unittest.TestCase):
     def test_create_volunteer(self):
         print("Executing test_create_volunteer")
 
-        plans = PlanEdit.create_plan("name", "type", "region", "description", "04122023", "05122023")
+        plans = PlanEdit.create_plan("name", "type", "country", "description", "04122023", "05122023")
 
         self.assertIsInstance(plans, list, "plans is not a list")
 

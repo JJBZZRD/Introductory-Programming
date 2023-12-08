@@ -167,11 +167,11 @@ class ManageList(tk.Frame):
 class PlanList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Plans', 'Add New Plan']
-        self.list_headers = ['Plan ID', 'Plan Name', 'Region', 'Event Name', 'Description', 'Start Date', 'End Date']
+        self.list_headers = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date']
         self.list_data = PlanDataRetrieve.get_plans()
         self.get_search = PlanDataRetrieve.get_plan
         self.switch_to_page = 'AdminDashboard'
-        self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Region': 'region', 'Event Name': 'event name',
+        self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Country': 'country', 'Event Name': 'event name',
                                 'Description': 'description', 'Start Date': 'start date', 'End Date': 'end date'}
         self.export_name = 'Plans'
         self.create_title()
@@ -197,7 +197,7 @@ class VolunteerList(ManageList):
 
     def setup_list(self):
         self.list_type = ['Manage Volunteers', 'Add New Volunteer']
-        self.list_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
+        self.list_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Country', 'Description', 'Start Date', 'End Date']
         self.list_data = None  # to be provided by logid layer
         self.switch_to_page = 'EditVolunteer'
         self.create_title()
@@ -209,7 +209,7 @@ class RefugeeList(ManageList):
 
     def setup_list(self):
         self.list_type = ['Manage Refugees', 'Add New Refugee']
-        self.list_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
+        self.list_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Country', 'Description', 'Start Date', 'End Date']
         self.list_data = [['1', 'Austerity relief', 'economic collapse', 'United Kingdom',
                            'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']]
         self.switch_to_page = 'EditRefugee'

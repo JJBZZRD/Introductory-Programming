@@ -14,13 +14,13 @@ class PlanDataRetrieve:
 
     @staticmethod
     def get_plan(planID=None, start_date=None, end_date=None, name=None, 
-                 region=None, event_name=None, description=None):
+                 country=None, event_name=None, description=None):
         
         #Validate user input
         if name:
             name = logic_util.validate_name(name)
-        if region:
-            region = logic_util.validate_country(region)
+        if country:
+            country = logic_util.validate_country(country)
         if event_name:
             event_name = logic_util.validate_event(event_name)
         if description:
@@ -31,7 +31,7 @@ class PlanDataRetrieve:
             end_date = logic_util.validate_date(end_date)
         
         plan_tuples = Plan.get_plan(planID=planID, start_date=start_date, end_date=end_date, name=name, 
-                 region=region, event_name=event_name, description=description)
+                 country=country, event_name=event_name, description=description)
 
         return util.parse_result('Plan', plan_tuples)
 

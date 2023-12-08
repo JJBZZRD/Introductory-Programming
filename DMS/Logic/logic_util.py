@@ -79,7 +79,7 @@ def validate_name(name: str):
     return validate(name, "Invalid name")
 
 def validate_country(country: str):
-    return validate(country, "Invalid region")
+    return validate(country, "Invalid country")
 
 def validate_event(event: str):
     return validate(event, "Invalid event")

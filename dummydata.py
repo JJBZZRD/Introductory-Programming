@@ -75,11 +75,11 @@ refugee60 = Refugee(60,"tmjklfkp", "ghfydhbv", "1970-10-27 00:00:00", "xstjsl", 
 refugee61 = Refugee(61,"kfkvlmcn", "lilpsvir", "1978-01-05 00:00:00", "kgsurz", 6, "None")
 
 class Plan:  # Plan class has attributes matching columns in table
-    def __init__(self, planID, start_date, end_date, name, region, event_name, description):
+    def __init__(self, planID, start_date, end_date, name, country, event_name, description):
         self.planID = planID
         self.start_date = start_date
         self.end_date = end_date
-        self.region = region
+        self.country = country
         self.name = name
         self.event_name = event_name
         self.description = description
@@ -166,7 +166,7 @@ def generate_dummy_data():
             "start_date": str(random_date(datetime(2020, 1, 1), datetime(2023, 1, 1))),
             "end_date": str(random_date(datetime(2024, 1, 1), datetime(2026, 1, 1))),
             "name": random_string(),
-            "region": random_string(),
+            "country": random_string(),
             "event_name": random_string(),
             "description": random_string(20)
         })
@@ -241,7 +241,7 @@ def save_objects_to_file(filename, admin, plans, camps, volunteers, refugees):
 
         # Write Plans
         for i, plan in enumerate(plans):
-            plan_attrs = [quote_str(plan.start_date), quote_str(plan.end_date), quote_str(plan.name), quote_str(plan.region), quote_str(plan.event_name), quote_str(plan.description)]
+            plan_attrs = [quote_str(plan.start_date), quote_str(plan.end_date), quote_str(plan.name), quote_str(plan.country), quote_str(plan.event_name), quote_str(plan.description)]
             file.write(f"plan{i+1} = Plan({', '.join(plan_attrs)})\n")
 
         file.write("\n")

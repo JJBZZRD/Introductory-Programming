@@ -168,7 +168,7 @@ class EditPlan(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Plan']
-        self.modifiable_variables = ['Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
+        self.modifiable_variables = ['Plan Name', 'Plan Type', 'Country', 'Description', 'Start Date', 'End Date']
         self.button_labels = ['Save Changes', 'Delete']
         self.current_data = self.screen_data.display_info()
         self.save_record = PlanEdit.update_plan

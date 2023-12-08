@@ -15,7 +15,7 @@ INFO:root:
         start_date TEXT,
         end_date TEXT,
         name TEXT,
-        region TEXT,
+        country TEXT,
         event_name TEXT,
         description TEXT
         )
@@ -79,7 +79,7 @@ INFO:root:
         start_date TEXT,
         end_date TEXT,
         name TEXT,
-        region TEXT,
+        country TEXT,
         event_name TEXT,
         description TEXT
         )
@@ -143,7 +143,7 @@ INFO:root:
         start_date TEXT,
         end_date TEXT,
         name TEXT,
-        region TEXT,
+        country TEXT,
         event_name TEXT,
         description TEXT
         )
@@ -207,7 +207,7 @@ INFO:root:
         start_date TEXT,
         end_date TEXT,
         name TEXT,
-        region TEXT,
+        country TEXT,
         event_name TEXT,
         description TEXT
         )
@@ -285,7 +285,7 @@ INFO:root:
         start_date TEXT,
         end_date TEXT,
         name TEXT,
-        region TEXT,
+        country TEXT,
         event_name TEXT,
         description TEXT
         )
@@ -348,7 +348,7 @@ INFO:root:
         start_date TEXT,
         end_date TEXT,
         name TEXT,
-        region TEXT,
+        country TEXT,
         event_name TEXT,
         description TEXT
         )
@@ -411,7 +411,7 @@ INFO:root:
         start_date TEXT,
         end_date TEXT,
         name TEXT,
-        region TEXT,
+        country TEXT,
         event_name TEXT,
         description TEXT
         )
