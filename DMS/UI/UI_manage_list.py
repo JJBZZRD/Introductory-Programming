@@ -31,7 +31,10 @@ class ManageList(tk.Frame):
 
     def update_results_list(self, filter, searchbar, status=None):
         
+        search_text = searchbar
 
+        if searchbar == '':
+            search_text = None
 
         # the following displays a dismissible pop up if the filter is not changed from default
         if filter == 'Filter' or status == 'Status':
@@ -49,14 +52,14 @@ class ManageList(tk.Frame):
             dismiss_button.pack(pady=10)
             return
         
-        get_list_input = {self.filter_matching[filter]: searchbar}
+        get_list_input = {self.filter_matching[filter]: search_text}
 
         self.results_list.destroy()
 
-        if searchbar == '':
-            self.list_data = PlanDataRetrieve.get_plans()
-            self.create_results()
-            return
+        # if searchbar == '' and status == 'All':
+        #     self.list_data = PlanDataRetrieve.get_plans()
+        #     self.create_results()
+        #     return
         status_filter = None
 
         if status:
@@ -221,11 +224,13 @@ class VolunteerList(ManageList):
 
     def setup_list(self):
         self.list_type = ['Manage Volunteers', 'Add New Volunteer']
-        self.list_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Country', 'Description', 'Start Date', 'End Date']
+        self.list_headers = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
+                'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
         self.list_data = PersonDataRetrieve.get_all_volunteers()
         self.get_search = PersonDataRetrieve.get_volunteers
         self.switch_to_page = 'EditVolunteer'
-        self.filter_matching = {}
+        self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'name', 'Last Name': 'name', 'Username': 'username',
+                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID'}
         self.status_filters = ['All', 'Active', 'Deactivated']
         self.create_title()
         self.create_search()
