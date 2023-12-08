@@ -111,47 +111,49 @@ class Dashboard(tk.Frame):
             self.show_screen('EditRefugee', selected_refugee)
         
     def populate_resource_frame(self, parent, camp):
-        
         camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
 
         resources = {
-            'Water': (camp.water),
-            'Food': (camp.food),
-            'Medical Supplies': (camp.medical_supplies),
+            'Water': camp.water,
+            'Food': camp.food,
+            'Medical Supplies': camp.medical_supplies,
         }
 
-        resource_labels = {}
-        days_left_labels = {}
+        self.resource_labels = {}
+        self.days_left_labels = {}
 
         for resource_name, amount in resources.items():
-            resource_frame = tk.Frame(parent)
-            resource_frame.pack(fill='x', expand=True)
+            self.create_resource_frame(parent, camp, camp_resources_estimation, resource_name, amount)
 
-            tk.Label(resource_frame, text=f"{resource_name}:").pack(side='left')
-            amount_label = tk.Label(resource_frame, text=f"{amount}")
-            amount_label.pack(side='left')
-            resource_labels[resource_name] = amount_label
+    def create_resource_frame(self, parent, camp, camp_resources_estimation, resource_name, amount):
+        resource_frame = tk.Frame(parent)
+        resource_frame.pack(fill='x', expand=True)
 
-            def update_resource(resource_name, increment):
-                current_amount, current_capacity = resources[resource_name]
-                new_amount = max(0, min(current_amount + increment, current_capacity))
+        tk.Label(resource_frame, text=f"{resource_name}:").pack(side='left')
+        amount_label = tk.Label(resource_frame, text=f"{amount}")
+        amount_label.pack(side='left')
+        self.resource_labels[resource_name] = amount_label
 
-                CampDataEdit.update_camp(camp.campID, **{resource_name.lower().replace(' ', '_'): new_amount})
+        increase_button = tk.Button(resource_frame, text="+", command=lambda: self.update_resource(camp, resource_name, 1))
+        decrease_button = tk.Button(resource_frame, text="-", command=lambda: self.update_resource(camp, resource_name, -1))
 
-                amount_label = resource_labels[resource_name]
-                amount_label.config(text=f"{new_amount}/{current_capacity}")
+        increase_button.pack(side='left')
+        decrease_button.pack(side='left')
 
-            increase_button = tk.Button(resource_frame, text="+", command=lambda res=resource_name: update_resource(res, 1))
-            decrease_button = tk.Button(resource_frame, text="-", command=lambda res=resource_name: update_resource(res, -1))
+        resource_key = resource_name.lower().replace(' ', '_')
+        days_left = camp_resources_estimation[resource_key] if resource_key in camp_resources_estimation else "N/A"
+        days_left_label = tk.Label(resource_frame, text=f"Estimated Days Left: {days_left}")
+        days_left_label.pack(side='left')
+        self.days_left_labels[resource_name] = days_left_label
 
-            increase_button.pack(side='left')
-            decrease_button.pack(side='left')
+    def update_resource(self, camp, resource_name, increment):
+        current_amount, current_capacity = self.resources[resource_name]
+        new_amount = max(0, min(current_amount + increment, current_capacity))
 
-            resource_key = resource_name.lower().replace(' ', '_')
-            days_left = camp_resources_estimation[resource_key] if resource_key in camp_resources_estimation else "N/A"
-            days_left_label = tk.Label(resource_frame, text=f"Estimated Days Left: {days_left}")
-            days_left_label.pack(side='left')
-            days_left_labels[resource_name] = days_left_label
+        CampDataEdit.update_camp(camp.campID, **{resource_name.lower().replace(' ', '_'): new_amount})
+
+        amount_label = self.resource_labels[resource_name]
+        amount_label.config(text=f"{new_amount}/{current_capacity}")
             
     def populate_statistics_frame(self, parent, camp):
         statistics_frame = tk.Frame(parent)
