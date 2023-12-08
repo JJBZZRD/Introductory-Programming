@@ -87,7 +87,7 @@ def create_database():
         gender TEXT CHECK (gender IN ('Male', 'Female', 'Other')),
         familyID INTEGER,
         campID INTEGER NOT NULL,
-        triage_category TEXT (medical_condition IN ('None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate')),
+        triage_category TEXT CHECK (triage_category IN ('None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate')),
         medical_conditions Text,
         vital_status TEXT CHECK (vital_status IN ('Alive', 'Deceased')),
         FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -95,7 +95,6 @@ def create_database():
         """
 
     cursor.execute(refugees_table)
-
     countries_table = """
     CREATE TABLE IF NOT EXISTS countries (
         country TEXT PRIMARY KEY)
