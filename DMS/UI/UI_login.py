@@ -40,8 +40,8 @@ class LoginScreen(tk.Frame):
         username_entry.pack()
 
         tk.Label(self, text="Password:").pack()
-        password_entry = tk.Entry(self)
-        # password_entry = tk.Entry(self, show="*")
+        # password_entry = tk.Entry(self)
+        password_entry = tk.Entry(self, show="*")
         password_entry.pack()
 
         login_button = tk.Button(self, text="Login", command= lambda: self.login(username_entry.get(), password_entry.get()))
