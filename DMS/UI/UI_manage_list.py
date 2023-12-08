@@ -23,18 +23,18 @@ class ManageList(tk.Frame):
         self.get_search = None
         self.filter_matching = {}
         self.export_name = ''
+        self.status_filters = []
         self.setup_list()
 
     def setup_list(self):
         raise NotImplementedError("Subclasses should implement this method to setup the different lists")
 
-    def update_results_list(self, filter, searchbar):
-        
+    def update_results_list(self, filter, searchbar, status=None):
         
 
 
         # the following displays a dismissible pop up if the filter is not changed from default
-        if filter == 'Filter':
+        if filter == 'Filter' or status == 'Status':
             popup = tk.Toplevel(self.root)
 
             # Set the title of the popup window
@@ -57,6 +57,21 @@ class ManageList(tk.Frame):
             self.list_data = PlanDataRetrieve.get_plans()
             self.create_results()
             return
+        status_filter = None
+
+        if status:
+            match status:
+                case 'All':
+                    pass
+                case 'Active':
+                    get_list_input.update({'active': True})
+                
+                case 'Ended':
+                    get_list_input.update({'active': False})
+                
+                case 'Deactivated':
+                    get_list_input.update({'active': False})
+                
 
         # extracting the searched objects
         self.list_data = self.get_search(**get_list_input)
@@ -86,7 +101,7 @@ class ManageList(tk.Frame):
         search_filters.grid(column=5, row=2, padx=5)
         # search_filters.bind('<<ComboboxSelected>>', )
 
-        activity_status = ttk.Combobox(self, values=['All', 'Active', 'Ended'])
+        activity_status = ttk.Combobox(self, values=self.status_filters)
         activity_status.set("Status")
         activity_status.grid(column=4, row=2, padx=5)
 
@@ -178,6 +193,7 @@ class PlanList(ManageList):
         self.switch_to_page = 'AdminDashboard'
         self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Country': 'country', 'Event Name': 'event_name',
                                 'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date'}
+        self.status_filters = ['All', 'Active', 'Ended']
         self.export_name = 'Plans'
         self.create_title()
         self.create_search()
@@ -189,10 +205,12 @@ class CampList(ManageList):
         self.list_type = ['Manage Camps', 'Add New Camp']
         self.list_headers = ['Camp ID', 'Country', 'Max Shelter', 'Water', 'Max Water', 'Food', 'Max_Food',
                              'Medical Supplies', 'Max Medical Supplies', 'Plan ID']
-        self.list_data = camp.get_camps()
+        self.list_data = CampDataRetrieve.get_all_camps()
+        self.get_search = CampDataRetrieve.get_camp
         self.switch_to_page = 'EditCamp'
         self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Max Shelter': 'max_shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max_Food': 'max_food',
                                 'Medical Supplies': 'medical_supplies', 'Max Medical Supplies': 'max_medical_supplies', 'Plan ID': 'planID'}
+        self.export_name = 'Camps'
         self.create_title()
         self.create_search()
         self.create_results()
@@ -203,8 +221,11 @@ class VolunteerList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Volunteers', 'Add New Volunteer']
         self.list_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Country', 'Description', 'Start Date', 'End Date']
-        self.list_data = None  # to be provided by logid layer
+        self.list_data = PersonDataRetrieve.get_all_volunteers()
+        self.get_search = PersonDataRetrieve.get_volunteers
         self.switch_to_page = 'EditVolunteer'
+        self.filter_matching = {}
+        self.status_filters = ['All', 'Active', 'Deactivated']
         self.create_title()
         self.create_search()
         self.create_results()
@@ -214,10 +235,13 @@ class RefugeeList(ManageList):
 
     def setup_list(self):
         self.list_type = ['Manage Refugees', 'Add New Refugee']
-        self.list_headers = ['Plan ID', 'Plan Name', 'Plan Type', 'Country', 'Description', 'Start Date', 'End Date']
-        self.list_data = [['1', 'Austerity relief', 'economic collapse', 'United Kingdom',
-                           'Aims to provide support to those suffering from cosy livs', '25/11/2023', 'next GE']]
+        self.list_headers = ['Refugee ID', 'First Name', 'Last Name',
+                'Date of_Birth', 'Gender', 'Family ID',
+                'Camp ID', 'Triage Category', 'Medical Conditions',
+                'Vital Status']
         self.switch_to_page = 'EditRefugee'
+        self.list_data = PersonDataRetrieve.get_all_refugees()
+        self.get_search = PersonDataRetrieve.get_refugees
         self.create_title()
         self.create_search()
         self.create_results()
