@@ -3,6 +3,8 @@ from tkinter import ttk
 from tkinter import filedialog
 from .dummydata import plan1, plan2
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
+from ..Logic.camp_data_retrieve import CampDataRetrieve
+from ..Logic.person_data_retrieve import PersonDataRetrieve
 import pandas as pd
 
 
@@ -19,6 +21,7 @@ class ManageList(tk.Frame):
         self.list_data = None
         self.search_field = None
         self.switch_to_page = None
+        self.get_search = None
         self.filter_matching = {}
         self.export_name = ''
         self.setup_list()
@@ -27,7 +30,9 @@ class ManageList(tk.Frame):
         raise NotImplementedError("Subclasses should implement this method to setup the different lists")
 
     def update_results_list(self, filter, searchbar):
-        # print((self.filter_matching[filter], searchbar))
+        
+        
+
 
         # the following displays a dismissible pop up if the filter is not changed from default
         if filter == 'Filter':
@@ -44,15 +49,18 @@ class ManageList(tk.Frame):
             dismiss_button = tk.Button(popup, text="Dismiss", command=popup.destroy)
             dismiss_button.pack(pady=10)
             return
+        
+        get_list_input = {self.filter_matching[filter]: searchbar}
 
         self.results_list.destroy()
 
         if searchbar == '':
             self.list_data = PlanDataRetrieve.get_plans()
             self.create_results()
+            return
 
         # extracting the searched objects
-        self.list_data = PlanDataRetrieve.get_plan(self.filter_matching[filter], searchbar)
+        self.list_data = self.get_search(**get_list_input)
 
         # setting the internal results to the updated value
 
@@ -145,11 +153,13 @@ class ManageList(tk.Frame):
 
         df = pd.DataFrame(data_list, columns=self.list_headers)
         
-        df.to_csv(self.export_name + '.csv', index=False)
+        #df.to_csv(self.export_name + '.csv', index=False)
 
-        file_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
+        file_path = filedialog.asksaveasfilename(initialfile=self.export_name + '.csv',
+                                             defaultextension=".csv", 
+                                             filetypes=[("CSV files", "*.csv")])
 
-        if file_path:  # If a file path was selected
+        if file_path:  
             df.to_csv(file_path, index=False)
 
             
@@ -160,8 +170,9 @@ class PlanList(ManageList):
         self.list_type = ['Manage Plans', 'Add New Plan']
         self.list_headers = ['Plan ID', 'Plan Name', 'Region', 'Event Name', 'Description', 'Start Date', 'End Date']
         self.list_data = PlanDataRetrieve.get_plans()
+        self.get_search = PlanDataRetrieve.get_plan
         self.switch_to_page = 'AdminDashboard'
-        self.filter_matching = {'Plan ID': 'id', 'Plan Name': 'name', 'Region': 'region', 'Event Name': 'event name',
+        self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Region': 'region', 'Event Name': 'event name',
                                 'Description': 'description', 'Start Date': 'start date', 'End Date': 'end date'}
         self.export_name = 'Plans'
         self.create_title()
