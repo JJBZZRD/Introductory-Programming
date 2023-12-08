@@ -1,5 +1,5 @@
-from .config import conn, cursor
-from .camp import Camp
+from config import conn, cursor
+from camp import Camp
 
 
 class Refugee:  # Refugee class has attributes matching columns in table
@@ -28,7 +28,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
 
     @staticmethod
     def get_refugee_by_id(refugeeID):  # Get refugee details by selecting on refugeeID. Returns a list of tuples.
-        cursor.execute("SELECT * FROM refugees WHERE refugeeID = ?", (refugeeID,))
+        cursor.execute("SELECT * from refugees WHERE refugeeID = ?", (refugeeID,))
         return [cursor.fetchone()]
 
     @classmethod    # Insert a refugee into the database without creating a new instance
@@ -43,7 +43,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
             cursor.execute(sql, (first_name, last_name, date_of_birth, gender,
                                  familyID, campID, medical_condition, vital_status))
             conn.commit()
-            refugee_id = cursor.execute("SELECT last_insert_rowid() FROM refugees").fetchone()[0]
+            refugee_id = cursor.execute("SELECT last_insert_rowid() from refugees").fetchone()[0]
             return Refugee.get_refugee_by_id(refugee_id)
         else:
             return 'Camp campID does not exist'
@@ -86,7 +86,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
 
     @staticmethod
     def delete_refugee(refugeeID):  # Delete a refugee by selecting on refugeeID
-        cursor.execute("DELETE FROM refugees WHERE refugeeID = ?", (refugeeID,))
+        cursor.execute("DELETE from refugees WHERE refugeeID = ?", (refugeeID,))
         rows_deleted = cursor.rowcount
         conn.commit()
         if rows_deleted > 0:
@@ -130,12 +130,12 @@ class Refugee:  # Refugee class has attributes matching columns in table
             query.append("vital_status = ?")
             params.append(vital_status)
 
-        cursor.execute(f"""SELECT * FROM refugees WHERE {' AND '.join(query)}""", params)
+        cursor.execute(f"""SELECT * from refugees WHERE {' AND '.join(query)}""", params)
         return cursor.fetchall()
 
     @staticmethod
     def get_all_refugees():  # Gets all refugees. Returns a list of tuples.
-        cursor.execute("SELECT * FROM refugees")
+        cursor.execute("SELECT * from refugees")
         return cursor.fetchall()
 
     @staticmethod
@@ -155,5 +155,5 @@ class Refugee:  # Refugee class has attributes matching columns in table
         for campID in campIDs:
             query.append("campID = ?")
             params.append(campID)
-        cursor.execute(f"""SELECT * FROM refugees WHERE {' OR '.join(query)}""", params)
+        cursor.execute(f"""SELECT * from refugees WHERE {' OR '.join(query)}""", params)
         return cursor.fetchall()

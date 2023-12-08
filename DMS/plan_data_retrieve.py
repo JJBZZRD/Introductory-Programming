@@ -1,8 +1,8 @@
-from ..DB.plan import Plan
-from ..DB.refugee import Refugee
-from .. import util
+from plan import Plan
+from refugee import Refugee
+import util
 from datetime import datetime
-from . import logic_util
+import logic_util
 
 
 class PlanDataRetrieve:

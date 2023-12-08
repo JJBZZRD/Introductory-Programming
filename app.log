@@ -260,14 +260,14 @@ INFO:root:
             VALUES ('Soran', 'Test', 'aaa', 'bbb', '1/1/2000', '07511975055', 'Active', 1)
             
 INFO:root:COMMIT
-INFO:root:SELECT last_insert_rowid() FROM volunteers
+INFO:root:SELECT last_insert_rowid() from volunteers
 INFO:root:BEGIN 
 INFO:root:
             INSERT INTO volunteers (
             first_name, last_name, username, password, date_of_birth, phone, account_status, campID) 
             VALUES ('Soran', 'Test', 'aaa', 'bbb', '1/1/2000', '07511975055', 'Active', 1)
             
-INFO:root:SELECT * FROM volunteers
+INFO:root:SELECT * from volunteers
 INFO:root:
     CREATE TABLE IF NOT EXISTS admins(
         adminID INTEGER PRIMARY KEY,

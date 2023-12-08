@@ -1,8 +1,8 @@
-from .UI_header import UIHeader
-from .UI_login import LoginScreen
-from . import UI_dashboard as db
-from . import UI_manage_list as ml
-from . import UI_modify_entries as me
+from UI_header import UIHeader
+from UI_login import LoginScreen
+import UI_dashboard as db
+import UI_manage_list as ml
+import UI_modify_entries as me
 
 class UIManager:
     """

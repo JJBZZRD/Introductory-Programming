@@ -1,4 +1,4 @@
-from .config import conn, cursor
+from config import conn, cursor
 
 
 class Plan:  # Plan class has attributes matching columns in table
@@ -21,7 +21,7 @@ class Plan:  # Plan class has attributes matching columns in table
 
     @staticmethod
     def get_plan_by_id(planID):  # Get plan details by selecting on planID. Returns a list of tuples.
-        cursor.execute("SELECT * FROM plans WHERE planID = ?", (planID,))
+        cursor.execute("SELECT * from plans WHERE planID = ?", (planID,))
         return [cursor.fetchone()]
 
     @classmethod  # Insert a plan into the database
@@ -34,7 +34,7 @@ class Plan:  # Plan class has attributes matching columns in table
             """
         cursor.execute(sql, (start_date, end_date, name, region, event_name, description))
         conn.commit()
-        plan_id = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
+        plan_id = cursor.execute("SELECT last_insert_rowid() from plans").fetchone()[0]
         return Plan.get_plan_by_id(plan_id)
 
 
@@ -70,7 +70,7 @@ class Plan:  # Plan class has attributes matching columns in table
 
     @staticmethod
     def delete_plan(planID):  # Delete a plan by selecting on planID
-        cursor.execute("DELETE FROM plans WHERE planID = ?", (planID,))
+        cursor.execute("DELETE from plans WHERE planID = ?", (planID,))
         rows_deleted = cursor.rowcount
         conn.commit()
         if rows_deleted > 0:
@@ -107,17 +107,17 @@ class Plan:  # Plan class has attributes matching columns in table
             query.append("description LIKE ?")
             params.append(f"{description}%")
 
-        cursor.execute(f"""SELECT * FROM plans WHERE {' AND '.join(query)}""", params)
+        cursor.execute(f"""SELECT * from plans WHERE {' AND '.join(query)}""", params)
         return cursor.fetchall()
 
     @staticmethod
     def get_all_plans():  # Gets all plans. Returns a list of tuples.
-        cursor.execute("SELECT * FROM plans")
+        cursor.execute("SELECT * from plans")
         return cursor.fetchall()
 
     @staticmethod
     def total_resources(planID):
-        from .camp import Camp as pc
+        from camp import Camp as pc
         shelter = []
         food = []
         water = []

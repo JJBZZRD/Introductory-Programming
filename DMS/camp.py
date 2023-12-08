@@ -1,5 +1,5 @@
-from .config import conn, cursor
-from .plan import Plan
+from config import conn, cursor
+from plan import Plan
 
 
 class Camp:  # Camp class has attributes matching columns in table
@@ -26,7 +26,7 @@ class Camp:  # Camp class has attributes matching columns in table
 
     @staticmethod
     def get_camp_by_id(campID):  # Get camp details by selecting on campID. Returns a list of tuples.
-        cursor.execute("SELECT * FROM camps WHERE campID = ?", (campID,))
+        cursor.execute("SELECT * from camps WHERE campID = ?", (campID,))
         return [cursor.fetchone()]
 
     @classmethod  # Insert a camp into the database without creating a new instance
@@ -42,7 +42,7 @@ class Camp:  # Camp class has attributes matching columns in table
             cursor.execute(sql, (location, max_shelter, water, max_water, food,
                                  max_food, medical_supplies, max_medical_supplies, planID))
             conn.commit()
-            camp_id = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
+            camp_id = cursor.execute("SELECT last_insert_rowid() from camps").fetchone()[0]
             return Camp.get_camp_by_id(camp_id)
         else:
             return 'Plan planID does not exist'
@@ -89,7 +89,7 @@ class Camp:  # Camp class has attributes matching columns in table
 
     @staticmethod
     def delete_camp(campID):  # Delete a camp by selecting on campID
-        cursor.execute("DELETE FROM camps WHERE campID = ?", (campID,))
+        cursor.execute("DELETE from camps WHERE campID = ?", (campID,))
         rows_deleted = cursor.rowcount
         conn.commit()
         if rows_deleted > 0:
@@ -137,12 +137,12 @@ class Camp:  # Camp class has attributes matching columns in table
             query.append("planID = ?")
             params.append(planID)
 
-        cursor.execute(f"""SELECT * FROM camps WHERE {' AND '.join(query)}""", params)
+        cursor.execute(f"""SELECT * from camps WHERE {' AND '.join(query)}""", params)
         return cursor.fetchall()
     
     @staticmethod
     def get_all_camps():  # Gets all camps. Returns a list of tuples.
-        cursor.execute("SELECT * FROM camps")
+        cursor.execute("SELECT * from camps")
         return cursor.fetchall()
 
     @staticmethod

@@ -12,7 +12,7 @@ def get_by_planID(planID):
     for campID in campIDs:
         query.append("campID = ?")
         params.append(campID)
-    cursor.execute(f"""SELECT * FROM volunteers WHERE {' OR '.join(query)}""", params)
+    cursor.execute(f"""SELECT * from volunteers WHERE {' OR '.join(query)}""", params)
     return cursor.fetchall()
 
 print(get_by_planID(1))

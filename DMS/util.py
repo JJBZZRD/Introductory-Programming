@@ -1,10 +1,10 @@
 import re
 from datetime import datetime
-from .DB.volunteer import Volunteer
-from .DB.refugee import Refugee
-from .DB.plan import Plan
-from .DB.camp import Camp
-from .DB.countries import *
+from DB.volunteer import Volunteer
+from DB.refugee import Refugee
+from DB.plan import Plan
+from DB.camp import Camp
+from DB.countries import *
 
 def is_phone_format(phone_num):
     phone_pattern = re.compile(r'^\+\d+$')

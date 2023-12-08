@@ -1,7 +1,7 @@
-from ..DB.volunteer import Volunteer
-from ..DB.refugee import Refugee
-from .person_data_retrieve import PersonDataRetrieve
-from .. import util
+from volunteer import Volunteer
+from refugee import Refugee
+from person_data_retrieve import PersonDataRetrieve
+import util
 
 class PersonDataEdit:
 

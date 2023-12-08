@@ -1,11 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
-from ..Logic.camp_data_edit import CampDataEdit
-from ..Logic.plan_data_edit import PlanEdit
-from ..Logic.person_data_edit import PersonDataEdit
-from ..Logic.camp_data_retrieve import CampDataRetrieve
-from ..Logic.plan_data_retrieve import PlanDataRetrieve
-from ..Logic.person_data_retrieve import PersonDataRetrieve
+from camp_data_edit import CampDataEdit
+from plan_data_edit import PlanEdit
+from person_data_edit import PersonDataEdit
+from camp_data_retrieve import CampDataRetrieve
+from plan_data_retrieve import PlanDataRetrieve
+from person_data_retrieve import PersonDataRetrieve
 
 # the name of this class might not explain the functionality very well as its quite an abstraction. This class
 # produces varients of the pages to modfiy camps, plans, refugees, volunteers (and admins as personal details) There

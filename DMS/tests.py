@@ -1,6 +1,6 @@
-from . import config
-from .volunteer import Volunteer
-from .plan import Plan
+import config
+from volunteer import Volunteer
+from plan import Plan
 
 
 

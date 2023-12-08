@@ -1,13 +1,13 @@
 import unittest
 import sqlite3
-from ..person_data_retrieve import *
-from ..person_data_edit import *
-from ..camp_data_retrieve import *
-from ..plan_data_retrieve import *
-from ...DB.config import *
-from ...DB.camp import *
-from ...DB.plan import *
-from ... import util
+from person_data_retrieve import *
+from person_data_edit import *
+from camp_data_retrieve import *
+from plan_data_retrieve import *
+from config import *
+from camp import *
+from plan import *
+import util
 
 class TestVolunteer(unittest.TestCase):
 
@@ -16,7 +16,7 @@ class TestVolunteer(unittest.TestCase):
         print("Setting up resources for the test")
         self.connection = sqlite3.connect(':memory:')
         self.cursor = self.connection.cursor()
-        create_database()
+        # config.create_database()
         sql = """
             INSERT INTO plans (start_date, name) 
             VALUES ('2023-01-01', 'soran unit test plan');
@@ -28,7 +28,7 @@ class TestVolunteer(unittest.TestCase):
         cursor.execute(sql)
         cursor.execute(sql2)
         # conn.commit()
-        camp_id = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
+        camp_id = cursor.execute("SELECT last_insert_rowid() from camps").fetchone()[0]
         camp_tuple = Camp.get_camp_by_id(camp_id)
         camp = util.parse_result('Camp', camp_tuple)[0]
         print(camp.display_info())

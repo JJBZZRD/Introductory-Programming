@@ -193,7 +193,7 @@ def insert_dummy_data():
         SET
             password = '111',
             username = 'volunteer' ||
-                (SELECT rn FROM RankedVolunteers 
+                (SELECT rn from RankedVolunteers 
                 WHERE volunteers.volunteerID = RankedVolunteers.volunteerID);
         """
 

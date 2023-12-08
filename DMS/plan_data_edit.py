@@ -1,6 +1,6 @@
-from ..DB.plan import Plan
+from plan import Plan
 from datetime import datetime
-from . import logic_util
+import logic_util
 
 
 class PlanEdit:

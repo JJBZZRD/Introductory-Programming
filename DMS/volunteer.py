@@ -1,5 +1,5 @@
-from .config import conn, cursor
-from .camp import Camp
+from config import conn, cursor
+from camp import Camp
 
 
 class Volunteer:
@@ -24,7 +24,7 @@ class Volunteer:
 
     @staticmethod
     def get_volunteer_by_id(volunteerID):  # Get volunteer details by selecting on volunteerID. Returns a list of tuples.
-        cursor.execute("SELECT * FROM volunteers WHERE volunteerID = ?", (volunteerID,))
+        cursor.execute("SELECT * from volunteers WHERE volunteerID = ?", (volunteerID,))
         return [cursor.fetchone()]
 
     @classmethod  # Insert a volunteer into the database without creating a new instance
@@ -39,7 +39,7 @@ class Volunteer:
             cursor.execute(sql, (first_name, last_name, username,
                                  password, date_of_birth, phone, "Active", campID))
             conn.commit()
-            volunteer_id = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
+            volunteer_id = cursor.execute("SELECT last_insert_rowid() from volunteers").fetchone()[0]
             return Volunteer.get_volunteer_by_id(volunteer_id)
         else:
             return 'Camp campID does not exist'
@@ -82,7 +82,7 @@ class Volunteer:
 
     @staticmethod
     def delete_volunteer(volunteerID):  # Delete a volunteer by selecting on volunteerID
-        cursor.execute("DELETE FROM volunteers WHERE volunteerID = ?", (volunteerID,))
+        cursor.execute("DELETE from volunteers WHERE volunteerID = ?", (volunteerID,))
         rows_deleted = cursor.rowcount
         conn.commit()
         if rows_deleted > 0:
@@ -125,17 +125,17 @@ class Volunteer:
             query.append("campID = ?")
             params.append(campID)
 
-        cursor.execute(f"""SELECT * FROM volunteers WHERE {' AND '.join(query)}""", params)
+        cursor.execute(f"""SELECT * from volunteers WHERE {' AND '.join(query)}""", params)
         return cursor.fetchall()
     
     @staticmethod
     def get_all_volunteers():  # Gets all volunteers. Returns a list of tuples.
-        cursor.execute("SELECT * FROM volunteers")
+        cursor.execute("SELECT * from volunteers")
         return cursor.fetchall()
 
     @staticmethod  # Returns all usernames of active volunteers only. Perhaps useful for the login.
     def active_volunteer_usernames():
-        sql = "SELECT username FROM volunteers WHERE account_status = 'Active'"
+        sql = "SELECT username from volunteers WHERE account_status = 'Active'"
         cursor.execute(sql)
         return cursor.fetchall()
 
@@ -156,5 +156,5 @@ class Volunteer:
         for campID in campIDs:
             query.append("campID = ?")
             params.append(campID)
-        cursor.execute(f"""SELECT * FROM volunteers WHERE {' OR '.join(query)}""", params)
+        cursor.execute(f"""SELECT * from volunteers WHERE {' OR '.join(query)}""", params)
         return cursor.fetchall()

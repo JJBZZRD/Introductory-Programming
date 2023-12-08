@@ -1,11 +1,11 @@
 import unittest
 import sqlite3
-from ..person_data_retrieve import *
-from ..person_data_edit import *
-from ...DB.config import *
-from ...DB.camp import *
-from ...DB.plan import *
-from ... import util
+from person_data_retrieve import *
+from person_data_edit import *
+from config import *
+from camp import *
+from plan import *
+import util
 
 class TestVolunteer(unittest.TestCase):
 
@@ -27,7 +27,7 @@ class TestVolunteer(unittest.TestCase):
         cursor.execute(sql)
         cursor.execute(sql2)
         # conn.commit()
-        camp_id = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
+        camp_id = cursor.execute("SELECT last_insert_rowid() from camps").fetchone()[0]
         camp_tuple = Camp.get_camp_by_id(camp_id)
         camp = util.parse_result('Camp', camp_tuple)[0]
         print(f'Camp created: {camp.display_info()}')

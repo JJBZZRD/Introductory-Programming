@@ -1,12 +1,12 @@
 import unittest
 import sqlite3
-from ..person_data_retrieve import *
-from ..person_data_edit import *
-from ..plan_data_retrieve import *
-from ..plan_data_edit import *
-from ...DB.config import *
-from ...DB.camp import *
-from ...DB.plan import *
+from person_data_retrieve import *
+from person_data_edit import *
+from plan_data_retrieve import *
+from plan_data_edit import *
+from config import *
+from camp import *
+from plan import *
 
 
 class TestPlan(unittest.TestCase):

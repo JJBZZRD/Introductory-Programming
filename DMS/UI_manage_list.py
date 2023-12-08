@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-from .dummydata import plan1, plan2
-from ..Logic.plan_data_retrieve import PlanDataRetrieve
+from dummydata import plan1, plan2
+from plan_data_retrieve import PlanDataRetrieve
 
 
 class ManageList(tk.Frame):

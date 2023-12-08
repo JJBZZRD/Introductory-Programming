@@ -1,5 +1,5 @@
 import tkinter as tk
-from ..Logic.person_data_retrieve import PersonDataRetrieve
+from person_data_retrieve import PersonDataRetrieve
 
 
 class LoginScreen(tk.Frame):

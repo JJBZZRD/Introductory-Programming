@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 
-from ..Logic.person_data_retrieve import PersonDataRetrieve
-from ..Logic.camp_data_retrieve import CampDataRetrieve
-from ..Logic.camp_data_edit import CampDataEdit
-from ..Logic.plan_data_retrieve import PlanDataRetrieve
+from person_data_retrieve import PersonDataRetrieve
+from camp_data_retrieve import CampDataRetrieve
+from camp_data_edit import CampDataEdit
+from plan_data_retrieve import PlanDataRetrieve
 
 
 class Dashboard(tk.Frame):
