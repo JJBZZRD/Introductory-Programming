@@ -43,7 +43,7 @@ class Plan:  # Plan class has attributes matching columns in table
 
 
     @staticmethod  # Update a plan by selecting on planID
-    def update_plan(planID, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None):
+    def update_plan(planID, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None, water=None, food=None, shelter=None, medical_supplies=None):
 
         query = []
         params = []
@@ -66,7 +66,19 @@ class Plan:  # Plan class has attributes matching columns in table
         if description is not None:
             query.append("description = ?")
             params.append(description)
-
+        if water is not None:
+            query.append("water = ?")
+            params.append(water)
+        if food is not None:
+            query.append("food = ?")
+            params.append(food)
+        if shelter is not None:
+            query.append("shelter = ?")
+            params.append(shelter)
+        if medical_supplies is not None:
+            query.append("medical_supplies = ?")
+            params.append(medical_supplies)
+        
         params.append(planID)
         cursor.execute(f"""UPDATE plans SET {', '.join(query)} WHERE planID = ?""", params)
         conn.commit()

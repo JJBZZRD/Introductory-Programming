@@ -37,12 +37,15 @@ class PlanDataRetrieve:
         if isinstance(plans, list):
 
             current_date = datetime.now()
-            try:
-                plan.end_date = datetime.strptime(plan.end_date, '%d-%m-%Y')
-            except:
-                plan.end_date = datetime.strptime(plan.end_date, '%d/%m/%Y')
+            for plan in plans:
+                if plan.end_date:
+                    try:
+                        plan.end_date = datetime.strptime(plan.end_date, '%d-%m-%Y')
+                    except:
+                        plan.end_date = datetime.strptime(plan.end_date, '%d/%m/%Y')
+
             if active:
-                plans = [plan for plan in plans if plan.end_date > current_date]
+                plans = [plan for plan in plans if (plan.end_date > current_date or not plan.end_date)]
             elif active == None:
                 pass
             else:

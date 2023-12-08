@@ -37,7 +37,11 @@ def create_database():
         name TEXT,
         country TEXT,
         event_name TEXT,
-        description TEXT
+        description TEXT,
+        water INTEGER,
+        food INTEGER,
+        medical_supplies INTEGER,
+        shelter INTEGER
         )
         """
 
