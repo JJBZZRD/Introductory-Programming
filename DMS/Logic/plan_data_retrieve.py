@@ -54,7 +54,9 @@ class PlanDataRetrieve:
         return plans
 
     @staticmethod
-    def get_plan_resources(planID):
+    def get_resources(planID):
+        #return [total_food, total_water, total_shelter, total_medical_supplies]
+        return Plan.get_total_resources(planID)
 
 
 
