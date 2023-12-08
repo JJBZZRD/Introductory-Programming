@@ -59,7 +59,7 @@ class PersonDataEdit:
 
     
     @staticmethod
-    def update_refugee(id, first_name = None, last_name = None, date_of_birth = None, family_id = None, camp_id = None, medical_condition = None):
+    def update_refugee(id, first_name = None, last_name = None, date_of_birth = None, family_id = None, camp_id = None, medical_conditions = None):
         refugee = PersonDataRetrieve.get_refugees('id', id)[0]
         try:
             if first_name:
@@ -73,7 +73,7 @@ class PersonDataEdit:
             if family_id:
                 refugee.familyID = family_id
             if medical_condition:
-                refugee.medical_condition = medical_condition
+                refugee.medical_conditions = medical_condition
         except:
             return "Invalid inputs, please check and try again"
         

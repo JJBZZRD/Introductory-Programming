@@ -95,7 +95,18 @@ class PersonDataRetrieve:
     #         return util.parse_result('Refugee', refugee_tuples)
 
     @staticmethod
-    def get_refugees(id=None, name=None, date_of_birth=None, family_id=None, camp_id=None, medical_condition=None):
-        refugee_tuple_1 = Refugee.get_refugee(refugeeID=id, first_name=name, date_of_birth=date_of_birth, familyID=family_id, campID=camp_id, medical_condition=medical_condition)
-        refugee_tuple_2 = Refugee.get_refugee(refugeeID=id, last_name=name, date_of_birth=date_of_birth, familyID=family_id, campID=camp_id, medical_conditions=medical_condition)
-        return util.parse_results('Refugee', refugee_tuple_1, refugee_tuple_2)
+    def get_refugees(id=None, name=None, date_of_birth=None, gender=None, family_id=None, camp_id=None, triage_category=None, medical_condition=None, vital_status=None):
+        if name:
+            refugee_tuple_1 = Refugee.get_refugee(refugeeID=id, first_name=name, date_of_birth=date_of_birth, gender=gender, familyID=family_id, campID=camp_id, triage_category=triage_category, medical_conditions=medical_condition, vital_status=vital_status)
+
+            refugee_tuple_2 = Refugee.get_refugee(refugeeID=id, last_name=name, date_of_birth=date_of_birth, gender=gender, familyID=family_id, campID=camp_id, triage_category=triage_category, medical_conditions=medical_condition, vital_status=vital_status)
+
+            print(f'refugee1: {refugee_tuple_1}')
+            print(f'refugee2: {refugee_tuple_2}')
+
+            return util.parse_results('Refugee', refugee_tuple_1, refugee_tuple_2)
+        else:
+            refugee_tuple = Refugee.get_refugee(refugeeID=id, first_name=None, last_name=None, date_of_birth=date_of_birth, gender=gender, familyID=family_id, campID=camp_id, triage_category=triage_category, medical_conditions=medical_condition, vital_status=vital_status)
+            print(f'refugee: {refugee_tuple}')
+
+            return util.parse_result('Refugee', refugee_tuple)

@@ -14,9 +14,9 @@ class Refugee:  # Refugee class has attributes matching columns in table
         self.campID = campID
         self.triage_category = triage_category
         self.medical_conditions = medical_conditions
+        self.vital_status = vital_status
         self.age = 0
         self.band = None
-        self.vital_status = vital_status
 
     @classmethod
     def init_from_tuple(cls, refugee_tuple):
@@ -113,10 +113,10 @@ class Refugee:  # Refugee class has attributes matching columns in table
             params.append(refugeeID)
         if first_name is not None:
             query.append("first_name LIKE ?")
-            params.append(f"{first_name}%")
+            params.append(f"%{first_name}%")
         if last_name is not None:
             query.append("last_name LIKE ?")
-            params.append(f"{last_name}%")
+            params.append(f"%{last_name}%")
         if date_of_birth is not None:
             query.append("date_of_birth = ?")
             params.append(date_of_birth)
@@ -134,7 +134,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
             params.append(triage_category)
         if medical_conditions is not None:
             query.append("medical_conditions LIKE ?")
-            params.append(f"{medical_conditions}%")
+            params.append(f"%{medical_conditions}%")
         if vital_status is not None:
             query.append("vital_status = ?")
             params.append(vital_status)

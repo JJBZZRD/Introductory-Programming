@@ -60,8 +60,8 @@ class Family:  # Family class has attributes matching columns in table
     #     if campID is not None:
     #         query.append("campID = ?")
     #         params.append(campID)
-    #     if medical_condition is not None:
-    #         query.append("medical_condition = ?")
+    #     if medical_conditions is not None:
+    #         query.append("medical_conditions = ?")
     #         params.append(medical_condition)
     #     if vital_status is not None:
     #         query.append("vital_status = ?")
@@ -111,8 +111,8 @@ class Family:  # Family class has attributes matching columns in table
         if campID is not None:
             query.append("campID = ?")
             params.append(campID)
-        if medical_condition is not None:
-            query.append("medical_condition LIKE ?")
+        if medical_conditions is not None:
+            query.append("medical_conditions LIKE ?")
             params.append(f"{medical_condition}%")
         if vital_status is not None:
             query.append("vital_status = ?")

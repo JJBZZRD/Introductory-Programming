@@ -59,7 +59,7 @@ class PlanDataRetrieve:
             else: 
                 nutrition_cost += 2
 
-            if refugee.medical_condition is not None:
+            if refugee.medical_conditions is not None:
                 medical_cost += 1
     
         est_food = plan_resources[0]//nutrition_cost
