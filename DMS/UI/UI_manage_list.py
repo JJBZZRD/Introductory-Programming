@@ -176,8 +176,8 @@ class PlanList(ManageList):
         self.list_data = PlanDataRetrieve.get_plans()
         self.get_search = PlanDataRetrieve.get_plan
         self.switch_to_page = 'AdminDashboard'
-        self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Country': 'country', 'Event Name': 'event name',
-                                'Description': 'description', 'Start Date': 'start date', 'End Date': 'end date'}
+        self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Country': 'country', 'Event Name': 'event_name',
+                                'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date'}
         self.export_name = 'Plans'
         self.create_title()
         self.create_search()
