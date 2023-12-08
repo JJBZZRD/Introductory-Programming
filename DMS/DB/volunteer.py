@@ -107,8 +107,8 @@ class Volunteer:
             query.append("last_name LIKE ?")
             params.append(f"{last_name}%")
         if username is not None:
-            query.append("username LIKE ?")
-            params.append(f"{username}%")
+            query.append("username = ?")
+            params.append(username)
         if password is not None:
             query.append("password = ?")
             params.append(password)

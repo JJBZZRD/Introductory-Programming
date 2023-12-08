@@ -1,11 +1,13 @@
 import unittest
 import sqlite3
-from .person_data_retrieve import *
-from .person_data_edit import *
-from ..DB.config import *
-from ..DB.camp import *
-from ..DB.plan import *
-from .. import util
+from ..person_data_retrieve import *
+from ..person_data_edit import *
+from ..camp_data_retrieve import *
+from ..plan_data_retrieve import *
+from ...DB.config import *
+from ...DB.camp import *
+from ...DB.plan import *
+from ... import util
 
 class TestVolunteer(unittest.TestCase):
 
@@ -30,6 +32,11 @@ class TestVolunteer(unittest.TestCase):
         camp_tuple = Camp.get_camp_by_id(camp_id)
         camp = util.parse_result('Camp', camp_tuple)[0]
         print(camp.display_info())
+        sql3 = f"""
+        INSERT INTO refugees (campID, first_name, last_name, date_of_birth)
+        VALUES({camp_id}, 'aaa', 'bbb', '1111-11-11')
+        """
+        cursor.execute(sql3)
 
     def tearDown(self):
         print("Tearing down resources after the test")
@@ -38,11 +45,11 @@ class TestVolunteer(unittest.TestCase):
 
     def test_create_volunteer(self):
         print("Executing test_create_volunteer")
-
-        # vols = PersonDataEdit.create_volunteer('unit test first name', 'unit test last name', '28', 'username', 'password', '2023-1-1', '10123456')
-        
-        # self.assertIsInstance(vols, list, 'vols is not a list')
-        pass
-
+        plan = PlanDataRetrieve.get_plan(name='soran unit test plan')[0]
+        camp = CampDataRetrieve.get_camp(planID=plan.planID)[0]
+        print(camp.display_info())
+        refugee = PersonDataRetrieve.get_refugees(camp_id=camp.campID)[0]
+        print(refugee.display_info())
+        print(Refugee.get_refugee(campID=1))
 if __name__ == '__main__':
     unittest.main()

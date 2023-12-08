@@ -1,6 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
-
+from ..Logic.camp_data_edit import CampDataEdit
+from ..Logic.plan_data_edit import PlanEdit
+from ..Logic.person_data_edit import PersonDataEdit
+from ..Logic.camp_data_retrieve import CampDataRetrieve
+from ..Logic.plan_data_retrieve import PlanDataRetrieve
+from ..Logic.person_data_retrieve import PersonDataRetrieve
 
 # the name of this class might not explain the functionality very well as its quite an abstraction. This class
 # produces varients of the pages to modfiy camps, plans, refugees, volunteers (and admins as personal details) There
@@ -11,12 +16,17 @@ class ModifyEntries(tk.Frame):
         self.root = ui_manager.root
         self.screen_data = ui_manager.screen_data
         self.show_screen = ui_manager.show_screen
+        self.page_nav = ui_manager.page_nav
         self.lower_frame = None
         self.modify_type = None  # this passes the title name information from the subclass to the 'def create_title(self):' method
         self.modifiable_variables: list = []  # this allows the subclass to pass the list of entry names to the ' def create_entry_fields(self):' method
         self.current_data = []  # this information is passed to be displayed in the entry fields only if it is an edit entry variant subclass being called
         self.entry_fields = {}  # this variable creates a dictionary that allows you to extract the values from the entry fields in 'def create_entry_fields(self):'
         self.button_labels = None
+        self.create_record = None
+        self.save_record = None
+        self.delete_record = None
+        self.deactivate_record = None
         self.button_list = {}
         self.setup_modify()
 
@@ -103,9 +113,12 @@ class ModifyEntries(tk.Frame):
                 for key in self.entry_fields:
                     inputs.append(self.entry_fields[key].get())
                 print(tuple(inputs))
+
+                self.save_record(*inputs)
                 # try to update data using the business logic function
 
             case 'Delete':
+
                 # logic for deleting object passed into screen data
 
                 pass
@@ -114,8 +127,14 @@ class ModifyEntries(tk.Frame):
                 # logic for deactivating volunteer account
                 pass
             case 'Create':
+                inputs = []
+                for key in self.entry_fields:
+                    inputs.append(self.entry_fields[key].get())
+                print(tuple(inputs))
 
-                # logic for deactivating volunteer account
+                self.create_record(*inputs)
+                self.page_nav('back')
+                # logic for creating object
                 pass
 
 
@@ -135,9 +154,10 @@ class NewPlan(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Plan']
-        self.modifiable_variables = ['Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
+        self.modifiable_variables = ['Plan Name', 'Event Name', 'Country', 'Description', 'Start Date', 'End Date']
         self.button_labels = ['Create']
         self.current_data = None
+        self.create_record = PlanEdit.create_plan
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
@@ -150,6 +170,8 @@ class EditPlan(ModifyEntries):
         self.modify_type = ['Edit Plan']
         self.modifiable_variables = ['Plan Name', 'Plan Type', 'Region', 'Description', 'Start Date', 'End Date']
         self.button_labels = ['Save Changes', 'Delete']
+        self.current_data = self.screen_data.display_info()
+        self.save_record = PlanEdit.update_plan
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
