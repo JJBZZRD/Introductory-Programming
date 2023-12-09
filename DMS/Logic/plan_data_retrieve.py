@@ -33,7 +33,8 @@ class PlanDataRetrieve:
             start_date = logic_util.validate_date(start_date)
         if end_date:
             end_date = logic_util.validate_date(end_date)
-        
+
+        print(f' ======== [DEBUG] PlanDataRetrieve.get_plan: planID: {planID}, start_date: {start_date}, end_date: {end_date}, name: {name}, country: {country}, event_name: {event_name}, desc: {description} ============ ')
         plan_tuples = Plan.get_plan(planID=planID, start_date=start_date, end_date=end_date, name=name, 
                  country=country, event_name=event_name, description=description)
 

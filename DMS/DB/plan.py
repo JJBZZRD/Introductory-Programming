@@ -95,41 +95,30 @@ class Plan:  # Plan class has attributes matching columns in table
         else:
             print(f"Plan {planID} has not been deleted")
 
-    @staticmethod  # Get plan details by selecting on any combination of attributes. Can be used to find the
-    # planID which can then be used in the delete and update methods. Returns a list of tuples.
+    @staticmethod
     def get_plan(planID=None, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None):
 
-        query = []
-        params = []
+        query = "SELECT * FROM plans WHERE planID IS NOT NULL"
 
         if planID is not None:
-            query.append("planID = ?")
-            params.append(planID)
+            query += f" AND planID = {planID}"
         if start_date is not None:
-            query.append("start_date = ?")
-            params.append(start_date)
+            query += f" AND start_date = '{start_date}'"
         if end_date is not None:
-            query.append("end_date = ?")
-            params.append(end_date)
+            query += f" AND end_date = '{end_date}'"
         if name is not None:
-            query.append("name LIKE ?")
-            params.append(f"%{name}%")
+            query += f" AND name = '{name}'"
         if country is not None:
-            query.append("country = ?")
-            params.append(country)
+            query += f" AND country = '{country}'"
         if event_name is not None:
-            query.append("event_name LIKE ?")
-            params.append(f"%{event_name}%")
+            query += f" AND event_name = '{event_name}'"
         if description is not None:
-            query.append("description LIKE ?")
-            params.append(f"%{description}%")
-        if len(params)==0:
-            q = "SELECT * FROM plans"
-        else:
-            q = f"""SELECT * FROM plans WHERE {' AND '.join(query)}""", params
-        print(q)
-        cursor.execute(q)
+            query += f" AND description = '{description}'"
+
+        # print(query)
+        cursor.execute(query)
         return cursor.fetchall()
+
 
     @staticmethod
     def get_all_plans():  # Gets all plans. Returns a list of tuples.
