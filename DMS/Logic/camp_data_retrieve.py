@@ -165,7 +165,7 @@ class CampDataRetrieve:
                     'num_urgent': num_urgent,
                     'pct_urgent': pct_urgent,
                     'num_very_urgent': num_very_urgent,
-                    'pct_urgent': pct_urgent,
+                    'pct_very_urgent': pct_very_urgent,
                     'num_immediate':  num_immediate,
                     'pct_immediate':  pct_immediate
                 }
