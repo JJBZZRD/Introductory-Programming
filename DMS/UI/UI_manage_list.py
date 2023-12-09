@@ -29,7 +29,7 @@ class ManageList(tk.Frame):
     def setup_list(self):
         raise NotImplementedError("Subclasses should implement this method to setup the different lists")
 
-    def update_results_list(self, filter, searchbar, status=None):
+    def update_results_list(self, filter, searchbar, status=None, **kwargs):
         
         search_text = searchbar
 
@@ -108,13 +108,17 @@ class ManageList(tk.Frame):
             activity_status = ttk.Combobox(self, values=self.status_filters)
             activity_status.set("Status")
             activity_status.grid(column=4, row=2, padx=5)
+            search_button = ttk.Button(self, text='Search',
+                                   command=lambda: self.update_results_list(search_filters.get(), search_bar.get(), status=activity_status.get()))
+        else:
+            search_button = ttk.Button(self, text='Search',
+                                   command=lambda: self.update_results_list(search_filters.get(), search_bar.get()))
 
         search_bar = ttk.Entry(self, width=100)
         search_bar.grid(column=6, row=2, padx=5)
         # search_bar.pack(padx=10, pady=5)
 
-        search_button = ttk.Button(self, text='Search',
-                                   command=lambda: self.update_results_list(search_filters.get(), search_bar.get(), activity_status.get()))
+        
         search_button.grid(column=7, row=2)
         # search_button.pack(side='right', padx=10, pady=5)
 
