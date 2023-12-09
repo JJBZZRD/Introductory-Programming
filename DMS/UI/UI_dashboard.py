@@ -156,9 +156,6 @@ class Dashboard(tk.Frame):
 
     
     def create_camp_refugees_volunteers_section(self, parent_tab, camp, display_type, user_type):
-        print(f"Creating {display_type} section for camp {camp.campID}")
-        
-        # Create a new frame for the current camp
         refugees_volunteers_frame = tk.Frame(parent_tab, bg='white')
         refugees_volunteers_frame.grid(row=1, column=2, sticky="nsew", pady=5)
 
@@ -169,11 +166,10 @@ class Dashboard(tk.Frame):
         double_click_func = self.on_refugee_double_click if display_type == 'refugees' else self.on_volunteer_double_click
 
         refugees_title = tk.Label(refugees_volunteers_frame, text=title_text, font=('Arial', 16, 'bold'))
-        refugees_title.grid(row=0, column=0, sticky="w", pady=10)
+        refugees_title.grid(row=0, column=0, sticky='w',pady=10)
 
-        # Add a button to switch the display type
         switch_button = tk.Button(refugees_volunteers_frame, text="Switch", command=lambda: self.create_camp_refugees_volunteers_section(parent_tab, camp, 'volunteers' if display_type == 'refugees' else 'refugees', user_type))
-        switch_button.grid(row=0, column=0)
+        switch_button.grid(row=0, column=0,)
 
         search_frame = tk.Frame(refugees_volunteers_frame, bg='white')
         search_frame.grid(row=1, column=0, sticky="ew", pady=5)
