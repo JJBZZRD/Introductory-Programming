@@ -8,7 +8,7 @@ class PersonDataRetrieve:
     def login(username, password):
         # Validate the user's cre dentials using the UserDataAccess class
         if username == 'admin':
-            volunteer_tuples = Volunteer.get_volunteer(username=username, password=password)
+            volunteer_tuples = Volunteer.get_volunteer(username=username, password=password, inclue_admin=True)
         else:
             volunteer_tuples = Volunteer.get_volunteer(username=username, password=password, account_status='Active')
         return util.parse_result('Volunteer', volunteer_tuples)
