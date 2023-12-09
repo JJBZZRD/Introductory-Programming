@@ -31,13 +31,13 @@ class Plan:  # Plan class has attributes matching columns in table
 
     @classmethod  # Insert a plan into the database
     def create_plan(cls, plan_tuple):
-        start_date, end_date, name, country, event_name, description = plan_tuple
+        start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter = plan_tuple
         sql = """
             INSERT INTO plans (
-                start_date, end_date, name, country, event_name, description) 
-            VALUES (?, ?, ?, ?, ?, ?)
+                start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
-        cursor.execute(sql, (start_date, end_date, name, country, event_name, description))
+        cursor.execute(sql, (start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter))
         conn.commit()
         plan_id = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
         return Plan.get_plan_by_id(plan_id)

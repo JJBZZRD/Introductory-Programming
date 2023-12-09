@@ -10,7 +10,7 @@ class PlanDataRetrieve:
     @staticmethod
     def get_plans():
         plan_tuples = Plan.get_all_plans()
-        print(f'plan_tuples: {plan_tuples}')
+        # print(f'plan_tuples: {plan_tuples}')
         # [(1, '01/01/2023', '31/12/2024', 'Wylfa Nuclear Meltdown', 'United Kingdom', 'Nuclear Crisis Management', 'Emergency response to nuclear meltdown on Anglesey', None, None, None, None), 
         # (2, '01/01/2023', '31/12/2024', 'London Virus Outbreak', 'United Kingdom', 'Virus Containment Effort', 'Response to widespread virus outbreak in London', None, None, None, None), 
         # (3, '01/01/2023', '31/12/2024', 'Paris Earthquake Response', 'France', 'Earthquake Relief', 'Relief efforts for earthquake in Paris', None, None, None, None)]

@@ -62,6 +62,8 @@ class ModifyEntries(tk.Frame):
 
             if self.current_data is not None and i < len(self.current_data):
                 placeholder = self.current_data[i]
+            elif "Date" in variable:
+                placeholder = f"Enter {variable} in the format yyyy-mm-dd"
             else:
                 placeholder = "Enter " + variable
 

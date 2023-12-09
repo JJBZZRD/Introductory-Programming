@@ -27,19 +27,19 @@ def is_country(value):
 
 def validate_date(date):
     try:
-        date = datetime.strptime(date, '%d%m%Y').date()
+        date = datetime.strptime(date, '%d-%m-%Y').date()
 
         if not 1 <= date.day <= 31:
                 return ValueError("Invalid day")
         elif not 1 <= date.month <= 12:
             return ValueError("Invalid month")
-        elif not 1 <= date.year <= 9999:
+        elif not 2023 <= date.year <= 9999:
             return ValueError("Invalid year")
         
-        return date
+        return True
     
     except ValueError:
-        return "Invalid input"
+        return False
 
 def validate_end_date(start_time, end_time):
     try:
