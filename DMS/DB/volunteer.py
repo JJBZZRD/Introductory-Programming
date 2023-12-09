@@ -95,7 +95,7 @@ class Volunteer:
     def get_volunteer(volunteerID=None, first_name=None, last_name=None, username=None,
                       password=None, date_of_birth=None, phone=None, account_status=None, campID=None):
 
-        query = "SELECT * FROM refugees WHERE refugeeID IS NOT NULL"
+        query = "SELECT * FROM volunteers WHERE volunteerID IS NOT NULL"
         if volunteerID:
             query += f" AND volunteerID = {volunteerID}"
         if first_name:
