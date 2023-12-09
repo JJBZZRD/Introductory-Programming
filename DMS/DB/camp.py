@@ -152,3 +152,13 @@ class Camp:  # Camp class has attributes matching columns in table
             return True
         else:
             return False
+    
+    @staticmethod
+    def get_stats_triage_category(campID):
+        q = f"""SELECT vital_status, triage_category, COUNT(*) * 100.0 / (SELECT COUNT(*) FROM refugees) AS percentage
+                FROM refugees
+                WHERE campID = {campID}
+                GROUP BY triage_category, vital_status"""
+        print(q)
+        cursor.execute(q)
+        return cursor.fetchall()

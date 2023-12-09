@@ -27,7 +27,7 @@ def is_country(value):
 
 def validate_date(date):
     try:
-        date = datetime.strptime(date, '%d-%m-%Y').date()
+        date = datetime.strptime(date, '%Y-%m-%d').date()
 
         if not 1 <= date.day <= 31:
                 return ValueError("Invalid day")

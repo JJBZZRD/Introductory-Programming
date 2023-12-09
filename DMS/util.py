@@ -80,8 +80,8 @@ def validate_date(date):
 #         if not start_time or not end_time:
 #             return "Please enter date"
 
-#         start_time = datetime.strptime(start_time, '%d-%m-%Y').date()
-#         end_time = datetime.strptime(end_time, '%d-%m-%Y').date()
+#         start_time = datetime.strptime(start_time, '%Y-%m-%d').date()
+#         end_time = datetime.strptime(end_time, '%Y-%m-%d').date()
 
 #         for date in [start_time, end_time]:
 #             if not 1 <= date.day <= 31:
@@ -129,5 +129,5 @@ def validate_description(description: str):
 
 # from datetime import datetime
 # date = '08-12-2023'
-# date = datetime.strptime(date, '%d-%m-%Y').date()
+# date = datetime.strptime(date, '%Y-%m-%d').date()
 # print(date)

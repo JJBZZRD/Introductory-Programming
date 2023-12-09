@@ -36,8 +36,6 @@ class TestCamp(unittest.TestCase):
 
         self.assertIsInstance(camp_b, list, "camp_b is not a list")
 
-        pass
-
     def test_get_all_camp(self):
         print("\nExecuting get_all_camps")
     
@@ -46,8 +44,6 @@ class TestCamp(unittest.TestCase):
             print(camp.display_info())
     
         self.assertIsInstance(camp_c, list, "camp_c is not a list")
-    #
-    #     pass
 
     def test_get_camp(self):
         print("\nExecuting get_camp")
@@ -56,8 +52,6 @@ class TestCamp(unittest.TestCase):
 
         self.assertIsInstance(camp_d, list, "camp_d is not a list")
 
-        pass
-
     def test_get_camp_blank(self):
         print("\nExecuting get_camp with blank")
 
@@ -65,17 +59,18 @@ class TestCamp(unittest.TestCase):
 
         self.assertIsInstance(camp_e, list, "camp_e is not a list")
 
-        pass
-
     def test_get_camp_resources(self):
         print("\n --------------------------- Executing get_camp_resources ---------------------")
 
-        camp_f = CampDataRetrieve.get_camp_resources(campID=11)
+        camp_f = CampDataRetrieve.get_camp_resources(campID=1)
         print(camp_f)
 
         self.assertIsInstance(camp_f, list, "camp_f is not a list")
 
-        pass
+    def test_get_stats_triage_category(self):
+        print(" ------------ Executing test_get_stats_triage_category --------------- ")
+        print(CampDataRetrieve.get_stats_triage_category(1))
+
 
 
 if __name__ == '__main__':

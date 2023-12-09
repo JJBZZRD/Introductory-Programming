@@ -106,9 +106,9 @@ class CampDataRetrieve:
             # print(refugee.display_info())
             current_date = datetime.now()
             try:
-                birth_date = datetime.strptime(refugee.date_of_birth, '%d-%m-%Y')
+                birth_date = datetime.strptime(refugee.date_of_birth, '%Y-%m-%d')
             except:
-                birth_date = datetime.strptime(refugee.date_of_birth, '%d/%m/%Y')
+                return f"Invalid date format for refugee: {refugee.refugeeID}, wrong format: {refugee.date_of_birth}"
             age = current_date.year - birth_date.year - (
                     (current_date.month, current_date.day) < (birth_date.month, birth_date.day))
             if age < 18:
@@ -129,3 +129,37 @@ class CampDataRetrieve:
         estimation.append(medicine // cost_med)
 
         return estimation
+
+    @staticmethod
+    def get_stats_triage_category(campID):
+        triage_categories = ['None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate']
+
+        lists = {
+            category: PersonDataRetrieve.get_refugees(camp_id=campID, triage_category=category)
+            for category in triage_categories
+        }
+
+        if all(isinstance(l, list) for l in lists.values()):
+            total_list = lists['None'] + lists['Non-Urgent'] + \
+                         lists['Standard'] + lists['Urgent'] + \
+                         lists['Very-Urgent'] + lists['Immediate']
+            num_total = len(total_list)
+            num_none = len(lists['None'])
+            num_non_urgent = len(lists['Non-Urgent'])
+            num_Standard = len(lists['Standard'])
+            num_very_urgent = len(lists['Very-Urgent'])
+            num_immediate = len(lists['Immediate'])
+            pct_none = (num_none/num_total)*100
+            pct_none = (num_none/num_total)*100
+            pct_none = (num_none/num_total)*100
+            pct_none = (num_none/num_total)*100
+            pct_none = (num_none/num_total)*100
+            res = [num_none, num_total, pct_none]
+        
+        return res
+
+
+        # res = Camp.get_stats_triage_category(campID)
+        # print(res)
+
+CampDataRetrieve.get_stats_triage_category(3)

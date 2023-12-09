@@ -46,7 +46,7 @@ class PlanDataRetrieve:
             for plan in plans:
                 if plan.end_date:
                     try:
-                        plan.end_date_datetime = datetime.strptime(plan.end_date, '%d-%m-%Y')
+                        plan.end_date_datetime = datetime.strptime(plan.end_date, '%Y-%m-%d')
                     except:
                         plan.end_date_datetime = datetime.strptime(plan.end_date, '%d/%m/%Y')
 
@@ -84,9 +84,9 @@ class PlanDataRetrieve:
         for refugee in refugees:
             current_date = datetime.now()
             try:
-                birth_date = datetime.strptime(refugee.date_of_birth, '%d-%m-%Y')
+                birth_date = datetime.strptime(refugee.date_of_birth, '%Y-%m-%d')
             except:
-                birth_date = datetime.strptime(refugee.date_of_birth, '%d/%m/%Y')
+                birth_date = datetime.strptime(refugee.date_of_birth, '%Y/%m/%d')
             refugee.age = current_date.year - birth_date.year - (
                 (current_date.month, current_date.day) < (birth_date.month, birth_date.day))
             if refugee.age < 18:
