@@ -94,38 +94,28 @@ class Volunteer:
     # volunteerID which can then be used in the delete and update methods. Returns a list of tuples.
     def get_volunteer(volunteerID=None, first_name=None, last_name=None, username=None,
                       password=None, date_of_birth=None, phone=None, account_status=None, campID=None):
-        query = []
-        params = []
 
-        if volunteerID is not None:
-            query.append("volunteerID = ?")
-            params.append(volunteerID)
-        if first_name is not None:
-            query.append("first_name LIKE ?")
-            params.append(f"{first_name}")
-        if last_name is not None:
-            query.append("last_name LIKE ?")
-            params.append(f"{last_name}%")
-        if username is not None:
-            query.append("username = ?")
-            params.append(username)
-        if password is not None:
-            query.append("password = ?")
-            params.append(password)
-        if date_of_birth is not None:
-            query.append("date_of_birth = ?")
-            params.append(date_of_birth)
-        if phone is not None:
-            query.append("phone = ?")
-            params.append(phone)
-        if account_status is not None:
-            query.append("account_status = ?")
-            params.append(account_status)
-        if campID is not None:
-            query.append("campID = ?")
-            params.append(campID)
+        query = "SELECT * FROM volunteers WHERE volunteerID IS NOT NULL"
+        if volunteerID:
+            query += f" AND volunteerID = {volunteerID}"
+        if first_name:
+            query += f" AND first_name LIKE '%{first_name}'"
+        if last_name:
+            query += f" AND last_name LIKE '%{last_name}%'"
+        if username:
+            query += f" AND username = '{username}'"
+        if password:
+            query += f" AND password = '{password}'"
+        if date_of_birth:
+            query += f" AND date_of_birth = '{date_of_birth}'"
+        if phone:
+            query += f" AND phone = '{phone}'"
+        if account_status:
+            query += f" AND account_status = '{account_status}'"
+        if campID:
+            query += f" AND campID = {campID}"
 
-        cursor.execute(f"""SELECT * FROM volunteers WHERE {' AND '.join(query)}""", params)
+        cursor.execute(query)
         return cursor.fetchall()
     
     @staticmethod

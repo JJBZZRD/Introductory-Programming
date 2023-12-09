@@ -103,41 +103,29 @@ class Camp:  # Camp class has attributes matching columns in table
     def get_camp(campID=None, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
                  medical_supplies=None, max_medical_supplies=None, planID=None):
 
-        query = []
-        params = []
+        query = "SELECT * FROM camps WHERE campID IS NOT NULL"
+        if campID:
+            query += f" AND campID = {campID}"
+        if location:
+            query += f" AND location LIKE '%{location}%'"
+        if max_shelter:
+            query += f" AND max_shelter = {max_shelter}"
+        if water:
+            query += f" AND water = {water}"
+        if max_water:
+            query += f" AND max_water = {max_water}"
+        if food:
+            query += f" AND food = {food}"
+        if max_food:
+            query += f" AND max_food = {max_food}"
+        if medical_supplies:
+            query += f" AND medical_supplies = {medical_supplies}"
+        if max_medical_supplies:
+            query += f" AND max_medical_supplies = {max_medical_supplies}"
+        if planID:
+            query += f" AND planID = {planID}"
 
-        if campID is not None:
-            query.append("campID = ?")
-            params.append(campID)
-        if location is not None:
-            query.append("location LIKE ?")
-            params.append(f"{location}%")
-        if max_shelter is not None:
-            query.append("max_shelter = ?")
-            params.append(max_shelter)
-        if water is not None:
-            query.append("water = ?")
-            params.append(water)
-        if max_water is not None:
-            query.append("max_water = ?")
-            params.append(max_water)
-        if food is not None:
-            query.append("food = ?")
-            params.append(food)
-        if max_food is not None:
-            query.append("max_food = ?")
-            params.append(max_food)
-        if medical_supplies is not None:
-            query.append("medical_supplies = ?")
-            params.append(medical_supplies)
-        if max_medical_supplies is not None:
-            query.append("max_medical_supplies = ?")
-            params.append(max_medical_supplies)
-        if planID is not None:
-            query.append("planID = ?")
-            params.append(planID)
-
-        cursor.execute(f"""SELECT * FROM camps WHERE {' AND '.join(query)}""", params)
+        cursor.execute(query)
         return cursor.fetchall()
     
     @staticmethod
