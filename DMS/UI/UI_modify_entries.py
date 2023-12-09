@@ -251,11 +251,12 @@ class EditRefugee(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['View/Edit Refugee']
-        self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Family ID', 'Camp ID',
-                                     'Medical Condition']
+        self.modifiable_variables = ['Refugee ID', 'First Name', 'Last Name',
+                'Date of_Birth', 'Gender', 'Family ID',
+                'Camp ID', 'Triage Category', 'Medical Conditions',
+                'Vital Status']
         self.button_labels = ['Save Changes', 'Delete']
-        self.current_data = [self.screen_data.first_name, self.screen_data.last_name, self.screen_data.date_of_birth,
-                             self.screen_data.familyID, self.screen_data.campID, self.screen_data.medical_condition]
+        self.current_data = self.screen_data.display_info()
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
@@ -268,7 +269,7 @@ class EditPersonalDetails(ModifyEntries):
         self.modify_type = ['Edit Personal Details']
         self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
-        self.button_labels = ['Save Changes', 'Delete', 'Deactivate']
+        self.button_labels = ['Save Changes']#, 'Delete', 'Deactivate']
         self.current_data = self.logged_in_user.display_info()
         self.entry_fields = {}
         self.create_title()
