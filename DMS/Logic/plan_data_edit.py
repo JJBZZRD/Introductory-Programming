@@ -21,7 +21,7 @@ class PlanEdit:
         if not util.validate_date(start_date):
             print(f" =============== plan_data_edit.create_plan() ERROR: Invalid date format for start_date: {start_date} has to be yyyy-mm-dd =========")
             return "Invalid date format for start_date: has to be yyyy-mm-dd"
-        if end_date and end_date != "Enter End Date in the format yyyy-mm-dd":
+        if end_date and (end_date not in ["Enter End Date in the format yyyy-mm-dd", '', ' ']):
             if not util.validate_end_date(start_date, end_date):
                 print(f" =============== plan_data_edit.create_plan() ERROR: Invalid end_date: {end_date} has to be in yyyy-mm-dd and greater than start_date =========")
                 return "Invalid date format for start_date: has to be yyyy-mm-dd"
