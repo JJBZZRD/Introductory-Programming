@@ -100,19 +100,19 @@ class Plan:  # Plan class has attributes matching columns in table
 
         query = "SELECT * FROM plans WHERE planID IS NOT NULL"
 
-        if planID is not None:
+        if planID:
             query += f" AND planID = {planID}"
-        if start_date is not None:
+        if start_date:
             query += f" AND start_date = '{start_date}'"
-        if end_date is not None:
+        if end_date:
             query += f" AND end_date = '{end_date}'"
-        if name is not None:
+        if name:
             query += f" AND name LIKE '%{name}%'"
-        if country is not None:
+        if country:
             query += f" AND country = '{country}'"
-        if event_name is not None:
+        if event_name:
             query += f" AND event_name LIKE '%{event_name}%'"
-        if description is not None:
+        if description:
             query += f" AND description LIKE '%{description}%'"
 
         # print(query)

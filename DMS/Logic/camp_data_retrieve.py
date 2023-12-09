@@ -192,17 +192,22 @@ class CampDataRetrieve:
     def get_stats_gender(campID):
         list_male = PersonDataRetrieve.get_refugees(camp_id=campID, gender='Male')
         list_female = PersonDataRetrieve.get_refugees(camp_id=campID, gender='Female')
+        list_other = PersonDataRetrieve.get_refugees(camp_id=campID, gender='Other')
         if isinstance(list_male, list) and isinstance(list_female, list):
             num_male = len(list_male)
             num_female = len(list_female)
-            num_total = num_female + num_male
+            num_other = len(list_other)
+            num_total = num_female + num_male + num_other
             pct_male = (num_male/num_total)*100
             pct_female = (num_female/num_total)*100
+            pct_other = (num_other/num_total)*100
             stats = {
                 'num_male':num_male,
                 'pct_male':pct_male,
                 'num_female':num_female,
-                'pct_female':pct_female
+                'pct_female':pct_female,
+                'num_other':num_other,
+                'pct_other':pct_other
             }
         else:
             stats = "There is an error"
@@ -274,3 +279,22 @@ class CampDataRetrieve:
             stats = str(e)
         return stats
 
+    @staticmethod
+    def get_stats_vital_status(campID):
+        deads = PersonDataRetrieve.get_refugees(camp_id=campID, vital_status='Deceased')
+        alives = PersonDataRetrieve.get_refugees(camp_id=campID, vital_status='Alive')
+        if isinstance(deads, list) and isinstance(alives, list):
+            num_dead = len(deads)
+            num_alive = len(alives)
+            num_total = num_alive + num_dead
+            pct_dead = (num_dead/num_total)*100
+            pct_alive = (num_alive/num_total)*100
+            stats = {
+                'num_dead':num_dead,
+                'pct_dead':pct_dead,
+                'num_alive':num_alive,
+                'pct_alive':pct_alive
+            }
+        else:
+            stats = "An error occured"
+        return stats

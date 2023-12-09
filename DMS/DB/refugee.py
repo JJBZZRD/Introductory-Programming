@@ -105,41 +105,30 @@ class Refugee:  # Refugee class has attributes matching columns in table
     def get_refugee(refugeeID=None, first_name=None, last_name=None, date_of_birth=None, gender=None,
                     familyID=None, campID=None, triage_category=None, medical_conditions=None,
                     vital_status=None):
-        query = []
-        params = []
+        query = "SELECT * FROM refugees WHERE refugeeID IS NOT NULL"
 
-        if refugeeID is not None:
-            query.append("refugeeID = ?")
-            params.append(refugeeID)
-        if first_name is not None:
-            query.append("first_name LIKE ?")
-            params.append(f"%{first_name}%")
-        if last_name is not None:
-            query.append("last_name LIKE ?")
-            params.append(f"%{last_name}%")
-        if date_of_birth is not None:
-            query.append("date_of_birth = ?")
-            params.append(date_of_birth)
-        if gender is not None:
-            query.append("gender = ?")
-            params.append(gender)
-        if familyID is not None:
-            query.append("familyID = ?")
-            params.append(familyID)
-        if campID is not None:
-            query.append("campID = ?")
-            params.append(campID)
-        if triage_category is not None:
-            query.append("triage_category = ?")
-            params.append(triage_category)
-        if medical_conditions is not None:
-            query.append("medical_conditions LIKE ?")
-            params.append(f"%{medical_conditions}%")
-        if vital_status is not None:
-            query.append("vital_status = ?")
-            params.append(vital_status)
+        if refugeeID:
+            query += f" AND refugeeID = {refugeeID}"
+        if first_name:
+            query += f" AND first_name LIKE "%{first_name}%""
+        if last_name:
+            query += f" AND last_name LIKE '%{last_name}%'" 
+        if date_of_birth:
+            query += f" AND date_of_birth = '{date_of_birth}'" 
+        if gender:
+            query += f" AND gender = '{gender}'" 
+        if familyID:
+            query += f" AND familyID = {familyID}"
+        if campID:
+            query += f" AND campID = {campID}"
+        if triage_category:
+            query += f" AND triage_category = '{triage_category}'"
+        if medical_conditions:
+            query += f" AND medical_conditions LIKE '%{medical_conditions}%'"
+        if vital_status:
+            query += f" AND vital_status = '{vital_status}'" 
 
-        cursor.execute(f"""SELECT * FROM refugees WHERE {' AND '.join(query)}""", params)
+        cursor.execute(query)
         return cursor.fetchall()
 
     @staticmethod
