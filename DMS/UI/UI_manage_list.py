@@ -114,7 +114,7 @@ class ManageList(tk.Frame):
         # search_bar.pack(padx=10, pady=5)
 
         search_button = ttk.Button(self, text='Search',
-                                   command=lambda: self.update_results_list(search_filters.get(), search_bar.get()))
+                                   command=lambda: self.update_results_list(search_filters.get(), search_bar.get(), activity_status.get()))
         search_button.grid(column=7, row=2)
         # search_button.pack(side='right', padx=10, pady=5)
 
