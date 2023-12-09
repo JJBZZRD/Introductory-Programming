@@ -219,7 +219,7 @@ class CampDataRetrieve:
         if isinstance(refugees, list):
             num_total = len(refugees)
             if num_total > 0: 
-                num_child, num_adult, num_elders = 0
+                num_child = num_adult = num_elders = 0
                 for refugee in refugees:
                     current_date = datetime.now()
                     try:
