@@ -151,7 +151,10 @@ class ModifyEntries(tk.Frame):
                 self.page_nav('back')
                 # logic for creating object
                 pass
+            case 'End':
 
+                # logic for ending a plan
+                pass
 
         # takes the entry field values
 
@@ -184,7 +187,7 @@ class EditPlan(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Plan']
         self.modifiable_variables = ['Plan ID', 'Plan Name', 'Event Name', 'Country', 'Description', 'Start Date', 'End Date']
-        self.button_labels = ['Save Changes', 'Delete']
+        self.button_labels = ['Save Changes', 'End', 'Delete']
         self.current_data = self.screen_data.display_info()
         self.save_record = PlanEdit.update_plan
         self.entry_fields = {}
