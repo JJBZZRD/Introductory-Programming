@@ -128,7 +128,7 @@ class ManageList(tk.Frame):
         # this lets us change the header values depending on what are being passed
         for i in self.list_headers:
             self.results_list.heading(i, text=i)
-            self.results_list.column(i, anchor='center')
+            self.results_list.column(i, anchor='center', width=int(1000/len(self.list_headers)))
 
         # self.tree_item_to_object = {}
 
@@ -139,11 +139,20 @@ class ManageList(tk.Frame):
 
         # print("Tree items to objects:", self.tree_item_to_object)
 
-        # Bind double-click event
+        
         self.results_list.bind('<Double-1>', lambda event: self.on_item_double_click(event))
 
-        # Place the Treeview on the grid
-        self.results_list.grid(column=0, row=3, columnspan=13)
+        
+        self.results_list.grid(column=0, row=3, columnspan=12, sticky='nsew')
+
+        scrollbar = ttk.Scrollbar(self, orient='vertical', command=self.results_list.yview)
+        scrollbar.grid(column=12, row=3, sticky='ns')
+
+        
+        self.results_list.configure(yscrollcommand=scrollbar.set)
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(3, weight=1)
 
         # print("Tree items to objects:", self.tree_item_to_object)
 

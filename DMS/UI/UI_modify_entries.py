@@ -17,6 +17,7 @@ class ModifyEntries(tk.Frame):
         self.screen_data = ui_manager.screen_data
         self.show_screen = ui_manager.show_screen
         self.page_nav = ui_manager.page_nav
+        self.logged_in_user = ui_manager.logged_in_user
         self.lower_frame = None
         self.modify_type = None  # this passes the title name information from the subclass to the 'def create_title(self):' method
         self.modifiable_variables: list = []  # this allows the subclass to pass the list of entry names to the ' def create_entry_fields(self):' method
@@ -199,8 +200,7 @@ class EditCamp(ModifyEntries):
         self.modify_type = ['Edit Camp']
         self.modifiable_variables = ['Location', 'Shelter', 'Water Level', 'Food Level',
                                      'Medical supply']
-        self.current_data = [self.screen_data.location, self.screen_data.shelter, self.screen_data.water,
-                             self.screen_data.food, self.screen_data.medical_supplies]
+        self.current_data = self.screen_data.display_info()
         self.button_labels = ['Save Changes', 'Delete']
         self.entry_fields = {}
         self.create_title()
@@ -227,7 +227,7 @@ class EditVolunteer(ModifyEntries):
         self.modify_type = ['Edit Volunteer']
         self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp']
         self.button_labels = ['Save Changes', 'Deactivate']
-        self.current_data = ['JJ', 'Buzzard', '24/03/1997', '07780364693', 'camp1']
+        self.current_data = self.screen_data.display_info()
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
@@ -266,10 +266,10 @@ class EditPersonalDetails(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Personal Details']
-        self.modifiable_variables = ['First Name', 'Last Name', 'User Name', 'Date of Birth', 'Phone Number']
+        self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
+                'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
         self.button_labels = ['Save Changes', 'Delete', 'Deactivate']
-        self.current_data = [self.screen_data.first_name, self.screen_data.last_name, self.screen_data.username,
-                             self.screen_data.date_of_birth, self.screen_data.phone]
+        self.current_data = self.logged_in_user.display_info()
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
