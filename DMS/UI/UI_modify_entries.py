@@ -6,6 +6,7 @@ from ..Logic.person_data_edit import PersonDataEdit
 from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 from ..Logic.person_data_retrieve import PersonDataRetrieve
+from ..DB.countries import get_all_countries
 
 # the name of this class might not explain the functionality very well as its quite an abstraction. This class
 # produces varients of the pages to modfiy camps, plans, refugees, volunteers (and admins as personal details) There
@@ -30,6 +31,7 @@ class ModifyEntries(tk.Frame):
         self.deactivate_record = None
         self.button_list = {}
         self.button_column = None
+        self.fields_to_be_dropdown = {'Country': get_all_countries()}
         self.setup_modify()
 
     def setup_modify(self):
@@ -52,20 +54,28 @@ class ModifyEntries(tk.Frame):
 
         k = 1
         j = 0
-        for i, variable in enumerate(
-                self.modifiable_variables):  # this loop creates a vertical list of columns that is 4 high maximum
-            entry_name = ttk.Label(self.lower_frame, text=variable)
-            entry_name.grid(column=k, row=j, pady=5, padx=5)
+        for i, variable in enumerate(self.modifiable_variables):  # this loop creates a vertical list of columns that is 4 high maximum
+            if variable in self.fields_to_be_dropdown:
+                entry_name = ttk.Label(self.lower_frame, text=variable)
+                entry_name.grid(column=k, row=j, pady=5, padx=5)
 
-            entry_field = ttk.Entry(self.lower_frame)
-            entry_field.grid(column=k + 1, row=j, pady=5, padx=5)
+                drop_down = ttk.Combobox(self.lower_frame, values=self.fields_to_be_dropdown[variable], state='readonly')
+                drop_down.set(self.fields_to_be_dropdown[variable][0])
+                drop_down.grid(column=k + 1, row=j, pady=5, padx=5)
+                self.entry_fields.update({variable: drop_down})
+            else:
+                entry_name = ttk.Label(self.lower_frame, text=variable)
+                entry_name.grid(column=k, row=j, pady=5, padx=5)
 
-            self.entry_fields.update({variable: entry_field})
+                entry_field = ttk.Entry(self.lower_frame)
+                entry_field.grid(column=k + 1, row=j, pady=5, padx=5)
+
+                self.entry_fields.update({variable: entry_field})
 
             if self.current_data is not None and i < len(self.current_data):
                 placeholder = self.current_data[i]
             elif "Date" in variable:
-                placeholder = f"Enter {variable} in the format yyyy-mm-dd"
+                placeholder = "yyyy-mm-dd"
             else:
                 placeholder = "Enter " + variable
 
@@ -173,7 +183,7 @@ class EditPlan(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Plan']
-        self.modifiable_variables = ['Plan Name', 'Plan Type', 'Country', 'Description', 'Start Date', 'End Date']
+        self.modifiable_variables = ['Plan ID', 'Plan Name', 'Event Name', 'Country', 'Description', 'Start Date', 'End Date']
         self.button_labels = ['Save Changes', 'Delete']
         self.current_data = self.screen_data.display_info()
         self.save_record = PlanEdit.update_plan
@@ -187,8 +197,8 @@ class NewCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Camp']
-        self.modifiable_variables = ['Camp Name', 'Refugees', 'Volunteers', 'Water Level', 'Food Level',
-                                     'Medical supply']
+        self.modifiable_variables = ['Camp ID', 'Country', 'Max Shelter', 'Water', 'Max Water', 'Food', 'Max_Food',
+                             'Medical Supplies', 'Max Medical Supplies', 'Plan ID']
         self.button_labels = ['Create']
         self.entry_fields = {}
         self.create_title()
@@ -200,8 +210,8 @@ class EditCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Camp']
-        self.modifiable_variables = ['Location', 'Shelter', 'Water Level', 'Food Level',
-                                     'Medical supply']
+        self.modifiable_variables = ['Camp ID', 'Country', 'Max Shelter', 'Water', 'Max Water', 'Food', 'Max_Food',
+                             'Medical Supplies', 'Max Medical Supplies', 'Plan ID']
         self.current_data = self.screen_data.display_info()
         self.button_labels = ['Save Changes', 'Delete']
         self.entry_fields = {}
