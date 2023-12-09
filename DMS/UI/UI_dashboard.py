@@ -58,23 +58,52 @@ class Dashboard(tk.Frame):
         return statistics_frame
 
     def populate_statistics_section(self, statistics_frame, camp):
-        def get_number_of_families():
-            return 0
+        campID = camp.campID 
 
-        def get_average_age():
-            return 0
+        triage_stats = CampDataRetrieve.get_stats_triage_category(campID)
+        gender_stats = CampDataRetrieve.get_stats_gender(campID)
+        age_stats = CampDataRetrieve.get_stats_age(campID)
+        family_stats = CampDataRetrieve.get_stats_family(campID)
+        vital_status_stats = CampDataRetrieve.get_stats_vital_status(campID)
 
-        def get_number_of_dead():
-            return 0
+        row = 1
+        tk.Label(statistics_frame, text="Triage Categories:").grid(row=row, column=0, sticky="w")
+        row += 1
+        for category in ['None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate']:
+            if isinstance(triage_stats, dict):
+                tk.Label(statistics_frame, text=f"{category}:").grid(row=row, column=0, sticky="w")
+                tk.Label(statistics_frame, text=str(triage_stats.get(f'num_{category.lower().replace("-", "_")}', 0))).grid(row=row, column=1)
+                row += 1
 
-        tk.Label(statistics_frame, text="Number of families:").grid(row=1, column=0, sticky="w")
-        tk.Label(statistics_frame, text=str(get_number_of_families())).grid(row=1, column=1)
+        tk.Label(statistics_frame, text="Gender Stats:").grid(row=row, column=0, sticky="w")
+        row += 1
+        for gender in ['Male', 'Female', 'Other']:
+            if isinstance(gender_stats, dict):
+                tk.Label(statistics_frame, text=f"{gender}:").grid(row=row, column=0, sticky="w")
+                tk.Label(statistics_frame, text=str(gender_stats.get(f'num_{gender.lower()}', 0))).grid(row=row, column=1)
+                row += 1
 
-        tk.Label(statistics_frame, text="Average age:").grid(row=2, column=0, sticky="w")
-        tk.Label(statistics_frame, text=str(get_average_age())).grid(row=2, column=1)
+        if isinstance(age_stats, dict):
+            tk.Label(statistics_frame, text="Age Groups:").grid(row=row, column=0, sticky="w")
+            row += 1
+            for age_group in ['Child', 'Adult', 'Elders']:
+                tk.Label(statistics_frame, text=f"{age_group}:").grid(row=row, column=0, sticky="w")
+                tk.Label(statistics_frame, text=str(age_stats.get(f'num_{age_group.lower()}', 0))).grid(row=row, column=1)
+                row += 1
 
-        tk.Label(statistics_frame, text="Dead:").grid(row=3, column=0, sticky="w")
-        tk.Label(statistics_frame, text=str(get_number_of_dead())).grid(row=3, column=1)
+        if isinstance(family_stats, dict):
+            tk.Label(statistics_frame, text="Family Stats:").grid(row=row, column=0, sticky="w")
+            tk.Label(statistics_frame, text=str(family_stats.get('num_families', 0))).grid(row=row, column=1)
+            row += 1
+
+        if isinstance(vital_status_stats, dict):
+            tk.Label(statistics_frame, text="Vital Status:").grid(row=row, column=0, sticky="w")
+            row += 1
+            for status in ['Alive', 'Dead']:
+                tk.Label(statistics_frame, text=f"{status}:").grid(row=row, column=0, sticky="w")
+                tk.Label(statistics_frame, text=str(vital_status_stats.get(f'num_{status.lower()}', 0))).grid(row=row, column=1)
+                row += 1
+
 
     def create_resources_section(self, parent_tab, camp, plan, user_type):
         
@@ -326,6 +355,10 @@ class AdminDashboard(Dashboard):
         title_label = tk.Label(title_frame, text=plan_details, font=('Arial', 16, 'bold'), bg='white')
         title_label.pack(side='left', padx=10)
         title_label.place(relx=0.5, rely=0.5, anchor='center')
+
+        edit_button = ttk.Button(title_frame, text="Edit Plan", style='TButton', 
+                                command=lambda: self.show_screen('EditPlan',plan))
+        edit_button.pack(side='right', padx=10)
 
     def setup_plan_statistics_tab(self):
         stats_tab = ttk.Frame(self.tab_control)
