@@ -9,9 +9,9 @@ def clear_dummy_data():
 def insert_dummy_data():
     plans_data = """
     INSERT INTO plans (planID, start_date, end_date, name, country, event_name, description) VALUES
-    (1, '01/01/2023', '31/12/2024', 'Wylfa Nuclear Meltdown', 'United Kingdom', 'Nuclear Crisis Management', 'Emergency response to nuclear meltdown on Anglesey'),
-    (2, '01/01/2023', '31/12/2024', 'London Virus Outbreak', 'United Kingdom', 'Virus Containment Effort', 'Response to widespread virus outbreak in London'),
-    (3, '01/01/2023', '31/12/2024', 'Paris Earthquake Response', 'France', 'Earthquake Relief', 'Relief efforts for earthquake in Paris');
+    (1, '2023-01-01', '2025-01-01', 'Wylfa Nuclear Meltdown', 'United Kingdom', 'Nuclear Crisis Management', 'Emergency response to nuclear meltdown on Anglesey'),
+    (2, '2023-01-01', '2025-01-01', 'London Virus Outbreak', 'United Kingdom', 'Virus Containment Effort', 'Response to widespread virus outbreak in London'),
+    (3, '2023-01-01', '2025-01-01', 'Paris Earthquake Response', 'France', 'Earthquake Relief', 'Relief efforts for earthquake in Paris');
     """
 
     cursor.execute(plans_data)
