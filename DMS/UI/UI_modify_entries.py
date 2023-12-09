@@ -29,6 +29,7 @@ class ModifyEntries(tk.Frame):
         self.delete_record = None
         self.deactivate_record = None
         self.button_list = {}
+        self.button_column = None
         self.setup_modify()
 
     def setup_modify(self):
@@ -77,6 +78,7 @@ class ModifyEntries(tk.Frame):
                 j = -1
 
             j += 1
+            self.button_column = k + 2
 
     def on_focus_in(self, event, entry, placeholder):
         if entry.get() == placeholder:
@@ -95,7 +97,7 @@ class ModifyEntries(tk.Frame):
         #
         for i, button in enumerate(self.button_labels):
             new_button = ttk.Button(self.lower_frame, text=button, command=lambda b=button: self.button_click_function(b))
-            new_button.grid(column=5, row=4-i, padx=5, pady=5)
+            new_button.grid(column=self.button_column, row=4-i, padx=5, pady=5)
             self.button_list.update({button: new_button})
 
         spacer_button = ttk.Button(self.lower_frame, text=self.button_labels[0])
