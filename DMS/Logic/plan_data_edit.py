@@ -1,4 +1,5 @@
 from ..DB.plan import Plan
+from ..DB.countries import *
 from datetime import datetime
 from .. import util
 
@@ -13,6 +14,9 @@ class PlanEdit:
 
             if not isinstance(attr, str):
                 return "Please provide the correct input type for {}".format(attr)
+
+        if country not in get_all_countries():
+            return "Please enter a valid country"
 
         if not util.validate_date(start_date):
             print(f" =============== plan_data_edit.create_plan() ERROR: Invalid date format for start_date: {start_date} has to be yyyy-mm-dd =========")
