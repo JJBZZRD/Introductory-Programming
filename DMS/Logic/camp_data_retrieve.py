@@ -82,7 +82,7 @@ class CampDataRetrieve:
 
     @staticmethod
     def get_camp_resources(campID):
-        estimation = []
+        estimation = {}
         resources_name = ['water', 'food']
         refugees = PersonDataRetrieve.get_refugees(camp_id=campID)
         # if len(refugees) >0:
@@ -123,22 +123,20 @@ class CampDataRetrieve:
 
         for resource in resources_name:
             value = getattr(camp, resource)  # value = camp.water
-            estimation.append(value // cost)
+            estimation[resource.capitalize()] = (value // cost)
 
         medicine = getattr(camp, 'medical_supplies')
-        estimation.append(medicine // cost_med)
+        estimation['Medical Supplies'] = (medicine // cost_med)
 
         return estimation
 
     @staticmethod
     def get_stats_triage_category(campID):
         triage_categories = ['None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate']
-
         lists = {
             category: PersonDataRetrieve.get_refugees(camp_id=campID, triage_category=category)
             for category in triage_categories
         }
-
         if all(isinstance(l, list) for l in lists.values()):
             total_list = lists['None'] + lists['Non-Urgent'] + \
                          lists['Standard'] + lists['Urgent'] + \
@@ -146,20 +144,54 @@ class CampDataRetrieve:
             num_total = len(total_list)
             num_none = len(lists['None'])
             num_non_urgent = len(lists['Non-Urgent'])
-            num_Standard = len(lists['Standard'])
+            num_standard = len(lists['Standard'])
+            num_urgent = len(lists['Urgent'])
             num_very_urgent = len(lists['Very-Urgent'])
             num_immediate = len(lists['Immediate'])
             pct_none = (num_none/num_total)*100
-            pct_none = (num_none/num_total)*100
-            pct_none = (num_none/num_total)*100
-            pct_none = (num_none/num_total)*100
-            pct_none = (num_none/num_total)*100
-            res = [num_none, num_total, pct_none]
-        
-        return res
+            pct_non_urgent = (num_non_urgent/num_total)*100
+            pct_standard = (num_standard/num_total)*100
+            pct_very_urgent = (num_very_urgent/num_total)*100
+            pct_urgent = (num_urgent/num_total)*100
+            pct_immediate = (num_immediate/num_total)*100
+            stats = {
+                'num_none': num_none,
+                'pct_none': pct_none,
+                'num_non_urgent': num_non_urgent,
+                'pct_non_urgent': pct_non_urgent,
+                'num_standard': num_standard,
+                'pct_standard': pct_standard,
+                'num_urgent': num_urgent,
+                'pct_urgent': pct_urgent,
+                'num_very_urgent': num_very_urgent,
+                'pct_urgent': pct_urgent,
+                'num_immediate':  num_immediate,
+                'pct_immediate':  pct_immediate
+            }
+        else:
+            stats = "There is an error"
+        return stats
 
-
-        # res = Camp.get_stats_triage_category(campID)
-        # print(res)
-
-CampDataRetrieve.get_stats_triage_category(3)
+    @staticmethod
+    def get_stats_gender(campID):
+        list_male = PersonDataRetrieve.get_refugees(camp_id=campID, gender='Male')
+        list_female = PersonDataRetrieve.get_refugees(camp_id=campID, gender='Female')
+        if isinstance(list_male, list) and isinstance(list_female, list):
+            num_male = len(list_male)
+            num_female = len(list_female)
+            num_total = num_female + num_male
+            pct_male = (num_male/num_total)*100
+            pct_female = (num_female/num_total)*100
+            stats = {
+                'num_male':num_male,
+                'pct_male':pct_male,
+                'num_female':num_female,
+                'pct_female':pct_female
+            }
+        else:
+            stats = "There is an error"
+        return stats 
+    
+    @staticmethod
+    def get_stats_age(campID):
+        refugees = PersonDataRetrieve.get_refugees(camp_id=campID)

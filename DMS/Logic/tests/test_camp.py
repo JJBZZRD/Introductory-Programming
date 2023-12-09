@@ -62,10 +62,10 @@ class TestCamp(unittest.TestCase):
     def test_get_camp_resources(self):
         print("\n --------------------------- Executing get_camp_resources ---------------------")
 
-        camp_f = CampDataRetrieve.get_camp_resources(campID=1)
-        print(camp_f)
+        resources = CampDataRetrieve.get_camp_resources(campID=1)
+        print(resources)
 
-        self.assertIsInstance(camp_f, list, "camp_f is not a list")
+        self.assertIsInstance(resources, dict, "resources is not a dict")
 
     def test_get_stats_triage_category(self):
         print(" ------------ Executing test_get_stats_triage_category --------------- ")
