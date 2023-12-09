@@ -193,9 +193,8 @@ class Dashboard(tk.Frame):
 
         update_list_func(camp, search_entry, refugees_treeview)
 
-        if user_type == 'admin' or (user_type == 'volunteer' and display_type == 'volunteers'):
-            manage_button = ttk.Button(refugees_volunteers_frame, text=f"Manage {display_type.capitalize()}", command=lambda: self.show_screen(manage_screen, camp))
-            manage_button.grid(row=3, column=0, pady=5)
+        manage_button = ttk.Button(refugees_volunteers_frame, text=f"Manage {display_type.capitalize()}", command=lambda: self.show_screen(manage_screen, camp))
+        manage_button.grid(row=3, column=0, pady=5)
 
         return refugees_volunteers_frame
 
@@ -210,7 +209,6 @@ class Dashboard(tk.Frame):
             refugees_treeview.insert("", "end", text="No matching refugees found.")
         else:
             for refugee in self.refugees:
-                print(refugee.__dict__) 
                 refugees_treeview.insert("", "end", text=refugee.refugeeID, values=(f"{refugee.first_name} {refugee.last_name}", refugee.triage_category))
     
     def on_refugee_double_click(self, _, treeview):
@@ -263,23 +261,19 @@ class AdminDashboard(Dashboard):
     """
 
     def setup_dashboard(self, plan):
-        # Assuming admin has access to all camps or specific camps
         self.plan = plan
-        self.planCamps = CampDataRetrieve.get_all_camps()  # or a filtered list based on admin access
+        
+        self.planCamps = CampDataRetrieve.get_all_camps()  
 
         self.tab_control = ttk.Notebook(self)
 
-        # Set up individual tabs
         self.create_admin_tabs()
 
         self.tab_control.pack(expand=1, fill="both")
 
     def create_admin_tabs(self):
-        # Setup for camp tabs
-
-
-        # Setup for additional tabs
         self.setup_distribute_resources_tab()
+        
         self.setup_plan_statistics_tab()
         
         self.setup_camp_tabs()
@@ -302,23 +296,19 @@ class AdminDashboard(Dashboard):
         addition_resources_frame = ttk.Frame(distribute_tab)
         ttk.Label(addition_resources_frame, text="Addition Resources Placeholder").pack()
 
-        # Scrollable Canvas for Camp Resources
-        camp_resources_canvas = tk.Canvas(distribute_tab)
+    # Scrollable Canvas for Camp Resources
+        canvas_width = 600  # Set this based on your UI design needs
+        camp_resources_canvas = tk.Canvas(distribute_tab, width=canvas_width)
         camp_resources_scrollbar = ttk.Scrollbar(distribute_tab, orient="horizontal", command=camp_resources_canvas.xview)
         camp_resources_canvas.configure(xscrollcommand=camp_resources_scrollbar.set)
 
         all_camp_resources_frame = ttk.Frame(camp_resources_canvas)
-        camp_resources_canvas.create_window((0, 0), window=all_camp_resources_frame, anchor="nw")
+        camp_resources_canvas.create_window((0, 1), window=all_camp_resources_frame, anchor="nw")
 
-        # Place each camp's resources side by side with a title
+        # Add camps to the frame
         for i, camp in enumerate(self.planCamps):
-            # Title for each camp
-            camp_title = f"Camp {camp.campID}"
-            ttk.Label(all_camp_resources_frame, text=camp_title).grid(row=0, column=i)
-
-            # Camp resources section
             camp_section = self.create_resources_section(all_camp_resources_frame, camp, self.plan, 'admin')
-            camp_section.grid(row=1, column=i, sticky="nsew")
+            camp_section.grid(row=0, column=i, sticky="nsew")
             all_camp_resources_frame.grid_columnconfigure(i, weight=1)
 
         # Update the canvas's scrollregion
@@ -329,11 +319,17 @@ class AdminDashboard(Dashboard):
         camp_resources_canvas.grid(row=1, column=1, sticky="nsew")
         camp_resources_scrollbar.grid(row=2, column=1, sticky="ew")
         distribute_tab.grid_columnconfigure(0, weight=1)
-        distribute_tab.grid_columnconfigure(1, weight=3)  # Adjust weight for size preference
+        distribute_tab.grid_columnconfigure(1, weight=3)
         distribute_tab.grid_rowconfigure(1, weight=1)
 
         # Bind the canvas to resize dynamically
         distribute_tab.bind("<Configure>", lambda e: camp_resources_canvas.configure(width=e.width, height=e.height))
+        
+        all_camp_resources_frame.update_idletasks()
+        camp_resources_canvas.update_idletasks()
+
+        print(all_camp_resources_frame.winfo_reqwidth())
+        print(camp_resources_canvas.winfo_width())
 
     def create_title_frame(self, parent_tab, plan):
         title_frame = tk.Frame(parent_tab, bg='white', height=30)
@@ -346,8 +342,6 @@ class AdminDashboard(Dashboard):
         title_label = tk.Label(title_frame, text=plan_details, font=('Arial', 16, 'bold'), bg='white')
         title_label.pack(side='left', padx=10)
         title_label.place(relx=0.5, rely=0.5, anchor='center')
-
-
 
     def setup_plan_statistics_tab(self):
         stats_tab = ttk.Frame(self.tab_control)
