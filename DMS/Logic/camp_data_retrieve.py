@@ -170,20 +170,7 @@ class CampDataRetrieve:
                     'pct_immediate':  pct_immediate
                 }
             else:
-                stats = {
-                    'num_none': 0,
-                    'pct_none': 0,
-                    'num_non_urgent': 0,
-                    'pct_non_urgent': 0,
-                    'num_standard': 0,
-                    'pct_standard': 0,
-                    'num_urgent': 0,
-                    'pct_urgent': 0,
-                    'num_very_urgent': 0,
-                    'pct_urgent': 0,
-                    'num_immediate':  0,
-                    'pct_immediate':  0 
-                }
+                stats = "There is no refugee."
         else:
             stats = "There is an error"
         return stats
@@ -198,6 +185,8 @@ class CampDataRetrieve:
             num_female = len(list_female)
             num_other = len(list_other)
             num_total = num_female + num_male + num_other
+            if num_total < 1:
+                return "There is no refugee"
             pct_male = (num_male/num_total)*100
             pct_female = (num_female/num_total)*100
             pct_other = (num_other/num_total)*100
@@ -287,6 +276,8 @@ class CampDataRetrieve:
             num_dead = len(deads)
             num_alive = len(alives)
             num_total = num_alive + num_dead
+            if num_total < 1:
+                return "There is no refugee."
             pct_dead = (num_dead/num_total)*100
             pct_alive = (num_alive/num_total)*100
             stats = {
