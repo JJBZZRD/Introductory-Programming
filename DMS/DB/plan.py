@@ -107,13 +107,13 @@ class Plan:  # Plan class has attributes matching columns in table
         if end_date is not None:
             query += f" AND end_date = '{end_date}'"
         if name is not None:
-            query += f" AND name = '{name}'"
+            query += f" AND name LIKE '%{name}%'"
         if country is not None:
             query += f" AND country = '{country}'"
         if event_name is not None:
-            query += f" AND event_name = '{event_name}'"
+            query += f" AND event_name LIKE '%{event_name}%'"
         if description is not None:
-            query += f" AND description = '{description}'"
+            query += f" AND description LIKE '%{description}%'"
 
         # print(query)
         cursor.execute(query)
