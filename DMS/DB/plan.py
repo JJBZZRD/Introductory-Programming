@@ -140,20 +140,45 @@ class Plan:  # Plan class has attributes matching columns in table
         campIDs = [camps_tuples[i][0] for i in range(len(camps_tuples))]
         for campID in campIDs:
             camps = pc.get_camp_by_id(campID)
-            s = camps[0][2]
-            shelter.append(s)
-            f = camps[0][5]
-            food.append(f)
-            w = camps[0][3]
-            water.append(w)
-            m = camps[0][7]
-            medical_supplies.append(m)
-        for i in shelter:
-            total_shelter += i
-        for i in food:
-            total_food += i
-        for i in water:
-            total_water += i
-        for i in medical_supplies:
-            total_medical_supplies += i
+
+            for s in camps[0][2]:
+                if s is not None:
+                    shelter.append(s)
+                    total_shelter += s
+                    
+            for f in camps[0][5]:
+                if f is not None:
+                    food.append(f)
+                    total_food += f
+
+            for w in camps[0][3]:
+                if w is not None:
+                    water.append(w)
+                    total_water += w
+
+            for m in camps[0][7]:
+                if m is not None:
+                    medical_supplies.append(m)
+                    total_medical_supplies += m
+
         return [total_food, total_water, total_shelter, total_medical_supplies]
+
+        # for campID in campIDs:
+        #     camps = pc.get_camp_by_id(campID)
+        #     s = camps[0][2]
+        #     shelter.append(s)
+        #     f = camps[0][5]
+        #     food.append(f)
+        #     w = camps[0][3]
+        #     water.append(w)
+        #     m = camps[0][7]
+        #     medical_supplies.append(m)
+        # for i in shelter:
+        #     total_shelter += i
+        # for i in food:
+        #     total_food += i
+        # for i in water:
+        #     total_water += i
+        # for i in medical_supplies:
+        #     total_medical_supplies += i
+        # return [total_food, total_water, total_shelter, total_medical_supplies]

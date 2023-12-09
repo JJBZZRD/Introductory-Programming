@@ -8,7 +8,7 @@ from . import logic_util
 class PlanDataRetrieve:
 
     @staticmethod
-    def get_plans():
+    def get_all_plans():
         plan_tuples = Plan.get_all_plans()
         # print(f'plan_tuples: {plan_tuples}')
         # [(1, '01/01/2023', '31/12/2024', 'Wylfa Nuclear Meltdown', 'United Kingdom', 'Nuclear Crisis Management', 'Emergency response to nuclear meltdown on Anglesey', None, None, None, None), 
@@ -72,7 +72,7 @@ class PlanDataRetrieve:
     @staticmethod
     def get_plan_resources_estimate(planID):
         refugees_tuples = Refugee.get_by_planID(planID)
-        refugees = util.parse_result(refugees_tuples)
+        refugees = util.parse_result('Refugee', refugees_tuples)
         total_refugees = len(refugees_tuples)
 
         plan_resources = Plan.get_total_resources(planID)
