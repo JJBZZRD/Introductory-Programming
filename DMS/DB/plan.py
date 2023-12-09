@@ -127,58 +127,14 @@ class Plan:  # Plan class has attributes matching columns in table
 
     @staticmethod
     def get_total_resources(planID):
-        from .camp import Camp as pc
-        shelter = []
-        food = []
-        water = []
-        medical_supplies = []
-        total_shelter = 0
-        total_food = 0
-        total_water = 0
-        total_medical_supplies = 0
-        camps_tuples = pc.get_camp(planID=planID)
-        campIDs = [camps_tuples[i][0] for i in range(len(camps_tuples))]
-        for campID in campIDs:
-            camps = pc.get_camp_by_id(campID)
-
-            for s in camps[0][2]:
-                if s is not None:
-                    shelter.append(s)
-                    total_shelter += s
-                    
-            for f in camps[0][5]:
-                if f is not None:
-                    food.append(f)
-                    total_food += f
-
-            for w in camps[0][3]:
-                if w is not None:
-                    water.append(w)
-                    total_water += w
-
-            for m in camps[0][7]:
-                if m is not None:
-                    medical_supplies.append(m)
-                    total_medical_supplies += m
-
-        return [total_food, total_water, total_shelter, total_medical_supplies]
-
-        # for campID in campIDs:
-        #     camps = pc.get_camp_by_id(campID)
-        #     s = camps[0][2]
-        #     shelter.append(s)
-        #     f = camps[0][5]
-        #     food.append(f)
-        #     w = camps[0][3]
-        #     water.append(w)
-        #     m = camps[0][7]
-        #     medical_supplies.append(m)
-        # for i in shelter:
-        #     total_shelter += i
-        # for i in food:
-        #     total_food += i
-        # for i in water:
-        #     total_water += i
-        # for i in medical_supplies:
-        #     total_medical_supplies += i
-        # return [total_food, total_water, total_shelter, total_medical_supplies]
+        q = f"""
+            SELECT SUM(food) as sum_food,
+                SUM(water) as sum_water,
+                SUM(max_shelter) as sum_shelter,
+                SUM(medical_supplies) as sum_med
+            FROM camps
+            WHERE planID = {planID}
+            GROUP BY planID
+            """
+        cursor.execute(q)
+        return cursor.fetchall()

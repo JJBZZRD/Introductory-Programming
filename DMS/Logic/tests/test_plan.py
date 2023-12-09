@@ -35,16 +35,16 @@ class TestPlan(unittest.TestCase):
     def test_get_resources(self):
         print(" \n------------ Executing test_get_resources --------------- ")
         
-        resources = PlanDataRetrieve.get_resources(planID=1)
-        print(resources)
-        self.assertIsInstance(resources, list, 'Get_resource FAILED')
+        resources = PlanDataRetrieve.get_resources(1)
+        print(f"resource: {resources}")
+        self.assertEqual(len(resources), 4, 'test_get_resources does not return 4 resources')
 
     def test_get_plan_resources_estimation(self):
         print(" \n------------ Executing test_get_resources_estimation --------------- ")
 
         estimation = PlanDataRetrieve.get_plan_resources_estimate(planID=1)
-        print(estimation)
-        self.assertIsInstance(estimation, list, 'Get_resource_estimation FAILED')        
+        print(f"estimation: {estimation}")
+        self.assertEqual(len(estimation), 3, 'test_get_resources_estimation FAILED')        
 
     def test_create_plan(self):
         print(" \n------------ Executing test_create_plan --------------- ")

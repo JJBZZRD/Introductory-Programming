@@ -58,26 +58,27 @@ class PlanDataRetrieve:
                 plans = [plan for plan in plans if plan.end_date_datetime < current_date]
 
             for plan in plans:
-                plan.food, plan.water, plan.shelter, plan.medical_supplies = Plan.get_total_resources(plan.planID)
+                plan.food, plan.water, plan.shelter, plan.medical_supplies = PlanDataRetrieve.get_resources(plan.planID)
 
         return plans
 
     @staticmethod
     def get_resources(planID):
         #return [total_food, total_water, total_shelter, total_medical_supplies]
-        return Plan.get_total_resources(planID)
+        return list(Plan.get_total_resources(planID)[0])
 
 
 
     @staticmethod
     def get_plan_resources_estimate(planID):
-        refugees_tuples = Refugee.get_by_planID(planID)
+        refugees_tuples = Refugee.get_refugees_by_plan(planID)
+        # print(f"refugee_tuples: {refugees_tuples}")
         refugees = util.parse_result('Refugee', refugees_tuples)
         total_refugees = len(refugees_tuples)
 
-        plan_resources = Plan.get_total_resources(planID)
+        plan_resources = PlanDataRetrieve.get_resources(planID)
         #[food, water, shelter, medical supplies]
-
+        # print(f"plan_resource: {plan_resources}")
         nutrition_cost = 1
         medical_cost = 1
 

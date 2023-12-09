@@ -155,3 +155,16 @@ class Refugee:  # Refugee class has attributes matching columns in table
             params.append(campID)
         cursor.execute(f"""SELECT * FROM refugees WHERE {' OR '.join(query)}""", params)
         return cursor.fetchall()
+
+    @staticmethod
+    def get_refugees_by_plan(plan_id):
+        q = f"""
+            SELECT *
+            FROM refugees
+            WHERE campID IN
+                (SELECT campID
+                FROM camps
+                WHERE planID = {plan_id})
+            """
+        cursor.execute(q)
+        return cursor.fetchall()
