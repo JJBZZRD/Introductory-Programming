@@ -110,16 +110,16 @@ class Dashboard(tk.Frame):
             amount_label.grid(row=0, column=1)
 
             # Add buttons for volunteers and admin
-            if user_type in ['volunteer', 'admin']:
-                tk.Button(top_frame, text="-", command=lambda resource_name=resource_name: self.update_resource(camp, resource_frame, resource_name, -1, plan, user_type)).grid(row=0, column=2)
-                tk.Button(top_frame, text="+", command=lambda resource_name=resource_name: self.update_resource(camp, resource_frame, resource_name, 1, plan, user_type)).grid(row=0, column=3)
+            if user_type in ['volunteer', 'admin'] and resource_name in ['Water', 'Food', 'Medical Supplies', 'Max shelter']:
+                tk.Button(top_frame, text="-", command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(camp, resource_frame, resource_name, -1, plan, user_type)).grid(row=0, column=2)
+                tk.Button(top_frame, text="+", command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(camp, resource_frame, resource_name, 1, plan, user_type)).grid(row=0, column=3)
 
             bottom_frame = tk.Frame(resource_frame)
             bottom_frame.grid(row=1, column=0, sticky="ew")
 
             # Display 'Days left' only for specific resources
             if resource_name in ['Water', 'Food', 'Medical Supplies']:
-                days_left = camp_resources_estimation.index(resource_name)                
+                days_left = camp_resources_estimation.get(resource_name)                
                 tk.Label(bottom_frame, text=f"Days left: {days_left}").grid(row=0, column=0, sticky="w")
 
         return resources_frame
@@ -147,10 +147,9 @@ class Dashboard(tk.Frame):
         amount_label.config(text=str(new_amount))
 
         camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
-        resource_order = ['Water', 'Food', 'Medical Supplies', 'Max Shelter']
+        resource_order = ['Water', 'Food', 'Medical Supplies']
         if resource_name in resource_order:
-            index = resource_order.index(resource_name)
-            days_left = camp_resources_estimation[index] if index < len(camp_resources_estimation) else "N/A"
+            days_left = camp_resources_estimation.get(resource_name)
 
             bottom_frame = resource_frame.winfo_children()[1]
             days_left_label = bottom_frame.winfo_children()[0]
@@ -164,7 +163,7 @@ class Dashboard(tk.Frame):
         refugees_volunteers_frame.grid(row=1, column=2, sticky="nsew", pady=5)  
 
         title_text = f"{'Refugees' if display_type == 'refugees' else 'Volunteers'} in Camp {camp.campID}"
-        columns = ("Name", "Medical Condition") if display_type == "refugees" else ("Name", "Camp")
+        columns = ("Name", "Triage Category") if display_type == "refugees" else ("Name", "Camp")
         update_list_func = self.update_refugees_list if display_type == 'refugees' else self.update_volunteers_list
         manage_screen = "RefugeeList" if display_type == 'refugees' else "VolunteerList"
         double_click_func = self.on_refugee_double_click if display_type == 'refugees' else self.on_volunteer_double_click
@@ -257,20 +256,30 @@ class VolunteerDashboard(Dashboard):
 
 class AdminDashboard(Dashboard):
     """
-    Takes in a list of camp objects TBD and displays a dashboard with information on each camp.
-    
-    Includes an overview tab with information on all camps + additional resources. Also incudes a tab for each invidual camp.
+    Admin dashboard for displaying information on each camp and additional resources.
+    Includes an overview tab with information on all camps plus additional resources, 
+    as well as individual tabs for each camp, a resource distribution tab, and a statistics tab.
     """
-    
-    def create_admin_tabs(self):
+
+    def setup_dashboard(self, plan):
+        # Assuming admin has access to all camps or specific camps
+        self.plan = plan
+        self.planCamps = CampDataRetrieve.get_all_camps()  # or a filtered list based on admin access
+
         self.tab_control = ttk.Notebook(self)
 
-        self.setup_camp_tabs()
-
-        self.setup_distribute_resources_tab()
-        self.setup_plan_statistics_tab()
+        # Set up individual tabs
+        self.create_admin_tabs()
 
         self.tab_control.pack(expand=1, fill="both")
+
+    def create_admin_tabs(self):
+        # Setup for camp tabs
+        self.setup_camp_tabs()
+
+        # Setup for additional tabs
+        self.setup_distribute_resources_tab()
+        self.setup_plan_statistics_tab()
 
     def setup_camp_tabs(self):
         user_type = 'admin'
