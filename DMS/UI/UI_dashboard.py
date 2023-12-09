@@ -82,7 +82,6 @@ class Dashboard(tk.Frame):
 
         camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
         
-        # Initial resources are only those belonging to the camp
         resources = {
             'Water': camp.water,
             'Food': camp.food,
@@ -90,7 +89,6 @@ class Dashboard(tk.Frame):
             'Max shelter': camp.max_shelter,
         }
 
-        # Add additional resources for admin
         if user_type == 'admin' and plan:
             resources.update({
                 'Additional Water': plan.water,
@@ -110,7 +108,6 @@ class Dashboard(tk.Frame):
             amount_label = tk.Label(top_frame, text=str(amount))
             amount_label.grid(row=0, column=1)
 
-            # Add buttons for volunteers and admin
             if user_type in ['volunteer', 'admin'] and resource_name in ['Water', 'Food', 'Medical Supplies', 'Max shelter']:
                 tk.Button(top_frame, text="-", command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(camp, resource_frame, resource_name, -1, plan, user_type)).grid(row=0, column=2)
                 tk.Button(top_frame, text="+", command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(camp, resource_frame, resource_name, 1, plan, user_type)).grid(row=0, column=3)
@@ -118,7 +115,6 @@ class Dashboard(tk.Frame):
             bottom_frame = tk.Frame(resource_frame)
             bottom_frame.grid(row=1, column=0, sticky="ew")
 
-            # Display 'Days left' only for specific resources
             if resource_name in ['Water', 'Food', 'Medical Supplies']:
                 days_left = camp_resources_estimation.get(resource_name)                
                 tk.Label(bottom_frame, text=f"Days left: {days_left}").grid(row=0, column=0, sticky="w")
@@ -160,10 +156,13 @@ class Dashboard(tk.Frame):
 
     
     def create_camp_refugees_volunteers_section(self, parent_tab, camp, display_type, user_type):
+        print(f"Creating {display_type} section for camp {camp.campID}")
+        
+        # Create a new frame for the current camp
         refugees_volunteers_frame = tk.Frame(parent_tab, bg='white')
-        refugees_volunteers_frame.grid(row=1, column=2, sticky="nsew", pady=5)  
+        refugees_volunteers_frame.grid(row=1, column=2, sticky="nsew", pady=5)
 
-        title_text = f"{'Refugees' if display_type == 'refugees' else 'Volunteers'} in Camp {camp.campID}"
+        title_text = f"{'Refugees' if display_type == 'refugees' else 'Volunteers'}"
         columns = ("Name", "Triage Category") if display_type == "refugees" else ("Name", "Camp")
         update_list_func = self.update_refugees_list if display_type == 'refugees' else self.update_volunteers_list
         manage_screen = "RefugeeList" if display_type == 'refugees' else "VolunteerList"
@@ -171,6 +170,10 @@ class Dashboard(tk.Frame):
 
         refugees_title = tk.Label(refugees_volunteers_frame, text=title_text, font=('Arial', 16, 'bold'))
         refugees_title.grid(row=0, column=0, sticky="w", pady=10)
+
+        # Add a button to switch the display type
+        switch_button = tk.Button(refugees_volunteers_frame, text="Switch", command=lambda: self.create_camp_refugees_volunteers_section(parent_tab, camp, 'volunteers' if display_type == 'refugees' else 'refugees', user_type))
+        switch_button.grid(row=0, column=0)
 
         search_frame = tk.Frame(refugees_volunteers_frame, bg='white')
         search_frame.grid(row=1, column=0, sticky="ew", pady=5)
@@ -198,6 +201,7 @@ class Dashboard(tk.Frame):
 
         return refugees_volunteers_frame
 
+
     def update_refugees_list(self, camp, search_entry, refugees_treeview):
         filter_value = search_entry.get().strip()
 
@@ -222,13 +226,13 @@ class Dashboard(tk.Frame):
 
         volunteers_treeview.delete(*volunteers_treeview.get_children())
 
-        self.volunteers = PersonDataRetrieve.get_volunteers(camp_id=camp.campID, name=filter_value)
+        self.volunteers = PersonDataRetrieve.get_volunteers(campID=camp.campID, name=filter_value)
 
         if not self.volunteers:
             volunteers_treeview.insert("", "end", text="No matching volunteers found.")
         else:
             for volunteer in self.volunteers:
-                volunteers_treeview.insert("", "end", text=volunteer.volunteerID, values=(f"{volunteer.first_name} {volunteer.last_name}", volunteer.role))
+                volunteers_treeview.insert("", "end", text=volunteer.volunteerID, values=(f"{volunteer.first_name} {volunteer.last_name}", volunteer.phone))
 
     def on_volunteer_double_click(self, _, treeview):
         item = treeview.focus()
@@ -289,15 +293,12 @@ class AdminDashboard(Dashboard):
         distribute_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(distribute_tab, text='Distribute Plan Resources')
 
-        # Create Title Frame
-        self.create_title_frame(distribute_tab, self.plan)
+        self.create_resource_distribution_title(distribute_tab, self.plan)
 
-        # Frame for Addition Resources
         addition_resources_frame = ttk.Frame(distribute_tab)
         ttk.Label(addition_resources_frame, text="Addition Resources Placeholder").pack()
 
-    # Scrollable Canvas for Camp Resources
-        canvas_width = 600  # Set this based on your UI design needs
+        canvas_width = 600  
         camp_resources_canvas = tk.Canvas(distribute_tab, width=canvas_width)
         camp_resources_scrollbar = ttk.Scrollbar(distribute_tab, orient="horizontal", command=camp_resources_canvas.xview)
         camp_resources_canvas.configure(xscrollcommand=camp_resources_scrollbar.set)
@@ -305,16 +306,13 @@ class AdminDashboard(Dashboard):
         all_camp_resources_frame = ttk.Frame(camp_resources_canvas)
         camp_resources_canvas.create_window((0, 1), window=all_camp_resources_frame, anchor="nw")
 
-        # Add camps to the frame
         for i, camp in enumerate(self.planCamps):
             camp_section = self.create_resources_section(all_camp_resources_frame, camp, self.plan, 'admin')
             camp_section.grid(row=0, column=i, sticky="nsew")
             all_camp_resources_frame.grid_columnconfigure(i, weight=1)
 
-        # Update the canvas's scrollregion
         all_camp_resources_frame.bind("<Configure>", lambda e: camp_resources_canvas.configure(scrollregion=camp_resources_canvas.bbox("all")))
 
-        # Grid Layout Management
         addition_resources_frame.grid(row=1, column=0, sticky="nsew")
         camp_resources_canvas.grid(row=1, column=1, sticky="nsew")
         camp_resources_scrollbar.grid(row=2, column=1, sticky="ew")
@@ -322,19 +320,11 @@ class AdminDashboard(Dashboard):
         distribute_tab.grid_columnconfigure(1, weight=3)
         distribute_tab.grid_rowconfigure(1, weight=1)
 
-        # Bind the canvas to resize dynamically        
-        all_camp_resources_frame.update_idletasks()
-        camp_resources_canvas.update_idletasks()
-
-        print(all_camp_resources_frame.winfo_reqwidth())
-        print(camp_resources_canvas.winfo_width())
-
-    def create_title_frame(self, parent_tab, plan):
+    def create_resource_distribution_title(self, parent_tab, plan):
         title_frame = tk.Frame(parent_tab, bg='white', height=30)
         title_frame.grid(row=0, column=0, columnspan=2, sticky="ew", pady=2)
         title_frame.grid_propagate(False)
 
-        # Assuming you have a method to get plan details. Replace with actual method call.
         plan_details = "Plan details placeholder"  # Replace this with actual plan details retrieval
 
         title_label = tk.Label(title_frame, text=plan_details, font=('Arial', 16, 'bold'), bg='white')
