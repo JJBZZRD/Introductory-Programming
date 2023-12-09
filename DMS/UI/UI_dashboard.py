@@ -322,9 +322,7 @@ class AdminDashboard(Dashboard):
         distribute_tab.grid_columnconfigure(1, weight=3)
         distribute_tab.grid_rowconfigure(1, weight=1)
 
-        # Bind the canvas to resize dynamically
-        distribute_tab.bind("<Configure>", lambda e: camp_resources_canvas.configure(width=e.width, height=e.height))
-        
+        # Bind the canvas to resize dynamically        
         all_camp_resources_frame.update_idletasks()
         camp_resources_canvas.update_idletasks()
 
