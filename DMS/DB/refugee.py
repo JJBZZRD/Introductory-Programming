@@ -110,7 +110,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
         if refugeeID:
             query += f" AND refugeeID = {refugeeID}"
         if first_name:
-            query += f" AND first_name LIKE "%{first_name}%""
+            query += f" AND first_name LIKE '%{first_name}%'"
         if last_name:
             query += f" AND last_name LIKE '%{last_name}%'" 
         if date_of_birth:
