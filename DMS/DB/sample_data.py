@@ -32,7 +32,7 @@ def insert_dummy_data():
     INSERT INTO volunteers (first_name, last_name, username, password, date_of_birth, phone, account_status, campID) VALUES
     -- Camp 1
     ('admin', '111', 'admin', '111', '1990-05-15', '555-1234', 'Active', NULL),
-    ('Jane', 'Smith', 'jane_smith', 'password456', '1985-08-22', '555-5678', 'Active', 1),
+    ('Jane', 'Smith', 'volunteer1', '111', '1985-08-22', '555-5678', 'Active', 1),
     ('Robert', 'Johnson', 'robert_j', 'password789', '1992-03-10', '555-9876', 'Active', 1),
     ('Emily', 'Williams', 'emily_w', 'passwordabc', '1988-11-27', '555-4321', 'Active', 1),
     ('Michael', 'Brown', 'michael_b', 'passworddef', '1995-07-18', '555-8765', 'Inactive', 1),
@@ -43,7 +43,7 @@ def insert_dummy_data():
     ('Emma', 'Johnson', 'emma_j', 'pass789', '1998-06-08', '555-5678', 'Active', 1),
 
     -- Camp 2
-    ('Daniel', 'White', 'daniel_w', 'pass123', '1987-10-12', '555-3456', 'Active', 2),
+    ('Daniel', 'White', 'volunteer2', '222', '1987-10-12', '555-3456', 'Active', 2),
     ('Sophie', 'Miller', 'sophie_m', 'pass456', '1994-01-25', '555-7890', 'Active', 2),
     ('Matthew', 'Davis', 'matthew_d', 'pass789', '1990-09-30', '555-2345', 'Active', 2),
     ('Ava', 'Wilson', 'ava_w', 'passabc', '1985-12-15', '555-6789', 'Active', 2),
@@ -55,7 +55,7 @@ def insert_dummy_data():
     ('Madison', 'Perry', 'madison_p', 'passtu', '1996-07-17', '555-8765', 'Active', 2),
 
     -- Camp 3
-    ('Liam', 'Carter', 'liam_c', 'passvwx', '1993-02-05', '555-2345', 'Active', 3),
+    ('Liam', 'Carter', 'volunteer3', '333', '1993-02-05', '555-2345', 'Active', 3),
     ('Aubrey', 'Hayes', 'aubrey_h', 'passyz1', '1998-08-20', '555-6789', 'Active', 3),
     ('Mason', 'Wells', 'mason_w', 'pass234', '1991-04-15', '555-1234', 'Active', 3),
     ('Harper', 'Barnes', 'harper_b', 'pass567', '1986-10-30', '555-5678', 'Active', 3),
