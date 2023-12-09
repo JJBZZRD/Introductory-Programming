@@ -142,32 +142,48 @@ class CampDataRetrieve:
                          lists['Standard'] + lists['Urgent'] + \
                          lists['Very-Urgent'] + lists['Immediate']
             num_total = len(total_list)
-            num_none = len(lists['None'])
-            num_non_urgent = len(lists['Non-Urgent'])
-            num_standard = len(lists['Standard'])
-            num_urgent = len(lists['Urgent'])
-            num_very_urgent = len(lists['Very-Urgent'])
-            num_immediate = len(lists['Immediate'])
-            pct_none = (num_none/num_total)*100
-            pct_non_urgent = (num_non_urgent/num_total)*100
-            pct_standard = (num_standard/num_total)*100
-            pct_very_urgent = (num_very_urgent/num_total)*100
-            pct_urgent = (num_urgent/num_total)*100
-            pct_immediate = (num_immediate/num_total)*100
-            stats = {
-                'num_none': num_none,
-                'pct_none': pct_none,
-                'num_non_urgent': num_non_urgent,
-                'pct_non_urgent': pct_non_urgent,
-                'num_standard': num_standard,
-                'pct_standard': pct_standard,
-                'num_urgent': num_urgent,
-                'pct_urgent': pct_urgent,
-                'num_very_urgent': num_very_urgent,
-                'pct_urgent': pct_urgent,
-                'num_immediate':  num_immediate,
-                'pct_immediate':  pct_immediate
-            }
+            if num_total > 0:
+                num_none = len(lists['None'])
+                num_non_urgent = len(lists['Non-Urgent'])
+                num_standard = len(lists['Standard'])
+                num_urgent = len(lists['Urgent'])
+                num_very_urgent = len(lists['Very-Urgent'])
+                num_immediate = len(lists['Immediate'])
+                pct_none = (num_none/num_total)*100
+                pct_non_urgent = (num_non_urgent/num_total)*100
+                pct_standard = (num_standard/num_total)*100
+                pct_very_urgent = (num_very_urgent/num_total)*100
+                pct_urgent = (num_urgent/num_total)*100
+                pct_immediate = (num_immediate/num_total)*100
+                stats = {
+                    'num_none': num_none,
+                    'pct_none': pct_none,
+                    'num_non_urgent': num_non_urgent,
+                    'pct_non_urgent': pct_non_urgent,
+                    'num_standard': num_standard,
+                    'pct_standard': pct_standard,
+                    'num_urgent': num_urgent,
+                    'pct_urgent': pct_urgent,
+                    'num_very_urgent': num_very_urgent,
+                    'pct_urgent': pct_urgent,
+                    'num_immediate':  num_immediate,
+                    'pct_immediate':  pct_immediate
+                }
+            else:
+                stats = {
+                    'num_none': 0,
+                    'pct_none': 0,
+                    'num_non_urgent': 0,
+                    'pct_non_urgent': 0,
+                    'num_standard': 0,
+                    'pct_standard': 0,
+                    'num_urgent': 0,
+                    'pct_urgent': 0,
+                    'num_very_urgent': 0,
+                    'pct_urgent': 0,
+                    'num_immediate':  0,
+                    'pct_immediate':  0 
+                }
         else:
             stats = "There is an error"
         return stats
@@ -195,3 +211,66 @@ class CampDataRetrieve:
     @staticmethod
     def get_stats_age(campID):
         refugees = PersonDataRetrieve.get_refugees(camp_id=campID)
+        if isinstance(refugees, list):
+            num_total = len(refugees)
+            if num_total > 0: 
+                num_child, num_adult, num_elders = 0
+                for refugee in refugees:
+                    current_date = datetime.now()
+                    try:
+                        birth_date = datetime.strptime(refugee.date_of_birth, '%Y-%m-%d')
+                    except:
+                        return f"Invalid date format for refugee: {refugee.refugeeID}, wrong format: {refugee.date_of_birth}"
+                    age = current_date.year - birth_date.year - (
+                            (current_date.month, current_date.day) < (birth_date.month, birth_date.day))
+                    if age <= 18:
+                        num_child += 1
+                    elif 18 < age <= 40:
+                        num_adult += 1
+                    else:
+                        num_elders += 1
+
+                pct_child = (num_child/num_total)*100
+                pct_adult = (num_adult/num_total)*100
+                pct_elders = (num_elders/num_total)*100
+
+                stats = {
+                    'num_child':num_child,
+                    'pct_child':pct_child,
+                    'num_adult':num_adult,
+                    'pct_adult':pct_adult,
+                    'num_elders':num_elders,
+                    'pct_elders':pct_elders
+                }
+            else:
+                stats = {
+                    'num_child':0,
+                    'pct_child':0,
+                    'num_adult':0,
+                    'pct_adult':0,
+                    'num_elders':0,
+                    'pct_elders':0
+                }
+            return stats
+        else:
+            return refugees
+
+    @staticmethod
+    def get_stats_family(campID):
+        try:
+            all_separate_families = [i[0] for i in Camp.get_separate_family()]
+            families = [i[0] for i in Camp.get_camp_families(campID)]
+            num_families = len(families)
+            camp_separate_families = []
+            for i in families:
+                if i in all_separate_families:
+                    camp_separate_families.append(i)
+            
+            stats = {
+                'num_families':num_families,
+                'separate_families': camp_separate_families
+            }
+        except Exception as e:
+            stats = str(e)
+        return stats
+

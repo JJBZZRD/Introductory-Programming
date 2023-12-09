@@ -18,10 +18,10 @@ def insert_dummy_data():
 
     camp_data = """
     INSERT INTO camps (campID, location, max_shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID) VALUES
-    (1, 'Camden', 71, 409, 562, 478, 593, 164, 214, 2),
-    (2, 'Greenwich', 198, 103, 190, 335, 502, 57, 119, 2),
-    (3, 'Snowdonia', 179, 334, 545, 310, 531, 160, 248, 1),
-    (4, 'Richmond', 135, 470, 741, 175, 360, 98, 181, 1),
+    (1, 'Camden', 71, 409, 562, 478, 593, 164, 214, 1),
+    (2, 'Greenwich', 198, 103, 190, 335, 502, 57, 119, 1),
+    (3, 'Snowdonia', 179, 334, 545, 310, 531, 160, 248, 2),
+    (4, 'Richmond', 135, 470, 741, 175, 360, 98, 181, 2),
     (5, 'Versailles', 164, 260, 537, 394, 637, 88, 222, 3)
     """
 
@@ -71,6 +71,9 @@ def insert_dummy_data():
 
     refugees_data = """
     INSERT INTO refugees (first_name, last_name, date_of_birth, gender, familyID, campID, triage_category, medical_conditions, vital_status) VALUES
+
+    --Family separated: 8, 10, 
+
     -- Camp 1
     ('Isabella', 'Johnson', '2002-08-10', 'Female', 1, 1, 'Standard', 'None', 'Alive'),
     ('Oliver', 'Smith', '1980-03-25', 'Male', 2, 1, 'Urgent', 'Diabetes', 'Alive'),

@@ -55,10 +55,15 @@ class test_db(unittest.TestCase):
     #     # print(Volunteer.get_all_volunteers())
     #     persons = PersonDataRetrieve.get_all_volunteers()
 
-    def test_update_volunteer(self):
-        print(" ------------ Executing test_update_volunteer_status --------------- ")
-        res = Volunteer.update_volunteer(31, account_status='Active')
-        print(res)
+    # def test_update_volunteer(self):
+    #     print(" ------------ Executing test_update_volunteer_status --------------- ")
+    #     res = Volunteer.update_volunteer(31, account_status='Active')
+    #     print(res)
 
+    def test_get_separate_family_by_camp(self):
+        # print(Camp.get_separate_family_by_camp(2))
+        # print(Camp.get_separate_family_by_plan(1))
+        print(Camp.get_separate_family())
+        print(Camp.get_camp_families(1))
 if __name__ == '__main__':
     unittest.main()

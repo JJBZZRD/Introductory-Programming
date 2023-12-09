@@ -69,7 +69,21 @@ class TestCamp(unittest.TestCase):
 
     def test_get_stats_triage_category(self):
         print(" ------------ Executing test_get_stats_triage_category --------------- ")
-        print(CampDataRetrieve.get_stats_triage_category(1))
+        # print(CampDataRetrieve.get_stats_triage_category(1))
+        res = CampDataRetrieve.get_stats_triage_category(1)
+        self.assertIsInstance(res, dict, 'res is not a dict')
+
+    def test_get_stats_gender(self):
+        print(" ------------ Executing test_get_stats_gender --------------- ")
+        print(CampDataRetrieve.get_stats_gender(1))
+        res = CampDataRetrieve.get_stats_gender(1)
+        self.assertIsInstance(res, dict, 'res is not a dict')
+
+    def test_get_stats_family(self):
+        print(" ------------ Executing test_get_stats_family --------------- ")
+        print(CampDataRetrieve.get_stats_family(1))
+        res = CampDataRetrieve.get_stats_family(1)
+        self.assertIsInstance(res, dict, 'res is not a dict')
 
 
 

@@ -152,4 +152,40 @@ class Camp:  # Camp class has attributes matching columns in table
             return True
         else:
             return False
+
+    # @staticmethod
+    # def get_family_counts(campID):
+    #     q = f"""
+    #         SELECT COUNT(DISTINCT familyID)
+    #         FROM refugees
+    #         WHERE campID = {campID}
+    #         """ 
+    #     cursor.execute(q)
+    #     return cursor.fetchone()
     
+    @staticmethod
+    def get_separate_family():
+        q = """
+        SELECT familyID
+        FROM
+            (SELECT familyID, campID
+            FROM refugees
+            GROUP BY familyID, campID
+            ORDER BY familyID)
+        GROUP BY familyID
+        HAVING COUNT(campID) > 1
+            """
+        cursor.execute(q)
+        return cursor.fetchall()
+
+    @staticmethod
+    def get_camp_families(campID):
+        q = f"""
+        SELECT familyID
+        FROM refugees
+        WHERE campID = {campID}
+        GROUP BY familyID
+        """
+        cursor.execute(q)
+        return cursor.fetchall()
+
