@@ -59,8 +59,8 @@ class Dashboard(tk.Frame):
         age_stats = CampDataRetrieve.get_stats_age(campID)
         vital_status_stats = CampDataRetrieve.get_stats_vital_status(campID)
 
-        num_volunteers = len(PersonDataRetrieve.get_volunteers(campID))
-        num_refugees = len(PersonDataRetrieve.get_refugees(campID))
+        num_volunteers = len(PersonDataRetrieve.get_volunteers(campID=campID))
+        num_refugees = len(PersonDataRetrieve.get_refugees(camp_id=campID))
         family_stats = CampDataRetrieve.get_stats_family(campID)
         num_families = (
             family_stats.get("num_families", "Error fetching families")
@@ -515,7 +515,7 @@ class AdminDashboard(Dashboard):
     def setup_dashboard(self, plan):
         self.plan = plan
 
-        self.planCamps = CampDataRetrieve.get_all_camps()
+        self.planCamps = CampDataRetrieve.get_camp(planID=plan.planID)
 
         self.tab_control = ttk.Notebook(self)
 
