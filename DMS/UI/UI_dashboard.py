@@ -193,6 +193,7 @@ class Dashboard(tk.Frame):
 
     def create_additional_resources_section(self, parent_frame, plan):
         additional_resources_frame = tk.Frame(parent_frame, bg="white")
+
         additional_resources = {
             "Shelter": plan.shelter,
             "Water": plan.water,
@@ -220,9 +221,8 @@ class Dashboard(tk.Frame):
                     resource_frame,
                     res_name,
                     plan,
-                    -1,  # Decrement
+                    -1,
                 ),
-                # This is the frame to update
             ).grid(row=0, column=2)
 
             tk.Button(
@@ -232,7 +232,7 @@ class Dashboard(tk.Frame):
                     resource_frame,
                     res_name,
                     plan,
-                    1,  # Decrement
+                    1,
                 ),
             ).grid(row=0, column=3)
 
