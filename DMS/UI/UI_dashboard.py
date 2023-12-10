@@ -21,7 +21,7 @@ class Dashboard(tk.Frame):
         )
 
     def setup_camp_tab(self, parent_tab, camp, plan, type):
-        self.create_camp_title_frame(parent_tab, camp)
+        self.create_camp_title_frame(parent_tab, plan, camp)
 
         resources_frame = self.create_resources_section(parent_tab, camp, plan, type)
         statistics_frame = self.create_camp_statistics_section(parent_tab, camp)
@@ -37,12 +37,12 @@ class Dashboard(tk.Frame):
         parent_tab.grid_columnconfigure(2, weight=1)
         parent_tab.grid_rowconfigure(1, weight=1)
 
-    def create_camp_title_frame(self, parent_tab, camp):
+    def create_camp_title_frame(self, parent_tab, plan, camp):
         title_frame = tk.Frame(parent_tab, bg="white", height=30)
         title_frame.grid(row=0, column=0, columnspan=3, sticky="ew", pady=2)
         title_frame.grid_propagate(False)
 
-        title_text = f"Camp {camp.campID} - {camp.location}"
+        title_text = f"{plan.name} - Camp {camp.campID} - {camp.location}"
         title_label = tk.Label(
             title_frame, text=title_text, font=("Arial", 16, "bold"), bg="white"
         )
