@@ -241,7 +241,6 @@ class Dashboard(tk.Frame):
             amount_label = tk.Label(top_frame, text=str(amount))
             amount_label.grid(row=0, column=1)
 
-            # Decrease button
             tk.Button(
                 resource_frame,
                 text="-",
@@ -591,6 +590,12 @@ class AdminDashboard(Dashboard):
         )
 
         for i, camp in enumerate(self.planCamps):
+            camp_title = f"Camp {camp.campID} - {camp.location}"
+            camp_title_label = tk.Label(
+                all_camp_resources_frame, text=camp_title, font=("Arial", 12, "bold")
+            )
+            camp_title_label.grid(row=0, column=i * 2, sticky="w")
+
             camp_section = self.create_resources_section(
                 all_camp_resources_frame,
                 camp,
@@ -598,8 +603,8 @@ class AdminDashboard(Dashboard):
                 "admin",
                 additional_resources_frame=additional_resources_frame,
             )
-            camp_section.grid(row=0, column=i, sticky="nsew")
-            all_camp_resources_frame.grid_columnconfigure(i, weight=1)
+            camp_section.grid(row=1, column=i * 2, sticky="nsew")
+            all_camp_resources_frame.grid_columnconfigure(i * 2 + 1, weight=1)
 
         all_camp_resources_frame.bind(
             "<Configure>",
