@@ -24,6 +24,7 @@ class ModifyEntries(tk.Frame):
         self.modifiable_variables: list = []  # this allows the subclass to pass the list of entry names to the ' def create_entry_fields(self):' method
         self.current_data = []  # this information is passed to be displayed in the entry fields only if it is an edit entry variant subclass being called
         self.entry_fields = {}  # this variable creates a dictionary that allows you to extract the values from the entry fields in 'def create_entry_fields(self):'
+        self.filter_matching = {}
         self.button_labels = None
         self.create_record = None
         self.save_record = None
@@ -32,6 +33,7 @@ class ModifyEntries(tk.Frame):
         self.button_list = {}
         self.button_column = None
         self.fields_to_be_dropdown = {}
+        self.read_only_fields = []
         self.setup_modify()
 
     def setup_modify(self):
@@ -66,7 +68,7 @@ class ModifyEntries(tk.Frame):
                 else:
                     drop_down.set(self.fields_to_be_dropdown[variable][0])
                 drop_down.grid(column=k + 1, row=j, pady=5, padx=5)
-                self.entry_fields.update({variable: drop_down})
+                self.entry_fields.update({variable: [self.filter_matching[variable], drop_down]})
             else:
                 entry_name = ttk.Label(self.lower_frame, text=variable)
                 entry_name.grid(column=k, row=j, pady=5, padx=5)
@@ -74,7 +76,7 @@ class ModifyEntries(tk.Frame):
                 entry_field = ttk.Entry(self.lower_frame)
                 entry_field.grid(column=k + 1, row=j, pady=5, padx=5)
 
-                self.entry_fields.update({variable: entry_field})
+                self.entry_fields.update({variable: [self.filter_matching[variable], entry_field]})
 
                 if self.current_data is not None and i < len(self.current_data):
                     placeholder = self.current_data[i]
@@ -130,12 +132,12 @@ class ModifyEntries(tk.Frame):
 
         match button:
             case 'Save Changes':
-                inputs = []
+                inputs = {}
                 for key in self.entry_fields:
-                    inputs.append(self.entry_fields[key].get())
-                print(tuple(inputs))
+                    inputs.update({self.entry_fields[key][0]: self.entry_fields[key][1].get()})
+                #print(tuple(inputs))
 
-                self.save_record(*inputs)
+                self.save_record(**inputs)
                 # try to update data using the business logic function
 
             case 'Delete':
@@ -148,12 +150,12 @@ class ModifyEntries(tk.Frame):
                 # logic for deactivating volunteer account
                 pass
             case 'Create':
-                inputs = []
+                inputs = {}
                 for key in self.entry_fields:
-                    inputs.append(self.entry_fields[key].get())
-                print(tuple(inputs))
+                    inputs.update({self.entry_fields[key][0]: self.entry_fields[key][1].get()})
+                #print(tuple(inputs))
 
-                self.create_record(*inputs)
+                self.create_record(**inputs)
                 self.page_nav('back')
                 # logic for creating object
                 pass
@@ -179,6 +181,8 @@ class NewPlan(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Plan']
         self.modifiable_variables = ['Plan Name', 'Event Name', 'Country', 'Description', 'Start Date', 'End Date']
+        self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Country': 'country', 'Event Name': 'event_name',
+                                'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date'}
         self.button_labels = ['Create']
         self.current_data = None
         self.create_record = PlanEdit.create_plan
@@ -194,11 +198,14 @@ class EditPlan(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Plan']
         self.modifiable_variables = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date']
+        self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Country': 'country', 'Event Name': 'event_name',
+                                'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date'}
         self.button_labels = ['Save Changes', 'End', 'Delete']
         self.current_data = self.screen_data.display_info()
         self.save_record = PlanEdit.update_plan
         self.entry_fields = {}
         self.fields_to_be_dropdown = {'Country': get_all_countries()}
+        self.read_only_fields = ['Plan ID']
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -208,10 +215,14 @@ class NewCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Camp']
-        self.modifiable_variables = ['Camp ID', 'Country', 'Max Shelter', 'Water', 'Max Water', 'Food', 'Max_Food',
+        self.modifiable_variables = ['Country', 'Max Shelter', 'Water', 'Max Water', 'Food', 'Max_Food',
                              'Medical Supplies', 'Max Medical Supplies', 'Plan ID']
+        self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Max Shelter': 'max_shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max_Food': 'max_food',
+                                'Medical Supplies': 'medical_supplies', 'Max Medical Supplies': 'max_medical_supplies', 'Plan ID': 'planID'}
         self.button_labels = ['Create']
+        self.save_record = CampDataEdit.create_camp
         self.entry_fields = {}
+        self.read_only_fields = []
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -223,9 +234,14 @@ class EditCamp(ModifyEntries):
         self.modify_type = ['Edit Camp']
         self.modifiable_variables = ['Camp ID', 'Country', 'Max Shelter', 'Water', 'Max Water', 'Food', 'Max_Food',
                              'Medical Supplies', 'Max Medical Supplies', 'Plan ID']
+        self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Max Shelter': 'max_shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max_Food': 'max_food',
+                                'Medical Supplies': 'medical_supplies', 'Max Medical Supplies': 'max_medical_supplies', 'Plan ID': 'planID'}
         self.current_data = self.screen_data.display_info()
         self.button_labels = ['Save Changes', 'Delete']
+        self.save_record = CampDataEdit.update_camp
         self.entry_fields = {}
+        self.fields_to_be_dropdown = {'Plan ID': [plan.PlanID for plan in PlanDataRetrieve.get_all_plans()]}
+        self.read_only_fields = ['Plan ID']
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -235,9 +251,13 @@ class NewVolunteer(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Volunteer']
-        self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp ID']
+        self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
+                'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
+        self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'name', 'Last Name': 'name', 'Username': 'username',
+                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status'}
         self.button_labels = ['Create']
         # self.display_delete_button = False
+        self.save_record = PersonDataEdit.create_volunteer
         self.entry_fields = {}
         self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()]}
         self.create_title()
@@ -249,9 +269,13 @@ class EditVolunteer(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Volunteer']
-        self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp']
+        self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
+                'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
+        self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'name', 'Last Name': 'name', 'Username': 'username',
+                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status'}
         self.button_labels = ['Save Changes', 'Deactivate']
         self.current_data = self.screen_data.display_info()
+        self.save_record = PersonDataEdit.update_volunteer
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
@@ -263,8 +287,18 @@ class NewRefugee(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Refugee']
-        self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp']
+        self.modifiable_variables = ['Refugee ID', 'First Name', 'Last Name',
+                'Date of_Birth', 'Gender', 'Family ID',
+                'Camp ID', 'Triage Category', 'Medical Conditions',
+                'Vital Status']
+        self.filter_matching = {'Refugee ID': 'id', 'First Name': 'name', 'Last Name': 'name',
+                'Date of_Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
+                'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
+                'Vital Status': 'vital_status'}
+        self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Vital Status': ['Alive', 'Deceased'], 
+                                      'Gender': ['Male', 'Female', 'Other'], 'Triage Category': ['None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate']}
         self.button_labels = ['Create']
+        self.save_record = PersonDataEdit.create_refugee
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
@@ -279,8 +313,15 @@ class EditRefugee(ModifyEntries):
                 'Date of_Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status']
+        self.filter_matching = {'Refugee ID': 'id', 'First Name': 'name', 'Last Name': 'name',
+                'Date of_Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
+                'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
+                'Vital Status': 'vital_status'}
+        self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Vital Status': ['Alive', 'Deceased'], 
+                                      'Gender': ['Male', 'Female', 'Other'], 'Triage Category': ['None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate']}
         self.button_labels = ['Save Changes', 'Delete']
         self.current_data = self.screen_data.display_info()
+        self.save_record = PersonDataEdit.update_refugee
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
@@ -293,8 +334,11 @@ class EditPersonalDetails(ModifyEntries):
         self.modify_type = ['Edit Personal Details']
         self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
+        self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'name', 'Last Name': 'name', 'Username': 'username',
+                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status'}
         self.button_labels = ['Save Changes']#, 'Delete', 'Deactivate']
         self.current_data = self.logged_in_user.display_info()
+        self.save_record = PersonDataEdit.update_volunteer
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
