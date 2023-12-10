@@ -7,6 +7,7 @@ from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 from ..Logic.person_data_retrieve import PersonDataRetrieve
 from ..DB.countries import get_all_countries
+from ..DB.plan import Plan
 
 # the name of this class might not explain the functionality very well as its quite an abstraction. This class
 # produces varients of the pages to modfiy camps, plans, refugees, volunteers (and admins as personal details) There
@@ -240,7 +241,7 @@ class EditCamp(ModifyEntries):
         self.button_labels = ['Save Changes', 'Delete']
         self.save_record = CampDataEdit.update_camp
         self.entry_fields = {}
-        self.fields_to_be_dropdown = {'Plan ID': [plan.PlanID for plan in PlanDataRetrieve.get_all_plans()]}
+        self.fields_to_be_dropdown = {'Plan ID': [plan.planID for plan in PlanDataRetrieve.get_all_plans()]}
         self.read_only_fields = ['Plan ID']
         self.create_title()
         self.create_entry_fields()

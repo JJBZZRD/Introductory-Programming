@@ -166,7 +166,6 @@ class Dashboard(tk.Frame):
             "Water": camp.water,
             "Food": camp.food,
             "Medical Supplies": camp.medical_supplies,
-            "Max shelter": camp.max_shelter,
         }
 
         for index, (resource_name, amount) in enumerate(resources.items()):
@@ -182,45 +181,39 @@ class Dashboard(tk.Frame):
             amount_label = tk.Label(top_frame, text=str(amount))
             amount_label.grid(row=0, column=1)
 
-            if user_type in ["volunteer", "admin"] and resource_name in [
-                "Water",
-                "Food",
-                "Medical Supplies",
-                "Max shelter",
-            ]:
-                tk.Button(
-                    top_frame,
-                    text="-",
-                    command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(
-                        camp,
-                        resource_frame,
-                        resource_name,
-                        -1,
-                        plan,
-                        user_type,
-                        additional_resources_frame,
-                    ),
-                ).grid(row=0, column=2)
-                tk.Button(
-                    top_frame,
-                    text="+",
-                    command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(
-                        camp,
-                        resource_frame,
-                        resource_name,
-                        1,
-                        plan,
-                        user_type,
-                        additional_resources_frame,
-                    ),
-                ).grid(row=0, column=3)
+            tk.Button(
+                top_frame,
+                text="-",
+                command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(
+                    camp,
+                    resource_frame,
+                    resource_name,
+                    -1,
+                    plan,
+                    user_type,
+                    additional_resources_frame=additional_resources_frame,
+                ),
+            ).grid(row=0, column=2)
+            tk.Button(
+                top_frame,
+                text="+",
+                command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(
+                    camp,
+                    resource_frame,
+                    resource_name,
+                    1,
+                    plan,
+                    user_type,
+                    additional_resources_frame=additional_resources_frame,
+                ),
+            ).grid(row=0, column=3)
 
             bottom_frame = tk.Frame(resource_frame)
             bottom_frame.grid(row=1, column=0, sticky="ew")
 
             if resource_name in ["Water", "Food", "Medical Supplies"]:
                 days_left = camp_resources_estimation.get(resource_name)
-                tk.Label(bottom_frame, text=f"Days left: {days_left}").grid(
+                tk.Label(bottom_frame, text=f"Days left: {days_left}\n").grid(
                     row=0, column=0, sticky="w"
                 )
 
@@ -229,89 +222,146 @@ class Dashboard(tk.Frame):
     def create_additional_resources_section(self, parent_frame, plan):
         additional_resources_frame = tk.Frame(parent_frame, bg="white")
         additional_resources = {
-            "Additional Water": plan.water,
-            "Additional Food": plan.food,
-            "Additional Medical Supplies": plan.medical_supplies,
-            "Additional Shelter": plan.shelter,
+            "Water": plan.water,
+            "Food": plan.food,
+            "Medical Supplies": plan.medical_supplies,
+            "Shelter": plan.shelter,
         }
 
         for index, (resource_name, amount) in enumerate(additional_resources.items()):
-            resource_frame = tk.Frame(additional_resources_frame, bg="white")
+            resource_frame = tk.Frame(additional_resources_frame)
             resource_frame.grid(row=index, column=0, sticky="ew")
 
-            tk.Label(resource_frame, text=f"{resource_name}:").grid(
+            top_frame = tk.Frame(resource_frame)
+            top_frame.grid(row=0, column=0, sticky="ew")
+
+            tk.Label(top_frame, text=f"{resource_name}:").grid(
                 row=0, column=0, sticky="w"
             )
-            amount_label = tk.Label(resource_frame, text=str(amount))
-            amount_label.grid(row=0, column=1, sticky="w")
+            amount_label = tk.Label(top_frame, text=str(amount))
+            amount_label.grid(row=0, column=1)
 
             # Decrease button
-            decrease_button = tk.Button(
+            tk.Button(
                 resource_frame,
                 text="-",
-                command=lambda res_name=resource_name, amt_label=amount_label: self.update_resource(
-                    None,  # No specific camp for additional resources
+                command=lambda res_name=resource_name, resource_frame=resource_frame: self.update_plan_resources(
                     resource_frame,
                     res_name,
-                    -1,  # Decrement
                     plan,
-                    "admin",
-                    additional_resources_frame,  # This is the frame to update
+                    -1,  # Decrement
                 ),
-            )
-            decrease_button.grid(row=0, column=2, padx=5)
+                # This is the frame to update
+            ).grid(row=0, column=2)
 
-            # Increase button
-            increase_button = tk.Button(
+            tk.Button(
                 resource_frame,
                 text="+",
-                command=lambda res_name=resource_name, amt_label=amount_label: self.update_resource(
-                    None,  # No specific camp for additional resources
+                command=lambda res_name=resource_name, resource_frame=resource_frame: self.update_plan_resources(
                     resource_frame,
                     res_name,
-                    1,  # Increment
                     plan,
-                    "admin",
-                    additional_resources_frame,  # This is the frame to update
+                    1,  # Decrement
                 ),
-            )
-            increase_button.grid(row=0, column=3, padx=5)
+            ).grid(row=0, column=3)
+
+            bottom_frame = tk.Frame(resource_frame)
+            bottom_frame.grid(row=1, column=0, sticky="ew")
 
         return additional_resources_frame
 
     def update_resource(
-        self, camp, resource_frame, resource_name, increment, plan, type
+        self,
+        camp,
+        resource_frame,
+        resource_name,
+        increment,
+        plan,
+        user_type,
+        additional_resources_frame=None,
     ):
-        print(
-            f"Updating {resource_name} by {increment} in resource frame {resource_frame} for camp {camp.campID}, plan {plan.planID}"
-        )
-
         resource_key = resource_name.lower().replace(" ", "_")
-        if type == "admin" and resource_name.startswith("Additional"):
-            current_amount = getattr(plan, resource_key)
-            new_amount = max(0, current_amount + increment)
+        if user_type == "admin":
+            # Update camp resource
+            camp_current_amount = getattr(camp, resource_key)
+            new_camp_amount = max(0, camp_current_amount + increment)
+            if CampDataEdit.update_camp(camp.campID, **{resource_key: new_camp_amount}):
+                setattr(camp, resource_key, new_camp_amount)
 
-            if PlanEdit.update_plan(plan.planID, **{resource_key: new_amount}):
-                setattr(plan, resource_key, new_amount)
-        else:
-            current_amount = getattr(camp, resource_key)
-            new_amount = max(0, current_amount + increment)
-            if CampDataEdit.update_camp(camp.campID, **{resource_key: new_amount}):
-                print(f"Updating {resource_key} to {new_amount}")
-                setattr(camp, resource_key, new_amount)
+            # Update plan resource, decrementing by increment
+            plan_current_amount = getattr(plan, resource_key)
+            new_plan_amount = max(0, plan_current_amount - increment)
+            if PlanEdit.update_plan(plan.planID, **{resource_key: new_plan_amount}):
+                setattr(plan, resource_key, new_plan_amount)
+
+            # Update the plan's resource amount label
+            if additional_resources_frame:
+                # Find the label in the additional_resources_frame
+                # Assumes the label is the second widget in its parent frame's children
+                # Iterate over each resource frame to find the right one
+                for res_frame in additional_resources_frame.winfo_children():
+                    # Each res_frame should have a top_frame as its first child
+                    top_frame = res_frame.winfo_children()[0]
+                    # The resource name label is the first widget in top_frame
+                    res_name_label = top_frame.winfo_children()[0]
+                    # Check if this is the label for the current resource
+                    if res_name_label.cget("text") == f"{resource_name}:":
+                        # The amount label is the second widget
+                        amount_label = top_frame.winfo_children()[1]
+                        amount_label.config(text=str(new_plan_amount))
+                        break  # Found the correct label, exit the loop
+
+            # Update the camp's resource amount label
+            top_frame = resource_frame.winfo_children()[0]
+            amount_label = top_frame.winfo_children()[1]
+            amount_label.config(text=str(new_camp_amount))
+
+            # Update days left if the resource is one of the specified types
+            camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
+            resource_order = ["Water", "Food", "Medical Supplies"]
+            if resource_name in resource_order:
+                days_left = camp_resources_estimation.get(resource_name)
+                bottom_frame = resource_frame.winfo_children()[1]
+                days_left_label = bottom_frame.winfo_children()[0]
+                days_left_label.config(text=f"Days left: {days_left}\n")
+
+            resource_frame.update()
+            if additional_resources_frame:
+                additional_resources_frame.update()
+
+    def update_plan_resources(self, resource_frame, resource_name, plan, increment):
+        resource_key = resource_name.lower().replace(" ", "_")
+        current_amount = getattr(plan, resource_key)
+        new_amount = max(0, current_amount + increment)
+        if PlanEdit.update_plan(plan.planID, **{resource_key: new_amount}):
+            setattr(plan, resource_key, new_amount)
 
         top_frame = resource_frame.winfo_children()[0]
         amount_label = top_frame.winfo_children()[1]
         amount_label.config(text=str(new_amount))
 
-        camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
-        resource_order = ["Water", "Food", "Medical Supplies"]
-        if resource_name in resource_order:
-            days_left = camp_resources_estimation.get(resource_name)
+        resource_frame.update()
 
-            bottom_frame = resource_frame.winfo_children()[1]
-            days_left_label = bottom_frame.winfo_children()[0]
-            days_left_label.config(text=f"Days left: {days_left}")
+    def distribute_resources(
+        self,
+        resource_frame,
+        resource_name,
+        camp,
+        plan,
+        increment,
+    ):
+        resource_key = resource_name.lower().replace(" ", "_")
+        current_amount = getattr(plan, resource_key)
+        new_amount = max(0, current_amount + increment)
+        if PlanEdit.update_plan(plan.planID, **{resource_key: new_amount}):
+            setattr(plan, resource_key, new_amount)
+
+        top_frame = resource_frame.winfo_children()[0]
+        amount_label = top_frame.winfo_children()[1]
+        amount_label.config(text=str(new_amount))
+
+        if CampDataEdit.update_camp(camp.campID, **{resource_key: new_amount}):
+            setattr(camp, resource_key, new_amount)
 
         resource_frame.update()
 
@@ -597,53 +647,3 @@ class AdminDashboard(Dashboard):
     def setup_plan_statistics_tab(self):
         stats_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(stats_tab, text="Plan Camps Statistics")
-
-    # def populate_overview_tab(self, tab):
-    #     self.create_camps_frame(tab, self.planCamps)
-    #     self.create_additional_resources_frame(tab, self.plan, self.additional_resources)
-
-    # def create_camps_frame(self, parent, planCamps):
-    #     camps_frame = tk.Frame(parent, bg='white')
-    #     camps_frame.pack(side='left', fill='both', expand=True)
-
-    #     for camp in planCamps:
-    #         camp_frame = tk.Frame(camps_frame, bg='white', borderwidth=1, relief='solid', padx=5, pady=5)
-    #         camp_frame.pack(side='left', fill='both', expand=True, padx=5, pady=5)
-    #         tk.Label(camp_frame, text=f"Camp {camp.campID}", font=('Arial', 16, 'bold')).pack(pady=(5, 10))
-    #         self.populate_resource_frame(camp_frame, camp)
-    #         ttk.Button(camp_frame, text="Edit Camp", style='TButton').pack(pady=5)
-
-    # def create_additional_resources_frame(self, parent, plan, additional_resources):
-    #     resources_frame = tk.Frame(parent, bg='white', bd=2, relief='groove')
-    #     resources_frame.pack(side='right', fill='y', padx=(5, 0))
-    #     tk.Label(resources_frame, text="Additional Resources Available", bg='white', font=('Arial', 14)).pack(pady=10)
-    #     for resource_name, amount in additional_resources.items():
-    #         self.create_resource_amount_frame(resources_frame, plan, resource_name, amount, self.update_additional_resource)
-
-    # def create_resource_amount_frame(self, frame, plan, resource_name, amount, update_additional_resource):
-    #     top_frame = tk.Frame(frame, bg='white')
-    #     top_frame.pack(fill='x', expand=True)
-    #     tk.Label(top_frame, text=f"{resource_name}:", bg='white', font=('Arial', 12)).pack(side='left')
-    #     label = tk.Label(top_frame, text=str(amount), bg='white')
-    #     label.pack(side='left')
-    #     tk.Button(top_frame, text="+", command=lambda: update_additional_resource(label, plan, resource_name, 1)).pack(side='left')
-    #     tk.Button(top_frame, text="-", command=lambda: update_additional_resource(label, plan, resource_name, -1)).pack(side='left')
-
-    # def update_additional_resource(self, label, plan, resource_name, increment):
-    #         self.plan = plan
-    #         current_amount = self.additional_resources[resource_name]
-    #         new_amount = max(0, current_amount + increment)
-    #         self.additional_resources[resource_name] = new_amount
-    #         label.config(text=str(new_amount))
-
-    #         try:
-    #             PlanEdit.update_plan(
-    #                 planID=self.plan.planID,
-    #                 water=self.additional_resources.get('Water'),
-    #                 food=self.additional_resources.get('Food'),
-    #                 shelter=self.additional_resources.get('Shelter'),
-    #                 medical_supplies=self.additional_resources.get('Medical Supplies')
-    #             )
-    #         except Exception as e:
-    #             print(f"Error updating plan: {e}")
-    #             # Consider adding user feedback here, e.g., displaying an error message in the UI.
