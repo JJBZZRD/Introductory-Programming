@@ -31,7 +31,7 @@ class ModifyEntries(tk.Frame):
         self.deactivate_record = None
         self.button_list = {}
         self.button_column = None
-        self.fields_to_be_dropdown = {'Country': get_all_countries()}
+        self.fields_to_be_dropdown = {}
         self.setup_modify()
 
     def setup_modify(self):
@@ -60,7 +60,11 @@ class ModifyEntries(tk.Frame):
                 entry_name.grid(column=k, row=j, pady=5, padx=5)
 
                 drop_down = ttk.Combobox(self.lower_frame, values=self.fields_to_be_dropdown[variable], state='readonly')
-                drop_down.set(self.fields_to_be_dropdown[variable][0])
+
+                if self.current_data is not None and i < len(self.current_data):
+                    drop_down.set(self.current_data[i])
+                else:
+                    drop_down.set(self.fields_to_be_dropdown[variable][0])
                 drop_down.grid(column=k + 1, row=j, pady=5, padx=5)
                 self.entry_fields.update({variable: drop_down})
             else:
@@ -72,16 +76,18 @@ class ModifyEntries(tk.Frame):
 
                 self.entry_fields.update({variable: entry_field})
 
-            if self.current_data is not None and i < len(self.current_data):
-                placeholder = self.current_data[i]
-            elif "Date" in variable:
-                placeholder = "yyyy-mm-dd"
-            else:
-                placeholder = "Enter " + variable
+                if self.current_data is not None and i < len(self.current_data):
+                    placeholder = self.current_data[i]
+                elif "Date" in variable:
+                    placeholder = "yyyy-mm-dd"
+                else:
+                    placeholder = "Enter " + variable
 
-            entry_field.insert(0, placeholder)
-            entry_field.bind("<FocusIn>", lambda event, e=entry_field, p=placeholder: self.on_focus_in(event, e, p))
-            entry_field.bind("<FocusOut>", lambda event, e=entry_field, p=placeholder: self.on_focus_out(event, e, p))
+                entry_field.insert(0, placeholder)
+                entry_field.bind("<FocusIn>", lambda event, e=entry_field, p=placeholder: self.on_focus_in(event, e, p))
+                entry_field.bind("<FocusOut>", lambda event, e=entry_field, p=placeholder: self.on_focus_out(event, e, p))
+    
+            
 
             if j == 3:
                 k += 2
@@ -153,7 +159,7 @@ class ModifyEntries(tk.Frame):
                 pass
             case 'End':
 
-                # logic for ending a plan
+                # logic fo r ending a plan
                 pass
 
         # takes the entry field values
@@ -177,6 +183,7 @@ class NewPlan(ModifyEntries):
         self.current_data = None
         self.create_record = PlanEdit.create_plan
         self.entry_fields = {}
+        self.fields_to_be_dropdown = {'Country': get_all_countries()}
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -186,11 +193,12 @@ class EditPlan(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Plan']
-        self.modifiable_variables = ['Plan ID', 'Plan Name', 'Event Name', 'Country', 'Description', 'Start Date', 'End Date']
+        self.modifiable_variables = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date']
         self.button_labels = ['Save Changes', 'End', 'Delete']
         self.current_data = self.screen_data.display_info()
         self.save_record = PlanEdit.update_plan
         self.entry_fields = {}
+        self.fields_to_be_dropdown = {'Country': get_all_countries()}
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -227,10 +235,11 @@ class NewVolunteer(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Volunteer']
-        self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp']
+        self.modifiable_variables = ['First Name', 'Last Name', 'Date of Birth', 'Phone Number', 'Camp ID']
         self.button_labels = ['Create']
         # self.display_delete_button = False
         self.entry_fields = {}
+        self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()]}
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
