@@ -194,9 +194,9 @@ class Dashboard(tk.Frame):
     def create_additional_resources_section(self, parent_frame, plan):
         additional_resources_frame = tk.Frame(parent_frame, bg="white")
 
-        label_text = f"Unallocated Resources for the plan \n ({plan.name})"
-        outside_label = tk.Label(additional_resources_frame, text=label_text)
-        outside_label.grid(row=0, column=0, sticky="w")
+        # label_text = f"Unallocated Resources for the plan \n ({plan.name})"
+        # outside_label = tk.Label(additional_resources_frame, text=label_text)
+        # outside_label.grid(row=0, column=0, sticky="w")
 
         additional_resources = {
             "Shelter": plan.shelter,
@@ -550,13 +550,17 @@ class AdminDashboard(Dashboard):
 
         self.create_plan_tab_title(distribute_tab, self.plan)
 
+        label_text = f"Unallocated Resources for the plan \n ({self.plan.name})"
+        outside_label = tk.Label(distribute_tab, text=label_text)
+        outside_label.grid(row=1, column=0, sticky="w")
+
         additional_resources_frame = self.create_additional_resources_section(
             distribute_tab, self.plan
         )
         label = tk.Label(distribute_tab, text="* This page is used for managing the distribution of the resources. * \n \
         i.e. Increasing camp resources means to distribute unallocated resources to the camp. \n \
         Decreasing camp resources means to take the resource from the camp to the unallocated pool.", fg='red')
-        label.grid(row=0, column=1)
+        label.grid(row=0, column=1, sticky='e')
 
         label = tk.Label(distribute_tab, text="** To log the resource changes for a camp, please update in the corresponding camp tab. **")
         label.grid(row=1, column=1)
@@ -623,7 +627,8 @@ class AdminDashboard(Dashboard):
             command=lambda: self.show_screen("EditPlan", plan),
         )
         edit_button.grid(
-            row=0, column=1, sticky="e", padx=10, pady=(5, 0)
+            # row=0, column=1, sticky="e", padx=10, pady=(5, 0)
+            row=0, column=0, sticky="w", padx=10, pady=(0, 5)
         )
 
         description_frame = tk.Frame(parent_tab, bg="white")
