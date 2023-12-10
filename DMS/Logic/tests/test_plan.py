@@ -59,6 +59,35 @@ class TestPlan(unittest.TestCase):
         print(plan)
         self.assertIsInstance(plan, list, 'Update_plan FAILED')        
 
+    def test_get_stats_triage_category(self):
+        print(" ------------ Executing test_get_stats_triage_category --------------- ")
+        stats = PlanDataRetrieve.get_stats_triage_category(1)
+        print(f'stats: {stats}')
+        self.assertEqual(len(stats), 12, 'get_stats_triage_category should return 12 figures')
+
+    def test_get_stats_gender(self):
+        print(" ------------ Executing test_get_stats_gender --------------- ")
+        stats = PlanDataRetrieve.get_stats_gender(1)
+        print(f'stats: {stats}')
+        self.assertEqual(len(stats), 6, 'get_stats_gender should return 6 figures')
+
+    def test_get_stats_age(self):
+        print(" ------------ Executing test_get_stats_triage_category --------------- ")
+        stats = PlanDataRetrieve.get_stats_age(1)
+        print(f'stats: {stats}')
+        self.assertEqual(len(stats), 6, 'test_get_stats_age should return 6 figures')
+
+    def test_get_stats_family(self):
+        print(" ------------ Executing test_get_stats_family --------------- ")
+        stats = PlanDataRetrieve.get_stats_family(1)
+        print(f'stats: {stats}')
+        self.assertEqual(len(stats), 2, 'get_stats_family should return 2 figures')       
+ 
+    def test_get_stats_vital_status(self):
+        print(" ------------ Executing test_get_stats_vital_status --------------- ")
+        stats = PlanDataRetrieve.get_stats_vital_status(1)
+        print(f'stats: {stats}')
+        self.assertEqual(len(stats), 4, 'get_stats_vital_status should return 4 figures')
     # def test_delete_plan(self):
     #     plan = PlanEdit.delete_plan(planID=1)
     #     print(plan)
