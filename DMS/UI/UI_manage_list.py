@@ -85,7 +85,7 @@ class ManageList(tk.Frame):
 
         self.create_results()
 
-    def create_title(self):
+    def create_title(self, plan=False):
         # this method creates the title and add entry button for each list
         # page_top_frame = tk.Frame(self.root)
         # page_top_frame.pack(side='top')
@@ -96,6 +96,16 @@ class ManageList(tk.Frame):
         new_plan_button = ttk.Button(self, text=self.list_type[1], command=self.new_record_button)
         new_plan_button.grid(column=6, row=1, padx=10, pady=5)
 
+        if plan:
+            manage_camps = ttk.Button(self, text='  Manage Camps   ', command=lambda page='CampList': self.show_screen(page))
+            manage_camps.grid(column=4, row=0, padx=5, pady=5)
+                                                      
+            manage_volunteers = ttk.Button(self, text='Manage Volunteers', command=lambda page='VolunteerList': self.show_screen(page))
+            manage_volunteers.grid(column=4, row=1, padx=5, pady=5)
+
+            manage_refugees = ttk.Button(self, text=' Manage Refugees ', command=lambda page='RefugeeList': self.show_screen(page))
+            manage_refugees.grid(column=4, row=2, padx=5, pady=5)
+
     def create_search(self):
         # this creates the search bar, filters and search button
         # search_frame = tk.Frame(self.root)
@@ -103,13 +113,13 @@ class ManageList(tk.Frame):
 
         search_filters = ttk.Combobox(self, values=self.list_headers, state="readonly")
         search_filters.set("Filter")  # set default value
-        search_filters.grid(column=5, row=2, padx=5)
+        search_filters.grid(column=5, row=3, padx=5)
         # search_filters.bind('<<ComboboxSelected>>', )
 
         if self.status_filters:
             activity_status = ttk.Combobox(self, values=self.status_filters)
             activity_status.set("Status")
-            activity_status.grid(column=4, row=2, padx=5)
+            activity_status.grid(column=4, row=3, padx=5)
             search_button = ttk.Button(self, text='Search',
                                    command=lambda: self.update_results_list(search_filters.get(), search_bar.get(), status=activity_status.get()))
         else:
@@ -117,15 +127,15 @@ class ManageList(tk.Frame):
                                    command=lambda: self.update_results_list(search_filters.get(), search_bar.get()))
 
         search_bar = ttk.Entry(self, width=100)
-        search_bar.grid(column=6, row=2, padx=5)
+        search_bar.grid(column=6, row=3, padx=5)
         # search_bar.pack(padx=10, pady=5)
 
         
-        search_button.grid(column=7, row=2)
+        search_button.grid(column=7, row=3)
         # search_button.pack(side='right', padx=10, pady=5)
 
         export_data_button = ttk.Button(self, text='Export Results', command=self.export_data)
-        export_data_button.grid(column=8, row=2, padx=5)
+        export_data_button.grid(column=8, row=3, padx=5)
         
     def create_results(self):
         # this method creates the results list for a chosen subclass
@@ -149,16 +159,16 @@ class ManageList(tk.Frame):
         self.results_list.bind('<Double-1>', lambda event: self.on_item_double_click(event))
 
         
-        self.results_list.grid(column=0, row=3, columnspan=12, sticky='nsew')
+        self.results_list.grid(column=0, row=4, columnspan=12, sticky='nsew')
 
         scrollbar = ttk.Scrollbar(self, orient='vertical', command=self.results_list.yview)
-        scrollbar.grid(column=12, row=3, sticky='ns')
+        scrollbar.grid(column=12, row=4, sticky='ns')
 
         
         self.results_list.configure(yscrollcommand=scrollbar.set)
 
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(3, weight=1)
+        self.grid_rowconfigure(4, weight=1)
 
         # print("Tree items to objects:", self.tree_item_to_object)
 
@@ -217,7 +227,7 @@ class PlanList(ManageList):
                                 'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date'}
         self.status_filters = ['All', 'Active', 'Ended']
         self.export_name = 'Plans'
-        self.create_title()
+        self.create_title(plan=True)
         self.create_search()
         self.create_results()
 

@@ -30,7 +30,8 @@ class UIManager:
             'AdminDashboard': db.AdminDashboard, 'VolunteerDashboard': db.VolunteerDashboard, 'NewPlan': me.NewPlan,
             'EditPlan': me.EditPlan,
             'NewCamp': me.NewCamp, 'EditCamp': me.EditCamp, 'NewVolunteer': me.NewVolunteer,
-            'EditVolunteer': me.EditVolunteer, 'EditPersonalDetails': me.EditPersonalDetails, 'NewRefugee': me.NewRefugee, 'EditRefugee': me.EditRefugee
+            'EditVolunteer': me.EditVolunteer, 'EditPersonalDetails': me.EditPersonalDetails, 'NewRefugee': me.NewRefugee, 'EditRefugee': me.EditRefugee, 
+            'CampList':ml.CampList
         }
         self.logged_in_user = None
         self.screen_data = None
