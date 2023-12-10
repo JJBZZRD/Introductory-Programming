@@ -373,9 +373,9 @@ class Dashboard(tk.Frame):
 
         title_text = f"{'Refugees' if display_type == 'refugees' else 'Volunteers'}"
         columns = (
-            ("Name", "Triage Category")
+            ("Name", "Medical status")
             if display_type == "refugees"
-            else ("Name", "Camp")
+            else ("Name", "Phone number")
         )
         update_list_func = (
             self.update_refugees_list
@@ -416,7 +416,7 @@ class Dashboard(tk.Frame):
         search_frame.grid_columnconfigure(0, weight=1)
 
         refugees_treeview = ttk.Treeview(refugees_volunteers_frame, columns=columns)
-        refugees_treeview.grid(row=2, column=0, sticky="nsew", pady=10)
+        refugees_treeview.grid(row=2, column=0, sticky="nsew", pady=5)
         refugees_volunteers_frame.grid_rowconfigure(2, weight=1)
 
         refugees_treeview.bind(
@@ -468,12 +468,6 @@ class Dashboard(tk.Frame):
                     ),
                 )
 
-    def on_refugee_double_click(self, _, treeview):
-        item = treeview.focus()
-        if item:
-            selected_refugee = self.refugees[int(treeview.item(item, "text")) - 1]
-            self.show_screen("EditRefugee", selected_refugee)
-
     def update_volunteers_list(self, camp, search_entry, volunteers_treeview):
         filter_value = search_entry.get().strip()
 
@@ -483,10 +477,12 @@ class Dashboard(tk.Frame):
             campID=camp.campID, name=filter_value
         )
 
-        if not self.volunteers:
+        unique_volunteers = {v.volunteerID: v for v in self.volunteers}.values()
+
+        if not unique_volunteers:
             volunteers_treeview.insert("", "end", text="No matching volunteers found.")
         else:
-            for volunteer in self.volunteers:
+            for volunteer in unique_volunteers:
                 volunteers_treeview.insert(
                     "",
                     "end",
@@ -497,11 +493,26 @@ class Dashboard(tk.Frame):
                     ),
                 )
 
-    def on_volunteer_double_click(self, _, treeview):
+    def on_refugee_double_click(self, event, treeview):
         item = treeview.focus()
         if item:
-            selected_volunteer = self.volunteers[int(treeview.item(item, "text")) - 1]
-        self.show_screen("EditVolunteer", selected_volunteer)
+            refugee_id = treeview.item(item, "text")
+
+            selected_refugee_list = PersonDataRetrieve.get_refugees(id=refugee_id)
+            if selected_refugee_list:
+                selected_refugee = selected_refugee_list[0]
+                self.show_screen("EditRefugee", selected_refugee)
+
+    def on_volunteer_double_click(self, event, treeview):
+        item = treeview.focus()
+        if item:
+            volunteer_id = treeview.item(item, "text")
+            selected_volunteer_list = PersonDataRetrieve.get_volunteers(
+                volunteerID=volunteer_id
+            )
+            if selected_volunteer_list:
+                selected_volunteer = selected_volunteer_list[0]
+                self.show_screen("EditVolunteer", selected_volunteer)
 
 
 class VolunteerDashboard(Dashboard):
