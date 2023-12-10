@@ -54,104 +54,80 @@ class Dashboard(tk.Frame):
         title_label.place(relx=0.5, rely=0.5, anchor="center")
 
     def create_camp_statistics_section(self, parent_tab, camp):
-        statistics_frame = tk.Frame(parent_tab, bg="white")
+        camp_statistics_frame = tk.Frame(parent_tab, bg="white")
+        camp_statistics_frame.grid(row=0, column=0, sticky="ew")
 
-        statistics_frame.grid(row=1, column=1, sticky="nsew", pady=5)
-
-        statistics_title = tk.Label(statistics_frame, text="Statistics:")
-        statistics_title.grid(row=0, column=0, sticky="w")
-
-        self.populate_statistics_section(statistics_frame, camp)
-
-        return statistics_frame
-
-    def populate_statistics_section(self, statistics_frame, camp):
-        campID = camp.campID
-
+        campID = camp.campID  # Assuming camp object has an attribute 'campID'
         triage_stats = CampDataRetrieve.get_stats_triage_category(campID)
         gender_stats = CampDataRetrieve.get_stats_gender(campID)
         age_stats = CampDataRetrieve.get_stats_age(campID)
-        family_stats = CampDataRetrieve.get_stats_family(campID)
         vital_status_stats = CampDataRetrieve.get_stats_vital_status(campID)
 
-        row = 1
-        tk.Label(statistics_frame, text="Triage Categories:").grid(
-            row=row, column=0, sticky="w"
+        num_volunteers = len(PersonDataRetrieve.get_volunteers(campID))
+        num_refugees = len(PersonDataRetrieve.get_refugees(campID))
+        family_stats = CampDataRetrieve.get_stats_family(campID)
+        num_families = (
+            family_stats.get("num_families", "Error fetching families")
+            if isinstance(family_stats, dict)
+            else family_stats
         )
+
+        stats_functions = [
+            ("Gender Distribution", gender_stats),
+            ("Age Distribution", age_stats),
+            ("Vital Status", vital_status_stats),
+            ("Triage Categories", triage_stats),
+        ]
+
+        row = 0
+
+        tk.Label(
+            camp_statistics_frame,
+            text=f"Number of Volunteers: {num_volunteers}",
+            font=("Arial", 11),
+        ).grid(row=row, column=0, sticky="w")
         row += 1
-        for category in [
-            "None",
-            "Non-Urgent",
-            "Standard",
-            "Urgent",
-            "Very-Urgent",
-            "Immediate",
-        ]:
-            if isinstance(triage_stats, dict):
-                tk.Label(statistics_frame, text=f"{category}:").grid(
-                    row=row, column=0, sticky="w"
-                )
-                tk.Label(
-                    statistics_frame,
-                    text=str(
-                        triage_stats.get(f'num_{category.lower().replace("-", "_")}', 0)
-                    ),
-                ).grid(row=row, column=1)
-                row += 1
 
-        tk.Label(statistics_frame, text="Gender Stats:").grid(
-            row=row, column=0, sticky="w"
-        )
+        tk.Label(
+            camp_statistics_frame,
+            text=f"Number of Refugees: {num_refugees}",
+            font=("Arial", 11),
+        ).grid(row=row, column=0, sticky="w")
         row += 1
-        for gender in ["Male", "Female", "Other"]:
-            if isinstance(gender_stats, dict):
-                tk.Label(statistics_frame, text=f"{gender}:").grid(
-                    row=row, column=0, sticky="w"
-                )
-                tk.Label(
-                    statistics_frame,
-                    text=str(gender_stats.get(f"num_{gender.lower()}", 0)),
-                ).grid(row=row, column=1)
-                row += 1
 
-        if isinstance(age_stats, dict):
-            tk.Label(statistics_frame, text="Age Groups:").grid(
-                row=row, column=0, sticky="w"
-            )
-            row += 1
-            for age_group in ["Child", "Adult", "Elders"]:
-                tk.Label(statistics_frame, text=f"{age_group}:").grid(
-                    row=row, column=0, sticky="w"
-                )
-                tk.Label(
-                    statistics_frame,
-                    text=str(age_stats.get(f"num_{age_group.lower()}", 0)),
-                ).grid(row=row, column=1)
-                row += 1
+        tk.Label(
+            camp_statistics_frame,
+            text=f"Number of Families: {num_families}",
+            font=("Arial", 11),
+        ).grid(row=row, column=0, sticky="w")
+        row += 1
 
-        if isinstance(family_stats, dict):
-            tk.Label(statistics_frame, text="Family Stats:").grid(
-                row=row, column=0, sticky="w"
-            )
+        for label, stats in stats_functions:
             tk.Label(
-                statistics_frame, text=str(family_stats.get("num_families", 0))
-            ).grid(row=row, column=1)
+                camp_statistics_frame, text=label, font=("Arial", 11, "bold")
+            ).grid(row=row, column=0, sticky="w")
             row += 1
 
-        if isinstance(vital_status_stats, dict):
-            tk.Label(statistics_frame, text="Vital Status:").grid(
-                row=row, column=0, sticky="w"
-            )
-            row += 1
-            for status in ["Alive", "Dead"]:
-                tk.Label(statistics_frame, text=f"{status}:").grid(
+            if isinstance(stats, str):
+                tk.Label(camp_statistics_frame, text=stats, font=("Arial", 11)).grid(
                     row=row, column=0, sticky="w"
                 )
-                tk.Label(
-                    statistics_frame,
-                    text=str(vital_status_stats.get(f"num_{status.lower()}", 0)),
-                ).grid(row=row, column=1)
                 row += 1
+                continue
+
+            for key, value in stats.items():
+                if "num_" in key:
+                    pct_key = "pct_" + key.split("_")[1]
+                    pct_value = stats.get(pct_key, 0)
+                    formatted_stat = (
+                        f"{key.split('_')[1].title()}: {pct_value:.0f}% ({value})"
+                    )
+                    tk.Label(
+                        camp_statistics_frame, text=formatted_stat, font=("Arial", 11)
+                    ).grid(row=row, column=0, sticky="w")
+                    row += 1
+
+        return camp_statistics_frame
 
     def create_resources_section(
         self, parent_tab, camp, plan, user_type, additional_resources_frame=None
@@ -389,7 +365,7 @@ class Dashboard(tk.Frame):
         )
 
         refugees_title = tk.Label(
-            refugees_volunteers_frame, text=title_text, font=("Arial", 16, "bold")
+            refugees_volunteers_frame, text=title_text, font=("Arial", 22, "bold")
         )
         refugees_title.grid(row=0, column=0, sticky="w", pady=10)
 
@@ -592,7 +568,7 @@ class AdminDashboard(Dashboard):
         for i, camp in enumerate(self.planCamps):
             camp_title = f"Camp {camp.campID} - {camp.location}"
             camp_title_label = tk.Label(
-                all_camp_resources_frame, text=camp_title, font=("Arial", 12, "bold")
+                all_camp_resources_frame, text=camp_title, font=("Arial", 11, "bold")
             )
             camp_title_label.grid(row=0, column=i * 2, sticky="w")
 
@@ -662,4 +638,46 @@ class AdminDashboard(Dashboard):
 
     def setup_plan_statistics_tab(self):
         stats_tab = ttk.Frame(self.tab_control)
-        self.tab_control.add(stats_tab, text="Plan Camps Statistics")
+        self.tab_control.add(stats_tab, text="Plan Statistics")
+
+        self.create_plan_tab_title(stats_tab, self.plan)
+
+        additional_resources_frame = self.create_additional_resources_section(
+            stats_tab, self.plan
+        )
+
+        canvas_width = 600
+        camp_stats_canvas = tk.Canvas(stats_tab, width=canvas_width)
+        camp_resources_scrollbar = ttk.Scrollbar(
+            stats_tab, orient="horizontal", command=camp_stats_canvas.xview
+        )
+        camp_stats_canvas.configure(xscrollcommand=camp_resources_scrollbar.set)
+
+        all_camp_stats_frame = ttk.Frame(camp_stats_canvas)
+        camp_stats_canvas.create_window(
+            (0, 1), window=all_camp_stats_frame, anchor="nw"
+        )
+
+        for i, camp in enumerate(self.planCamps):
+            camp_title = f"Camp {camp.campID} - {camp.location}"
+            camp_title_label = tk.Label(
+                all_camp_stats_frame, text=camp_title, font=("Arial", 12, "bold")
+            )
+            camp_title_label.grid(row=0, column=i * 2, sticky="w")
+
+            camp_stats = self.create_camp_statistics_section(all_camp_stats_frame, camp)
+            camp_stats.grid(row=1, column=i * 2, sticky="nsew")
+            all_camp_stats_frame.grid_columnconfigure(i * 2 + 1, weight=1)
+
+        all_camp_stats_frame.bind(
+            "<Configure>",
+            lambda e: camp_stats_canvas.configure(
+                scrollregion=camp_stats_canvas.bbox("all")
+            ),
+        )
+
+        additional_resources_frame.grid(row=2, column=0, sticky="nsew")
+        camp_stats_canvas.grid(row=2, column=1, sticky="nsew")
+        camp_resources_scrollbar.grid(row=3, column=1, sticky="ew")
+        stats_tab.grid_columnconfigure(0, weight=1)
+        stats_tab.grid_columnconfigure(1, weight=3)
