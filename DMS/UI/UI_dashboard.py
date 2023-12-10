@@ -42,11 +42,7 @@ class Dashboard(tk.Frame):
         title_frame.grid(row=0, column=0, columnspan=3, sticky="ew", pady=2)
         title_frame.grid_propagate(False)
 
-        current_capacity = CampDataRetrieve.get_camp(campID=camp.campID)[0].max_shelter
-
-        title_text = (
-            f"Details for Camp {camp.campID} - Capacity: placeholder/{current_capacity}"
-        )
+        title_text = f"Camp {camp.campID} - {camp.location}"
         title_label = tk.Label(
             title_frame, text=title_text, font=("Arial", 16, "bold"), bg="white"
         )
