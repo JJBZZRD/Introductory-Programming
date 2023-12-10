@@ -8,3 +8,6 @@
 **/.idea/
 DMS/DB/log_files/queries.log
 DMS/DB/database.db
+**/build/
+**/dist/
+__main__.spec
