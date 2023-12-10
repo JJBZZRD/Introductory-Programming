@@ -24,6 +24,7 @@ class ManageList(tk.Frame):
         self.filter_matching = {}
         self.export_name = ''
         self.status_filters = []
+        self.record_button = None
         self.setup_list()
 
     def setup_list(self):
@@ -91,7 +92,7 @@ class ManageList(tk.Frame):
         list_title = ttk.Label(self, text=self.list_type[0], font=("Helvetica", 20, "bold"))
         list_title.grid(column=6, row=0, padx=10, pady=5)
 
-        new_plan_button = ttk.Button(self, text=self.list_type[1], command=self.switch_to_new_plan)
+        new_plan_button = ttk.Button(self, text=self.list_type[1], command=self.new_record_button)
         new_plan_button.grid(column=6, row=1, padx=10, pady=5)
 
     def create_search(self):
@@ -179,8 +180,8 @@ class ManageList(tk.Frame):
         else:
             print("no asssociated object")
 
-    def switch_to_new_plan(self, event=None):
-        self.show_screen('NewPlan')
+    def new_record_button(self, event=None):
+        self.show_screen(self.record_button)
 
 
     def export_data(self):
@@ -205,9 +206,10 @@ class PlanList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Plans', 'Add New Plan']
         self.list_headers = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date']
-        self.list_data = PlanDataRetrieve.get_plans()
+        self.list_data = PlanDataRetrieve.get_all_plans()
         self.get_search = PlanDataRetrieve.get_plan
         self.switch_to_page = 'AdminDashboard'
+        self.record_button = 'NewPlan'
         self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Country': 'country', 'Event Name': 'event_name',
                                 'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date'}
         self.status_filters = ['All', 'Active', 'Ended']
@@ -225,6 +227,7 @@ class CampList(ManageList):
         self.list_data = CampDataRetrieve.get_all_camps()
         self.get_search = CampDataRetrieve.get_camp
         self.switch_to_page = 'EditCamp'
+        self.record_button = 'NewCamp'
         self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Max Shelter': 'max_shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max_Food': 'max_food',
                                 'Medical Supplies': 'medical_supplies', 'Max Medical Supplies': 'max_medical_supplies', 'Plan ID': 'planID'}
         self.export_name = 'Camps'
@@ -242,6 +245,7 @@ class VolunteerList(ManageList):
         self.list_data = PersonDataRetrieve.get_all_volunteers()
         self.get_search = PersonDataRetrieve.get_volunteers
         self.switch_to_page = 'EditVolunteer'
+        self.record_button = 'NewVolunteer'
         self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'name', 'Last Name': 'name', 'Username': 'username',
                 'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID'}
         self.status_filters = ['All', 'Active', 'Deactivated']
@@ -261,6 +265,7 @@ class RefugeeList(ManageList):
         self.list_data = PersonDataRetrieve.get_all_refugees()
         self.get_search = PersonDataRetrieve.get_refugees
         self.switch_to_page = 'EditRefugee'
+        self.record_button = 'NewRefugee'
         self.filter_matching = {'Refugee ID': 'id', 'First Name': 'name', 'Last Name': 'name',
                 'Date of_Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
                 'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
