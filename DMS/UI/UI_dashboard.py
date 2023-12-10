@@ -53,7 +53,7 @@ class Dashboard(tk.Frame):
         camp_statistics_frame = tk.Frame(parent_tab, bg="white")
         camp_statistics_frame.grid(row=0, column=0, sticky="ew")
 
-        campID = camp.campID  # Assuming camp object has an attribute 'campID'
+        campID = camp.campID
         triage_stats = CampDataRetrieve.get_stats_triage_category(campID)
         gender_stats = CampDataRetrieve.get_stats_gender(campID)
         age_stats = CampDataRetrieve.get_stats_age(campID)
@@ -194,10 +194,10 @@ class Dashboard(tk.Frame):
     def create_additional_resources_section(self, parent_frame, plan):
         additional_resources_frame = tk.Frame(parent_frame, bg="white")
         additional_resources = {
+            "Shelter": plan.shelter,
             "Water": plan.water,
             "Food": plan.food,
             "Medical Supplies": plan.medical_supplies,
-            "Shelter": plan.shelter,
         }
 
         for index, (resource_name, amount) in enumerate(additional_resources.items()):
@@ -253,12 +253,6 @@ class Dashboard(tk.Frame):
     ):
         resource_key = resource_name.lower().replace(" ", "_")
         if user_type == "admin":
-            # Update camp resource
-            camp_current_amount = getattr(camp, resource_key)
-            new_camp_amount = max(0, camp_current_amount + increment)
-            if CampDataEdit.update_camp(camp.campID, **{resource_key: new_camp_amount}):
-                setattr(camp, resource_key, new_camp_amount)
-
             # Update plan resource, decrementing by increment
             plan_current_amount = getattr(plan, resource_key)
             new_plan_amount = max(0, plan_current_amount - increment)
@@ -282,23 +276,29 @@ class Dashboard(tk.Frame):
                         amount_label.config(text=str(new_plan_amount))
                         break  # Found the correct label, exit the loop
 
-            # Update the camp's resource amount label
-            top_frame = resource_frame.winfo_children()[0]
-            amount_label = top_frame.winfo_children()[1]
-            amount_label.config(text=str(new_camp_amount))
+                # Update camp resource
+        camp_current_amount = getattr(camp, resource_key)
+        new_camp_amount = max(0, camp_current_amount + increment)
+        if CampDataEdit.update_camp(camp.campID, **{resource_key: new_camp_amount}):
+            setattr(camp, resource_key, new_camp_amount)
 
-            # Update days left if the resource is one of the specified types
-            camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
-            resource_order = ["Water", "Food", "Medical Supplies"]
-            if resource_name in resource_order:
-                days_left = camp_resources_estimation.get(resource_name)
-                bottom_frame = resource_frame.winfo_children()[1]
-                days_left_label = bottom_frame.winfo_children()[0]
-                days_left_label.config(text=f"Days left: {days_left}\n")
+        # Update the camp's resource amount label
+        top_frame = resource_frame.winfo_children()[0]
+        amount_label = top_frame.winfo_children()[1]
+        amount_label.config(text=str(new_camp_amount))
 
-            resource_frame.update()
-            if additional_resources_frame:
-                additional_resources_frame.update()
+        # Update days left if the resource is one of the specified types
+        camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
+        resource_order = ["Shelter", "Water", "Food", "Medical Supplies"]
+        if resource_name in resource_order:
+            days_left = camp_resources_estimation.get(resource_name)
+            bottom_frame = resource_frame.winfo_children()[1]
+            days_left_label = bottom_frame.winfo_children()[0]
+            days_left_label.config(text=f"Days left: {days_left}\n")
+
+        resource_frame.update()
+        if additional_resources_frame:
+            additional_resources_frame.update()
 
     def update_plan_resources(self, resource_frame, resource_name, plan, increment):
         resource_key = resource_name.lower().replace(" ", "_")
@@ -361,7 +361,7 @@ class Dashboard(tk.Frame):
         )
 
         refugees_title = tk.Label(
-            refugees_volunteers_frame, text=title_text, font=("Arial", 22, "bold")
+            refugees_volunteers_frame, text=title_text, font=("Arial", 14, "bold")
         )
         refugees_title.grid(row=0, column=0, sticky="w", pady=10)
 
