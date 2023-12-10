@@ -12,3 +12,4 @@ DMS/DB/database.db
 **/dist/
 __main__.spec
 **/queries.log
+**/query.log
