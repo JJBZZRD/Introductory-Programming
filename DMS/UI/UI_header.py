@@ -8,6 +8,7 @@ class UIHeader(tk.Frame):
         self.show_screen = ui_manager.show_screen
         self.page_nav = ui_manager.page_nav
         self.reset_history = ui_manager.reset_history
+        self.refresh_page = ui_manager.refresh_page
         self.create_header()
 
     def create_header(self):
@@ -38,7 +39,12 @@ class UIHeader(tk.Frame):
                                        command=lambda: self.page_nav('forward'))
         nav_forward_button.pack(side=tk.LEFT, padx=(0, 10))
 
+        nav_refresh_button = tk.Button(parent, text="↺", bg="white",
+                                       command=lambda: self.refresh_page())
+        nav_refresh_button.pack(side=tk.LEFT, padx=(0, 10))
+
     def add_control_buttons(self, parent):
+
         settings_button = tk.Button(parent, text="⚙", bg="white", command=self.open_settings)
         settings_button.pack(side=tk.LEFT)
 

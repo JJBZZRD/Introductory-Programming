@@ -106,18 +106,20 @@ class UIManager:
 
         elif direction == 'forward' and self.current_page_position < len(self.page_history) - 1:
             self.current_page_position += 1
-
-        elif direction == 'refresh':
-            # this allows 'refresh' to be a valid input but simply executes showscreen without any navigation
-            # changes or page history changes
-            pass
-
         else:
             print('Invalid navigation direction or boundary reached.')
             return
 
         screen_name, screen_data = self.page_history[self.current_page_position]
         self.show_screen(screen_name, screen_data=screen_data, add_to_history=False)
+
+    def refresh_page(self):
+        if self.page_history[self.current_page_position - 1][0] == 'LoginScreen':
+            self.page_nav('forward')
+            self.page_nav('back')
+        else:
+            self.page_nav('back')
+            self.page_nav('forward')
 
     def reset_history(self):
         self.page_history = []
