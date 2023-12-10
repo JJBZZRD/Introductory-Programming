@@ -153,10 +153,14 @@ class Dashboard(tk.Frame):
                 ).grid(row=row, column=1)
                 row += 1
 
-    def create_resources_section(self, parent_tab, camp, plan, user_type):
+    def create_resources_section(
+        self, parent_tab, camp, plan, user_type, additional_resources_frame=None
+    ):
         resources_frame = tk.Frame(parent_tab, bg="white")
 
         camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
+
+        additional_resources_frame = additional_resources_frame
 
         resources = {
             "Water": camp.water,
@@ -164,16 +168,6 @@ class Dashboard(tk.Frame):
             "Medical Supplies": camp.medical_supplies,
             "Max shelter": camp.max_shelter,
         }
-
-        if user_type == "admin" and plan:
-            resources.update(
-                {
-                    "Additional Water": plan.water,
-                    "Additional Food": plan.food,
-                    "Additional Medical Supplies": plan.medical_supplies,
-                    "Additional Shelter": plan.shelter,
-                }
-            )
 
         for index, (resource_name, amount) in enumerate(resources.items()):
             resource_frame = tk.Frame(resources_frame)
@@ -198,14 +192,26 @@ class Dashboard(tk.Frame):
                     top_frame,
                     text="-",
                     command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(
-                        camp, resource_frame, resource_name, -1, plan, user_type
+                        camp,
+                        resource_frame,
+                        resource_name,
+                        -1,
+                        plan,
+                        user_type,
+                        additional_resources_frame,
                     ),
                 ).grid(row=0, column=2)
                 tk.Button(
                     top_frame,
                     text="+",
                     command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(
-                        camp, resource_frame, resource_name, 1, plan, user_type
+                        camp,
+                        resource_frame,
+                        resource_name,
+                        1,
+                        plan,
+                        user_type,
+                        additional_resources_frame,
                     ),
                 ).grid(row=0, column=3)
 
@@ -220,41 +226,59 @@ class Dashboard(tk.Frame):
 
         return resources_frame
 
-    def update_resource(
-        self, camp, resource_frame, resource_name, increment, plan, type
-    ):
-        print(
-            f"Updating {resource_name} by {increment} in resource frame {resource_frame} for camp {camp.campID}, plan {plan.planID}"
-        )
+    def create_additional_resources_section(self, parent_frame, plan):
+        print(f"plan: {plan.planID}")
+        additional_resources_frame = tk.Frame(parent_frame, bg="white")
+        additional_resources = {
+            "Additional Water": plan.water,
+            "Additional Food": plan.food,
+            "Additional Medical Supplies": plan.medical_supplies,
+            "Additional Shelter": plan.shelter,
+        }
 
-        resource_key = resource_name.lower().replace(" ", "_")
-        if type == "admin" and resource_name.startswith("Additional"):
-            current_amount = getattr(plan, resource_key)
-            new_amount = max(0, current_amount + increment)
+        for index, (resource_name, amount) in enumerate(additional_resources.items()):
+            resource_frame = tk.Frame(additional_resources_frame, bg="white")
+            resource_frame.grid(row=index, column=0, sticky="ew")
 
-            if PlanEdit.update_plan(plan.planID, **{resource_key: new_amount}):
-                setattr(plan, resource_key, new_amount)
-        else:
-            current_amount = getattr(camp, resource_key)
-            new_amount = max(0, current_amount + increment)
-            if CampDataEdit.update_camp(camp.campID, **{resource_key: new_amount}):
-                print(f"Updating {resource_key} to {new_amount}")
-                setattr(camp, resource_key, new_amount)
+            tk.Label(resource_frame, text=f"{resource_name}:").grid(
+                row=0, column=0, sticky="w"
+            )
+            amount_label = tk.Label(resource_frame, text=str(amount))
+            amount_label.grid(row=0, column=1, sticky="w")
 
-        top_frame = resource_frame.winfo_children()[0]
-        amount_label = top_frame.winfo_children()[1]
-        amount_label.config(text=str(new_amount))
+            # Decrease button
+            decrease_button = tk.Button(
+                resource_frame,
+                text="-",
+                command=lambda res_name=resource_name, amt_label=amount_label: self.update_resource(
+                    None,  # No specific camp for additional resources
+                    resource_frame,
+                    res_name,
+                    -1,  # Decrement
+                    plan,
+                    "admin",
+                    additional_resources_frame,  # This is the frame to update
+                ),
+            )
+            decrease_button.grid(row=0, column=2, padx=5)
 
-        camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
-        resource_order = ["Water", "Food", "Medical Supplies"]
-        if resource_name in resource_order:
-            days_left = camp_resources_estimation.get(resource_name)
+            # Increase button
+            increase_button = tk.Button(
+                resource_frame,
+                text="+",
+                command=lambda res_name=resource_name, amt_label=amount_label: self.update_resource(
+                    None,  # No specific camp for additional resources
+                    resource_frame,
+                    res_name,
+                    1,  # Increment
+                    plan,
+                    "admin",
+                    additional_resources_frame,  # This is the frame to update
+                ),
+            )
+            increase_button.grid(row=0, column=3, padx=5)
 
-            bottom_frame = resource_frame.winfo_children()[1]
-            days_left_label = bottom_frame.winfo_children()[0]
-            days_left_label.config(text=f"Days left: {days_left}")
-
-        resource_frame.update()
+        return additional_resources_frame
 
     def create_camp_refugees_volunteers_section(
         self, parent_tab, camp, display_type, user_type
@@ -416,7 +440,7 @@ class VolunteerDashboard(Dashboard):
 
 class AdminDashboard(Dashboard):
     """
-    Admin dashboard for displaying information on each camp and additional resources.
+    Admin dashboard for displaying information on each camp and additional resources.2
     Includes an overview tab with information on all camps plus additional resources,
     as well as individual tabs for each camp, a resource distribution tab, and a statistics tab.
     """
@@ -450,12 +474,13 @@ class AdminDashboard(Dashboard):
         distribute_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(distribute_tab, text="Distribute Plan Resources")
 
+        print(self.plan)
+
         self.create_plan_tab_title(distribute_tab, self.plan)
 
-        addition_resources_frame = ttk.Frame(distribute_tab)
-        ttk.Label(
-            addition_resources_frame, text="Addition Resources Placeholder"
-        ).pack()
+        additional_resources_frame = self.create_additional_resources_section(
+            distribute_tab, self.plan
+        )
 
         canvas_width = 600
         camp_resources_canvas = tk.Canvas(distribute_tab, width=canvas_width)
@@ -471,7 +496,11 @@ class AdminDashboard(Dashboard):
 
         for i, camp in enumerate(self.planCamps):
             camp_section = self.create_resources_section(
-                all_camp_resources_frame, camp, self.plan, "admin"
+                all_camp_resources_frame,
+                camp,
+                self.plan,
+                "admin",
+                additional_resources_frame=additional_resources_frame,
             )
             camp_section.grid(row=0, column=i, sticky="nsew")
             all_camp_resources_frame.grid_columnconfigure(i, weight=1)
@@ -483,7 +512,7 @@ class AdminDashboard(Dashboard):
             ),
         )
 
-        addition_resources_frame.grid(row=2, column=0, sticky="nsew")
+        additional_resources_frame.grid(row=2, column=0, sticky="nsew")
         camp_resources_canvas.grid(row=2, column=1, sticky="nsew")
         camp_resources_scrollbar.grid(row=3, column=1, sticky="ew")
         distribute_tab.grid_columnconfigure(0, weight=1)
@@ -533,6 +562,24 @@ class AdminDashboard(Dashboard):
     def setup_plan_statistics_tab(self):
         stats_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(stats_tab, text="Plan Camps Statistics")
+
+    def create_additional_resources_section(self, parent_frame, plan):
+        print(f"plan: {plan.planID}")
+        additional_resources_frame = tk.Frame(parent_frame, bg="white")
+        additional_resources = {
+            "Additional Water": plan.water,
+            "Additional Food": plan.food,
+            "Additional Medical Supplies": plan.medical_supplies,
+            "Additional Shelter": plan.shelter,
+        }
+
+        for index, (resource_name, amount) in enumerate(additional_resources.items()):
+            resource_label = tk.Label(
+                additional_resources_frame, text=f"{resource_name}: {amount}"
+            )
+            resource_label.grid(row=index, column=0, sticky="w")
+
+        return additional_resources_frame
 
     # def populate_overview_tab(self, tab):
     #     self.create_camps_frame(tab, self.planCamps)
