@@ -128,9 +128,9 @@ class Plan:  # Plan class has attributes matching columns in table
     @staticmethod
     def get_total_resources(planID):
         q = f"""
-            SELECT SUM(food) as sum_food,
+            SELECT SUM(max_shelter) as sum_shelter,
+                SUM(food) as sum_food,
                 SUM(water) as sum_water,
-                SUM(max_shelter) as sum_shelter,
                 SUM(medical_supplies) as sum_med
             FROM camps
             WHERE planID = {planID}
