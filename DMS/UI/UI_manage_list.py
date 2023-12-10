@@ -4,6 +4,7 @@ from tkinter import filedialog
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.person_data_retrieve import PersonDataRetrieve
+from ..DB.camp import Camp
 import pandas as pd
 
 
@@ -199,6 +200,8 @@ class ManageList(tk.Frame):
         if file_path:  
             df.to_csv(file_path, index=False)
 
+    
+
             
 
 
@@ -236,6 +239,7 @@ class CampList(ManageList):
         self.create_results()
 
 
+
 class VolunteerList(ManageList):
 
     def setup_list(self):
@@ -253,6 +257,10 @@ class VolunteerList(ManageList):
         self.create_search()
         self.create_results()
 
+    def list_by_plan(self):
+        #need some way of extracting list of volunteers asociated with a specific planID
+        #if i give you a camp, can you give me a list of volunteers associated with the plan that contains that camp
+        pass
 
 class RefugeeList(ManageList):
 
@@ -262,7 +270,7 @@ class RefugeeList(ManageList):
                 'Date of_Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status']
-        self.list_data = PersonDataRetrieve.get_all_refugees()
+        self.list_data = self.list_by_camp()
         self.get_search = PersonDataRetrieve.get_refugees
         self.switch_to_page = 'EditRefugee'
         self.record_button = 'NewRefugee'
@@ -274,3 +282,9 @@ class RefugeeList(ManageList):
         self.create_title()
         self.create_search()
         self.create_results()
+
+    def list_by_camp(self):
+        if isinstance(self.screen_data, Camp):
+            return PersonDataRetrieve.get_refugees(camp_id=self.screen_data.campID)
+        else:
+            return PersonDataRetrieve.get_all_refugees()
