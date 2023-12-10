@@ -194,6 +194,10 @@ class Dashboard(tk.Frame):
     def create_additional_resources_section(self, parent_frame, plan):
         additional_resources_frame = tk.Frame(parent_frame, bg="white")
 
+        label_text = f"Unallocated Resources for the plan \n ({plan.name})"
+        outside_label = tk.Label(additional_resources_frame, text=label_text)
+        outside_label.grid(row=0, column=0, sticky="w")
+
         additional_resources = {
             "Shelter": plan.shelter,
             "Water": plan.water,
@@ -203,7 +207,7 @@ class Dashboard(tk.Frame):
 
         for index, (resource_name, amount) in enumerate(additional_resources.items()):
             resource_frame = tk.Frame(additional_resources_frame)
-            resource_frame.grid(row=index, column=0, sticky="ew")
+            resource_frame.grid(row=index + 1, column=0, sticky="ew")
 
             top_frame = tk.Frame(resource_frame)
             top_frame.grid(row=0, column=0, sticky="ew")
@@ -211,6 +215,7 @@ class Dashboard(tk.Frame):
             tk.Label(top_frame, text=f"{resource_name}:").grid(
                 row=0, column=0, sticky="w"
             )
+
             amount_label = tk.Label(top_frame, text=str(amount))
             amount_label.grid(row=0, column=1)
 
@@ -541,13 +546,20 @@ class AdminDashboard(Dashboard):
         distribute_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(distribute_tab, text="Distribute Plan Resources")
 
-        print(self.plan)
+        print(f"\n[DEBUG] Distribute Plan Resources: self.plan: {self.plan}\n")
 
         self.create_plan_tab_title(distribute_tab, self.plan)
 
         additional_resources_frame = self.create_additional_resources_section(
             distribute_tab, self.plan
         )
+        label = tk.Label(distribute_tab, text="* This page is used for managing the distribution of the resources. * \n \
+        i.e. Increasing camp resources means to distribute unallocated resources to the camp. \n \
+        Decreasing camp resources means to take the resource from the camp to the unallocated pool.", fg='red')
+        label.grid(row=0, column=1)
+
+        label = tk.Label(distribute_tab, text="** To log the resource changes for a camp, please update in the corresponding camp tab. **")
+        label.grid(row=1, column=1)
 
         canvas_width = 600
         camp_resources_canvas = tk.Canvas(distribute_tab, width=canvas_width)
@@ -602,7 +614,7 @@ class AdminDashboard(Dashboard):
         )
         title_label.grid(
             row=0, column=0, sticky="w", padx=10, pady=(5, 0)
-        )  # Adjust padding here if needed
+        )
 
         edit_button = ttk.Button(
             title_frame,
@@ -612,7 +624,7 @@ class AdminDashboard(Dashboard):
         )
         edit_button.grid(
             row=0, column=1, sticky="e", padx=10, pady=(5, 0)
-        )  # Adjust padding here if needed
+        )
 
         description_frame = tk.Frame(parent_tab, bg="white")
         description_frame.grid(row=1, column=0, columnspan=2, sticky="ew")
@@ -625,7 +637,7 @@ class AdminDashboard(Dashboard):
         )
         description_label.grid(
             row=0, column=0, sticky="w", padx=10, pady=(0, 5)
-        )  # Adjust padding here if needed
+        )
 
         # Adjust the row configurations to control the vertical spacing
         parent_tab.grid_rowconfigure(0, weight=0)  # Minimal weight for title row
