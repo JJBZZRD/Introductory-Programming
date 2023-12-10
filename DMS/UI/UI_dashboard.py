@@ -562,7 +562,7 @@ class AdminDashboard(Dashboard):
         Decreasing camp resources means to take the resource from the camp to the unallocated pool.", fg='red')
         label.grid(row=0, column=1, sticky='e')
 
-        label = tk.Label(distribute_tab, text="** To log the resource changes for a camp, please update in the corresponding camp tab. **")
+        label = tk.Label(distribute_tab, text="** To log the resource changes for a camp, please use 'Manage Camp' in the previous screeen. **")
         label.grid(row=1, column=1)
 
         canvas_width = 600
