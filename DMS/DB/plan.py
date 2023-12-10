@@ -138,3 +138,15 @@ class Plan:  # Plan class has attributes matching columns in table
             """
         cursor.execute(q)
         return cursor.fetchall()
+
+    @staticmethod
+    def get_plan_families(planID):
+        q = f"""
+        SELECT familyID
+        FROM refugees
+        LEFT JOIN camps ON refugees.campID = camps.campID
+        WHERE camps.planID = {planID}
+        GROUP BY familyID
+        """
+        cursor.execute(q)
+        return cursor.fetchall()

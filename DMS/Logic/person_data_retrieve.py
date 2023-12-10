@@ -47,6 +47,9 @@ class PersonDataRetrieve:
         refugee_tuples = Refugee.get_all_refugees() 
         return util.parse_result('Refugee', refugee_tuples)
     
+    def get_refugees_by_plan(plan_id, triage_category = None, gender = None, vital_status=None):
+        return util.parse_result('Refugee', Refugee.get_refugees_by_plan(plan_id, triage_category, gender, vital_status))
+    
     @staticmethod
     def get_refugees(id=None, name=None, date_of_birth=None, gender=None, family_id=None, camp_id=None, triage_category=None, medical_condition=None, vital_status=None):
         if name:

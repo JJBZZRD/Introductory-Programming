@@ -180,7 +180,7 @@ class CampDataRetrieve:
         list_male = PersonDataRetrieve.get_refugees(camp_id=campID, gender='Male')
         list_female = PersonDataRetrieve.get_refugees(camp_id=campID, gender='Female')
         list_other = PersonDataRetrieve.get_refugees(camp_id=campID, gender='Other')
-        if isinstance(list_male, list) and isinstance(list_female, list):
+        if isinstance(list_male, list) and isinstance(list_female, list) and isinstance(list_other, list):
             num_male = len(list_male)
             num_female = len(list_female)
             num_other = len(list_other)

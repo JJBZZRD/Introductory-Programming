@@ -157,7 +157,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
         return cursor.fetchall()
 
     @staticmethod
-    def get_refugees_by_plan(plan_id):
+    def get_refugees_by_plan(plan_id, triage_category = None, gender = None, vital_status=None):
         q = f"""
             SELECT *
             FROM refugees
@@ -165,6 +165,29 @@ class Refugee:  # Refugee class has attributes matching columns in table
                 (SELECT campID
                 FROM camps
                 WHERE planID = {plan_id})
+            AND refugeeID IS NOT NULL
+            """
+        
+        if triage_category:
+            q += f" AND triage_category = '{triage_category}'"
+        if gender:
+            q += f" AND gender = '{gender}'"
+        if vital_status:
+            q += f" AND vital_status = '{vital_status}'"
+        
+        cursor.execute(q)
+        return cursor.fetchall()
+
+    @staticmethod
+    def get_plan_triage_stats(plan_id, triage_category):
+        q = f"""
+            SELECT *
+            FROM refugees
+            WHERE campID IN
+                (SELECT campID
+                FROM camps
+                WHERE planID = {plan_id}
+            AND triage_category = '{triage_category}')
             """
         cursor.execute(q)
         return cursor.fetchall()
