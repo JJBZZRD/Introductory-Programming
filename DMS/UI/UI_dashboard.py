@@ -227,7 +227,6 @@ class Dashboard(tk.Frame):
         return resources_frame
 
     def create_additional_resources_section(self, parent_frame, plan):
-        print(f"plan: {plan.planID}")
         additional_resources_frame = tk.Frame(parent_frame, bg="white")
         additional_resources = {
             "Additional Water": plan.water,
@@ -279,6 +278,42 @@ class Dashboard(tk.Frame):
             increase_button.grid(row=0, column=3, padx=5)
 
         return additional_resources_frame
+
+    def update_resource(
+        self, camp, resource_frame, resource_name, increment, plan, type
+    ):
+        print(
+            f"Updating {resource_name} by {increment} in resource frame {resource_frame} for camp {camp.campID}, plan {plan.planID}"
+        )
+
+        resource_key = resource_name.lower().replace(" ", "_")
+        if type == "admin" and resource_name.startswith("Additional"):
+            current_amount = getattr(plan, resource_key)
+            new_amount = max(0, current_amount + increment)
+
+            if PlanEdit.update_plan(plan.planID, **{resource_key: new_amount}):
+                setattr(plan, resource_key, new_amount)
+        else:
+            current_amount = getattr(camp, resource_key)
+            new_amount = max(0, current_amount + increment)
+            if CampDataEdit.update_camp(camp.campID, **{resource_key: new_amount}):
+                print(f"Updating {resource_key} to {new_amount}")
+                setattr(camp, resource_key, new_amount)
+
+        top_frame = resource_frame.winfo_children()[0]
+        amount_label = top_frame.winfo_children()[1]
+        amount_label.config(text=str(new_amount))
+
+        camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
+        resource_order = ["Water", "Food", "Medical Supplies"]
+        if resource_name in resource_order:
+            days_left = camp_resources_estimation.get(resource_name)
+
+            bottom_frame = resource_frame.winfo_children()[1]
+            days_left_label = bottom_frame.winfo_children()[0]
+            days_left_label.config(text=f"Days left: {days_left}")
+
+        resource_frame.update()
 
     def create_camp_refugees_volunteers_section(
         self, parent_tab, camp, display_type, user_type
@@ -562,24 +597,6 @@ class AdminDashboard(Dashboard):
     def setup_plan_statistics_tab(self):
         stats_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(stats_tab, text="Plan Camps Statistics")
-
-    def create_additional_resources_section(self, parent_frame, plan):
-        print(f"plan: {plan.planID}")
-        additional_resources_frame = tk.Frame(parent_frame, bg="white")
-        additional_resources = {
-            "Additional Water": plan.water,
-            "Additional Food": plan.food,
-            "Additional Medical Supplies": plan.medical_supplies,
-            "Additional Shelter": plan.shelter,
-        }
-
-        for index, (resource_name, amount) in enumerate(additional_resources.items()):
-            resource_label = tk.Label(
-                additional_resources_frame, text=f"{resource_name}: {amount}"
-            )
-            resource_label.grid(row=index, column=0, sticky="w")
-
-        return additional_resources_frame
 
     # def populate_overview_tab(self, tab):
     #     self.create_camps_frame(tab, self.planCamps)
