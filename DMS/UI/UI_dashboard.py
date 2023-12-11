@@ -39,13 +39,22 @@ class Dashboard(tk.Frame):
 
     def create_camp_title_frame(self, parent_tab, plan, camp):
         title_frame = tk.Frame(parent_tab, height=30)
-        title_frame.grid(row=0, column=0, columnspan=3, sticky="ew", pady=2)
+        title_frame.grid(row=0, column=0, columnspan=3, sticky="ew", padx=5, pady=5)
         title_frame.grid_propagate(False)
+        title_frame.columnconfigure(0, weight=1)
 
         title_text = f"{plan.name} - Camp {camp.campID} - {camp.location}"
         title_label = tk.Label(title_frame, text=title_text, font=("Arial", 16, "bold"))
-        title_label.pack(side="left", padx=10)
-        title_label.place(relx=0.5, rely=0.5, anchor="center")
+        title_label.grid(row=0, column=0, sticky="w", padx=10)
+
+        edit_camp_button = ttk.Button(
+            title_frame,
+            text="Edit Camp",
+            command=lambda: self.show_screen("EditCamp", camp),
+        )
+        edit_camp_button.grid(row=0, column=1, sticky="e", padx=10)
+
+        title_frame.columnconfigure(1, weight=0)
 
     def create_camp_statistics_section(self, parent_tab, camp):
         camp_statistics_frame = tk.Frame(parent_tab)
@@ -142,9 +151,7 @@ class Dashboard(tk.Frame):
 
             top_frame = tk.Frame(resource_frame)
             top_frame.grid(row=0, column=0, sticky="ew")
-            top_frame.columnconfigure(
-                0, weight=1
-            )  # Allocate extra space to push buttons right
+            top_frame.columnconfigure(0, weight=1)
 
             tk.Label(top_frame, text=f"{resource_name}:").grid(
                 row=0, column=0, sticky="w"
@@ -241,6 +248,12 @@ class Dashboard(tk.Frame):
 
             bottom_frame = tk.Frame(resource_frame)
             bottom_frame.grid(row=1, column=0, sticky="ew")
+
+        tk.Label(
+            additional_resources_frame,
+            text=f"\nButtons above update plan {self.plan.planID}'s \navailable additional resources.\n\nButtons under camp headings \ndistribute those additional \nresources",
+            font=("Arial", 11, "bold"),
+        ).grid(row=9, column=0, sticky="w")
 
         return additional_resources_frame
 
@@ -515,11 +528,6 @@ class AdminDashboard(Dashboard):
             distribute_tab, self.plan
         )
 
-        tk.Label(
-            additional_resources_frame,
-            text=f"\nButtons above update plan {self.plan.planID}'s available additional resources.\n\n Buttons under camp headings distribute additional resources\n(i.e inversely change additional resources.)",
-        )
-
         canvas_width = 600
         camp_resources_canvas = tk.Canvas(distribute_tab, width=canvas_width)
         camp_resources_scrollbar = ttk.Scrollbar(
@@ -571,12 +579,12 @@ class AdminDashboard(Dashboard):
         plan_description = plan.description
 
         title_label = tk.Label(title_frame, text=plan_name, font=("Arial", 16, "bold"))
-        title_label.grid(row=0, column=0, sticky="w", padx=10, pady=(5, 0))
+        title_label.grid(row=0, column=0, sticky="w", padx=5, pady=(5, 0))
 
         description_label = tk.Label(
             title_frame, text=plan_description, font=("Arial", 14)
         )
-        description_label.grid(row=1, column=0, sticky="w", padx=10)
+        description_label.grid(row=1, column=0, sticky="w", padx=5, pady=(0, 5))
 
         new_camp_button = ttk.Button(
             title_frame,
@@ -598,7 +606,7 @@ class AdminDashboard(Dashboard):
             style="TButton",
             command=lambda: self.show_screen("EditPlan", plan),
         )
-        edit_button.grid(row=0, column=3, padx=10, pady=(5, 0))
+        edit_button.grid(row=0, column=3, padx=5, pady=(5, 0))
 
         title_frame.columnconfigure(1, weight=1)
         title_frame.columnconfigure(2, weight=1)
