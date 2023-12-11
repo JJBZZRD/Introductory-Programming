@@ -160,7 +160,7 @@ class Dashboard(tk.Frame):
                     camp,
                     resource_frame,
                     resource_name,
-                    -1,
+                    -10,
                     plan,
                     user_type,
                     additional_resources_frame=additional_resources_frame,
@@ -173,7 +173,7 @@ class Dashboard(tk.Frame):
                     camp,
                     resource_frame,
                     resource_name,
-                    1,
+                    10,
                     plan,
                     user_type,
                     additional_resources_frame=additional_resources_frame,
@@ -193,10 +193,6 @@ class Dashboard(tk.Frame):
 
     def create_additional_resources_section(self, parent_frame, plan):
         additional_resources_frame = tk.Frame(parent_frame, bg="white")
-
-        # label_text = f"Unallocated Resources for the plan \n ({plan.name})"
-        # outside_label = tk.Label(additional_resources_frame, text=label_text)
-        # outside_label.grid(row=0, column=0, sticky="w")
 
         additional_resources = {
             "Shelter": plan.shelter,
@@ -226,7 +222,7 @@ class Dashboard(tk.Frame):
                     resource_frame,
                     res_name,
                     plan,
-                    -1,
+                    -10,
                 ),
             ).grid(row=0, column=2)
 
@@ -237,7 +233,7 @@ class Dashboard(tk.Frame):
                     resource_frame,
                     res_name,
                     plan,
-                    1,
+                    10,
                 ),
             ).grid(row=0, column=3)
 
@@ -258,41 +254,29 @@ class Dashboard(tk.Frame):
     ):
         resource_key = resource_name.lower().replace(" ", "_")
         if user_type == "admin":
-            # Update plan resource, decrementing by increment
             plan_current_amount = getattr(plan, resource_key)
             new_plan_amount = max(0, plan_current_amount - increment)
             if PlanEdit.update_plan(plan.planID, **{resource_key: new_plan_amount}):
                 setattr(plan, resource_key, new_plan_amount)
 
-            # Update the plan's resource amount label
             if additional_resources_frame:
-                # Find the label in the additional_resources_frame
-                # Assumes the label is the second widget in its parent frame's children
-                # Iterate over each resource frame to find the right one
                 for res_frame in additional_resources_frame.winfo_children():
-                    # Each res_frame should have a top_frame as its first child
                     top_frame = res_frame.winfo_children()[0]
-                    # The resource name label is the first widget in top_frame
                     res_name_label = top_frame.winfo_children()[0]
-                    # Check if this is the label for the current resource
                     if res_name_label.cget("text") == f"{resource_name}:":
-                        # The amount label is the second widget
                         amount_label = top_frame.winfo_children()[1]
                         amount_label.config(text=str(new_plan_amount))
-                        break  # Found the correct label, exit the loop
+                        break
 
-                # Update camp resource
         camp_current_amount = getattr(camp, resource_key)
         new_camp_amount = max(0, camp_current_amount + increment)
         if CampDataEdit.update_camp(camp.campID, **{resource_key: new_camp_amount}):
             setattr(camp, resource_key, new_camp_amount)
 
-        # Update the camp's resource amount label
         top_frame = resource_frame.winfo_children()[0]
         amount_label = top_frame.winfo_children()[1]
         amount_label.config(text=str(new_camp_amount))
 
-        # Update days left if the resource is one of the specified types
         camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
         resource_order = ["Shelter", "Water", "Food", "Medical Supplies"]
         if resource_name in resource_order:
@@ -315,29 +299,6 @@ class Dashboard(tk.Frame):
         top_frame = resource_frame.winfo_children()[0]
         amount_label = top_frame.winfo_children()[1]
         amount_label.config(text=str(new_amount))
-
-        resource_frame.update()
-
-    def distribute_resources(
-        self,
-        resource_frame,
-        resource_name,
-        camp,
-        plan,
-        increment,
-    ):
-        resource_key = resource_name.lower().replace(" ", "_")
-        current_amount = getattr(plan, resource_key)
-        new_amount = max(0, current_amount + increment)
-        if PlanEdit.update_plan(plan.planID, **{resource_key: new_amount}):
-            setattr(plan, resource_key, new_amount)
-
-        top_frame = resource_frame.winfo_children()[0]
-        amount_label = top_frame.winfo_children()[1]
-        amount_label.config(text=str(new_amount))
-
-        if CampDataEdit.update_camp(camp.campID, **{resource_key: new_amount}):
-            setattr(camp, resource_key, new_amount)
 
         resource_frame.update()
 
@@ -550,20 +511,14 @@ class AdminDashboard(Dashboard):
 
         self.create_plan_tab_title(distribute_tab, self.plan)
 
-        label_text = f"Unallocated Resources for the plan \n ({self.plan.name})"
-        outside_label = tk.Label(distribute_tab, text=label_text)
-        outside_label.grid(row=1, column=0, sticky="w")
-
         additional_resources_frame = self.create_additional_resources_section(
             distribute_tab, self.plan
         )
-        label = tk.Label(distribute_tab, text="* This page is used for managing the distribution of the resources. * \n \
-        i.e. Increasing camp resources means to distribute unallocated resources to the camp. \n \
-        Decreasing camp resources means to take the resource from the camp to the unallocated pool.", fg='red')
-        label.grid(row=0, column=1, sticky='e')
 
-        label = tk.Label(distribute_tab, text="** To log the resource changes for a camp, please use 'Manage Camp' in the previous screeen. **")
-        label.grid(row=1, column=1)
+        label = tk.Label(
+            additional_resources_frame,
+            text=f"\nButtons above update plan {self.plan.planID}'s available additional resources.\n\n Buttons under camp headings distribute additional resources\n(i.e inversely change additional resources.)",
+        )
 
         canvas_width = 600
         camp_resources_canvas = tk.Canvas(distribute_tab, width=canvas_width)
@@ -616,9 +571,7 @@ class AdminDashboard(Dashboard):
         title_label = tk.Label(
             title_frame, text=plan_name, font=("Arial", 16, "bold"), bg="white"
         )
-        title_label.grid(
-            row=0, column=0, sticky="w", padx=10, pady=(5, 0)
-        )
+        title_label.grid(row=0, column=0, sticky="w", padx=10, pady=(5, 0))
 
         edit_button = ttk.Button(
             title_frame,
@@ -627,27 +580,25 @@ class AdminDashboard(Dashboard):
             command=lambda: self.show_screen("EditPlan", plan),
         )
         edit_button.grid(
-            # row=0, column=1, sticky="e", padx=10, pady=(5, 0)
-            row=0, column=0, sticky="w", padx=10, pady=(0, 5)
+            row=0,
+            column=0,
+            sticky="e",
+            padx=10,
+            pady=(0, 5),
         )
 
         description_frame = tk.Frame(parent_tab, bg="white")
         description_frame.grid(row=1, column=0, columnspan=2, sticky="ew")
-        description_frame.columnconfigure(
-            0, weight=1
-        )  # Ensure description expands with the window width
+        description_frame.columnconfigure(0, weight=1)
 
         description_label = tk.Label(
             description_frame, text=plan.description, font=("Arial", 14), bg="white"
         )
-        description_label.grid(
-            row=0, column=0, sticky="w", padx=10, pady=(0, 5)
-        )
+        description_label.grid(row=0, column=0, sticky="w", padx=10, pady=(0, 5))
 
-        # Adjust the row configurations to control the vertical spacing
-        parent_tab.grid_rowconfigure(0, weight=0)  # Minimal weight for title row
-        parent_tab.grid_rowconfigure(1, weight=0)  # Minimal weight for description row
-        parent_tab.grid_rowconfigure(2, weight=1)  # Allow content below to expand
+        parent_tab.grid_rowconfigure(0, weight=0)
+        parent_tab.grid_rowconfigure(1, weight=0)
+        parent_tab.grid_rowconfigure(2, weight=1)
 
     def setup_plan_statistics_tab(self):
         stats_tab = ttk.Frame(self.tab_control)
