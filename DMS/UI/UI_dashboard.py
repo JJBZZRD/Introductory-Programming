@@ -29,28 +29,26 @@ class Dashboard(tk.Frame):
             parent_tab, camp, "refugees", type
         )
 
-        resources_frame.grid(row=1, column=0, sticky="nsew")
-        statistics_frame.grid(row=1, column=1, sticky="nsew")
-        refugees_volunteers_frame.grid(row=1, column=2, sticky="nsew")
+        resources_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
+        statistics_frame.grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
+        refugees_volunteers_frame.grid(row=1, column=2, sticky="nsew", padx=5, pady=5)
         parent_tab.grid_columnconfigure(0, weight=1)
         parent_tab.grid_columnconfigure(1, weight=1)
         parent_tab.grid_columnconfigure(2, weight=1)
         parent_tab.grid_rowconfigure(1, weight=1)
 
     def create_camp_title_frame(self, parent_tab, plan, camp):
-        title_frame = tk.Frame(parent_tab, bg="white", height=30)
+        title_frame = tk.Frame(parent_tab, height=30)
         title_frame.grid(row=0, column=0, columnspan=3, sticky="ew", pady=2)
         title_frame.grid_propagate(False)
 
         title_text = f"{plan.name} - Camp {camp.campID} - {camp.location}"
-        title_label = tk.Label(
-            title_frame, text=title_text, font=("Arial", 16, "bold"), bg="white"
-        )
+        title_label = tk.Label(title_frame, text=title_text, font=("Arial", 16, "bold"))
         title_label.pack(side="left", padx=10)
         title_label.place(relx=0.5, rely=0.5, anchor="center")
 
     def create_camp_statistics_section(self, parent_tab, camp):
-        camp_statistics_frame = tk.Frame(parent_tab, bg="white")
+        camp_statistics_frame = tk.Frame(parent_tab)
         camp_statistics_frame.grid(row=0, column=0, sticky="ew")
 
         campID = camp.campID
@@ -128,11 +126,9 @@ class Dashboard(tk.Frame):
     def create_resources_section(
         self, parent_tab, camp, plan, user_type, additional_resources_frame=None
     ):
-        resources_frame = tk.Frame(parent_tab, bg="white")
+        resources_frame = tk.Frame(parent_tab)
 
         camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
-
-        additional_resources_frame = additional_resources_frame
 
         resources = {
             "Water": camp.water,
@@ -142,10 +138,13 @@ class Dashboard(tk.Frame):
 
         for index, (resource_name, amount) in enumerate(resources.items()):
             resource_frame = tk.Frame(resources_frame)
-            resource_frame.grid(row=index, column=0, sticky="ew")
+            resource_frame.grid(row=index, column=0, sticky="ew", padx=10, pady=(5, 0))
 
             top_frame = tk.Frame(resource_frame)
             top_frame.grid(row=0, column=0, sticky="ew")
+            top_frame.columnconfigure(
+                0, weight=1
+            )  # Allocate extra space to push buttons right
 
             tk.Label(top_frame, text=f"{resource_name}:").grid(
                 row=0, column=0, sticky="w"
@@ -153,7 +152,7 @@ class Dashboard(tk.Frame):
             amount_label = tk.Label(top_frame, text=str(amount))
             amount_label.grid(row=0, column=1)
 
-            tk.Button(
+            minus_button = tk.Button(
                 top_frame,
                 text="-",
                 command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(
@@ -165,8 +164,10 @@ class Dashboard(tk.Frame):
                     user_type,
                     additional_resources_frame=additional_resources_frame,
                 ),
-            ).grid(row=0, column=2)
-            tk.Button(
+            )
+            minus_button.grid(row=0, column=2, sticky="e")
+
+            plus_button = tk.Button(
                 top_frame,
                 text="+",
                 command=lambda resource_name=resource_name, resource_frame=resource_frame: self.update_resource(
@@ -178,12 +179,13 @@ class Dashboard(tk.Frame):
                     user_type,
                     additional_resources_frame=additional_resources_frame,
                 ),
-            ).grid(row=0, column=3)
+            )
+            plus_button.grid(row=0, column=3, sticky="e")
 
             bottom_frame = tk.Frame(resource_frame)
             bottom_frame.grid(row=1, column=0, sticky="ew")
 
-            if resource_name in ["Water", "Food", "Medical Supplies"]:
+            if resource_name in ["Water", "Food", "Medical Supplies", "Shelter"]:
                 days_left = camp_resources_estimation.get(resource_name)
                 tk.Label(bottom_frame, text=f"Days left: {days_left}\n").grid(
                     row=0, column=0, sticky="w"
@@ -192,7 +194,7 @@ class Dashboard(tk.Frame):
         return resources_frame
 
     def create_additional_resources_section(self, parent_frame, plan):
-        additional_resources_frame = tk.Frame(parent_frame, bg="white")
+        additional_resources_frame = tk.Frame(parent_frame)
 
         additional_resources = {
             "Shelter": plan.shelter,
@@ -305,7 +307,7 @@ class Dashboard(tk.Frame):
     def create_camp_refugees_volunteers_section(
         self, parent_tab, camp, display_type, user_type
     ):
-        refugees_volunteers_frame = tk.Frame(parent_tab, bg="white")
+        refugees_volunteers_frame = tk.Frame(parent_tab)
         refugees_volunteers_frame.grid(row=1, column=2, sticky="nsew", pady=5)
 
         title_text = f"{'Refugees' if display_type == 'refugees' else 'Volunteers'}"
@@ -346,7 +348,7 @@ class Dashboard(tk.Frame):
             column=0,
         )
 
-        search_frame = tk.Frame(refugees_volunteers_frame, bg="white")
+        search_frame = tk.Frame(refugees_volunteers_frame)
         search_frame.grid(row=1, column=0, sticky="ew", pady=5)
         search_entry = tk.Entry(search_frame)
         search_entry.grid(row=0, column=0, sticky="ew", padx=5)
@@ -507,15 +509,13 @@ class AdminDashboard(Dashboard):
         distribute_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(distribute_tab, text="Distribute Plan Resources")
 
-        print(f"\n[DEBUG] Distribute Plan Resources: self.plan: {self.plan}\n")
-
         self.create_plan_tab_title(distribute_tab, self.plan)
 
         additional_resources_frame = self.create_additional_resources_section(
             distribute_tab, self.plan
         )
 
-        label = tk.Label(
+        tk.Label(
             additional_resources_frame,
             text=f"\nButtons above update plan {self.plan.planID}'s available additional resources.\n\n Buttons under camp headings distribute additional resources\n(i.e inversely change additional resources.)",
         )
@@ -563,15 +563,34 @@ class AdminDashboard(Dashboard):
         distribute_tab.grid_columnconfigure(1, weight=3)
 
     def create_plan_tab_title(self, parent_tab, plan):
-        title_frame = tk.Frame(parent_tab, bg="white")
+        title_frame = tk.Frame(parent_tab)
         title_frame.grid(row=0, column=0, columnspan=2, sticky="ew")
         title_frame.columnconfigure(0, weight=1)
 
         plan_name = f"Plan {plan.planID}: {plan.name} - {plan.country}"
-        title_label = tk.Label(
-            title_frame, text=plan_name, font=("Arial", 16, "bold"), bg="white"
-        )
+        plan_description = plan.description
+
+        title_label = tk.Label(title_frame, text=plan_name, font=("Arial", 16, "bold"))
         title_label.grid(row=0, column=0, sticky="w", padx=10, pady=(5, 0))
+
+        description_label = tk.Label(
+            title_frame, text=plan_description, font=("Arial", 14)
+        )
+        description_label.grid(row=1, column=0, sticky="w", padx=10)
+
+        new_camp_button = ttk.Button(
+            title_frame,
+            text="New Camp",
+            command=lambda: self.show_screen("NewCamp", plan),
+        )
+        new_camp_button.grid(row=0, column=1, pady=(5, 0))
+
+        new_camp_item_button = ttk.Button(
+            title_frame,
+            text="Camp List",
+            command=lambda: self.show_screen("CampList", plan),
+        )
+        new_camp_item_button.grid(row=0, column=2, pady=(5, 0))
 
         edit_button = ttk.Button(
             title_frame,
@@ -579,22 +598,11 @@ class AdminDashboard(Dashboard):
             style="TButton",
             command=lambda: self.show_screen("EditPlan", plan),
         )
-        edit_button.grid(
-            row=0,
-            column=0,
-            sticky="e",
-            padx=10,
-            pady=(0, 5),
-        )
+        edit_button.grid(row=0, column=3, padx=10, pady=(5, 0))
 
-        description_frame = tk.Frame(parent_tab, bg="white")
-        description_frame.grid(row=1, column=0, columnspan=2, sticky="ew")
-        description_frame.columnconfigure(0, weight=1)
-
-        description_label = tk.Label(
-            description_frame, text=plan.description, font=("Arial", 14), bg="white"
-        )
-        description_label.grid(row=0, column=0, sticky="w", padx=10, pady=(0, 5))
+        title_frame.columnconfigure(1, weight=1)
+        title_frame.columnconfigure(2, weight=1)
+        title_frame.columnconfigure(3, weight=1)
 
         parent_tab.grid_rowconfigure(0, weight=0)
         parent_tab.grid_rowconfigure(1, weight=0)
