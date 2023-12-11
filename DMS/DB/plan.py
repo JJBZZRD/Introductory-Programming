@@ -15,13 +15,13 @@ class Plan:  # Plan class has attributes matching columns in table
         self.medical_supplies = medical_supplies
         self.shelter = shelter
         self.end_date_datetime = None
-
+        self.status = None
     @classmethod
     def init_from_tuple(cls, plan_tuple):
         return cls(*plan_tuple)
 
     def display_info(self):
-        return [str(self.planID), str(self.name), str(self.country), str(self.event_name), str(self.description),
+        return [self.status, str(self.planID), str(self.name), str(self.country), str(self.event_name), str(self.description),
                 str(self.start_date), str(self.end_date)]
 
     @staticmethod

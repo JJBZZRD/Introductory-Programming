@@ -6,7 +6,6 @@ from . import logic_util
 from ..Logic.person_data_retrieve import PersonDataRetrieve
 from ..DB.camp import Camp
 
-
 class PlanDataRetrieve:
 
     @staticmethod

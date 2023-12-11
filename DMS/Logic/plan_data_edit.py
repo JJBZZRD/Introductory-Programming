@@ -7,6 +7,20 @@ from .. import util
 class PlanEdit:
 
     @staticmethod
+    def check_plan_status():
+        plans = util.parse_result('Plan', Plan.get_all_plans())
+        for plan in plans:
+            if plan.end_date:
+                try:
+                    plan.end_date_datetime = datetime.strptime(plan.end_date, '%Y-%m-%d')
+                except:
+                    plan.end_date_datetime = datetime.strptime(plan.end_date, '%d/%m/%Y')
+            if plan.end_date_datetime > datetime.now() or plan.end_date_datetime is None:
+                plan.status = 'Active'
+            else:
+                plan.status = 'Ended'
+
+    @staticmethod
     def create_plan(name, event_name, country, description, start_date, end_date=None, water=None, food=None, medical_supplies=None, shelter=None):
         for attr in [start_date, name, country, event_name, description]:
             if not attr:
@@ -29,7 +43,13 @@ class PlanEdit:
             end_date = None
         plan_tuple = (start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter)
 
-        return Plan.create_plan(plan_tuple)
+        plan = util.parse_result('Plan', Plan.create_plan(plan_tuple))[0]
+        if isinstance(plan, Plan):
+            plan.status = 'Active'
+            plan.end_date_datetime = datetime.strptime(plan.end_date, '%Y-%m-%d') if plan.end_date is not None else None
+            return plan
+        else:
+            return util.parse_result('Plan', plan)
 
     @staticmethod
     def update_plan(planID=None, name=None, event_name=None, country=None, description=None, start_date=None, end_date=None, water=None, food=None, shelter=None, medical_supplies=None):
