@@ -524,15 +524,80 @@ class AdminDashboard(Dashboard):
         self.tab_control.add(distribute_tab, text="Distribute Plan Resources")
 
         self.create_plan_tab_title(distribute_tab, self.plan)
-
         additional_resources_frame = self.create_additional_resources_section(
             distribute_tab, self.plan
         )
+        (
+            camp_resources_canvas,
+            camp_resources_scrollbar,
+            _,
+        ) = self.create_camp_resources_section(
+            distribute_tab, additional_resources_frame
+        )
 
+        additional_resources_frame.grid(row=2, column=0, sticky="nsew")
+        camp_resources_canvas.grid(row=2, column=1, sticky="nsew")
+        camp_resources_scrollbar.grid(row=3, column=1, sticky="ew")
+        distribute_tab.grid_columnconfigure(0, weight=1)
+        distribute_tab.grid_columnconfigure(1, weight=3)
+
+    # def setup_distribute_resources_tab(self):
+    #     distribute_tab = ttk.Frame(self.tab_control)
+    #     self.tab_control.add(distribute_tab, text="Distribute Plan Resources")
+
+    #     self.create_plan_tab_title(distribute_tab, self.plan)
+
+    #     additional_resources_frame = self.create_additional_resources_section(
+    #         distribute_tab, self.plan
+    #     )
+
+    #     canvas_width = 600
+    #     camp_resources_canvas = tk.Canvas(distribute_tab, width=canvas_width)
+    #     camp_resources_scrollbar = ttk.Scrollbar(
+    #         distribute_tab, orient="horizontal", command=camp_resources_canvas.xview
+    #     )
+    #     camp_resources_canvas.configure(xscrollcommand=camp_resources_scrollbar.set)
+
+    #     all_camp_resources_frame = ttk.Frame(camp_resources_canvas)
+    #     camp_resources_canvas.create_window(
+    #         (0, 1), window=all_camp_resources_frame, anchor="nw"
+    #     )
+
+    #     for i, camp in enumerate(self.planCamps):
+    #         camp_title = f"Camp {camp.campID} - {camp.location}"
+    #         camp_title_label = tk.Label(
+    #             all_camp_resources_frame, text=camp_title, font=("Arial", 11, "bold")
+    #         )
+    #         camp_title_label.grid(row=0, column=i * 2, sticky="w")
+
+    #         camp_section = self.create_resources_section(
+    #             all_camp_resources_frame,
+    #             camp,
+    #             self.plan,
+    #             "admin",
+    #             additional_resources_frame=additional_resources_frame,
+    #         )
+    #         camp_section.grid(row=1, column=i * 2, sticky="nsew")
+    #         all_camp_resources_frame.grid_columnconfigure(i * 2 + 1, weight=1)
+
+    #     all_camp_resources_frame.bind(
+    #         "<Configure>",
+    #         lambda e: camp_resources_canvas.configure(
+    #             scrollregion=camp_resources_canvas.bbox("all")
+    #         ),
+    #     )
+
+    #     additional_resources_frame.grid(row=2, column=0, sticky="nsew")
+    #     camp_resources_canvas.grid(row=2, column=1, sticky="nsew")
+    #     camp_resources_scrollbar.grid(row=3, column=1, sticky="ew")
+    #     distribute_tab.grid_columnconfigure(0, weight=1)
+    #     distribute_tab.grid_columnconfigure(1, weight=3)
+
+    def create_camp_resources_section(self, parent, additional_resources_frame):
         canvas_width = 600
-        camp_resources_canvas = tk.Canvas(distribute_tab, width=canvas_width)
+        camp_resources_canvas = tk.Canvas(parent, width=canvas_width)
         camp_resources_scrollbar = ttk.Scrollbar(
-            distribute_tab, orient="horizontal", command=camp_resources_canvas.xview
+            parent, orient="horizontal", command=camp_resources_canvas.xview
         )
         camp_resources_canvas.configure(xscrollcommand=camp_resources_scrollbar.set)
 
@@ -542,21 +607,9 @@ class AdminDashboard(Dashboard):
         )
 
         for i, camp in enumerate(self.planCamps):
-            camp_title = f"Camp {camp.campID} - {camp.location}"
-            camp_title_label = tk.Label(
-                all_camp_resources_frame, text=camp_title, font=("Arial", 11, "bold")
+            self.populate_camp_resources(
+                all_camp_resources_frame, camp, i, additional_resources_frame
             )
-            camp_title_label.grid(row=0, column=i * 2, sticky="w")
-
-            camp_section = self.create_resources_section(
-                all_camp_resources_frame,
-                camp,
-                self.plan,
-                "admin",
-                additional_resources_frame=additional_resources_frame,
-            )
-            camp_section.grid(row=1, column=i * 2, sticky="nsew")
-            all_camp_resources_frame.grid_columnconfigure(i * 2 + 1, weight=1)
 
         all_camp_resources_frame.bind(
             "<Configure>",
@@ -565,11 +618,26 @@ class AdminDashboard(Dashboard):
             ),
         )
 
-        additional_resources_frame.grid(row=2, column=0, sticky="nsew")
-        camp_resources_canvas.grid(row=2, column=1, sticky="nsew")
-        camp_resources_scrollbar.grid(row=3, column=1, sticky="ew")
-        distribute_tab.grid_columnconfigure(0, weight=1)
-        distribute_tab.grid_columnconfigure(1, weight=3)
+        return camp_resources_canvas, camp_resources_scrollbar, all_camp_resources_frame
+
+    def populate_camp_resources(
+        self, parent_frame, camp, column_index, additional_resources_frame
+    ):
+        camp_title = f"Camp {camp.campID} - {camp.location}"
+        camp_title_label = tk.Label(
+            parent_frame, text=camp_title, font=("Arial", 11, "bold")
+        )
+        camp_title_label.grid(row=0, column=column_index * 2, sticky="w")
+
+        camp_section = self.create_resources_section(
+            parent_frame,
+            camp,
+            self.plan,
+            "admin",
+            additional_resources_frame=additional_resources_frame,
+        )
+        camp_section.grid(row=1, column=column_index * 2, sticky="nsew")
+        parent_frame.grid_columnconfigure(column_index * 2 + 1, weight=1)
 
     def create_plan_tab_title(self, parent_tab, plan):
         title_frame = tk.Frame(parent_tab)
