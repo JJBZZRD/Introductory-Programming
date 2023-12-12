@@ -41,7 +41,9 @@ def create_database():
         water INTEGER,
         food INTEGER,
         medical_supplies INTEGER,
-        shelter INTEGER
+        shelter INTEGER,
+        status TEXT CHECK (status IN ('Active', 'Ended')),
+        created_time TEXT
         )
         """
 
@@ -59,6 +61,7 @@ def create_database():
         medical_supplies INTEGER,
         max_medical_supplies INTEGER,
         planID INTEGER NOT NULL,
+        created_time TEXT,
         FOREIGN KEY (planID) REFERENCES plans(planID) ON DELETE CASCADE ON UPDATE CASCADE
         )
         """
@@ -76,6 +79,7 @@ def create_database():
         phone TEXT,
         account_status TEXT CHECK (account_status IN ('Admin', 'Active', 'Inactive')),
         campID INTEGER,
+        created_time TEXT,
         FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
         )
         """
@@ -94,6 +98,7 @@ def create_database():
         triage_category TEXT CHECK (triage_category IN ('None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate')),
         medical_conditions Text,
         vital_status TEXT CHECK (vital_status IN ('Alive', 'Deceased')),
+        created_time TEXT,
         FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
         )
         """
@@ -106,14 +111,14 @@ def create_database():
 
     cursor.execute(countries_table)
 
-    family_table = """
-    CREATE TABLE IF NOT EXISTS family(
-        familyID INTEGER PRIMARY KEY,
-        family_name TEXT,
-        lead_family_memberID INTEGER)
-        """
+    # family_table = """
+    # CREATE TABLE IF NOT EXISTS family(
+    #     familyID INTEGER PRIMARY KEY,
+    #     family_name TEXT,
+    #     lead_family_memberID INTEGER)
+    #     """
 
-    cursor.execute(family_table)
+    # cursor.execute(family_table)
 
     conn.commit()
 
@@ -125,137 +130,137 @@ def clear_dummy_data():
 
 def insert_dummy_data():
     plans_data = """
-    INSERT INTO plans (planID, start_date, end_date, name, country, event_name, description, shelter, water, food, medical_supplies) VALUES
-    (1, '2023-01-01', '2025-01-01', 'Wylfa Nuclear Meltdown', 'United Kingdom', 'Nuclear Crisis Management', 'Emergency response to nuclear meltdown on Anglesey', 100, 100, 100, 100),
-    (2, '2023-01-01', '2025-01-01', 'London Virus Outbreak', 'United Kingdom', 'Virus Containment Effort', 'Response to widespread virus outbreak in London', 200, 200, 200, 200),
-    (3, '2023-01-01', '2025-01-01', 'Paris Earthquake Response', 'France', 'Earthquake Relief', 'Relief efforts for earthquake in Paris', 300, 300, 300, 300);
+    INSERT INTO plans (planID, start_date, end_date, name, country, event_name, description, shelter, water, food, medical_supplies, status, created_time) VALUES
+    (1, '2023-01-01', '2025-01-01', 'Wylfa Nuclear Meltdown', 'United Kingdom', 'Nuclear Crisis Management', 'Emergency response to nuclear meltdown on Anglesey', 100, 100, 100, 100, 'Active', '2023-01-01T14:36:25'),
+    (2, '2023-01-01', '2025-01-01', 'London Virus Outbreak', 'United Kingdom', 'Virus Containment Effort', 'Response to widespread virus outbreak in London', 200, 200, 200, 200, 'Active', '2023-01-01T14:36:25'),
+    (3, '2023-01-01', '2025-01-01', 'Paris Earthquake Response', 'France', 'Earthquake Relief', 'Relief efforts for earthquake in Paris', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25');
     """
 
     cursor.execute(plans_data)
 
     camp_data = """
-    INSERT INTO camps (campID, location, shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID) VALUES
-    (1, 'Camden', 20, 300, 600, 200, 400, 100, 200, 1),
-    (2, 'Greenwich', 20, 300, 600, 200, 400, 100, 200, 1),
-    (3, 'Snowdonia', 20, 300, 600, 200, 400, 100, 200, 2),
-    (4, 'Richmond', 20, 300, 600, 200, 400, 100, 200, 2),
-    (5, 'Versailles', 20, 300, 600, 200, 400, 100, 200, 3)
+    INSERT INTO camps (campID, location, shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID, created_time) VALUES
+    (1, 'Camden', 20, 300, 600, 200, 400, 100, 200, 1, '2023-01-01T14:36:25'),
+    (2, 'Greenwich', 20, 300, 600, 200, 400, 100, 200, 1, '2023-01-01T14:36:25'),
+    (3, 'Snowdonia', 20, 300, 600, 200, 400, 100, 200, 2, '2023-01-01T14:36:25'),
+    (4, 'Richmond', 20, 300, 600, 200, 400, 100, 200, 2, '2023-01-01T14:36:25'),
+    (5, 'Versailles', 20, 300, 600, 200, 400, 100, 200, 3, '2023-01-01T14:36:25')
     """
 
     cursor.execute(camp_data)
 
     # Insert dummy data for volunteers
     volunteers_data = """
-    INSERT INTO volunteers (first_name, last_name, username, password, date_of_birth, phone, account_status, campID) VALUES
+    INSERT INTO volunteers (first_name, last_name, username, password, date_of_birth, phone, account_status, campID, created_time) VALUES
     -- Camp 1
-    ('admin', '111', 'admin', '111', '1990-05-15', '555-1234', 'Active', NULL),
-    ('Jane', 'Smith', 'volunteer1', '111', '1985-08-22', '555-5678', 'Active', 1),
-    ('Robert', 'Johnson', 'robert_j', 'password789', '1992-03-10', '555-9876', 'Active', 1),
-    ('Emily', 'Williams', 'emily_w', 'passwordabc', '1988-11-27', '555-4321', 'Active', 1),
-    ('Michael', 'Brown', 'michael_b', 'passworddef', '1995-07-18', '555-8765', 'Inactive', 1),
-    ('Sophia', 'Davis', 'sophia_d', 'pass123', '1993-09-05', '555-2345', 'Active', 1),
-    ('David', 'Anderson', 'david_a', 'pass456', '1991-02-14', '555-6789', 'Inactive', 1),
-    ('Olivia', 'Thomas', 'olivia_t', 'pass789', '1986-12-03', '555-8765', 'Active', 1),
-    ('Christopher', 'Garcia', 'chris_g', 'passabc', '1994-04-20', '555-2345', 'Active', 1),
-    ('Emma', 'Johnson', 'emma_j', 'pass789', '1998-06-08', '555-5678', 'Active', 1),
+    ('admin', '111', 'admin', '111', '1990-05-15', '555-1234', 'Active', NULL, '2023-01-01T14:36:25'),
+    ('Jane', 'Smith', 'volunteer1', '111', '1985-08-22', '555-5678', 'Active', 1, '2023-01-01T14:36:25'),
+    ('Robert', 'Johnson', 'robert_j', 'password789', '1992-03-10', '555-9876', 'Active', 1, '2023-01-01T14:36:25'),
+    ('Emily', 'Williams', 'emily_w', 'passwordabc', '1988-11-27', '555-4321', 'Active', 1, '2023-01-01T14:36:25'),
+    ('Michael', 'Brown', 'michael_b', 'passworddef', '1995-07-18', '555-8765', 'Inactive', 1, '2023-01-01T14:36:25'),
+    ('Sophia', 'Davis', 'sophia_d', 'pass123', '1993-09-05', '555-2345', 'Active', 1, '2023-01-01T14:36:25'),
+    ('David', 'Anderson', 'david_a', 'pass456', '1991-02-14', '555-6789', 'Inactive', 1, '2023-01-01T14:36:25'),
+    ('Olivia', 'Thomas', 'olivia_t', 'pass789', '1986-12-03', '555-8765', 'Active', 1, '2023-01-01T14:36:25'),
+    ('Christopher', 'Garcia', 'chris_g', 'passabc', '1994-04-20', '555-2345', 'Active', 1, '2023-01-01T14:36:25'),
+    ('Emma', 'Johnson', 'emma_j', 'pass789', '1998-06-08', '555-5678', 'Active', 1, '2023-01-01T14:36:25'),
 
     -- Camp 2
-    ('Daniel', 'White', 'volunteer2', '222', '1987-10-12', '555-3456', 'Active', 2),
-    ('Sophie', 'Miller', 'sophie_m', 'pass456', '1994-01-25', '555-7890', 'Active', 2),
-    ('Matthew', 'Davis', 'matthew_d', 'pass789', '1990-09-30', '555-2345', 'Active', 2),
-    ('Ava', 'Wilson', 'ava_w', 'passabc', '1985-12-15', '555-6789', 'Active', 2),
-    ('Nicholas', 'Taylor', 'nicholas_t', 'passdef', '1992-05-18', '555-8765', 'Inactive', 2),
-    ('Grace', 'Moore', 'grace_m', 'passghi', '1997-03-22', '555-1234', 'Active', 2),
-    ('Ethan', 'Baker', 'ethan_b', 'passjkl', '1988-08-08', '555-5678', 'Inactive', 2),
-    ('Chloe', 'Fisher', 'chloe_f', 'passmno', '1995-04-02', '555-2345', 'Active', 2),
-    ('Caleb', 'Ward', 'caleb_w', 'passpqr', '1989-11-10', '555-6789', 'Active', 2),
-    ('Madison', 'Perry', 'madison_p', 'passtu', '1996-07-17', '555-8765', 'Active', 2),
+    ('Daniel', 'White', 'volunteer2', '222', '1987-10-12', '555-3456', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Sophie', 'Miller', 'sophie_m', 'pass456', '1994-01-25', '555-7890', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Matthew', 'Davis', 'matthew_d', 'pass789', '1990-09-30', '555-2345', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Ava', 'Wilson', 'ava_w', 'passabc', '1985-12-15', '555-6789', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Nicholas', 'Taylor', 'nicholas_t', 'passdef', '1992-05-18', '555-8765', 'Inactive', 2, '2023-01-01T14:36:25'),
+    ('Grace', 'Moore', 'grace_m', 'passghi', '1997-03-22', '555-1234', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Ethan', 'Baker', 'ethan_b', 'passjkl', '1988-08-08', '555-5678', 'Inactive', 2, '2023-01-01T14:36:25'),
+    ('Chloe', 'Fisher', 'chloe_f', 'passmno', '1995-04-02', '555-2345', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Caleb', 'Ward', 'caleb_w', 'passpqr', '1989-11-10', '555-6789', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Madison', 'Perry', 'madison_p', 'passtu', '1996-07-17', '555-8765', 'Active', 2, '2023-01-01T14:36:25'),
 
     -- Camp 3
-    ('Liam', 'Carter', 'volunteer3', '333', '1993-02-05', '555-2345', 'Active', 3),
-    ('Aubrey', 'Hayes', 'aubrey_h', 'passyz1', '1998-08-20', '555-6789', 'Active', 3),
-    ('Mason', 'Wells', 'mason_w', 'pass234', '1991-04-15', '555-1234', 'Active', 3),
-    ('Harper', 'Barnes', 'harper_b', 'pass567', '1986-10-30', '555-5678', 'Active', 3),
-    ('Aiden', 'Fisher', 'aiden_f', 'pass890', '1994-12-22', '555-8765', 'Inactive', 3),
-    ('Ella', 'Bryant', 'ella_b', 'passabc1', '1997-06-18', '555-2345', 'Active', 3),
-    ('Logan', 'Coleman', 'logan_c', 'passdef1', '1989-01-12', '555-6789', 'Inactive', 3),
-    ('Avery', 'Reyes', 'avery_r', 'passghi1', '1996-03-25', '555-8765', 'Active', 3),
-    ('Lucas', 'Scott', 'lucas_s', 'passjkl1', '1992-07-08', '555-2345', 'Active', 3),
-    ('Sophie', 'Jordan', 'sophie_j', 'passmno1', '1995-09-20', '555-6789', 'Active', 3)
+    ('Liam', 'Carter', 'volunteer3', '333', '1993-02-05', '555-2345', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Aubrey', 'Hayes', 'aubrey_h', 'passyz1', '1998-08-20', '555-6789', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Mason', 'Wells', 'mason_w', 'pass234', '1991-04-15', '555-1234', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Harper', 'Barnes', 'harper_b', 'pass567', '1986-10-30', '555-5678', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Aiden', 'Fisher', 'aiden_f', 'pass890', '1994-12-22', '555-8765', 'Inactive', 3, '2023-01-01T14:36:25'),
+    ('Ella', 'Bryant', 'ella_b', 'passabc1', '1997-06-18', '555-2345', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Logan', 'Coleman', 'logan_c', 'passdef1', '1989-01-12', '555-6789', 'Inactive', 3, '2023-01-01T14:36:25'),
+    ('Avery', 'Reyes', 'avery_r', 'passghi1', '1996-03-25', '555-8765', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Lucas', 'Scott', 'lucas_s', 'passjkl1', '1992-07-08', '555-2345', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Sophie', 'Jordan', 'sophie_j', 'passmno1', '1995-09-20', '555-6789', 'Active', 3, '2023-01-01T14:36:25')
     """
 
     cursor.execute(volunteers_data)
 
     refugees_data = """
-    INSERT INTO refugees (first_name, last_name, date_of_birth, gender, familyID, campID, triage_category, medical_conditions, vital_status) VALUES
+    INSERT INTO refugees (first_name, last_name, date_of_birth, gender, familyID, campID, triage_category, medical_conditions, vital_status, created_time) VALUES
 
     --Family separated: 8, 10, 
 
     -- Camp 1
-    ('Isabella', 'Johnson', '2002-08-10', 'Female', 1, 1, 'Standard', 'None', 'Alive'),
-    ('Oliver', 'Smith', '1980-03-25', 'Male', 2, 1, 'Urgent', 'Diabetes', 'Alive'),
-    ('Charlotte', 'Taylor', '1995-12-05', 'Female', 3, 1, 'Non-Urgent', 'Asthma', 'Alive'),
-    ('Henry', 'Clark', '2010-05-18', 'Male', 4, 1, 'None', 'None', 'Alive'),
-    ('Sophia', 'Williams', '1998-10-30', 'Female', 5, 1, 'Urgent', 'Respiratory Infection', 'Alive'),
-    ('Jacob', 'Brown', '2014-06-22', 'Male', 6, 1, 'Standard', 'None', 'Alive'),
-    ('Amelia', 'Harrison', '2003-04-03', 'Female', 7, 1, 'Non-Urgent', 'Allergies', 'Alive'),
-    ('William', 'Baker', '1990-01-12', 'Male', 8, 1, 'None', 'Fractured Arm', 'Alive'),
-    ('Sophie', 'Evans', '2005-09-20', 'Female', 9, 1, 'Urgent', 'Heart Disease', 'Alive'),
-    ('Thomas', 'Jones', '1988-07-08', 'Male', 10, 1, 'Non-Urgent', 'None', 'Alive'),
-    ('Aisha', 'Khan', '1996-06-18', 'Female', 11, 1, 'Urgent', 'Hypertension', 'Alive'),
-    ('Alexander', 'Brown', '1983-08-14', 'Male', 12, 1, 'None', 'Fractured Leg', 'Alive'),
-    ('Lily', 'Taylor', '2007-11-02', 'Female', 13, 1, 'Non-Urgent', 'Asthma', 'Alive'),
-    ('Daniel', 'Evans', '2000-02-25', 'Male', 9, 1, 'None', 'None', 'Alive'),
-    ('Ella', 'Williams', '1993-03-12', 'Female', 15, 1, 'Standard', 'None', 'Alive'),
-    ('Leo', 'Jones', '2012-12-30', 'Male', 10, 1, 'Urgent', 'Diabetes', 'Alive'),
-    ('Zara', 'Clark', '2005-07-28', 'Female', 17, 1, 'Non-Urgent', 'None', 'Alive'),
-    ('Mia', 'Evans', '1998-04-15', 'Female', 9, 1, 'Urgent', 'Asthma', 'Alive'),
-    ('Nooh', 'Baker', '2011-09-10', 'Male', 8, 1, 'Non-Urgent', 'None', 'Alive'),
-    ('Liam', 'Thompson', '2004-05-05', 'Male', 20, 1, 'None', 'Fractured Arm', 'Alive'),
+    ('Isabella', 'Johnson', '2002-08-10', 'Female', 1, 1, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Oliver', 'Smith', '1980-03-25', 'Male', 2, 1, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Charlotte', 'Taylor', '1995-12-05', 'Female', 3, 1, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Henry', 'Clark', '2010-05-18', 'Male', 4, 1, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Sophia', 'Williams', '1998-10-30', 'Female', 5, 1, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
+    ('Jacob', 'Brown', '2014-06-22', 'Male', 6, 1, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Amelia', 'Harrison', '2003-04-03', 'Female', 7, 1, 'Non-Urgent', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
+    ('William', 'Baker', '1990-01-12', 'Male', 8, 1, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    ('Sophie', 'Evans', '2005-09-20', 'Female', 9, 1, 'Urgent', 'Heart Disease', 'Alive', '2023-01-01T14:36:25'),
+    ('Thomas', 'Jones', '1988-07-08', 'Male', 10, 1, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Aisha', 'Khan', '1996-06-18', 'Female', 11, 1, 'Urgent', 'Hypertension', 'Alive', '2023-01-01T14:36:25'),
+    ('Alexander', 'Brown', '1983-08-14', 'Male', 12, 1, 'None', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
+    ('Lily', 'Taylor', '2007-11-02', 'Female', 13, 1, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Daniel', 'Evans', '2000-02-25', 'Male', 9, 1, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Ella', 'Williams', '1993-03-12', 'Female', 15, 1, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Leo', 'Jones', '2012-12-30', 'Male', 10, 1, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Zara', 'Clark', '2005-07-28', 'Female', 17, 1, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Mia', 'Evans', '1998-04-15', 'Female', 9, 1, 'Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Nooh', 'Baker', '2011-09-10', 'Male', 8, 1, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Liam', 'Thompson', '2004-05-05', 'Male', 20, 1, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
 
     -- Camp 2
-    ('Emily', 'White', '2001-11-10', 'Female', 21, 2, 'Standard', 'None', 'Alive'),
-    ('Alexander', 'Miller', '1995-03-25', 'Male', 22, 2, 'Urgent', 'Diabetes', 'Alive'),
-    ('Mia', 'Davis', '2008-12-05', 'Female', 23, 2, 'Non-Urgent', 'Asthma', 'Alive'),
-    ('Leo', 'Baker', '2012-05-18', 'Male', 8, 2, 'Immediate', 'None', 'Alive'),
-    ('Isabella', 'Clark', '1999-09-30', 'Female', 25, 2, 'Urgent', 'Respiratory Infection', 'Alive'),
-    ('James', 'Martin', '2007-11-15', 'Male', 26, 2, 'Standard', 'None', 'Alive'),
-    ('Poppy', 'Harrison', '2015-04-03', 'Female', 7, 2, 'Non-Urgent', 'Allergies', 'Alive'),
-    ('Jack', 'Baker', '1988-06-22', 'Male', 8, 2, 'Immediate', 'Fractured Arm', 'Alive'),
-    ('Ruby', 'Evans', '2003-09-20', 'Female', 29, 2, 'Urgent', 'Heart Disease', 'Alive'),
-    ('George', 'Jones', '1994-07-08', 'Male', 10, 2, 'Non-Urgent', 'None', 'Alive'),
-    ('Sophie', 'Harrison', '1996-06-18', 'Female', 7, 2, 'Urgent', 'Hypertension', 'Alive'),
-    ('Benjamin', 'Hill', '1983-08-14', 'Male', 32, 2, 'Immediate', 'Fractured Leg', 'Alive'),
-    ('Isla', 'Clark', '2007-11-02', 'Female', 33, 2, 'Non-Urgent', 'Asthma', 'Alive'),
-    ('Jacob', 'Evans', '2000-02-25', 'Male', 29, 2, 'Immediate', 'None', 'Alive'),
-    ('Ella', 'Williams', '1993-03-12', 'Female', 35, 2, 'Standard', 'None', 'Alive'),
-    ('Oliver', 'Jones', '2012-12-30', 'Male', 10, 2, 'Urgent', 'Diabetes', 'Alive'),
-    ('Zara', 'Clark', '2005-07-28', 'Female', 37, 2, 'Non-Urgent', 'None', 'Alive'),
-    ('Ava', 'Evans', '1998-04-15', 'Female', 29, 2, 'Urgent', 'Asthma', 'Alive'),
-    ('Noah', 'Baker', '2011-09-10', 'Male', 39, 2, 'Non-Urgent', 'None', 'Alive'),
-    ('Ethan', 'Thompson', '2004-05-05', 'Male', 40, 2, 'Immediate', 'Fractured Arm', 'Alive'),
+    ('Emily', 'White', '2001-11-10', 'Female', 21, 2, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Alexander', 'Miller', '1995-03-25', 'Male', 22, 2, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Mia', 'Davis', '2008-12-05', 'Female', 23, 2, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Leo', 'Baker', '2012-05-18', 'Male', 8, 2, 'Immediate', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Isabella', 'Clark', '1999-09-30', 'Female', 25, 2, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
+    ('James', 'Martin', '2007-11-15', 'Male', 26, 2, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Poppy', 'Harrison', '2015-04-03', 'Female', 7, 2, 'Non-Urgent', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
+    ('Jack', 'Baker', '1988-06-22', 'Male', 8, 2, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    ('Ruby', 'Evans', '2003-09-20', 'Female', 29, 2, 'Urgent', 'Heart Disease', 'Alive', '2023-01-01T14:36:25'),
+    ('George', 'Jones', '1994-07-08', 'Male', 10, 2, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Sophie', 'Harrison', '1996-06-18', 'Female', 7, 2, 'Urgent', 'Hypertension', 'Alive', '2023-01-01T14:36:25'),
+    ('Benjamin', 'Hill', '1983-08-14', 'Male', 32, 2, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
+    ('Isla', 'Clark', '2007-11-02', 'Female', 33, 2, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Jacob', 'Evans', '2000-02-25', 'Male', 29, 2, 'Immediate', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Ella', 'Williams', '1993-03-12', 'Female', 35, 2, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Oliver', 'Jones', '2012-12-30', 'Male', 10, 2, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Zara', 'Clark', '2005-07-28', 'Female', 37, 2, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Ava', 'Evans', '1998-04-15', 'Female', 29, 2, 'Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Noah', 'Baker', '2011-09-10', 'Male', 39, 2, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Ethan', 'Thompson', '2004-05-05', 'Male', 40, 2, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
 
     -- Camp 3
-    ('Lily', 'White', '1996-04-20', 'Female', 41, 3, 'Standard', 'None', 'Alive'),
-    ('Oliver', 'Taylor', '2002-08-15', 'Male', 42, 3, 'Urgent', 'Diabetes', 'Alive'),
-    ('Ava', 'Harrison', '2010-10-05', 'Female', 7, 3, 'Non-Urgent', 'Asthma', 'Alive'),
-    ('Ethan', 'Baker', '2014-11-18', 'Male', 39, 3, 'Immediate', 'None', 'Alive'),
-    ('Mia', 'Williams', '2001-09-30', 'Female', 45, 3, 'Urgent', 'Respiratory Infection', 'Alive'),
-    ('Noah', 'Martin', '2012-01-15', 'Male', 46, 3, 'Standard', 'None', 'Alive'),
-    ('Layla', 'Harrison', '2015-04-02', 'Female', 7, 3, 'Non-Urgent', 'Allergies', 'Alive'),
-    ('Oliver', 'Baker', '1998-01-12', 'Male', 39, 3, 'Immediate', 'Fractured Arm', 'Alive'),
-    ('Isla', 'Evans', '2005-09-20', 'Female', 49, 3, 'Urgent', 'Heart Disease', 'Alive'),
-    ('Harry', 'Jones', '1992-07-08', 'Male', 10, 3, 'Non-Urgent', 'None', 'Alive'),
-    ('Sophia', 'Taylor', '1996-06-18', 'Female', 51, 3, 'Urgent', 'Hypertension', 'Alive'),
-    ('Henry', 'Hill', '1983-08-14', 'Male', 52, 3, 'Immediate', 'Fractured Leg', 'Alive'),
-    ('Eva', 'Clark', '2007-11-02', 'Female', 53, 3, 'Non-Urgent', 'Asthma', 'Alive'),
-    ('Daniel', 'Evans', '2000-02-25', 'Male', 49, 3, 'Immediate', 'None', 'Alive'),
-    ('Sophie', 'Williams', '1993-03-12', 'Female', 55, 3, 'Standard', 'None', 'Alive'),
-    ('Leo', 'Jones', '2012-12-30', 'Male', 10, 3, 'Urgent', 'Diabetes', 'Alive'),
-    ('Zara', 'Clark', '2005-07-28', 'Female', 57, 3, 'Non-Urgent', 'None', 'Alive'),
-    ('Mia', 'Evans', '1998-04-15', 'Female', 49, 3, 'Urgent', 'Asthma', 'Alive'),
-    ('Noah', 'Baker', '2011-09-10', 'Male', 8, 3, 'Non-Urgent', 'None', 'Alive'),
-    ('Ella', 'Thompson', '2004-05-05', 'Male', 60, 3, 'Immediate', 'Fractured Arm', 'Alive')
+    ('Lily', 'White', '1996-04-20', 'Female', 41, 3, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Oliver', 'Taylor', '2002-08-15', 'Male', 42, 3, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Ava', 'Harrison', '2010-10-05', 'Female', 7, 3, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Ethan', 'Baker', '2014-11-18', 'Male', 39, 3, 'Immediate', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Mia', 'Williams', '2001-09-30', 'Female', 45, 3, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
+    ('Noah', 'Martin', '2012-01-15', 'Male', 46, 3, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Layla', 'Harrison', '2015-04-02', 'Female', 7, 3, 'Non-Urgent', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
+    ('Oliver', 'Baker', '1998-01-12', 'Male', 39, 3, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    ('Isla', 'Evans', '2005-09-20', 'Female', 49, 3, 'Urgent', 'Heart Disease', 'Alive', '2023-01-01T14:36:25'),
+    ('Harry', 'Jones', '1992-07-08', 'Male', 10, 3, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Sophia', 'Taylor', '1996-06-18', 'Female', 51, 3, 'Urgent', 'Hypertension', 'Alive', '2023-01-01T14:36:25'),
+    ('Henry', 'Hill', '1983-08-14', 'Male', 52, 3, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
+    ('Eva', 'Clark', '2007-11-02', 'Female', 53, 3, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Daniel', 'Evans', '2000-02-25', 'Male', 49, 3, 'Immediate', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Sophie', 'Williams', '1993-03-12', 'Female', 55, 3, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Leo', 'Jones', '2012-12-30', 'Male', 10, 3, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Zara', 'Clark', '2005-07-28', 'Female', 57, 3, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Mia', 'Evans', '1998-04-15', 'Female', 49, 3, 'Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Noah', 'Baker', '2011-09-10', 'Male', 8, 3, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Ella', 'Thompson', '2004-05-05', 'Male', 60, 3, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25')
     """
 
     cursor.execute(refugees_data)

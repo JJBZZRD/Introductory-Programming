@@ -21,7 +21,7 @@ class PlanEdit:
                 plan.status = 'Ended'
 
     @staticmethod
-    def create_plan(name, event_name, country, description, start_date, end_date=None, water=None, food=None, medical_supplies=None, shelter=None):
+    def create_plan(name, event_name, country, description, start_date, end_date=None, water=None, food=None, medical_supplies=None, shelter=None, status='Active'):
         for attr in [start_date, name, country, event_name, description]:
             if not attr:
                 return "Please provide {}".format(attr)
@@ -41,32 +41,35 @@ class PlanEdit:
                 return "Invalid date format for start_date: has to be yyyy-mm-dd"
         else:
             end_date = None
-        plan_tuple = (start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter)
+        now = datetime.now().date().strftime('%Y-%m-%dT%H:%M:%S')
+        plan_tuple = (start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, now)
 
         plan = util.parse_result('Plan', Plan.create_plan(plan_tuple))[0]
         if isinstance(plan, Plan):
-            plan.status = 'Active'
+            # plan.status = 'Active'
             plan.end_date_datetime = datetime.strptime(plan.end_date, '%Y-%m-%d') if plan.end_date is not None else None
             return plan
         else:
             return util.parse_result('Plan', plan)
 
     @staticmethod
-    def update_plan(planID=None, name=None, event_name=None, country=None, description=None, start_date=None, end_date=None, water=None, food=None, shelter=None, medical_supplies=None):
+    def update_plan(planID=None, name=None, event_name=None, country=None, description=None, start_date=None, end_date=None, water=None, food=None, shelter=None, medical_supplies=None, status=None):
 
         if name:
-            name = util.validate_name(name)
+            if not util.is_valid_name(name):
+                return "Invalid plan name"
         if country:
-            country = util.validate_country(country)
+            if not util.is_valid_country(country):
+                return "Invalid country"
         if event_name:
-            event_name = util.validate_event(event_name)
-        if description:
-            description = util.validate_description(description)
+            if not util.is_valid_name(event_name):
+                return "Invalid event name"
         if start_date:
-            start_date = util.validate_date(start_date)
-
+            if not util.validate_date(start_date):
+                return "Invalid start date"
         if end_date:
-            end_date = util.validate_end_date(start_date, end_date)
+            if util.validate_end_date(start_date, end_date):
+                return "Invalid end date"
         #     if datetime.today().date() == end_date:
         #         return Plan.delete_plan(planID)
         #     else: 
@@ -74,17 +77,23 @@ class PlanEdit:
         # else:
         #     end_date = None
 
-        return Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies)
+        if status and status in ['Active', 'Ended']:
+            status = status
+        else:
+            return "Invalid status"
 
-    # @staticmethod
-    # def end_plan(planID, start_date, end_date):
-    #     end_date = util.validate_end_date(start_date, end_date)
+        return Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
 
-    #     if end_date:
-    #         if datetime.today().date() == end_date:
-    #             return Plan.delete_plan(planID)
-    #         else:
-    #             return Plan.update_plan(planID=planID, end_date=end_date)
+    @staticmethod
+    def end_plan(planID):
+        plan = Plan.get_plan(planID)[0]
+        if plan:
+            plan.end_date = datetime.today().date()
+            plan.status = 'Ended'
+            Plan.update_plan(planID, end_date=plan.end_date, status=plan.status)
+            return plan
+        else:
+            return "Plan does not exist"
             
     @staticmethod
     def delete_plan(planID):

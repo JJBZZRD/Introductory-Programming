@@ -2,7 +2,7 @@ from .config import conn, cursor
 
 
 class Plan:  # Plan class has attributes matching columns in table
-    def __init__(self, planID, start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter):
+    def __init__(self, planID, start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, create_time):
         self.planID = planID
         self.start_date = start_date
         self.end_date = end_date
@@ -15,14 +15,16 @@ class Plan:  # Plan class has attributes matching columns in table
         self.medical_supplies = medical_supplies
         self.shelter = shelter
         self.end_date_datetime = None
-        self.status = None
+        self.status = status
+        self.create_time = create_time
+
     @classmethod
     def init_from_tuple(cls, plan_tuple):
         return cls(*plan_tuple)
 
     def display_info(self):
         return [str(self.planID), str(self.name), str(self.country), str(self.event_name), str(self.description),
-                str(self.start_date), str(self.end_date)]
+                str(self.start_date), str(self.end_date), self.status, self.create_time]
 
     @staticmethod
     def get_plan_by_id(planID):  # Get plan details by selecting on planID. Returns a list of tuples.
@@ -44,7 +46,7 @@ class Plan:  # Plan class has attributes matching columns in table
 
 
     @staticmethod  # Update a plan by selecting on planID
-    def update_plan(planID, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None, water=None, food=None, shelter=None, medical_supplies=None):
+    def update_plan(planID, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None, water=None, food=None, shelter=None, medical_supplies=None, status=None):
 
         query = []
         params = []
@@ -79,7 +81,11 @@ class Plan:  # Plan class has attributes matching columns in table
         if medical_supplies is not None:
             query.append("medical_supplies = ?")
             params.append(medical_supplies)
-        
+        if status is not None: 
+            query.append("status = ?")
+            params.append(status)
+
+
         params.append(planID)
         cursor.execute(f"""UPDATE plans SET {', '.join(query)} WHERE planID = ?""", params)
         conn.commit()

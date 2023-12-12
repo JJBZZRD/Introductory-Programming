@@ -2,6 +2,7 @@ from ..DB.volunteer import Volunteer
 from ..DB.refugee import Refugee
 from .person_data_retrieve import PersonDataRetrieve
 from .. import util
+from datetime import datetime
 
 class PersonDataEdit:
 
@@ -54,7 +55,6 @@ class PersonDataEdit:
     @staticmethod
     def create_volunteer(first_name = None, last_name = None, camp_id = None, username = None, password = None, date_of_birth = None, phone = None):
 
-        t = (first_name, last_name, username, password, date_of_birth, phone, camp_id)
 
         if phone and not util.is_phone_format(phone):
            return "Incorrect phone number format"
@@ -65,13 +65,16 @@ class PersonDataEdit:
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
 
+        now = util.get_current_time().strftime("%Y-%m-%dT%H:%M:%S")
+
+        t = (first_name, last_name, username, password, date_of_birth, phone, camp_id, now)
+
         volunteer_tuples = Volunteer.create_volunteer(t)
         # print(volunteer_tuples)
         return util.parse_result('Volunteer', volunteer_tuples)
     
     @staticmethod
     def create_refugee(first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category = 'None', medical_conditions = None, vital_status = 'Alive'):
-        t = (first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category, medical_conditions, vital_status)
 
 
         if first_name and not util.is_valid_name(first_name):
@@ -80,6 +83,10 @@ class PersonDataEdit:
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
 
+        now = util.get_current_time().strftime("%Y-%m-%dT%H:%M:%S")
+
+        t = (first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category, medical_conditions, vital_status, now)
+        
         refugee_tuples = Refugee.create_refugee(t)
         return util.parse_result('Refugee', refugee_tuples)
 

@@ -3,8 +3,7 @@ from .plan import Plan
 
 
 class Camp:  # Camp class has attributes matching columns in table
-    def __init__(self, campID, location, shelter, water, max_water, food, max_food, medical_supplies,
-                 max_medical_supplies, planID):
+    def __init__(self, campID, location, shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID, created_time):
         self.campID = campID
         self.location = location
         self.shelter = shelter
@@ -15,6 +14,7 @@ class Camp:  # Camp class has attributes matching columns in table
         self.medical_supplies = medical_supplies
         self.max_medical_supplies = max_medical_supplies
         self.planID = planID
+        self.created_time = created_time
 
     @classmethod
     def init_from_tuple(cls, camp_tuple):
@@ -22,7 +22,7 @@ class Camp:  # Camp class has attributes matching columns in table
 
     def display_info(self):
         return [str(self.campID), str(self.location), str(self.shelter), str(self.water), str(self.max_water), str(self.food), str(self.max_food),
-                str(self.medical_supplies), str(self.max_medical_supplies), str(self.planID)]
+                str(self.medical_supplies), str(self.max_medical_supplies), str(self.planID), self.created_time]
 
     @staticmethod
     def get_camp_by_id(campID):  # Get camp details by selecting on campID. Returns a list of tuples.
@@ -31,16 +31,16 @@ class Camp:  # Camp class has attributes matching columns in table
 
     @classmethod  # Insert a camp into the database without creating a new instance
     def create_camp(cls, camp_tuple):
-        location, shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID = camp_tuple
+        location, shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID, created_time = camp_tuple
         if Camp.check_planID_exist(planID):
             sql = """
                 INSERT INTO camps (
                     location, shelter, water, max_water, food, max_food, medical_supplies,
-                    max_medical_supplies, planID) 
+                    max_medical_supplies, planID, created_time) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """
             cursor.execute(sql, (location, shelter, water, max_water, food,
-                                 max_food, medical_supplies, max_medical_supplies, planID))
+                                 max_food, medical_supplies, max_medical_supplies, planID, created_time))
             conn.commit()
             camp_id = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
             return Camp.get_camp_by_id(camp_id)

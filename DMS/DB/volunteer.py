@@ -3,7 +3,7 @@ from .camp import Camp
 
 
 class Volunteer:
-    def __init__(self, volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID):
+    def __init__(self, volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID, created_time):
         self.volunteerID = volunteerID
         self.first_name = first_name
         self.last_name = last_name
@@ -13,6 +13,7 @@ class Volunteer:
         self.phone = phone
         self.account_status = account_status
         self.campID = campID
+        self.created_time = created_time
 
     @classmethod
     def init_from_tuple(cls, volunteer_tuple):
@@ -20,7 +21,7 @@ class Volunteer:
 
     def display_info(self):
         return [str(self.volunteerID), str(self.first_name), str(self.last_name), str(self.username),
-                str(self.date_of_birth), str(self.phone), str(self.account_status), str(self.campID)]
+                str(self.date_of_birth), str(self.phone), str(self.account_status), str(self.campID), self.created_time]
 
     @staticmethod
     def get_volunteer_by_id(volunteerID):  # Get volunteer details by selecting on volunteerID. Returns a list of tuples.
@@ -29,15 +30,15 @@ class Volunteer:
 
     @classmethod  # Insert a volunteer into the database without creating a new instance
     def create_volunteer(cls, volunteer_tuple):
-        first_name, last_name, username, password, date_of_birth, phone, campID = volunteer_tuple
+        first_name, last_name, username, password, date_of_birth, phone, campID, created_time = volunteer_tuple
         if Volunteer.check_campID_exist(campID):
             sql = """
                 INSERT INTO volunteers (
-                first_name, last_name, username, password, date_of_birth, phone, account_status, campID) 
+                first_name, last_name, username, password, date_of_birth, phone, account_status, campID, created_time) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """
             cursor.execute(sql, (first_name, last_name, username,
-                                 password, date_of_birth, phone, "Active", campID))
+                                 password, date_of_birth, phone, "Active", campID, created_time))
             conn.commit()
             volunteer_id = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
             return Volunteer.get_volunteer_by_id(volunteer_id)

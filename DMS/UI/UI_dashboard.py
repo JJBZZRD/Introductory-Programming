@@ -104,6 +104,10 @@ class Dashboard(tk.Frame):
         ).grid(row=row, column=0, sticky="w")
         row += 1
 
+        separator = tk.ttk.Separator(camp_statistics_frame, orient="horizontal")
+        separator.grid(row=row, column=0, columnspan=5, sticky="ew", pady=5)
+        row += 1
+
         tk.Label(
             camp_statistics_frame,
             text=f"Volunteers: {num_volunteers}",
@@ -191,7 +195,7 @@ class Dashboard(tk.Frame):
             )
 
             tk.Label(resources_frame, text=f"{resource_name}: {amount}").grid(
-                row=resource_row + 1, column=0, sticky="w", padx=5
+                row=resource_row + 1, column=0, sticky="w", padx=5, pady=5
             )
 
             match resource_name:
@@ -337,10 +341,10 @@ class Dashboard(tk.Frame):
 
         title_label = tk.Label(
             additional_resources_frame,
-            text=f"Plan {plan.planID} Undistributed Resources:",
+            text=f"Plan {plan.planID} Undistributed Resources",
             font=("Arial", 14, "bold"),
         )
-        title_label.grid(row=0, column=0, columnspan=4, sticky="w", padx=5, pady=5)
+        title_label.grid(row=0, column=0, columnspan=3, sticky="w", padx=5, pady=5)
 
         additional_resources = {
             "Shelter": plan.shelter,
@@ -350,11 +354,18 @@ class Dashboard(tk.Frame):
         }
 
         for index, (resource_name, amount) in enumerate(additional_resources.items()):
-            resource_row = index + 1
+            resource_row = index * 2 + 1
+
+            separator = tk.ttk.Separator(
+                additional_resources_frame, orient="horizontal"
+            )
+            separator.grid(
+                row=resource_row, column=0, columnspan=3, sticky="ew", pady=5
+            )
 
             tk.Label(
                 additional_resources_frame, text=f"{resource_name}: {amount}"
-            ).grid(row=resource_row, column=0, sticky="w", padx=5)
+            ).grid(row=resource_row + 1, column=0, sticky="w", padx=5)
 
             if amount > 0:
                 tk.Button(
@@ -366,7 +377,7 @@ class Dashboard(tk.Frame):
                         plan,
                         -10,
                     ),
-                ).grid(row=resource_row, column=2, padx=5)
+                ).grid(row=resource_row + 1, column=1, padx=5)
 
             tk.Button(
                 additional_resources_frame,
@@ -377,16 +388,28 @@ class Dashboard(tk.Frame):
                     plan,
                     10,
                 ),
-            ).grid(row=resource_row, column=3, padx=5)
+            ).grid(row=resource_row + 1, column=2, padx=5)
 
         tk.Label(
             additional_resources_frame,
-            text=f"\nButtons above update plan {plan.planID}'s \navailable additional resources.\n\nButtons under camp headings \ndistribute those additional \nresources",
+            text=f"\nButtons above update plan {plan.planID}'s available\nadditional resources.",
         ).grid(
-            row=len(additional_resources) + 1,
+            row=len(additional_resources) * 2 + 2,
             column=0,
-            columnspan=4,
-            sticky="ew",
+            columnspan=3,
+            sticky="w",
+            padx=5,
+            pady=5,
+        )
+
+        tk.Label(
+            additional_resources_frame,
+            text=f"\nButtons under camp headings distribute\nplan {plan.planID}'s additional resources.",
+        ).grid(
+            row=len(additional_resources) * 2 + 3,
+            column=0,
+            columnspan=3,
+            sticky="w",
             padx=5,
             pady=5,
         )
@@ -629,8 +652,8 @@ class AdminDashboard(Dashboard):
         self.additional_resources_frame.grid(
             row=1, column=0, sticky="nsew", padx=5, pady=5
         )
-        camp_resources_canvas.grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
-        camp_resources_scrollbar.grid(row=2, column=1, sticky="ew", padx=5, pady=5)
+        camp_resources_canvas.grid(row=1, column=1, sticky="nsew", padx=5)
+        camp_resources_scrollbar.grid(row=2, column=1, sticky="ew", padx=5)
 
         distribute_tab.grid_columnconfigure(0, weight=1)
         distribute_tab.grid_columnconfigure(1, weight=3)
@@ -653,9 +676,9 @@ class AdminDashboard(Dashboard):
             _,
         ) = self.create_all_camp_statistics_section(stats_tab)
 
-        plan_stats_section.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
-        camp_stats_canvas.grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
-        camp_stats_scrollbar.grid(row=2, column=1, sticky="ew", padx=5, pady=5)
+        plan_stats_section.grid(row=1, column=0, sticky="nsew", padx=5)
+        camp_stats_canvas.grid(row=1, column=1, sticky="nsew", padx=5)
+        camp_stats_scrollbar.grid(row=2, column=1, sticky="ew", padx=5)
 
         stats_tab.grid_columnconfigure(0, weight=1)
         stats_tab.grid_columnconfigure(1, weight=3)
@@ -689,12 +712,6 @@ class AdminDashboard(Dashboard):
         return camp_resources_canvas, camp_resources_scrollbar, all_camp_resources_frame
 
     def populate_all_camp_resources(self, parent_frame, camp, column_index):
-        camp_title = f"Camp {camp.campID} - {camp.location}"
-        camp_title_label = tk.Label(
-            parent_frame, text=camp_title, font=("Arial", 14, "bold")
-        )
-        camp_title_label.grid(row=0, column=column_index * 2, sticky="ew")
-
         camp_section = self.create_resources_section(
             parent_frame,
             camp,
@@ -730,12 +747,6 @@ class AdminDashboard(Dashboard):
         return camp_stats_canvas, camp_stats_scrollbar, all_camp_stats_frame
 
     def populate_camp_statistics(self, parent_frame, camp, column_index):
-        camp_title = f"Camp {camp.campID} - {camp.location}"
-        camp_title_label = tk.Label(
-            parent_frame, text=camp_title, font=("Arial", 14, "bold")
-        )
-        camp_title_label.grid(row=0, column=column_index * 2, sticky="ew")
-
         camp_stats = self.create_camp_statistics_section(parent_frame, camp)
         camp_stats.grid(row=1, column=column_index * 2, sticky="nsew")
         parent_frame.grid_columnconfigure(column_index * 2 + 1, weight=1)
