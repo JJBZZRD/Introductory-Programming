@@ -250,7 +250,7 @@ class VolunteerList(ManageList):
         self.list_type = ['Manage Volunteers', 'Add New Volunteer']
         self.list_headers = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
-        self.list_data = PersonDataRetrieve.get_all_volunteers()
+        self.list_data = self.list_by_plan
         self.get_search = PersonDataRetrieve.get_volunteers
         self.switch_to_page = 'EditVolunteer'
         self.record_button = 'NewVolunteer'
@@ -264,7 +264,22 @@ class VolunteerList(ManageList):
     def list_by_plan(self):
         #need some way of extracting list of volunteers asociated with a specific planID
         #if i give you a camp, can you give me a list of volunteers associated with the plan that contains that camp
-        pass
+        if isinstance(self.screen_data, Camp):
+            planID = self.screen_data.planID
+
+            camps_under_plan = CampDataRetrieve.get_camp(planID=planID)
+
+            camp_id_under_plan = list(set([camp.campID for camp in camps_under_plan]))
+
+            volunteers_of_camps = []
+
+            for camp_id in camp_id_under_plan:
+                volunteers_of_camps += PersonDataRetrieve.get_volunteer(campID=camp_id)
+
+            return volunteers_of_camps
+        else:
+            return PersonDataRetrieve.get_all_volunteers()
+        
 
 class RefugeeList(ManageList):
 
