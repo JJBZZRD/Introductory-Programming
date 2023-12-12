@@ -41,7 +41,8 @@ class PlanEdit:
                 return "Invalid date format for start_date: has to be yyyy-mm-dd"
         else:
             end_date = None
-        plan_tuple = (start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status)
+        now = datetime.now().date().strftime('%Y-%m-%dT%H:%M:%S')
+        plan_tuple = (start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, now)
 
         plan = util.parse_result('Plan', Plan.create_plan(plan_tuple))[0]
         if isinstance(plan, Plan):

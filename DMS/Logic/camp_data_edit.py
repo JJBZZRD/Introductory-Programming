@@ -2,7 +2,7 @@ from ..DB.camp import Camp
 from ..DB.plan import Plan
 from .camp_data_retrieve import CampDataRetrieve
 from .. import util
-
+from datetime import datetime
 
 class CampDataEdit:
 
@@ -109,10 +109,7 @@ class CampDataEdit:
         return util.parse_result('Camp', camp_tuple)
 
     @staticmethod  # Insert a camp into the database without creating a new instance
-    def create_camp(location, shelter, water, max_water, food, max_food, medical_supplies,
-                    max_medical_supplies, planID):
-        camp = (location, shelter, water, max_water, food, max_food, medical_supplies,
-                max_medical_supplies, planID)
+    def create_camp(location, shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID):
                 # validate
         if location:
             if not util.is_valid_name(location):
@@ -180,10 +177,13 @@ class CampDataEdit:
                     return "Cannot find this planID. Please try again."
             else:
                 return "You should enter a number to planID."
+                
+        now = datetime.now().date().strftime('%Y-%m-%dT%H:%M:%S')
+
+        camp_tuple = (location, shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID, now)
             
-        campID = Camp.create_camp(camp_tuple=camp)
-        camp_tuple = [Camp.get_campID(campID)]
-        return util.parse_result('Camp', camp_tuple)
+        camps = Camp.create_camp(camp_tuple)
+        return util.parse_result('Camp', camps)
 
     @staticmethod
     def delete_camp(campID):

@@ -2,7 +2,7 @@ from .config import conn, cursor
 
 
 class Plan:  # Plan class has attributes matching columns in table
-    def __init__(self, planID, start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status=None):
+    def __init__(self, planID, start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, create_time):
         self.planID = planID
         self.start_date = start_date
         self.end_date = end_date
@@ -16,13 +16,15 @@ class Plan:  # Plan class has attributes matching columns in table
         self.shelter = shelter
         self.end_date_datetime = None
         self.status = status
+        self.create_time = create_time
+
     @classmethod
     def init_from_tuple(cls, plan_tuple):
         return cls(*plan_tuple)
 
     def display_info(self):
         return [str(self.planID), str(self.name), str(self.country), str(self.event_name), str(self.description),
-                str(self.start_date), str(self.end_date)]
+                str(self.start_date), str(self.end_date), self.status, self.create_time]
 
     @staticmethod
     def get_plan_by_id(planID):  # Get plan details by selecting on planID. Returns a list of tuples.
