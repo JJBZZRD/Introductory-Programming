@@ -140,6 +140,7 @@ class Dashboard(tk.Frame):
         camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
 
         resources = {
+            "Shelter": camp.shelter,
             "Water": camp.water,
             "Food": camp.food,
             "Medical Supplies": camp.medical_supplies,
@@ -321,7 +322,7 @@ class Dashboard(tk.Frame):
         self, parent_tab, camp, display_type, user_type
     ):
         refugees_volunteers_frame = tk.Frame(parent_tab)
-        refugees_volunteers_frame.grid(row=1, column=2, sticky="nsew", pady=5)
+        refugees_volunteers_frame.grid(row=1, column=2, sticky="nsew", padx=5, pady=5)
 
         title_text = f"{'Refugees' if display_type == 'refugees' else 'Volunteers'}"
         columns = (
