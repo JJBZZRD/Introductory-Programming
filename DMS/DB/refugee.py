@@ -3,8 +3,7 @@ from .camp import Camp
 
 
 class Refugee:  # Refugee class has attributes matching columns in table
-    def __init__(self, refugeeID, first_name, last_name, date_of_birth, gender, familyID, campID,
-                 triage_category, medical_conditions, vital_status):
+    def __init__(self, refugeeID, first_name, last_name, date_of_birth, gender, familyID, campID,triage_category, medical_conditions, vital_status, created_time):
         self.refugeeID = refugeeID
         self.first_name = first_name
         self.last_name = last_name
@@ -17,6 +16,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
         self.vital_status = vital_status
         self.age = 0
         self.band = None
+        self.created_time = created_time
 
     @classmethod
     def init_from_tuple(cls, refugee_tuple):
@@ -26,7 +26,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
         return [str(self.refugeeID), str(self.first_name), str(self.last_name),
                 str(self.date_of_birth), str(self.gender), str(self.familyID),
                 str(self.campID), str(self.triage_category), str(self.medical_conditions),
-                str(self.vital_status)]
+                str(self.vital_status), self.created_time]
 
     @staticmethod
     def get_refugee_by_id(refugeeID):  # Get refugee details by selecting on refugeeID. Returns a list of tuples.
