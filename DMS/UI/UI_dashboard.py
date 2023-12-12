@@ -146,9 +146,16 @@ class Dashboard(tk.Frame):
         return camp_statistics_frame
 
     def create_resources_section(self, parent_tab, camp, plan, user_type):
-        resources_frame = tk.Frame(parent_tab)
+        resources_frame = tk.Frame(parent_tab, relief="solid", borderwidth=2)
         resources_frame.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
         resources_frame.grid_columnconfigure(1, weight=1)
+
+        title_label = tk.Label(
+            resources_frame,
+            text=f"Current Resources:",
+            font=("Arial", 14, "bold"),
+        )
+        title_label.grid(row=0, column=0, columnspan=5, sticky="w", padx=5, pady=5)
 
         camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
 
@@ -160,12 +167,10 @@ class Dashboard(tk.Frame):
         }
 
         for index, (resource_name, amount) in enumerate(resources.items()):
-            tk.Label(resources_frame, text=f"{resource_name}:").grid(
-                row=index, column=0, sticky="w", padx=5
-            )
+            resource_row = index * 3 + 1
 
-            tk.Label(resources_frame, text=str(amount)).grid(
-                row=index, column=1, sticky="e", padx=5
+            tk.Label(resources_frame, text=f"{resource_name}: {amount}").grid(
+                row=resource_row, column=0, sticky="w", padx=5
             )
 
             match resource_name:
@@ -181,7 +186,7 @@ class Dashboard(tk.Frame):
             if amount > 0:
                 tk.Button(
                     resources_frame,
-                    text="-",
+                    text="-10",
                     command=lambda res_name=resource_name: self.update_resource(
                         camp,
                         resources_frame,
@@ -190,14 +195,14 @@ class Dashboard(tk.Frame):
                         plan,
                         user_type,
                     ),
-                ).grid(row=index, column=2, padx=5)
+                ).grid(row=resource_row, rowspan=2, column=2, padx=5)
 
             if (
                 user_type == "admin" and getattr(plan, plan_resouce) > 0
             ) or user_type == "volunteer":
                 tk.Button(
                     resources_frame,
-                    text="+",
+                    text="+10",
                     command=lambda res_name=resource_name: self.update_resource(
                         camp,
                         resources_frame,
@@ -206,13 +211,23 @@ class Dashboard(tk.Frame):
                         plan,
                         user_type,
                     ),
-                ).grid(row=index, column=3, padx=5)
+                ).grid(row=resource_row, rowspan=2, column=3, padx=5)
 
             if resource_name in ["Water", "Food", "Medical Supplies"]:
                 days_left = camp_resources_estimation.get(resource_name)
-                tk.Label(resources_frame, text=f"Days left: {days_left}\n").grid(
-                    row=index, column=4, sticky="w", padx=5
-                )
+
+                days_left_color = "red" if days_left < 7 else "black"
+
+                tk.Label(
+                    resources_frame,
+                    text=f"Days left: {int(days_left)}",
+                    fg=days_left_color,
+                ).grid(row=resource_row + 1, column=0, columnspan=5, sticky="w", padx=5)
+
+            separator = tk.ttk.Separator(resources_frame, orient="horizontal")
+            separator.grid(
+                row=resource_row + 2, column=0, columnspan=5, sticky="ew", pady=5
+            )
 
         return resources_frame
 
@@ -663,9 +678,9 @@ class AdminDashboard(Dashboard):
     def populate_camp_statistics(self, parent_frame, camp, column_index):
         camp_title = f"Camp {camp.campID} - {camp.location}"
         camp_title_label = tk.Label(
-            parent_frame, text=camp_title, font=("Arial", 12, "bold")
+            parent_frame, text=camp_title, font=("Arial", 14, "bold")
         )
-        camp_title_label.grid(row=0, column=column_index * 2, sticky="w")
+        camp_title_label.grid(row=0, column=column_index * 2, sticky="ew")
 
         camp_stats = self.create_camp_statistics_section(parent_frame, camp)
         camp_stats.grid(row=1, column=column_index * 2, sticky="nsew")
