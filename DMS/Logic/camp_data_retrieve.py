@@ -15,10 +15,9 @@ class CampDataRetrieve:
     @staticmethod
     def get_camp(campID=None, location=None, shelter=None, water=None, max_water=None, food=None, max_food=None,
                  medical_supplies=None, max_medical_supplies=None, planID=None):
-        # Currently use pycountry as validation, need to be further changed.
-        if location:
-            if not util.is_country(location):
-                return "You should enter a country name for real."
+        # if location:
+        #     if not util.is_country(location):
+        #         return "You should enter a country name for real."
 
         if shelter:
             if util.is_num(shelter):
