@@ -168,31 +168,43 @@ class Dashboard(tk.Frame):
                 row=index, column=1, sticky="e", padx=5
             )
 
-            tk.Button(
-                resources_frame,
-                text="-",
-                command=lambda res_name=resource_name: self.update_resource(
-                    camp,
-                    resources_frame,
-                    res_name,
-                    -10,
-                    plan,
-                    user_type,
-                ),
-            ).grid(row=index, column=2, padx=5)
+            match resource_name:
+                case "Shelter":
+                    plan_resouce = "shelter"
+                case "Water":
+                    plan_resouce = "water"
+                case "Food":
+                    plan_resouce = "food"
+                case "Medical Supplies":
+                    plan_resouce = "medical_supplies"
 
-            tk.Button(
-                resources_frame,
-                text="+",
-                command=lambda res_name=resource_name: self.update_resource(
-                    camp,
+            if amount > 0:
+                tk.Button(
                     resources_frame,
-                    res_name,
-                    10,
-                    plan,
-                    user_type,
-                ),
-            ).grid(row=index, column=3, padx=5)
+                    text="-",
+                    command=lambda res_name=resource_name: self.update_resource(
+                        camp,
+                        resources_frame,
+                        res_name,
+                        -10,
+                        plan,
+                        user_type,
+                    ),
+                ).grid(row=index, column=2, padx=5)
+
+            if (user_type == "admin" and getattr(plan, plan_resouce) > 0) or user_type == "volunteer":
+                tk.Button(
+                    resources_frame,
+                    text="+",
+                    command=lambda res_name=resource_name: self.update_resource(
+                        camp,
+                        resources_frame,
+                        res_name,
+                        10,
+                        plan,
+                        user_type,
+                    ),
+                ).grid(row=index, column=3, padx=5)
 
             if resource_name in ["Water", "Food", "Medical Supplies"]:
                 days_left = camp_resources_estimation.get(resource_name)
