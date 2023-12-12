@@ -52,8 +52,8 @@ class PersonDataEdit:
         return util.parse_result('Volunteer', volunteer_tuples)
     
     @staticmethod
-    def create_refugee(first_name, last_name, date_of_birth, family_id, camp_id, medical_condition):
-        t = (first_name, last_name, date_of_birth, family_id, camp_id, medical_condition)
+    def create_refugee(first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category = 'None', medical_conditions = None, vital_status = 'Alive'):
+        t = (first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category, medical_conditions, vital_status)
         refugee_tuples = Refugee.create_refugee(t)
         return util.parse_result('Refugee', refugee_tuples)
 

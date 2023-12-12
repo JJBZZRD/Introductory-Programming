@@ -288,18 +288,18 @@ class NewRefugee(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Refugee']
-        self.modifiable_variables = ['Refugee ID', 'First Name', 'Last Name',
-                'Date of_Birth', 'Gender', 'Family ID',
+        self.modifiable_variables = ['First Name', 'Last Name',
+                'Date of Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status']
-        self.filter_matching = {'Refugee ID': 'id', 'First Name': 'name', 'Last Name': 'name',
-                'Date of_Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
-                'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
+        self.filter_matching = {'First Name': 'first_name', 'Last Name': 'last_name',
+                'Date of Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
+                'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_conditions',
                 'Vital Status': 'vital_status'}
         self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Vital Status': ['Alive', 'Deceased'], 
                                       'Gender': ['Male', 'Female', 'Other'], 'Triage Category': ['None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate']}
         self.button_labels = ['Create']
-        self.save_record = PersonDataEdit.create_refugee
+        self.create_record = PersonDataEdit.create_refugee
         self.entry_fields = {}
         self.create_title()
         self.create_entry_fields()
@@ -311,11 +311,11 @@ class EditRefugee(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['View/Edit Refugee']
         self.modifiable_variables = ['Refugee ID', 'First Name', 'Last Name',
-                'Date of_Birth', 'Gender', 'Family ID',
+                'Date of Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status']
         self.filter_matching = {'Refugee ID': 'id', 'First Name': 'name', 'Last Name': 'name',
-                'Date of_Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
+                'Date of Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
                 'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
                 'Vital Status': 'vital_status'}
         self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Vital Status': ['Alive', 'Deceased'], 
