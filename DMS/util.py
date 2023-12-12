@@ -25,6 +25,12 @@ def is_country(value):
         return True
     else:
         return False
+    
+def is_valid_name(name):
+    if all((char.isalpha() or char.isspace()) or char == '-' or char == '\'' for char in name):
+        return True
+    else:
+        return False
 
 def parse_result(class_name, query_result):
     r = "Invalid input"
