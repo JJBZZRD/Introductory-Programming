@@ -5,11 +5,11 @@ from .plan import Plan
 
 
 # Test create
-#Camp.create_camp(location="London", max_shelter=50, water=20, max_water=50, food=30, max_food=50, medical_supplies=40,
+#Camp.create_camp(location="London", shelter=50, water=20, max_water=50, food=30, max_food=50, medical_supplies=40,
 #              max_medical_supplies=100, planID=1)
 
 # Test insert
-#summer = Camp(location="Bristol", max_shelter=23, water=34, max_water=67, food=45, max_food=56, medical_supplies=45,
+#summer = Camp(location="Bristol", shelter=23, water=34, max_water=67, food=45, max_food=56, medical_supplies=45,
 #              max_medical_supplies=45, planID=2)
 #summer.insert_camp()
 

@@ -7,7 +7,7 @@ from .. import util
 class CampDataEdit:
 
     @staticmethod
-    def update_camp(campID, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
+    def update_camp(campID, location=None, shelter=None, water=None, max_water=None, food=None, max_food=None,
                     medical_supplies=None, max_medical_supplies=None, planID=None):
         # get variables
         camp = CampDataRetrieve.get_camp(campID=campID)
@@ -18,8 +18,8 @@ class CampDataEdit:
         try:
             if location:
                 camp = location
-            if max_shelter:
-                camp.max_shelter = max_shelter
+            if shelter:
+                camp.shelter = shelter
             if water:
                 camp.water = water
             if max_water:
@@ -41,12 +41,12 @@ class CampDataEdit:
             if not util.is_country(location):
                 return "You should enter a country name for real."
 
-        if max_shelter:
-            if util.is_num(max_shelter):
-                if not util.is_positive(max_shelter):
-                    return "Cannot enter a negative value to max_shelter."
+        if shelter:
+            if util.is_num(shelter):
+                if not util.is_positive(shelter):
+                    return "Cannot enter a negative value to shelter."
             else:
-                return "You should enter a number to max_shelter."
+                return "You should enter a number to shelter."
 
         if water:
             if util.is_num(water):
@@ -97,15 +97,15 @@ class CampDataEdit:
             else:
                 return "You should enter a number to planID."
 
-        camp_tuple = Camp.update_camp(campID, location, max_shelter, water, max_water, food,
+        camp_tuple = Camp.update_camp(campID, location, shelter, water, max_water, food,
                                        max_food, medical_supplies, max_medical_supplies, planID)
 
         return util.parse_result('Camp', camp_tuple)
 
     @staticmethod  # Insert a camp into the database without creating a new instance
-    def create_camp(location, max_shelter, water, max_water, food, max_food, medical_supplies,
+    def create_camp(location, shelter, water, max_water, food, max_food, medical_supplies,
                     max_medical_supplies, planID):
-        camp = (location, max_shelter, water, max_water, food, max_food, medical_supplies,
+        camp = (location, shelter, water, max_water, food, max_food, medical_supplies,
                 max_medical_supplies, planID)
         campID = Camp.create_camp(camp_tuple=camp)
         camp_tuple = [Camp.get_campID(campID)]

@@ -13,19 +13,19 @@ class CampDataRetrieve:
         return util.parse_result('Camp', camp_tuples)
 
     @staticmethod
-    def get_camp(campID=None, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
+    def get_camp(campID=None, location=None, shelter=None, water=None, max_water=None, food=None, max_food=None,
                  medical_supplies=None, max_medical_supplies=None, planID=None):
         # Currently use pycountry as validation, need to be further changed.
         if location:
             if not util.is_country(location):
                 return "You should enter a country name for real."
 
-        if max_shelter:
-            if util.is_num(max_shelter):
-                if not util.is_positive(max_shelter):
-                    return "Cannot enter a negative value to max_shelter."
+        if shelter:
+            if util.is_num(shelter):
+                if not util.is_positive(shelter):
+                    return "Cannot enter a negative value to shelter."
             else:
-                return "You should enter a number to max_shelter."
+                return "You should enter a number to shelter."
 
         if water:
             if util.is_num(water):
@@ -75,7 +75,7 @@ class CampDataRetrieve:
                     return "Cannot find this planID. Please try again."
             else:
                 return "You should enter a number to planID."
-        camp_tuples = Camp.get_camp(campID, location, max_shelter, water, max_water, food, max_food,
+        camp_tuples = Camp.get_camp(campID, location, shelter, water, max_water, food, max_food,
                                     medical_supplies, max_medical_supplies, planID)
         # add more validation procedure in the future
         return util.parse_result('Camp', camp_tuples)

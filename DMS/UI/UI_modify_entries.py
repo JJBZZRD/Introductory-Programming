@@ -216,9 +216,9 @@ class NewCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Camp']
-        self.modifiable_variables = ['Country', 'Max Shelter', 'Water', 'Max Water', 'Food', 'Max_Food',
+        self.modifiable_variables = ['Country', 'Shelter', 'Water', 'Max Water', 'Food', 'Max Food',
                              'Medical Supplies', 'Max Medical Supplies', 'Plan ID']
-        self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Max Shelter': 'max_shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max_Food': 'max_food',
+        self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max Food': 'max_food',
                                 'Medical Supplies': 'medical_supplies', 'Max Medical Supplies': 'max_medical_supplies', 'Plan ID': 'planID'}
         self.button_labels = ['Create']
         self.save_record = CampDataEdit.create_camp
@@ -233,9 +233,9 @@ class EditCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Camp']
-        self.modifiable_variables = ['Camp ID', 'Country', 'Max Shelter', 'Water', 'Max Water', 'Food', 'Max_Food',
+        self.modifiable_variables = ['Camp ID', 'Country', 'Shelter', 'Water', 'Max Water', 'Food', 'Max Food',
                              'Medical Supplies', 'Max Medical Supplies', 'Plan ID']
-        self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Max Shelter': 'max_shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max_Food': 'max_food',
+        self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max Food': 'max_food',
                                 'Medical Supplies': 'medical_supplies', 'Max Medical Supplies': 'max_medical_supplies', 'Plan ID': 'planID'}
         self.current_data = self.screen_data.display_info()
         self.button_labels = ['Save Changes', 'Delete']

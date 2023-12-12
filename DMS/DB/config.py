@@ -51,7 +51,7 @@ def create_database():
     CREATE TABLE IF NOT EXISTS camps (
         campID INTEGER PRIMARY KEY,
         location TEXT,
-        max_shelter INTEGER,
+        shelter INTEGER,
         water INTEGER,
         max_water INTEGER,
         food INTEGER,
@@ -134,7 +134,7 @@ def insert_dummy_data():
     cursor.execute(plans_data)
 
     camp_data = """
-    INSERT INTO camps (campID, location, max_shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID) VALUES
+    INSERT INTO camps (campID, location, shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID) VALUES
     (1, 'Camden', 20, 300, 600, 200, 400, 100, 200, 1),
     (2, 'Greenwich', 20, 300, 600, 200, 400, 100, 200, 1),
     (3, 'Snowdonia', 20, 300, 600, 200, 400, 100, 200, 2),

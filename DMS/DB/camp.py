@@ -3,11 +3,11 @@ from .plan import Plan
 
 
 class Camp:  # Camp class has attributes matching columns in table
-    def __init__(self, campID, location, max_shelter, water, max_water, food, max_food, medical_supplies,
+    def __init__(self, campID, location, shelter, water, max_water, food, max_food, medical_supplies,
                  max_medical_supplies, planID):
         self.campID = campID
         self.location = location
-        self.max_shelter = max_shelter
+        self.shelter = shelter
         self.water = water
         self.max_water = max_water
         self.food = food
@@ -21,7 +21,7 @@ class Camp:  # Camp class has attributes matching columns in table
         return cls(*camp_tuple)
 
     def display_info(self):
-        return [str(self.campID), str(self.location), str(self.max_shelter), str(self.water), str(self.max_water), str(self.food), str(self.max_food),
+        return [str(self.campID), str(self.location), str(self.shelter), str(self.water), str(self.max_water), str(self.food), str(self.max_food),
                 str(self.medical_supplies), str(self.max_medical_supplies), str(self.planID)]
 
     @staticmethod
@@ -31,15 +31,15 @@ class Camp:  # Camp class has attributes matching columns in table
 
     @classmethod  # Insert a camp into the database without creating a new instance
     def create_camp(cls, camp_tuple):
-        location, max_shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID = camp_tuple
+        location, shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID = camp_tuple
         if Camp.check_planID_exist(planID):
             sql = """
                 INSERT INTO camps (
-                    location, max_shelter, water, max_water, food, max_food, medical_supplies,
+                    location, shelter, water, max_water, food, max_food, medical_supplies,
                     max_medical_supplies, planID) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """
-            cursor.execute(sql, (location, max_shelter, water, max_water, food,
+            cursor.execute(sql, (location, shelter, water, max_water, food,
                                  max_food, medical_supplies, max_medical_supplies, planID))
             conn.commit()
             camp_id = cursor.execute("SELECT last_insert_rowid() FROM camps").fetchone()[0]
@@ -48,7 +48,7 @@ class Camp:  # Camp class has attributes matching columns in table
             return 'Plan planID does not exist'
         
     @staticmethod  # Update a camp by selecting on campID
-    def update_camp(campID, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
+    def update_camp(campID, location=None, shelter=None, water=None, max_water=None, food=None, max_food=None,
                     medical_supplies=None, max_medical_supplies=None, planID=None):
 
         query = []
@@ -57,9 +57,9 @@ class Camp:  # Camp class has attributes matching columns in table
         if location is not None:
             query.append("location = ?")
             params.append(location)
-        if max_shelter is not None:
-            query.append("max_shelter = ?")
-            params.append(max_shelter)
+        if shelter is not None:
+            query.append("shelter = ?")
+            params.append(shelter)
         if water is not None:
             query.append("water = ?")
             params.append(water)
@@ -100,7 +100,7 @@ class Camp:  # Camp class has attributes matching columns in table
 
     @staticmethod  # Get camp details by selecting on any combination of attributes. Can be used to find the
     # campID which can then be used in the delete and update methods. Returns a list of tuples.
-    def get_camp(campID=None, location=None, max_shelter=None, water=None, max_water=None, food=None, max_food=None,
+    def get_camp(campID=None, location=None, shelter=None, water=None, max_water=None, food=None, max_food=None,
                  medical_supplies=None, max_medical_supplies=None, planID=None):
 
         query = "SELECT * FROM camps WHERE campID IS NOT NULL"
@@ -108,8 +108,8 @@ class Camp:  # Camp class has attributes matching columns in table
             query += f" AND campID = {campID}"
         if location:
             query += f" AND location LIKE '%{location}%'"
-        if max_shelter:
-            query += f" AND max_shelter = {max_shelter}"
+        if shelter:
+            query += f" AND shelter = {shelter}"
         if water:
             query += f" AND water = {water}"
         if max_water:

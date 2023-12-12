@@ -12,7 +12,7 @@ def insert_dummy_data():
     cursor.execute(plans_data)
 
     camp_data = """
-    INSERT INTO camps (campID, location, max_shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID) VALUES
+    INSERT INTO camps (campID, location, shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID) VALUES
     (1, 'Camden', 71, 409, 562, 478, 593, 164, 214, 2),
     (2, 'Greenwich', 198, 103, 190, 335, 502, 57, 119, 2),
     (3, 'Snowdonia', 179, 334, 545, 310, 531, 160, 248, 1),
