@@ -3,7 +3,7 @@ import os
 import sys
 import logging
 
-print("Initializing database...")
+print("Initialising database...")
 if getattr(sys, "frozen", False):
     application_path = os.path.dirname(sys.executable)
     running_mode = "Frozen/executable"
