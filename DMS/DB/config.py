@@ -41,7 +41,8 @@ def create_database():
         water INTEGER,
         food INTEGER,
         medical_supplies INTEGER,
-        shelter INTEGER
+        shelter INTEGER,
+        status TEXT CHECK (status IN ('Active', 'Ended'))
         )
         """
 
@@ -125,10 +126,10 @@ def clear_dummy_data():
 
 def insert_dummy_data():
     plans_data = """
-    INSERT INTO plans (planID, start_date, end_date, name, country, event_name, description, shelter, water, food, medical_supplies) VALUES
-    (1, '2023-01-01', '2025-01-01', 'Wylfa Nuclear Meltdown', 'United Kingdom', 'Nuclear Crisis Management', 'Emergency response to nuclear meltdown on Anglesey', 100, 100, 100, 100),
-    (2, '2023-01-01', '2025-01-01', 'London Virus Outbreak', 'United Kingdom', 'Virus Containment Effort', 'Response to widespread virus outbreak in London', 200, 200, 200, 200),
-    (3, '2023-01-01', '2025-01-01', 'Paris Earthquake Response', 'France', 'Earthquake Relief', 'Relief efforts for earthquake in Paris', 300, 300, 300, 300);
+    INSERT INTO plans (planID, start_date, end_date, name, country, event_name, description, shelter, water, food, medical_supplies, status) VALUES
+    (1, '2023-01-01', '2025-01-01', 'Wylfa Nuclear Meltdown', 'United Kingdom', 'Nuclear Crisis Management', 'Emergency response to nuclear meltdown on Anglesey', 100, 100, 100, 100, 'Active'),
+    (2, '2023-01-01', '2025-01-01', 'London Virus Outbreak', 'United Kingdom', 'Virus Containment Effort', 'Response to widespread virus outbreak in London', 200, 200, 200, 200, 'Active'),
+    (3, '2023-01-01', '2025-01-01', 'Paris Earthquake Response', 'France', 'Earthquake Relief', 'Relief efforts for earthquake in Paris', 300, 300, 300, 300, 'Active');
     """
 
     cursor.execute(plans_data)

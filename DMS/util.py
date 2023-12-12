@@ -17,7 +17,7 @@ def is_positive(value):
     num = float(value)
     return num > 0
 
-def is_country(value):
+def is_valid_country(value):
     countries = get_all_countries()
     # print(value)
     # print(countries)
@@ -78,6 +78,25 @@ def validate_date(date):
     except ValueError:
         return False
 
+def validate(value, message):
+    if not value:
+        return "Please provide {}".format(value)
+    elif not isinstance(value, str):
+        return message
+    return value
+
+def validate_end_date(start_time, end_time):
+    if not validate_date(end_time):
+        return False
+    else:
+        try:
+            start_time = datetime.strptime(start_time, '%Y-%m-%d').date()
+            end_time = datetime.strptime(end_time, '%Y-%m-%d').date()
+            return start_time < end_time
+        except:
+            return False
+     
+
 # def validate_end_date(start_time, end_time):
 #     try:
 #         if not all(isinstance(date, str) for date in [start_time, end_time]):
@@ -105,32 +124,6 @@ def validate_date(date):
 #     except ValueError:
 #         return "Invalid input"
     
-def validate_end_date(start_time, end_time):
-    if not validate_date(end_time):
-        return False
-    else:
-        start_time = datetime.strptime(start_time, '%Y-%m-%d').date()
-        end_time = datetime.strptime(end_time, '%Y-%m-%d').date()
-        return start_time < end_time
-     
-def validate(value, message):
-    if not value:
-        return "Please provide {}".format(value)
-    elif not isinstance(value, str):
-        return message
-    return value
-
-def validate_name(name: str):
-    return validate(name, "Invalid name")
-
-def validate_country(country: str):
-    return validate(country, "Invalid country")
-
-def validate_event(event: str):
-    return validate(event, "Invalid event")
-
-def validate_description(description: str):
-    return validate(description, "Invalid description")
 
 
 # from datetime import datetime
