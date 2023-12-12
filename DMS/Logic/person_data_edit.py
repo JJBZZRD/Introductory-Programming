@@ -33,6 +33,14 @@ class PersonDataEdit:
         if phone_num and not util.is_phone_format(phone_num):
            return "Incorrect phone number format"
         print(f'account_status: {account_status}')
+
+        if first_name and not util.is_valid_name(first_name):
+            return "Incorrect firt name format"
+        print(f'account_status: {account_status}')
+
+        if last_name and not util.is_valid_name(last_name):
+            return "Incorrect last name format"
+        print(f'account_status: {account_status}')
         
         volunteer_tuples = Volunteer.update_volunteer(id, first_name, last_name, username, password, date_of_birth, phone_num, account_status, camp_id)
 
@@ -47,6 +55,16 @@ class PersonDataEdit:
     def create_volunteer(first_name = None, last_name = None, camp_id = None, username = None, password = None, date_of_birth = None, phone = None):
 
         t = (first_name, last_name, username, password, date_of_birth, phone, camp_id)
+
+        if phone and not util.is_phone_format(phone):
+           return "Incorrect phone number format"
+
+        if first_name and not util.is_valid_name(first_name):
+            return "Incorrect firt name format"
+
+        if last_name and not util.is_valid_name(last_name):
+            return "Incorrect last name format"
+
         volunteer_tuples = Volunteer.create_volunteer(t)
         # print(volunteer_tuples)
         return util.parse_result('Volunteer', volunteer_tuples)
@@ -54,6 +72,14 @@ class PersonDataEdit:
     @staticmethod
     def create_refugee(first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category = 'None', medical_conditions = None, vital_status = 'Alive'):
         t = (first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category, medical_conditions, vital_status)
+
+
+        if first_name and not util.is_valid_name(first_name):
+            return "Incorrect firt name format"
+
+        if last_name and not util.is_valid_name(last_name):
+            return "Incorrect last name format"
+
         refugee_tuples = Refugee.create_refugee(t)
         return util.parse_result('Refugee', refugee_tuples)
 
@@ -76,6 +102,12 @@ class PersonDataEdit:
                 refugee.medical_conditions = medical_conditions
         except:
             return "Invalid inputs, please check and try again"
+        
+        if first_name and not util.is_valid_name(first_name):
+            return "Incorrect firt name format"
+
+        if last_name and not util.is_valid_name(last_name):
+            return "Incorrect last name format"
         
         refugee_tupples = Refugee.update_refugee(id, first_name, last_name, date_of_birth, family_id, camp_id, medical_conditions)
 
