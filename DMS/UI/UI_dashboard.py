@@ -6,7 +6,7 @@ from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.camp_data_edit import CampDataEdit
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 from ..Logic.plan_data_edit import PlanEdit
-# from ..UI.UI_manager import UIManager
+
 
 class Dashboard(tk.Frame):
     def __init__(self, ui_manager, *args):
@@ -192,7 +192,9 @@ class Dashboard(tk.Frame):
                     ),
                 ).grid(row=index, column=2, padx=5)
 
-            if (user_type == "admin" and getattr(plan, plan_resouce) > 0) or user_type == "volunteer":
+            if (
+                user_type == "admin" and getattr(plan, plan_resouce) > 0
+            ) or user_type == "volunteer":
                 tk.Button(
                     resources_frame,
                     text="+",
@@ -265,7 +267,7 @@ class Dashboard(tk.Frame):
         else:
             self.rebuild_resources_frame(camp, resource_frame, plan, user_type)
 
-        if user_type == "admin" :
+        if user_type == "admin":
             self.ui_manager.refresh_page()
             # self.rebuild_additional_resources_frame(plan)
 
@@ -434,6 +436,9 @@ class Dashboard(tk.Frame):
                         refugee.triage_category,
                     ),
                 )
+        refugees_treeview.column("#0", width=40, anchor="center")
+        refugees_treeview.column("#1", anchor="center")
+        refugees_treeview.column("#2", anchor="center")
 
     def update_volunteers_list(self, camp, search_entry, volunteers_treeview):
         filter_value = search_entry.get().strip()
@@ -451,7 +456,7 @@ class Dashboard(tk.Frame):
         else:
             for volunteer in unique_volunteers:
                 volunteers_treeview.insert(
-                    "",
+                    "ID",
                     "end",
                     text=volunteer.volunteerID,
                     values=(
@@ -459,6 +464,9 @@ class Dashboard(tk.Frame):
                         volunteer.phone,
                     ),
                 )
+        volunteers_treeview.column("#0", width=40)
+        volunteers_treeview.column("#1", anchor="center")
+        volunteers_treeview.column("#2", anchor="center")
 
     def on_refugee_double_click(self, event, treeview):
         item = treeview.focus()
