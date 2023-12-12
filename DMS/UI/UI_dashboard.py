@@ -6,7 +6,7 @@ from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.camp_data_edit import CampDataEdit
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 from ..Logic.plan_data_edit import PlanEdit
-
+# from ..UI.UI_manager import UIManager
 
 class Dashboard(tk.Frame):
     def __init__(self, ui_manager, *args):
@@ -14,6 +14,7 @@ class Dashboard(tk.Frame):
         self.root = ui_manager.root
         self.setup_dashboard(ui_manager.screen_data)
         self.show_screen = ui_manager.show_screen
+        self.ui_manager = ui_manager
 
     def setup_dashboard(self, *args):
         raise NotImplementedError(
@@ -241,10 +242,20 @@ class Dashboard(tk.Frame):
         if CampDataEdit.update_camp(camp.campID, **{resource_key: new_camp_amount}):
             setattr(camp, resource_key, new_camp_amount)
 
-        self.rebuild_resources_frame(camp, resource_frame, plan, user_type)
+        # print(f"Parent tab: {resource_frame.master}")
+        # print(f" {aaa}")
+        aaa = "canvas" in str(resource_frame.master)
+        if aaa:
+            try:
+                self.ui_manager.refresh_page()
+            except:
+                pass
+        else:
+            self.rebuild_resources_frame(camp, resource_frame, plan, user_type)
 
-        if user_type == "admin":
-            self.rebuild_additional_resources_frame(plan)
+        if user_type == "admin" :
+            self.ui_manager.refresh_page()
+            # self.rebuild_additional_resources_frame(plan)
 
     def update_plan_resources(self, resource_frame, resource_name, plan, increment):
         resource_key = resource_name.lower().replace(" ", "_")
@@ -253,6 +264,8 @@ class Dashboard(tk.Frame):
 
         if PlanEdit.update_plan(plan.planID, **{resource_key: new_amount}):
             setattr(plan, resource_key, new_amount)
+
+        self.ui_manager.refresh_page()
 
     def create_additional_resources_section(self, parent_frame, plan):
         additional_resources_frame = tk.Frame(parent_frame)
