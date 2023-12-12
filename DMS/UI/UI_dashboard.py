@@ -40,20 +40,33 @@ class Dashboard(tk.Frame):
     def create_camp_title_frame(self, parent_tab, plan, camp):
         title_frame = tk.Frame(parent_tab)
         title_frame.grid(row=0, column=0, columnspan=3, sticky="ew", padx=5, pady=5)
-        title_frame.columnconfigure(0, weight=1)
+        title_frame.columnconfigure(0, weight=2)
+        title_frame.columnconfigure(1, weight=0)
+        title_frame.columnconfigure(2, weight=0)
 
-        title_text = f"{plan.name} - Camp {camp.campID} - {camp.location}"
-        title_label = tk.Label(title_frame, text=title_text, font=("Arial", 16, "bold"))
-        title_label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        camp_title_text = f"Camp {camp.campID} - {camp.location}"
+        camp_title_label = tk.Label(
+            title_frame, text=camp_title_text, font=("Arial", 16, "bold")
+        )
+        camp_title_label.grid(row=0, column=0, sticky="w", padx=5, pady=(5, 0))
+
+        plan_title_text = f"Plan {plan.planID}: {plan.name} - {plan.country}"
+        plan_title_label = tk.Label(
+            title_frame, text=plan_title_text, font=("Arial", 14)
+        )
+        plan_title_label.grid(row=1, column=0, sticky="w", padx=5, pady=(0, 5))
 
         edit_camp_button = ttk.Button(
             title_frame,
             text="Edit Camp",
             command=lambda: self.show_screen("EditCamp", camp),
         )
-        edit_camp_button.grid(row=0, column=1, sticky="e", padx=5, pady=5)
+        edit_camp_button.grid(
+            row=0, column=2, rowspan=2, sticky="e", padx=(5, 15), pady=5
+        )
 
-        title_frame.columnconfigure(1, weight=0)
+        parent_tab.grid_rowconfigure(0, weight=0)
+        parent_tab.grid_rowconfigure(1, weight=1)
 
     def create_camp_statistics_section(self, parent_tab, camp):
         camp_statistics_frame = tk.Frame(parent_tab)
@@ -584,7 +597,7 @@ class AdminDashboard(Dashboard):
         )
 
         for i, camp in enumerate(self.planCamps):
-            self.populate_camp_resources(
+            self.populate_all_camp_resources(
                 all_camp_resources_frame, camp, i, additional_resources_frame
             )
 
@@ -597,7 +610,7 @@ class AdminDashboard(Dashboard):
 
         return camp_resources_canvas, camp_resources_scrollbar, all_camp_resources_frame
 
-    def populate_camp_resources(
+    def populate_all_camp_resources(
         self, parent_frame, camp, column_index, additional_resources_frame
     ):
         camp_title = f"Camp {camp.campID} - {camp.location}"
@@ -654,33 +667,36 @@ class AdminDashboard(Dashboard):
 
     def create_plan_tab_title(self, parent_tab, plan):
         title_frame = tk.Frame(parent_tab)
-        title_frame.grid(row=0, column=0, columnspan=2, sticky="ew", padx=5, pady=5)
-        title_frame.columnconfigure(0, weight=1)
+        title_frame.grid(row=0, column=0, columnspan=4, sticky="ew", padx=5, pady=5)
+        title_frame.columnconfigure(0, weight=2)
+        title_frame.columnconfigure(1, weight=0)
+        title_frame.columnconfigure(2, weight=0)
+        title_frame.columnconfigure(3, weight=0)
 
         plan_name = f"Plan {plan.planID}: {plan.name} - {plan.country}"
         plan_description = plan.description
 
         title_label = tk.Label(title_frame, text=plan_name, font=("Arial", 16, "bold"))
-        title_label.grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        title_label.grid(row=0, column=0, sticky="w", padx=5, pady=(5, 0))
 
         description_label = tk.Label(
             title_frame, text=plan_description, font=("Arial", 14)
         )
-        description_label.grid(row=1, column=0, sticky="w", padx=5)
+        description_label.grid(row=1, column=0, sticky="w", padx=5, pady=(0, 5))
 
         new_camp_button = ttk.Button(
             title_frame,
             text="New Camp",
             command=lambda: self.show_screen("NewCamp", plan),
         )
-        new_camp_button.grid(row=0, column=1, pady=5)
+        new_camp_button.grid(row=0, column=1, rowspan=2, padx=5)
 
         new_camp_item_button = ttk.Button(
             title_frame,
             text="Camp List",
             command=lambda: self.show_screen("CampList", plan),
         )
-        new_camp_item_button.grid(row=0, column=2, pady=5)
+        new_camp_item_button.grid(row=0, column=2, rowspan=2, padx=5)
 
         edit_button = ttk.Button(
             title_frame,
@@ -688,12 +704,7 @@ class AdminDashboard(Dashboard):
             style="TButton",
             command=lambda: self.show_screen("EditPlan", plan),
         )
-        edit_button.grid(row=0, column=3, padx=5, pady=5)
-
-        title_frame.columnconfigure(1, weight=1)
-        title_frame.columnconfigure(2, weight=1)
-        title_frame.columnconfigure(3, weight=1)
+        edit_button.grid(row=0, column=3, rowspan=2, padx=(5, 15))
 
         parent_tab.grid_rowconfigure(0, weight=0)
-        parent_tab.grid_rowconfigure(1, weight=0)
-        parent_tab.grid_rowconfigure(2, weight=1)
+        parent_tab.grid_rowconfigure(1, weight=1)
