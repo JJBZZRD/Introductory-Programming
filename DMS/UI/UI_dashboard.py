@@ -193,7 +193,7 @@ class Dashboard(tk.Frame):
             bottom_frame = tk.Frame(resource_frame)
             bottom_frame.grid(row=1, column=0, sticky="ew")
 
-            if resource_name in ["Water", "Food", "Medical Supplies", "Shelter"]:
+            if resource_name in ["Water", "Food", "Medical Supplies"]:
                 days_left = camp_resources_estimation.get(resource_name)
                 tk.Label(bottom_frame, text=f"Days left: {days_left}\n").grid(
                     row=0, column=0, sticky="w"
@@ -294,7 +294,7 @@ class Dashboard(tk.Frame):
         amount_label.config(text=str(new_camp_amount))
 
         camp_resources_estimation = CampDataRetrieve.get_camp_resources(camp.campID)
-        resource_order = ["Shelter", "Water", "Food", "Medical Supplies"]
+        resource_order = ["Water", "Food", "Medical Supplies"]
         if resource_name in resource_order:
             days_left = camp_resources_estimation.get(resource_name)
             bottom_frame = resource_frame.winfo_children()[1]
