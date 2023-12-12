@@ -39,7 +39,7 @@ class Dashboard(tk.Frame):
         parent_tab.grid_rowconfigure(1, weight=1)
 
     def create_camp_title_frame(self, parent_tab, plan, camp):
-        title_frame = tk.Frame(parent_tab)
+        title_frame = tk.Frame(parent_tab, relief="solid", borderwidth=2)
         title_frame.grid(row=0, column=0, columnspan=3, sticky="ew", padx=5, pady=5)
         title_frame.columnconfigure(0, weight=2)
         title_frame.columnconfigure(1, weight=0)
@@ -70,7 +70,7 @@ class Dashboard(tk.Frame):
         parent_tab.grid_rowconfigure(1, weight=1)
 
     def create_camp_statistics_section(self, parent_tab, camp):
-        camp_statistics_frame = tk.Frame(parent_tab)
+        camp_statistics_frame = tk.Frame(parent_tab, relief="solid", borderwidth=2)
         camp_statistics_frame.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
 
         campID = camp.campID
@@ -99,38 +99,49 @@ class Dashboard(tk.Frame):
 
         tk.Label(
             camp_statistics_frame,
-            text=f"Number of Volunteers: {num_volunteers}",
-            font=("Arial", 11),
+            text=f"Camp Statistics",
+            font=("Arial", 14, "bold"),
         ).grid(row=row, column=0, sticky="w")
         row += 1
 
         tk.Label(
             camp_statistics_frame,
-            text=f"Number of Refugees: {num_refugees}",
-            font=("Arial", 11),
+            text=f"Volunteers: {num_volunteers}",
         ).grid(row=row, column=0, sticky="w")
         row += 1
 
         tk.Label(
             camp_statistics_frame,
-            text=f"Number of Families: {num_families}",
-            font=("Arial", 11),
+            text=f"Refugees: {num_refugees}",
+        ).grid(row=row, column=0, sticky="w")
+        row += 1
+
+        tk.Label(
+            camp_statistics_frame,
+            text=f"Families: {num_families}",
         ).grid(row=row, column=0, sticky="w")
         row += 1
 
         for label, stats in stats_functions:
+            separator = tk.ttk.Separator(camp_statistics_frame, orient="horizontal")
+            separator.grid(row=row, column=0, columnspan=5, sticky="ew", pady=5)
+            row += 1
+
             tk.Label(
-                camp_statistics_frame, text=label, font=("Arial", 11, "bold")
+                camp_statistics_frame,
+                text=label,
             ).grid(row=row, column=0, sticky="w")
             row += 1
 
             if isinstance(stats, str):
-                tk.Label(camp_statistics_frame, text=stats, font=("Arial", 11)).grid(
-                    row=row, column=0, sticky="w"
-                )
+                tk.Label(
+                    camp_statistics_frame,
+                    text=stats,
+                ).grid(row=row, column=0, sticky="w")
                 row += 1
                 continue
 
+            stats_text = ""
             for key, value in stats.items():
                 if "num_" in key:
                     pct_key = "pct_" + key.split("_")[1]
@@ -138,10 +149,15 @@ class Dashboard(tk.Frame):
                     formatted_stat = (
                         f"{key.split('_')[1].title()}: {pct_value:.0f}% ({value})"
                     )
-                    tk.Label(
-                        camp_statistics_frame, text=formatted_stat, font=("Arial", 11)
-                    ).grid(row=row, column=0, sticky="w")
-                    row += 1
+                    stats_text += formatted_stat + " | "
+
+            stats_text = stats_text.rstrip(" | ")
+
+            tk.Label(
+                camp_statistics_frame,
+                text=stats_text,
+            ).grid(row=row, column=0, sticky="w")
+            row += 1
 
         return camp_statistics_frame
 
@@ -152,7 +168,7 @@ class Dashboard(tk.Frame):
 
         title_label = tk.Label(
             resources_frame,
-            text=f"Current Resources:",
+            text=f"Current Resources",
             font=("Arial", 14, "bold"),
         )
         title_label.grid(row=0, column=0, columnspan=5, sticky="w", padx=5, pady=5)
@@ -169,8 +185,13 @@ class Dashboard(tk.Frame):
         for index, (resource_name, amount) in enumerate(resources.items()):
             resource_row = index * 3 + 1
 
+            separator = tk.ttk.Separator(resources_frame, orient="horizontal")
+            separator.grid(
+                row=resource_row, column=0, columnspan=5, sticky="ew", pady=5
+            )
+
             tk.Label(resources_frame, text=f"{resource_name}: {amount}").grid(
-                row=resource_row, column=0, sticky="w", padx=5
+                row=resource_row + 1, column=0, sticky="w", padx=5
             )
 
             match resource_name:
@@ -195,7 +216,7 @@ class Dashboard(tk.Frame):
                         plan,
                         user_type,
                     ),
-                ).grid(row=resource_row, rowspan=2, column=2, padx=5)
+                ).grid(row=resource_row + 1, rowspan=2, column=2, padx=5)
 
             if (
                 user_type == "admin" and getattr(plan, plan_resouce) > 0
@@ -211,7 +232,25 @@ class Dashboard(tk.Frame):
                         plan,
                         user_type,
                     ),
-                ).grid(row=resource_row, rowspan=2, column=3, padx=5)
+                ).grid(row=resource_row + 1, rowspan=2, column=3, padx=5)
+
+            if resource_name == "Shelter":
+                num_refugees = len(PersonDataRetrieve.get_refugees(camp_id=camp.campID))
+
+                shelter_colour = "red" if num_refugees > camp.shelter else "black"
+
+                tk.Label(
+                    resources_frame,
+                    text=f"Camp refugees: {int(num_refugees)}",
+                    fg=shelter_colour,
+                ).grid(
+                    row=resource_row + 2,
+                    column=0,
+                    columnspan=5,
+                    sticky="w",
+                    padx=5,
+                    pady=5,
+                )
 
             if resource_name in ["Water", "Food", "Medical Supplies"]:
                 days_left = camp_resources_estimation.get(resource_name)
@@ -220,14 +259,16 @@ class Dashboard(tk.Frame):
 
                 tk.Label(
                     resources_frame,
-                    text=f"Days left: {int(days_left)}",
+                    text=f"Estimated days left: {int(days_left)}",
                     fg=days_left_color,
-                ).grid(row=resource_row + 1, column=0, columnspan=5, sticky="w", padx=5)
-
-            separator = tk.ttk.Separator(resources_frame, orient="horizontal")
-            separator.grid(
-                row=resource_row + 2, column=0, columnspan=5, sticky="ew", pady=5
-            )
+                ).grid(
+                    row=resource_row + 2,
+                    column=0,
+                    columnspan=5,
+                    sticky="w",
+                    padx=5,
+                    pady=5,
+                )
 
             self.rebuild_additional_resources_frame(plan)
         return resources_frame
@@ -283,10 +324,74 @@ class Dashboard(tk.Frame):
         else:
             self.rebuild_resources_frame(camp, resource_frame, plan, user_type)
 
-
         # if user_type == "admin":
         #     self.ui_manager.refresh_page()
-            # self.rebuild_additional_resources_frame(plan)
+        # self.rebuild_additional_resources_frame(plan)
+
+    def create_additional_resources_section(self, parent_frame, plan):
+        additional_resources_frame = tk.Frame(
+            parent_frame, relief="solid", borderwidth=2
+        )
+        additional_resources_frame.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
+        additional_resources_frame.grid_columnconfigure(1, weight=1)
+
+        title_label = tk.Label(
+            additional_resources_frame,
+            text=f"Plan {plan.planID} Undistributed Resources:",
+            font=("Arial", 14, "bold"),
+        )
+        title_label.grid(row=0, column=0, columnspan=4, sticky="w", padx=5, pady=5)
+
+        additional_resources = {
+            "Shelter": plan.shelter,
+            "Water": plan.water,
+            "Food": plan.food,
+            "Medical Supplies": plan.medical_supplies,
+        }
+
+        for index, (resource_name, amount) in enumerate(additional_resources.items()):
+            resource_row = index + 1
+
+            tk.Label(
+                additional_resources_frame, text=f"{resource_name}: {amount}"
+            ).grid(row=resource_row, column=0, sticky="w", padx=5)
+
+            if amount > 0:
+                tk.Button(
+                    additional_resources_frame,
+                    text="-10",
+                    command=lambda res_name=resource_name: self.update_plan_resources(
+                        additional_resources_frame,
+                        res_name,
+                        plan,
+                        -10,
+                    ),
+                ).grid(row=resource_row, column=2, padx=5)
+
+            tk.Button(
+                additional_resources_frame,
+                text="+10",
+                command=lambda res_name=resource_name: self.update_plan_resources(
+                    additional_resources_frame,
+                    res_name,
+                    plan,
+                    10,
+                ),
+            ).grid(row=resource_row, column=3, padx=5)
+
+        tk.Label(
+            additional_resources_frame,
+            text=f"\nButtons above update plan {plan.planID}'s \navailable additional resources.\n\nButtons under camp headings \ndistribute those additional \nresources",
+        ).grid(
+            row=len(additional_resources) + 1,
+            column=0,
+            columnspan=4,
+            sticky="ew",
+            padx=5,
+            pady=5,
+        )
+
+        return additional_resources_frame
 
     def update_plan_resources(self, resource_frame, resource_name, plan, increment):
         resource_key = resource_name.lower().replace(" ", "_")
@@ -298,63 +403,10 @@ class Dashboard(tk.Frame):
 
         self.ui_manager.refresh_page()
 
-    def create_additional_resources_section(self, parent_frame, plan):
-        additional_resources_frame = tk.Frame(parent_frame)
-        additional_resources_frame.grid_columnconfigure(1, weight=1)
-
-        additional_resources = {
-            "Shelter": plan.shelter,
-            "Water": plan.water,
-            "Food": plan.food,
-            "Medical Supplies": plan.medical_supplies,
-        }
-
-        for index, (resource_name, amount) in enumerate(additional_resources.items()):
-            tk.Label(additional_resources_frame, text=f"{resource_name}:").grid(
-                row=index, column=0, sticky="w", padx=5
-            )
-
-            tk.Label(additional_resources_frame, text=str(amount)).grid(
-                row=index, column=1, sticky="e", padx=5
-            )
-
-            if amount > 0:
-                tk.Button(
-                    additional_resources_frame,
-                    text="-",
-                    command=lambda res_name=resource_name: self.update_plan_resources(
-                        additional_resources_frame,
-                        res_name,
-                        plan,
-                        -10,
-                    ),
-                ).grid(row=index, column=2, padx=5)
-
-            tk.Button(
-                additional_resources_frame,
-                text="+",
-                command=lambda res_name=resource_name: self.update_plan_resources(
-                    additional_resources_frame,
-                    res_name,
-                    plan,
-                    10,
-                ),
-            ).grid(row=index, column=3, padx=5)
-
-        tk.Label(
-            additional_resources_frame,
-            text=f"\nButtons above update plan {plan.planID}'s \navailable additional resources.\n\nButtons under camp headings \ndistribute those additional \nresources",
-            font=("Arial", 11, "bold"),
-        ).grid(
-            row=len(additional_resources), column=0, columnspan=4, sticky="ew", padx=5
-        )
-
-        return additional_resources_frame
-
     def create_camp_refugees_volunteers_section(
         self, parent_tab, camp, display_type, user_type
     ):
-        refugees_volunteers_frame = tk.Frame(parent_tab)
+        refugees_volunteers_frame = tk.Frame(parent_tab, relief="solid", borderwidth=2)
         refugees_volunteers_frame.grid(row=1, column=2, sticky="nsew", padx=5, pady=5)
 
         title_text = f"{'Refugees' if display_type == 'refugees' else 'Volunteers'}"
@@ -689,7 +741,7 @@ class AdminDashboard(Dashboard):
         parent_frame.grid_columnconfigure(column_index * 2 + 1, weight=1)
 
     def create_plan_tab_title(self, parent_tab, plan):
-        title_frame = tk.Frame(parent_tab)
+        title_frame = tk.Frame(parent_tab, relief="solid", borderwidth=2)
         title_frame.grid(row=0, column=0, columnspan=4, sticky="ew", padx=5, pady=5)
         title_frame.columnconfigure(0, weight=2)
         title_frame.columnconfigure(1, weight=0)
