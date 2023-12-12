@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.building.build_main import Analysis, PYZ, EXE, BUNDLE
 
 
 a = Analysis(
@@ -39,5 +40,5 @@ app = BUNDLE(
     exe,
     name='dms.app',
     icon=None,
-    bundle_identifier=None,
+    bundle_identifier='uk.ac.ucl.dms',
 )
