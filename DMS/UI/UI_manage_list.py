@@ -41,15 +41,11 @@ class ManageList(tk.Frame):
         # the following displays a dismissible pop up if the filter is not changed from default
         if filter == 'Filter' or status == 'Status':
             popup = tk.Toplevel(self.root)
-
-            # Set the title of the popup window
             popup.title("Popup Window")
 
-            # Add some content to the popup
             msg = tk.Label(popup, text="Please select a search filter")
             msg.pack(padx=20, pady=20)
 
-            # Add a dismiss button
             dismiss_button = tk.Button(popup, text="Dismiss", command=popup.destroy)
             dismiss_button.pack(pady=10)
             return

@@ -143,7 +143,9 @@ class ModifyEntries(tk.Frame):
                     inputs.update({self.entry_fields[key][0]: self.entry_fields[key][1].get()})
                 #print(tuple(inputs))
 
-                self.save_record(**inputs)
+                
+
+                self.ui_error_popup(self.save_record(**inputs))
                 # try to update data using the business logic function
 
             case 'Delete':
@@ -161,9 +163,9 @@ class ModifyEntries(tk.Frame):
                     inputs.update({self.entry_fields[key][0]: self.entry_fields[key][1].get()})
                 #print(tuple(inputs))
 
-                self.create_record(**inputs)
-                self.page_nav('back')
-                # logic for creating object
+                self.ui_error_popup(self.create_record(**inputs))
+                #self.page_nav('back')
+
                 pass
             case 'End':
 
@@ -180,6 +182,17 @@ class ModifyEntries(tk.Frame):
 
         # if returns list
         # return error message utility with error list as input?
+
+    def ui_error_popup(self, function_result):
+        if isinstance(function_result, str):
+            popup = tk.Toplevel(self.root)
+            popup.title("Error Window")
+
+            msg = tk.Label(popup, text=function_result)
+            msg.pack(padx=20, pady=20)
+
+            dismiss_button = tk.Button(popup, text="Dismiss", command=popup.destroy)
+            dismiss_button.pack(pady=10)
 
 
 class NewPlan(ModifyEntries):
@@ -317,6 +330,7 @@ class NewRefugee(ModifyEntries):
         self.create_buttons()
 
 
+
 class EditRefugee(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
@@ -336,6 +350,7 @@ class EditRefugee(ModifyEntries):
         self.save_record = PersonDataEdit.update_refugee
         self.delete_record = PersonDataEdit.delete_refugee
         self.entry_fields = {}
+        self.read_only_fields = ['Refugee ID']
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -347,12 +362,17 @@ class EditPersonalDetails(ModifyEntries):
         self.modify_type = ['Edit Personal Details']
         self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
-        self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'name', 'Last Name': 'name', 'Username': 'username',
-                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status'}
+        self.filter_matching = {'Volunteer ID': 'id', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username',
+                'Date of Birth': 'date_of_birth', 'Phone': 'phone_num', 'Camp ID': 'camp_id', 'Account Status': 'account_status'}
         self.button_labels = ['Save Changes']#, 'Delete', 'Deactivate']
         self.current_data = self.logged_in_user.display_info()
         self.save_record = PersonDataEdit.update_volunteer
         self.entry_fields = {}
+        self.read_only_fields = ['Volunteer ID', 'Camp ID', 'Account Status']
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
+
+    def admin_user(self):
+        if self.logged_in_user.camp_id is not None:
+            self.read_only_fields.append('Camp ID')
