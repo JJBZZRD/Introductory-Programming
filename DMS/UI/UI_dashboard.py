@@ -361,22 +361,25 @@ class Dashboard(tk.Frame):
         refugees_title = tk.Label(
             refugees_volunteers_frame, text=title_text, font=("Arial", 14, "bold")
         )
-        refugees_title.grid(row=0, column=0, sticky="w", pady=10)
+        refugees_title.grid(row=0, column=0, sticky="w", padx=5, pady=5)
 
-        switch_button = tk.Button(
-            refugees_volunteers_frame,
-            text="Switch",
-            command=lambda: self.create_camp_refugees_volunteers_section(
-                parent_tab,
-                camp,
-                "volunteers" if display_type == "refugees" else "refugees",
-                user_type,
-            ),
-        )
-        switch_button.grid(
-            row=0,
-            column=0,
-        )
+        if user_type == "admin":
+            switch_text = (
+                "Switch to Volunteers"
+                if display_type == "refugees"
+                else "Switch to Refugees"
+            )
+            switch_button = tk.Button(
+                refugees_volunteers_frame,
+                text=switch_text,
+                command=lambda: self.create_camp_refugees_volunteers_section(
+                    parent_tab,
+                    camp,
+                    "volunteers" if display_type == "refugees" else "refugees",
+                    user_type,
+                ),
+            )
+            switch_button.grid(row=0, column=0, sticky="e", padx=5)
 
         search_frame = tk.Frame(refugees_volunteers_frame)
         search_frame.grid(row=1, column=0, sticky="ew", pady=5)
@@ -398,7 +401,7 @@ class Dashboard(tk.Frame):
 
         filter_button = ttk.Button(
             search_frame,
-            text="Filter/Search",
+            text="Search by name",
             command=lambda: update_list_func(camp, search_entry, refugees_treeview),
         )
         filter_button.grid(row=0, column=1, padx=3)
@@ -407,7 +410,7 @@ class Dashboard(tk.Frame):
 
         manage_button = ttk.Button(
             refugees_volunteers_frame,
-            text=f"Manage {display_type.capitalize()}",
+            text=f"Manage Camp {display_type.capitalize()}",
             command=lambda: self.show_screen(manage_screen, camp),
         )
         manage_button.grid(row=3, column=0, pady=5)
@@ -456,7 +459,7 @@ class Dashboard(tk.Frame):
         else:
             for volunteer in unique_volunteers:
                 volunteers_treeview.insert(
-                    "ID",
+                    "",
                     "end",
                     text=volunteer.volunteerID,
                     values=(
