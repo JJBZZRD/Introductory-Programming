@@ -273,8 +273,8 @@ class Dashboard(tk.Frame):
             setattr(camp, resource_key, new_camp_amount)
 
         aaa = "canvas" in str(resource_frame.master)
-        print(f"Parent tab: {resource_frame.master}")
-        print(f" {aaa}")
+        # print(f"Parent tab: {resource_frame.master}")
+        # print(f" {aaa}")
         if aaa:
             try:
                 self.ui_manager.refresh_page()
