@@ -277,7 +277,7 @@ class RefugeeList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Refugees', 'Add New Refugee']
         self.list_headers = ['Refugee ID', 'First Name', 'Last Name',
-                'Date of_Birth', 'Gender', 'Family ID',
+                'Date of Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status']
         self.list_data = self.list_by_camp()
@@ -285,7 +285,7 @@ class RefugeeList(ManageList):
         self.switch_to_page = 'EditRefugee'
         self.record_button = 'NewRefugee'
         self.filter_matching = {'Refugee ID': 'id', 'First Name': 'name', 'Last Name': 'name',
-                'Date of_Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
+                'Date of Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
                 'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
                 'Vital Status': 'vital_status'}
         self.export_name = 'Refugees'
