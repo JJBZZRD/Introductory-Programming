@@ -152,6 +152,8 @@ class ModifyEntries(tk.Frame):
 
                 # logic for deleting object passed into screen data
 
+                self.confirmation_popup('Are you sure you want to delete?', self.delete_record)
+
                 pass
             case 'Deactivate':
 
@@ -194,6 +196,19 @@ class ModifyEntries(tk.Frame):
             dismiss_button = tk.Button(popup, text="Dismiss", command=popup.destroy)
             dismiss_button.pack(pady=10)
 
+    def confirmation_popup(self, text, function):
+            popup = tk.Toplevel(self.root)
+            popup.title("confirmation Window")
+
+            msg = tk.Label(popup, text=text)
+            msg.pack(padx=20, pady=20)
+
+            dismiss_button = tk.Button(popup, text="Yes", command=lambda : function)
+            dismiss_button.pack(pady=10)
+
+            dismiss_button = tk.Button(popup, text="No", command=popup.destroy)
+            dismiss_button.pack(pady=10)
+
 
 class NewPlan(ModifyEntries):
     def setup_modify(self):
@@ -222,7 +237,7 @@ class EditPlan(ModifyEntries):
         self.button_labels = ['Save Changes', 'End', 'Delete']
         self.current_data = self.screen_data.display_info()
         self.save_record = PlanEdit.update_plan
-        self.delete_record = PlanEdit.delete_plan
+        self.delete_record = PlanEdit.delete_plan(self.screen_data.planID)
         self.entry_fields = {}
         self.fields_to_be_dropdown = {'Country': get_all_countries()}
         self.read_only_fields = ['Plan ID']
@@ -260,7 +275,7 @@ class EditCamp(ModifyEntries):
         self.current_data = self.screen_data.display_info()
         self.button_labels = ['Save Changes', 'Delete']
         self.save_record = CampDataEdit.update_camp
-        self.delete_record = CampDataEdit.delete_camp
+        self.delete_record = CampDataEdit.delete_camp(self.screen_data.CampID)
         self.entry_fields = {}
         self.fields_to_be_dropdown = {'Plan ID': [plan.planID for plan in PlanDataRetrieve.get_all_plans()]}
         self.read_only_fields = ['Camp ID']
@@ -298,7 +313,7 @@ class EditVolunteer(ModifyEntries):
         self.button_labels = ['Save Changes', 'Deactivate']
         self.current_data = self.screen_data.display_info()
         self.save_record = PersonDataEdit.update_volunteer
-        self.delete_record = PersonDataEdit.delete_volunteer
+        self.delete_record = PersonDataEdit.delete_volunteer(self.screen_data.volunteerID)
         self.entry_fields = {}
         self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()]}
         self.read_only_fields = ['Volunteer ID']
@@ -348,7 +363,7 @@ class EditRefugee(ModifyEntries):
         self.button_labels = ['Save Changes', 'Delete']
         self.current_data = self.screen_data.display_info()
         self.save_record = PersonDataEdit.update_refugee
-        self.delete_record = PersonDataEdit.delete_refugee
+        self.delete_record = PersonDataEdit.delete_refugee(self.screen_data.refugeeID)
         self.entry_fields = {}
         self.read_only_fields = ['Refugee ID']
         self.create_title()
