@@ -21,7 +21,7 @@ class Plan:  # Plan class has attributes matching columns in table
         return cls(*plan_tuple)
 
     def display_info(self):
-        return [self.status, str(self.planID), str(self.name), str(self.country), str(self.event_name), str(self.description),
+        return [str(self.planID), str(self.name), str(self.country), str(self.event_name), str(self.description),
                 str(self.start_date), str(self.end_date)]
 
     @staticmethod
