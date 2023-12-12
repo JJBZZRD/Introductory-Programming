@@ -260,10 +260,8 @@ class NewCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Camp']
-        self.modifiable_variables = ['Country', 'Shelter', 'Water', 'Max Water', 'Food', 'Max Food',
-                             'Medical Supplies', 'Max Medical Supplies', 'Plan ID']
-        self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max Food': 'max_food',
-                                'Medical Supplies': 'medical_supplies', 'Max Medical Supplies': 'max_medical_supplies', 'Plan ID': 'planID'}
+        self.modifiable_variables = ['Country', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID']
+        self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID'}
         self.button_labels = ['Create']
         self.save_record = CampDataEdit.create_camp
         self.entry_fields = {}
@@ -278,15 +276,13 @@ class EditCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Camp']
-        self.modifiable_variables = ['Camp ID', 'Country', 'Shelter', 'Water', 'Max Water', 'Food', 'Max Food',
-                             'Medical Supplies', 'Max Medical Supplies', 'Plan ID']
-        self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Max Water': 'max_water', 'Food': 'food', 'Max Food': 'max_food',
-                                'Medical Supplies': 'medical_supplies', 'Max Medical Supplies': 'max_medical_supplies', 'Plan ID': 'planID'}
+        self.modifiable_variables = ['Camp ID', 'Country', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID']
+        self.filter_matching = {'Camp ID': 'campID', 'Country': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID'}
         self.current_data = self.screen_data.display_info()
         self.button_labels = ['Save Changes', 'Delete']
         self.save_record = CampDataEdit.update_camp
         self.delete_record = CampDataEdit.delete_camp
-        self.screen_data_id = self.screen_data.CampID
+        self.screen_data_id = self.screen_data.campID
         self.entry_fields = {}
         self.fields_to_be_dropdown = {'Plan ID': [plan.planID for plan in PlanDataRetrieve.get_all_plans()]}
         self.read_only_fields = ['Camp ID']

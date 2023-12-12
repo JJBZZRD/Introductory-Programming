@@ -55,11 +55,8 @@ def create_database():
         location TEXT,
         shelter INTEGER,
         water INTEGER,
-        max_water INTEGER,
         food INTEGER,
-        max_food INTEGER,
         medical_supplies INTEGER,
-        max_medical_supplies INTEGER,
         planID INTEGER NOT NULL,
         created_time TEXT,
         FOREIGN KEY (planID) REFERENCES plans(planID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -139,12 +136,12 @@ def insert_dummy_data():
     cursor.execute(plans_data)
 
     camp_data = """
-    INSERT INTO camps (campID, location, shelter, water, max_water, food, max_food, medical_supplies, max_medical_supplies, planID, created_time) VALUES
-    (1, 'Camden', 20, 300, 600, 200, 400, 100, 200, 1, '2023-01-01T14:36:25'),
-    (2, 'Greenwich', 20, 300, 600, 200, 400, 100, 200, 1, '2023-01-01T14:36:25'),
-    (3, 'Snowdonia', 20, 300, 600, 200, 400, 100, 200, 2, '2023-01-01T14:36:25'),
-    (4, 'Richmond', 20, 300, 600, 200, 400, 100, 200, 2, '2023-01-01T14:36:25'),
-    (5, 'Versailles', 20, 300, 600, 200, 400, 100, 200, 3, '2023-01-01T14:36:25')
+    INSERT INTO camps (campID, location, shelter, water, food, medical_supplies, planID, created_time) VALUES
+    (1, 'Camden', 20, 300, 600, 200, 1, '2023-01-01T14:36:25'),
+    (2, 'Greenwich', 20, 300, 600, 200, 1, '2023-01-01T14:36:25'),
+    (3, 'Snowdonia', 20, 300, 600, 200, 2, '2023-01-01T14:36:25'),
+    (4, 'Richmond', 20, 300, 600, 200, 2, '2023-01-01T14:36:25'),
+    (5, 'Versailles', 20, 300, 600, 200, 3, '2023-01-01T14:36:25')
     """
 
     cursor.execute(camp_data)
