@@ -52,6 +52,8 @@ class CampDataEdit:
             if util.is_num(water):
                 if not util.is_positive(water):
                     return "Cannot enter a negative value to water level."
+                if water > max_water:
+                    return "The water level should not beyond to the maximum"
             else:
                 return "You should enter a number to water level."
 
@@ -66,6 +68,8 @@ class CampDataEdit:
             if util.is_num(food):
                 if not util.is_positive(food):
                     return "Cannot enter a negative value to food level."
+                if food > max_food:
+                    return "The food level should not beyond to the maximum"
             else:
                 return "You should enter a number to food level."
 
@@ -80,6 +84,8 @@ class CampDataEdit:
             if util.is_num(medical_supplies):
                 if not util.is_positive(medical_supplies):
                     return "Cannot enter a negative value to medical_supplies."
+                if medical_supplies > max_medical_supplies:
+                    return "The medical supplies level should not beyond to the maximum"
             else:
                 return "You should enter a number to medical_supplies."
 
@@ -123,6 +129,8 @@ class CampDataEdit:
             if util.is_num(water):
                 if not util.is_positive(water):
                     return "Cannot enter a negative value to water level."
+                if water > max_water:
+                    return "The water level should not beyond to the maximum"
             else:
                 return "You should enter a number to water level."
 
@@ -137,8 +145,11 @@ class CampDataEdit:
             if util.is_num(food):
                 if not util.is_positive(food):
                     return "Cannot enter a negative value to food level."
+                if food > max_food:
+                    return "The food level should not beyond to the maximum"
             else:
                 return "You should enter a number to food level."
+                
 
         if max_food:
             if util.is_num(max_food):
@@ -151,6 +162,8 @@ class CampDataEdit:
             if util.is_num(medical_supplies):
                 if not util.is_positive(medical_supplies):
                     return "Cannot enter a negative value to medical_supplies."
+                if medical_supplies > max_medical_supplies:
+                    return "The medical supplies level should not beyond to the maximum"
             else:
                 return "You should enter a number to medical_supplies."
 
