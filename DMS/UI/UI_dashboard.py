@@ -99,9 +99,9 @@ class Dashboard(tk.Frame):
 
         tk.Label(
             camp_statistics_frame,
-            text=f"Camp Statistics",
+            text=f"{camp.location} Camp Statistics",
             font=("Arial", 14, "bold"),
-        ).grid(row=row, column=0, sticky="w")
+        ).grid(row=row, column=0, sticky="w", padx=5, pady=5)
         row += 1
 
         separator = tk.ttk.Separator(camp_statistics_frame, orient="horizontal")
@@ -111,19 +111,19 @@ class Dashboard(tk.Frame):
         tk.Label(
             camp_statistics_frame,
             text=f"Volunteers: {num_volunteers}",
-        ).grid(row=row, column=0, sticky="w")
+        ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
         tk.Label(
             camp_statistics_frame,
             text=f"Refugees: {num_refugees}",
-        ).grid(row=row, column=0, sticky="w")
+        ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
         tk.Label(
             camp_statistics_frame,
             text=f"Families: {num_families}",
-        ).grid(row=row, column=0, sticky="w")
+        ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
         for label, stats in stats_functions:
@@ -134,14 +134,14 @@ class Dashboard(tk.Frame):
             tk.Label(
                 camp_statistics_frame,
                 text=label,
-            ).grid(row=row, column=0, sticky="w")
+            ).grid(row=row, column=0, sticky="w", padx=5)
             row += 1
 
             if isinstance(stats, str):
                 tk.Label(
                     camp_statistics_frame,
                     text=stats,
-                ).grid(row=row, column=0, sticky="w")
+                ).grid(row=row, column=0, sticky="w", padx=5)
                 row += 1
                 continue
 
@@ -160,7 +160,7 @@ class Dashboard(tk.Frame):
             tk.Label(
                 camp_statistics_frame,
                 text=stats_text,
-            ).grid(row=row, column=0, sticky="w")
+            ).grid(row=row, column=0, sticky="w", padx=5)
             row += 1
 
         return camp_statistics_frame
@@ -172,7 +172,7 @@ class Dashboard(tk.Frame):
 
         title_label = tk.Label(
             resources_frame,
-            text=f"Current Resources",
+            text=f"Current Resources in {camp.location}",
             font=("Arial", 14, "bold"),
         )
         title_label.grid(row=0, column=0, columnspan=5, sticky="w", padx=5, pady=5)
@@ -377,7 +377,7 @@ class Dashboard(tk.Frame):
                         plan,
                         -10,
                     ),
-                ).grid(row=resource_row + 1, column=1, padx=5)
+                ).grid(row=resource_row + 1, column=1, padx=5, sticky="e")
 
             tk.Button(
                 additional_resources_frame,
@@ -392,7 +392,7 @@ class Dashboard(tk.Frame):
 
         tk.Label(
             additional_resources_frame,
-            text=f"\nButtons above update plan {plan.planID}'s available\nadditional resources.",
+            text=f"\nButtons above update plan {plan.planID}'s available nadditional resources.",
         ).grid(
             row=len(additional_resources) * 2 + 2,
             column=0,
@@ -404,7 +404,7 @@ class Dashboard(tk.Frame):
 
         tk.Label(
             additional_resources_frame,
-            text=f"\nButtons under camp headings distribute\nplan {plan.planID}'s additional resources.",
+            text=f"\nButtons under camp headings distribute plan {plan.planID}'s additional resources.",
         ).grid(
             row=len(additional_resources) * 2 + 3,
             column=0,
@@ -659,16 +659,12 @@ class AdminDashboard(Dashboard):
         distribute_tab.grid_columnconfigure(1, weight=3)
         distribute_tab.grid_rowconfigure(1, weight=1)
 
-        distribute_tab.grid_rowconfigure(2, weight=0)
-
     def setup_plan_statistics_tab(self):
         stats_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(stats_tab, text="Plan Statistics")
 
         self.create_plan_tab_title(stats_tab, self.plan)
-        plan_stats_section = self.create_additional_resources_section(
-            stats_tab, self.plan
-        )
+        plan_stats_section = self.create_plan_statistics_section(stats_tab, self.plan)
 
         (
             camp_stats_canvas,
@@ -683,8 +679,6 @@ class AdminDashboard(Dashboard):
         stats_tab.grid_columnconfigure(0, weight=1)
         stats_tab.grid_columnconfigure(1, weight=3)
         stats_tab.grid_rowconfigure(1, weight=1)
-
-        stats_tab.grid_rowconfigure(2, weight=0)
 
     def create_camp_resources_section(self, parent):
         canvas_width = 450
@@ -751,6 +745,102 @@ class AdminDashboard(Dashboard):
         camp_stats.grid(row=1, column=column_index * 2, sticky="nsew")
         parent_frame.grid_columnconfigure(column_index * 2 + 1, weight=1)
 
+    def create_plan_statistics_section(self, parent_tab, plan):
+        plan_statistics_frame = tk.Frame(parent_tab, relief="solid", borderwidth=2)
+        plan_statistics_frame.grid(row=1, column=0, sticky="ew", padx=5, pady=5)
+
+        planID = plan.planID
+        triage_stats = PlanDataRetrieve.get_stats_triage_category(planID)
+        gender_stats = PlanDataRetrieve.get_stats_gender(planID)
+        age_stats = PlanDataRetrieve.get_stats_age(planID)
+        vital_status_stats = PlanDataRetrieve.get_stats_vital_status(planID)
+
+        num_volunteers = len(PersonDataRetrieve.get_all_volunteers())
+        num_refugees = len(PersonDataRetrieve.get_all_refugees())
+        family_stats = PlanDataRetrieve.get_stats_family(planID)
+        num_families = (
+            family_stats.get("num_families", "Error fetching families")
+            if isinstance(family_stats, dict)
+            else family_stats
+        )
+
+        stats_functions = [
+            ("Gender Distribution", gender_stats),
+            ("Age Distribution", age_stats),
+            ("Vital Status", vital_status_stats),
+            ("Triage Categories", triage_stats),
+        ]
+
+        row = 0
+
+        tk.Label(
+            plan_statistics_frame,
+            text=f"{plan.name} Statistics",
+            font=("Arial", 14, "bold"),
+        ).grid(row=row, column=0, sticky="w", padx=5, pady=5)
+        row += 1
+
+        separator = tk.ttk.Separator(plan_statistics_frame, orient="horizontal")
+        separator.grid(row=row, column=0, columnspan=5, sticky="ew", pady=5)
+        row += 1
+
+        tk.Label(
+            plan_statistics_frame,
+            text=f"Volunteers: {num_volunteers}",
+        ).grid(row=row, column=0, sticky="w", padx=5)
+        row += 1
+
+        tk.Label(
+            plan_statistics_frame,
+            text=f"Refugees: {num_refugees}",
+        ).grid(row=row, column=0, sticky="w", padx=5)
+        row += 1
+
+        tk.Label(
+            plan_statistics_frame,
+            text=f"Families: {num_families}",
+        ).grid(row=row, column=0, sticky="w", padx=5)
+        row += 1
+
+        for label, stats in stats_functions:
+            separator = tk.ttk.Separator(plan_statistics_frame, orient="horizontal")
+            separator.grid(row=row, column=0, columnspan=5, sticky="ew", pady=5)
+            row += 1
+
+            tk.Label(
+                plan_statistics_frame,
+                text=label,
+            ).grid(row=row, column=0, sticky="w", padx=5)
+            row += 1
+
+            if isinstance(stats, str):
+                tk.Label(
+                    plan_statistics_frame,
+                    text=stats,
+                ).grid(row=row, column=0, sticky="w", padx=5)
+                row += 1
+                continue
+
+            stats_text = ""
+            for key, value in stats.items():
+                if "num_" in key:
+                    pct_key = "pct_" + key.split("_")[1]
+                    pct_value = stats.get(pct_key, 0)
+                    formatted_stat = (
+                        f"{key.split('_')[1].title()}: {pct_value:.0f}% ({value})"
+                    )
+                    stats_text += formatted_stat + " | "
+
+            stats_text = stats_text.rstrip(" | ")
+
+            tk.Label(
+                plan_statistics_frame,
+                text=stats_text,
+            ).grid(row=row, column=0, sticky="w", padx=5)
+            row += 1
+
+        return plan_statistics_frame
+
     def create_plan_tab_title(self, parent_tab, plan):
         title_frame = tk.Frame(parent_tab, relief="solid", borderwidth=2)
         title_frame.grid(row=0, column=0, columnspan=4, sticky="ew", padx=5, pady=5)
@@ -791,6 +881,3 @@ class AdminDashboard(Dashboard):
             command=lambda: self.show_screen("EditPlan", plan),
         )
         edit_button.grid(row=0, column=3, rowspan=2, padx=(5, 15))
-
-        parent_tab.grid_rowconfigure(0, weight=0)
-        parent_tab.grid_rowconfigure(1, weight=1)
