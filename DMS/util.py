@@ -75,7 +75,8 @@ def validate_date(date):
         
         return True
     
-    except ValueError:
+    except Exception as e:
+        print(e)
         return False
 
 def validate(value, message):
@@ -93,7 +94,8 @@ def validate_end_date(start_time, end_time):
             start_time = datetime.strptime(start_time, '%Y-%m-%d').date()
             end_time = datetime.strptime(end_time, '%Y-%m-%d').date()
             return start_time < end_time
-        except:
+        except Exception as e:
+            print(e)
             return False
      
 
@@ -127,6 +129,8 @@ def validate_end_date(start_time, end_time):
 
 
 # from datetime import datetime
-# date = '08-12-2023'
-# date = datetime.strptime(date, '%Y-%m-%d').date()
-# print(date)
+# s = '2023-01-01'
+# e = '2025-01-01'
+# start_time = datetime.strptime(s, '%Y-%m-%d').date()
+# end_time = datetime.strptime(e, '%Y-%m-%d').date()
+# print(start_time < end_time)

@@ -144,7 +144,7 @@ class ModifyEntries(tk.Frame):
                 #print(tuple(inputs))
 
                 
-
+                print(f"inputs: {inputs}")  
                 self.ui_error_popup(self.save_record(**inputs))
                 # try to update data using the business logic function
 
@@ -195,6 +195,15 @@ class ModifyEntries(tk.Frame):
 
             dismiss_button = tk.Button(popup, text="Dismiss", command=popup.destroy)
             dismiss_button.pack(pady=10)
+        else:
+            popup = tk.Toplevel(self.root)
+            popup.title("System Message")
+
+            msg = tk.Label(popup, text="Operation Successful \n\n You can now close this window and navigage to other pages")
+            msg.pack(padx=20, pady=20)
+
+            dismiss_button = tk.Button(popup, text="Dismiss", command=popup.destroy)
+            dismiss_button.pack(pady=10) 
 
     def confirmation_popup(self, text, function):
             popup = tk.Toplevel(self.root)
@@ -346,7 +355,6 @@ class NewRefugee(ModifyEntries):
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
-
 
 
 class EditRefugee(ModifyEntries):

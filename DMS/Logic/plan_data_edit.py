@@ -55,6 +55,10 @@ class PlanEdit:
     @staticmethod
     def update_plan(planID=None, name=None, event_name=None, country=None, description=None, start_date=None, end_date=None, water=None, food=None, shelter=None, medical_supplies=None, status=None):
 
+        tuple = (planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
+
+        print(f"tuple: {tuple}")
+
         if name:
             if not util.is_valid_name(name):
                 return "Invalid plan name"
@@ -68,7 +72,8 @@ class PlanEdit:
             if not util.validate_date(start_date):
                 return "Invalid start date"
         if end_date:
-            if util.validate_end_date(start_date, end_date):
+            if not util.validate_end_date(start_date, end_date):
+                # print('aaaaaa')
                 return "Invalid end date"
         #     if datetime.today().date() == end_date:
         #         return Plan.delete_plan(planID)
@@ -77,12 +82,14 @@ class PlanEdit:
         # else:
         #     end_date = None
 
-        if status and status in ['Active', 'Ended']:
-            status = status
-        else:
+        if status and status not in ['Active', 'Ended']:
             return "Invalid status"
 
-        return Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
+        res = Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
+
+        print(f"res:  {res}")
+
+        return util.parse_result('Plan', res)
 
     @staticmethod
     def end_plan(planID):
