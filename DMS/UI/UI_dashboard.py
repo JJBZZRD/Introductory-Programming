@@ -637,9 +637,9 @@ class AdminDashboard(Dashboard):
     def populate_all_camp_resources(self, parent_frame, camp, column_index):
         camp_title = f"Camp {camp.campID} - {camp.location}"
         camp_title_label = tk.Label(
-            parent_frame, text=camp_title, font=("Arial", 11, "bold")
+            parent_frame, text=camp_title, font=("Arial", 14, "bold")
         )
-        camp_title_label.grid(row=0, column=column_index * 2, sticky="w")
+        camp_title_label.grid(row=0, column=column_index * 2, sticky="ew")
 
         camp_section = self.create_resources_section(
             parent_frame,
