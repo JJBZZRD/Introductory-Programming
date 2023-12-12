@@ -88,7 +88,7 @@ class PlanEdit:
             
     @staticmethod
     def delete_plan(planID):
-        return 'not' not in Plan.delete_plan(planID)
+        return f"Plan {planID} has been deleted" if Plan.delete_plan(planID) else f"There is an error when deleting plan {planID}"
     
     # @staticmethod
     # def plan_status(planID):

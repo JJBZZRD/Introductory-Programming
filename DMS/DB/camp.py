@@ -94,8 +94,10 @@ class Camp:  # Camp class has attributes matching columns in table
         conn.commit()
         if rows_deleted > 0:
             print(f"Camp {campID} has been deleted")
+            return True
         else:
             print(f"Admin {campID} has not been deleted")
+            return False
 
 
     @staticmethod  # Get camp details by selecting on any combination of attributes. Can be used to find the

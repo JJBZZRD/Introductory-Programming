@@ -97,8 +97,10 @@ class Refugee:  # Refugee class has attributes matching columns in table
         conn.commit()
         if rows_deleted > 0:
             print(f"Refugee {refugeeID} has been deleted")
+            return True
         else:
             print(f"Refugee {refugeeID} has not been deleted")
+            return False
 
     @staticmethod  # Get refugee details by selecting on any combination of attributes. Can be used to find the
     # refugeeID which can then be used in the delete and update methods. Returns a list of tuples.

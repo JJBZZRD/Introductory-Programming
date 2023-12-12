@@ -92,8 +92,10 @@ class Plan:  # Plan class has attributes matching columns in table
         conn.commit()
         if rows_deleted > 0:
             print(f"Plan {planID} has been deleted")
+            return True
         else:
             print(f"Plan {planID} has not been deleted")
+            return False
 
     @staticmethod
     def get_plan(planID=None, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None):

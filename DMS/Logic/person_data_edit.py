@@ -49,7 +49,7 @@ class PersonDataEdit:
     @staticmethod
     def delete_volunteer(id):
         res = Volunteer.delete_volunteer(id)
-        return 'not' not in res
+        return f"Volunteer {id} has been deleted" if res else f"There is an error when deleting volunteer {id}"
     
     @staticmethod
     def create_volunteer(first_name = None, last_name = None, camp_id = None, username = None, password = None, date_of_birth = None, phone = None):
@@ -116,4 +116,5 @@ class PersonDataEdit:
     @staticmethod
     def delete_refugee(id):
         res = Refugee.delete_refugee(id)
-        return 'not' not in res 
+        # print(f'res: {res}')
+        return f"Refugee {id} has been deleted" if res else f"There is an error when deleting refugee {id}"

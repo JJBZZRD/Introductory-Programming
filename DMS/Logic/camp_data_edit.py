@@ -187,4 +187,4 @@ class CampDataEdit:
 
     @staticmethod
     def delete_camp(campID):
-        return Camp.delete_camp(campID)
+        return f"Camp {campID} has been deleted" if Camp.delete_camp(campID) else f"There is an error when deleting camp {campID}"
