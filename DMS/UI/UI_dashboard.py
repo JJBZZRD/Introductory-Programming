@@ -299,16 +299,17 @@ class Dashboard(tk.Frame):
                 row=index, column=1, sticky="e", padx=5
             )
 
-            tk.Button(
-                additional_resources_frame,
-                text="-",
-                command=lambda res_name=resource_name: self.update_plan_resources(
+            if amount > 0:
+                tk.Button(
                     additional_resources_frame,
-                    res_name,
-                    plan,
-                    -10,
-                ),
-            ).grid(row=index, column=2, padx=5)
+                    text="-",
+                    command=lambda res_name=resource_name: self.update_plan_resources(
+                        additional_resources_frame,
+                        res_name,
+                        plan,
+                        -10,
+                    ),
+                ).grid(row=index, column=2, padx=5)
 
             tk.Button(
                 additional_resources_frame,
