@@ -666,7 +666,7 @@ class AdminDashboard(Dashboard):
         description_label = tk.Label(
             title_frame, text=plan_description, font=("Arial", 14)
         )
-        description_label.grid(row=1, column=0, sticky="w", padx=5, pady=5)
+        description_label.grid(row=1, column=0, sticky="w", padx=5)
 
         new_camp_button = ttk.Button(
             title_frame,
@@ -697,49 +697,3 @@ class AdminDashboard(Dashboard):
         parent_tab.grid_rowconfigure(0, weight=0)
         parent_tab.grid_rowconfigure(1, weight=0)
         parent_tab.grid_rowconfigure(2, weight=1)
-
-    # def setup_plan_statistics_tab(self):
-    #     stats_tab = ttk.Frame(self.tab_control)
-    #     self.tab_control.add(stats_tab, text="Plan Statistics")
-
-    #     self.create_plan_tab_title(stats_tab, self.plan)
-
-    #     additional_resources_frame = self.create_additional_resources_section(
-    #         stats_tab, self.plan
-    #     )
-
-    #     canvas_width = 600
-    #     camp_stats_canvas = tk.Canvas(stats_tab, width=canvas_width)
-    #     camp_resources_scrollbar = ttk.Scrollbar(
-    #         stats_tab, orient="horizontal", command=camp_stats_canvas.xview
-    #     )
-    #     camp_stats_canvas.configure(xscrollcommand=camp_resources_scrollbar.set)
-
-    #     all_camp_stats_frame = ttk.Frame(camp_stats_canvas)
-    #     camp_stats_canvas.create_window(
-    #         (0, 1), window=all_camp_stats_frame, anchor="nw"
-    #     )
-
-    #     for i, camp in enumerate(self.planCamps):
-    #         camp_title = f"Camp {camp.campID} - {camp.location}"
-    #         camp_title_label = tk.Label(
-    #             all_camp_stats_frame, text=camp_title, font=("Arial", 12, "bold")
-    #         )
-    #         camp_title_label.grid(row=0, column=i * 2, sticky="w")
-
-    #         camp_stats = self.create_camp_statistics_section(all_camp_stats_frame, camp)
-    #         camp_stats.grid(row=1, column=i * 2, sticky="nsew")
-    #         all_camp_stats_frame.grid_columnconfigure(i * 2 + 1, weight=1)
-
-    #     all_camp_stats_frame.bind(
-    #         "<Configure>",
-    #         lambda e: camp_stats_canvas.configure(
-    #             scrollregion=camp_stats_canvas.bbox("all")
-    #         ),
-    #     )
-
-    #     additional_resources_frame.grid(row=2, column=0, sticky="nsew")
-    #     camp_stats_canvas.grid(row=2, column=1, sticky="nsew")
-    #     camp_resources_scrollbar.grid(row=3, column=1, sticky="ew")
-    #     stats_tab.grid_columnconfigure(0, weight=1)
-    #     stats_tab.grid_columnconfigure(1, weight=3)
