@@ -229,6 +229,7 @@ class Dashboard(tk.Frame):
                 row=resource_row + 2, column=0, columnspan=5, sticky="ew", pady=5
             )
 
+            self.rebuild_additional_resources_frame(plan)
         return resources_frame
 
     def rebuild_resources_frame(self, camp, resource_frame, plan, user_type):
@@ -271,9 +272,9 @@ class Dashboard(tk.Frame):
         if CampDataEdit.update_camp(camp.campID, **{resource_key: new_camp_amount}):
             setattr(camp, resource_key, new_camp_amount)
 
-        # print(f"Parent tab: {resource_frame.master}")
-        # print(f" {aaa}")
         aaa = "canvas" in str(resource_frame.master)
+        print(f"Parent tab: {resource_frame.master}")
+        print(f" {aaa}")
         if aaa:
             try:
                 self.ui_manager.refresh_page()
@@ -282,8 +283,9 @@ class Dashboard(tk.Frame):
         else:
             self.rebuild_resources_frame(camp, resource_frame, plan, user_type)
 
-        if user_type == "admin":
-            self.ui_manager.refresh_page()
+
+        # if user_type == "admin":
+        #     self.ui_manager.refresh_page()
             # self.rebuild_additional_resources_frame(plan)
 
     def update_plan_resources(self, resource_frame, resource_name, plan, increment):
