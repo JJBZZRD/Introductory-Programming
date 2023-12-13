@@ -52,7 +52,7 @@ class PlanDataRetrieve:
         if isinstance(plans, list):
 
             # current_date = datetime.now()
-            for plan in plans:
+            # for plan in plans:
             #     if plan.end_date:
             #         try:
             #             plan.end_date_datetime = datetime.strptime(plan.end_date, '%Y-%m-%d')
@@ -67,9 +67,11 @@ class PlanDataRetrieve:
             #     plans = [plan for plan in plans if plan.end_date_datetime < current_date]
 
             # for plan in plans:
-                plan.food, plan.water, plan.shelter, plan.medical_supplies = PlanDataRetrieve.get_resources(plan.planID)
+                # plan.food, plan.water, plan.shelter, plan.medical_supplies = PlanDataRetrieve.get_resources(plan.planID)
 
-        return plans
+            return plans
+        else:
+            return f"Cannot find plan with id {planID}"
 
     @staticmethod
     def get_resources(planID):
@@ -77,7 +79,7 @@ class PlanDataRetrieve:
         # [Shelter, Food, Water, Medical Supplies]
         # res = Plan.get_total_resources(planID)
         # print(f'Plan.get_total_resources({planID}) {Plan.get_total_resources(planID)}')
-        # if len(res) == 0:
+        # if len(res) == 0:x``
         #     return [0,0,0,0]
         # print(f"plan")
         try:
