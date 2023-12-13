@@ -37,6 +37,7 @@ class ModifyEntries(tk.Frame):
         self.fields_to_be_dropdown = {}
         self.read_only_fields = []
         self.screen_data_id = None
+        self.page_nav_on_delete = None
         self.passed_id = {}
         self.setup_modify()
 
@@ -359,7 +360,7 @@ class EditVolunteer(ModifyEntries):
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Creation Time']
         self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username',
                 'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status', 'Creation Time': 'created_time'}
-        self.button_labels = ['Save Changes', 'Deactivate']
+        self.button_labels = ['Save Changes', 'Delete']
         self.current_data = self.screen_data.display_info()
         self.save_record = PersonDataEdit.update_volunteer
         self.delete_record = PersonDataEdit.delete_volunteer
