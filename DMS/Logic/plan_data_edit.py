@@ -35,11 +35,11 @@ class PlanEdit:
         if start_date in ["yyyy-mm-dd", '', ' ']:
             return "Please enter start date"
         if start_date and start_date not in ["yyyy-mm-dd", '', ' ']:
-            if util.validate_date(start_date):
-                start_year = datetime.strptime(start_date, '%Y-%m-%d').date().year
-                current_year = datetime.now().year
-                if start_year > current_year:
-                    return "        Invalid year        "
+            # if util.validate_date(start_date):
+            #     start_year = datetime.strptime(start_date, '%Y-%m-%d').date().year
+            #     current_year = datetime.now().year
+            #     if start_year > current_year:
+            #         return "        Invalid year        "
             if not util.validate_date(start_date):
                 return "Invalid date for start date (yyyy-mm-dd)"
 
