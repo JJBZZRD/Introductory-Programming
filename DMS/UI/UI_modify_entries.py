@@ -156,7 +156,7 @@ class ModifyEntries(tk.Frame):
 
                 
                 print(f"inputs: {inputs}")  
-                self.ui_error_popup(self.save_record(**inputs))
+                self.ui_error_popup(self.save_record(**inputs, logged_in_user=self.logged_in_user))
                 # try to update data using the business logic function
 
             case 'Delete':
@@ -176,7 +176,7 @@ class ModifyEntries(tk.Frame):
                     inputs.update({self.entry_fields[key][0]: self.entry_fields[key][1].get()})
                 #print(tuple(inputs))
 
-                self.ui_error_popup(self.create_record(**inputs))
+                self.ui_error_popup(self.create_record(**inputs, logged_in_user=self.logged_in_user))
                 #self.page_nav('back')
 
                 pass
