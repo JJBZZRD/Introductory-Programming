@@ -306,8 +306,8 @@ class EditCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Camp']
-        self.modifiable_variables = ['Camp ID', 'Location', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID']
-        self.filter_matching = {'Camp ID': 'campID', 'Location': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID'}
+        self.modifiable_variables = ['Camp ID', 'Location', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID', 'Creation Time']
+        self.filter_matching = {'Camp ID': 'campID', 'Location': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID', 'Creation Time': 'created_time'}
         self.current_data = self.screen_data.display_info()
         self.button_labels = ['Save Changes', 'Delete']
         self.save_record = CampDataEdit.update_camp
@@ -325,10 +325,10 @@ class EditCamp(ModifyEntries):
     def if_logged_in_as_volunteer(self):
         if self.logged_in_user.volunteerID != 1:
             self.fields_to_be_dropdown = {}
-            self.read_only_fields = ['Camp ID', 'Plan ID']
+            self.read_only_fields = ['Camp ID', 'Plan ID', 'Creation Time']
         else:
            self.fields_to_be_dropdown = {'Plan ID': [plan.planID for plan in PlanDataRetrieve.get_all_plans()]}
-           self.read_only_fields = ['Camp ID']
+           self.read_only_fields = ['Camp ID', 'Creation Time']
 
 
 
@@ -356,9 +356,9 @@ class EditVolunteer(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Volunteer']
         self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
-                'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
+                'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Creation Time']
         self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username',
-                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status'}
+                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status', 'Creation Time': 'created_time'}
         self.button_labels = ['Save Changes', 'Deactivate']
         self.current_data = self.screen_data.display_info()
         self.save_record = PersonDataEdit.update_volunteer
@@ -366,7 +366,7 @@ class EditVolunteer(ModifyEntries):
         self.screen_data_id = self.screen_data.volunteerID
         self.entry_fields = {}
         self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Account Status': ['Active', 'Inactive']}
-        self.read_only_fields = ['Volunteer ID']
+        self.read_only_fields = ['Volunteer ID', 'Creation Time']
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -402,10 +402,10 @@ class EditRefugee(ModifyEntries):
         self.modifiable_variables = ['Refugee ID', 'First Name', 'Last Name',
                 'Date of Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
-                'Vital Status']
+                'Vital Status', 'Creation Time']
         self.filter_matching = {'Refugee ID': 'id', 'First Name': 'first_name', 'Last Name': 'last_name', 'Date of Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
                 'Camp ID': 'campID', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_conditions',
-                'Vital Status': 'vital_status'}
+                'Vital Status': 'vital_status', 'Creation Time': 'created_time'}
         self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Vital Status': ['Alive', 'Deceased'], 
                                       'Gender': ['Male', 'Female', 'Other'], 'Triage Category': ['None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate']}
         self.button_labels = ['Save Changes', 'Delete']
@@ -414,7 +414,7 @@ class EditRefugee(ModifyEntries):
         self.delete_record = PersonDataEdit.delete_refugee
         self.screen_data_id = self.screen_data.refugeeID
         self.entry_fields = {}
-        self.read_only_fields = ['Refugee ID']
+        self.read_only_fields = ['Refugee ID', 'Creation Time']
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -425,14 +425,14 @@ class EditPersonalDetails(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Personal Details']
         self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
-                'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Password']
+                'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Creation Time', 'Password']
         self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username', 'Password': 'password',
-                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status'}
+                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status', 'Creation Time': 'created_time'}
         self.button_labels = ['Save Changes']#, 'Delete', 'Deactivate']
         self.current_data = self.logged_in_user.display_info()
         self.save_record = PersonDataEdit.update_volunteer
         self.entry_fields = {}
-        self.read_only_fields = ['Volunteer ID', 'Camp ID', 'Account Status']
+        self.read_only_fields = ['Volunteer ID', 'Camp ID', 'Account Status', 'Creation Time']
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
