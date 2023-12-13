@@ -75,12 +75,16 @@ class PlanDataRetrieve:
     def get_resources(planID):
         #return [total_food, total_water, total_shelter, total_medical_supplies]
         # [Shelter, Food, Water, Medical Supplies]
-        res = Plan.get_total_resources(planID)
-        print(f'Plan.get_total_resources({planID}) {Plan.get_total_resources(planID)}')
-        if len(res) == 0:
-            return [0,0,0,0]
+        # res = Plan.get_total_resources(planID)
+        # print(f'Plan.get_total_resources({planID}) {Plan.get_total_resources(planID)}')
+        # if len(res) == 0:
+        #     return [0,0,0,0]
         # print(f"plan")
-        return list(Plan.get_total_resources(planID)[0])
+        try:
+            plan = PlanDataRetrieve.get_plan(planID=planID)[0]
+        except:
+            return f"Cannot find plan with id {planID}"
+        return [plan.shelter, plan.food, plan.water, plan.medical_supplies]
 
     @staticmethod
     def get_plan_resources_estimate(planID):

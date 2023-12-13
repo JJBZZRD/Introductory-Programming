@@ -406,7 +406,7 @@ class EditRefugee(ModifyEntries):
         self.filter_matching = {'Refugee ID': 'id', 'First Name': 'first_name', 'Last Name': 'last_name', 'Date of Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
                 'Camp ID': 'campID', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_conditions',
                 'Vital Status': 'vital_status', 'Creation Time': 'created_time'}
-        self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Vital Status': ['Alive', 'Deceased'], 
+        self.fields_to_be_dropdown = {'Vital Status': ['Alive', 'Deceased'], 
                                       'Gender': ['Male', 'Female', 'Other'], 'Triage Category': ['None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate']}
         self.button_labels = ['Save Changes', 'Delete']
         self.current_data = self.screen_data.display_info()
@@ -415,9 +415,23 @@ class EditRefugee(ModifyEntries):
         self.screen_data_id = self.screen_data.refugeeID
         self.entry_fields = {}
         self.read_only_fields = ['Refugee ID', 'Creation Time']
+        self.campID_dropdown_values()
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
+
+    def campID_dropdown_values(self):
+        refugee_campID = self.screen_data.campID
+
+        camp_of_campID = CampDataRetrieve.get_camp(campID=refugee_campID)[0]
+
+        planID_of_camp = camp_of_campID.planID
+
+        camps = CampDataRetrieve.get_camp(planID=planID_of_camp)
+
+        list_of_camp_ids = [camp.campID for camp in camps]
+
+        self.fields_to_be_dropdown.update({'Camp ID': list_of_camp_ids})
 
 
 class EditPersonalDetails(ModifyEntries):
