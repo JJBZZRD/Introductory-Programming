@@ -30,7 +30,7 @@ class PersonDataRetrieve:
         return util.parse_result('Volunteer', Volunteer.get_by_planID(planID))
 
     @staticmethod
-    def get_volunteers(volunteerID=None, name=None, username=None, password=None, date_of_birth=None, phone=None, account_status=None, campID=None, active=None):
+    def get_volunteers(volunteerID=None, name=None, username=None, password=None, date_of_birth=None, phone=None, account_status=None, campID=None, active=None, created_time=None):
 
         if active:
             account_status = 'Active'
@@ -58,7 +58,7 @@ class PersonDataRetrieve:
         return util.parse_result('Refugee', Refugee.get_refugees_by_plan(plan_id, triage_category, gender, vital_status))
     
     @staticmethod
-    def get_refugees(id=None, name=None, date_of_birth=None, gender=None, family_id=None, camp_id=None, triage_category=None, medical_condition=None, vital_status=None):
+    def get_refugees(id=None, name=None, date_of_birth=None, gender=None, family_id=None, camp_id=None, triage_category=None, medical_condition=None, vital_status=None, created_time=None):
         # print(f"id: {id}")
         if name:
             refugee_tuple_1 = Refugee.get_refugee(refugeeID=id, first_name=name, date_of_birth=date_of_birth, gender=gender, familyID=family_id, campID=camp_id, triage_category=triage_category, medical_conditions=medical_condition, vital_status=vital_status)

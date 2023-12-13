@@ -86,7 +86,7 @@ class Camp:  # Camp class has attributes matching columns in table
 
     @staticmethod  # Get camp details by selecting on any combination of attributes. Can be used to find the
     # campID which can then be used in the delete and update methods. Returns a list of tuples.
-    def get_camp(campID=None, location=None, shelter=None, water=None, food=None, medical_supplies=None, planID=None):
+    def get_camp(campID=None, location=None, shelter=None, water=None, food=None, medical_supplies=None, planID=None, created_time=None):
 
         query = "SELECT * FROM camps WHERE campID IS NOT NULL"
         if campID:
