@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import PhotoImage
 
 class UIHeader(tk.Frame):
     def __init__(self, ui_manager, *args, **kwargs):
@@ -14,7 +15,17 @@ class UIHeader(tk.Frame):
     def create_header(self):
         header = tk.Frame(self, bg='white')
 
-        logo_label = tk.Label(header, text="LOGO", bg="white", font=("Arial", 16))
+        original_image = PhotoImage(file="DMS/UI/logo.png")  # Replace with the actual path to your image file
+
+        subsample_factor = 3
+        width = original_image.width() // subsample_factor
+        height = original_image.height() // subsample_factor
+
+        # Resize the image using subsample
+        resized_image = original_image.subsample(subsample_factor, subsample_factor)
+
+        logo_label = tk.Label(header, image=resized_image, bg="white")
+        logo_label.image = resized_image
         logo_label.pack(side=tk.LEFT, padx=(10, 20))
 
         # logged_in_user is a user object and .name provides the username
