@@ -7,6 +7,7 @@ from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 from ..Logic.person_data_retrieve import PersonDataRetrieve
 from ..DB.countries import get_all_countries
+from ..DB.camp import Camp
 from ..DB.plan import Plan
 
 # the name of this class might not explain the functionality very well as its quite an abstraction. This class
@@ -36,6 +37,7 @@ class ModifyEntries(tk.Frame):
         self.fields_to_be_dropdown = {}
         self.read_only_fields = []
         self.screen_data_id = None
+        self.passed_id = None
         self.setup_modify()
 
     def setup_modify(self):
@@ -79,8 +81,11 @@ class ModifyEntries(tk.Frame):
                 entry_field.grid(column=k + 1, row=j, pady=5, padx=5)
 
                 self.entry_fields.update({variable: [self.filter_matching[variable], entry_field]})
+                
+                if self.passed_id and variable in self.passed_id:
+                    placeholder = self.passed_id[variable]
 
-                if self.current_data is not None and i < len(self.current_data):
+                elif self.current_data is not None and i < len(self.current_data):
                     placeholder = self.current_data[i]
                 elif "Date" in variable:
                     placeholder = "yyyy-mm-dd"
@@ -246,7 +251,7 @@ class EditPlan(ModifyEntries):
         self.modifiable_variables = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date', 'Water', 'Food', 'Medical Supplies', 'Shelter', 'Status']
         self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Country': 'country', 'Event Name': 'event_name',
                                 'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date', 'Water': 'water', 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Shelter': 'shelter', 'Status':'status'}
-        self.button_labels = ['Save Changes', 'End', 'Delete']
+        self.button_labels = ['Save Changes', 'Delete']
         self.current_data = self.screen_data.display_info()
         self.save_record = PlanEdit.update_plan
         self.delete_record = PlanEdit.delete_plan
@@ -271,9 +276,22 @@ class NewCamp(ModifyEntries):
         self.entry_fields = {}
         self.fields_to_be_dropdown = {'Country': get_all_countries()}
         self.read_only_fields = []
+        self.passed_id = self.plan_id_set()
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
+
+    def plan_id_set(self):
+        #need to pass a plan id to the new camp if visited from dashboard and set to read only
+
+        if isinstance(self.screen_data, Plan):
+            planID = self.screen_data.planID
+
+            self.read_only_fields.append('Plan ID')
+
+            return {'Plan ID':planID}
+        else:
+            return None
 
 
 class EditCamp(ModifyEntries):
