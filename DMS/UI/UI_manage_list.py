@@ -230,6 +230,7 @@ class PlanList(ManageList):
         self.create_search()
         self.create_results()
 
+    
 
 class CampList(ManageList):
     def setup_list(self):
@@ -243,6 +244,7 @@ class CampList(ManageList):
         self.filter_matching = {'Camp ID': 'campID', 'Location': 'location', 'Shelter': 'shelter', 'Water': 'water', 
                                 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID', 'Creation Time': 'created_time' }
         self.export_name = 'Camps'
+        self.modify_title()
         self.create_title()
         self.create_search()
         self.create_results()
@@ -253,7 +255,9 @@ class CampList(ManageList):
         else:
             return CampDataRetrieve.get_all_camps()
 
-
+    def modify_title(self):
+        if isinstance(self.screen_data, Plan):
+            self.list_type[0] = f'Manage Camps for Plan {self.screen_data.planID}'
 
 class VolunteerList(ManageList):
 
@@ -270,6 +274,7 @@ class VolunteerList(ManageList):
         self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'name', 'Last Name': 'name', 'Username': 'username',
                 'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Creation Time': 'created_time'}
         self.status_filters = ['All', 'Active', 'Deactivated']
+        self.modify_title()
         self.create_title()
         self.create_search()
         self.create_results()
@@ -293,6 +298,10 @@ class VolunteerList(ManageList):
         else:
             return PersonDataRetrieve.get_all_volunteers()
         
+    def modify_title(self):
+        if isinstance(self.screen_data, Camp):
+            self.list_type[0] = f'Manage Volunteers for Plan {self.screen_data.planID}'
+
 
 class RefugeeList(ManageList):
 
@@ -315,6 +324,7 @@ class RefugeeList(ManageList):
                 'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
                 'Vital Status': 'vital_status','Creation Time': 'created_time'}
         self.export_name = 'Refugees'
+        self.modify_title()
         self.create_title()
         self.create_search()
         self.create_results()
@@ -324,3 +334,7 @@ class RefugeeList(ManageList):
             return PersonDataRetrieve.get_refugees(camp_id=self.screen_data.campID)
         else:
             return PersonDataRetrieve.get_all_refugees()
+    
+    def modify_title(self):
+        if isinstance(self.screen_data, Camp):
+            self.list_type[0] = f'Manage Refugees for Camp {self.screen_data.campID}'
