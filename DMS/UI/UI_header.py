@@ -19,14 +19,8 @@ class UIHeader(tk.Frame):
 
         original_image = PhotoImage(file="DMS/UI/logo.png")
 
-        subsample_factor = 3
-        width = original_image.width() // subsample_factor
-        height = original_image.height() // subsample_factor
-
-        resized_image = original_image.subsample(subsample_factor, subsample_factor)
-
-        logo_label = tk.Label(header, image=resized_image)
-        logo_label.image = resized_image
+        logo_label = tk.Label(header, image=original_image, bg="white")
+        logo_label.image = original_image
         logo_label.pack(side=tk.LEFT, padx=(10, 20))
 
         # logged_in_user is a user object and .name provides the username
@@ -43,7 +37,7 @@ class UIHeader(tk.Frame):
         self.add_navigation_buttons(header)
         self.add_control_buttons(header)
 
-        header.pack(side="top", fill="x")
+        header.pack(side='top', fill='x')
 
     def add_navigation_buttons(self, parent):
         nav_back_button = tk.Button(
