@@ -67,6 +67,9 @@ class PersonDataEdit:
         if username in ["Enter Username", '', ' ']:
             return "Please enter username"
 
+        if password in ["Enter Password", '', ' ']:
+            return "Please enter password"
+
         if date_of_birth in ["yyyy-mm-dd", '', ' ']:
             return "Please enter date of birth"
         if date_of_birth and date_of_birth not in ["yyyy-mm-dd", '', ' ']:
