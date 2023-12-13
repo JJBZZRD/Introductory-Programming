@@ -60,7 +60,7 @@ class PlanEdit:
 
         if status and status not in ['Active', 'Ended']:
             return "Invalid status"
-        if status == 'Acvive':
+        if status == 'Active':
             if name:
                 if not util.is_valid_name(name):
                     return "Invalid plan name"
