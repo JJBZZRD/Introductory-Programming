@@ -11,7 +11,7 @@ else:
     try:
         app_full_path = os.path.realpath(__file__)
         application_path = os.path.dirname(app_full_path)
-        running_mode = "Non-interactive (e.g. 'python main.py')"
+        running_mode = "Non-interactive (e.g. 'python __main__.py')"
     except NameError:
         application_path = os.getcwd()
         running_mode = "Interactive"
@@ -19,7 +19,8 @@ else:
 dbpath = os.path.join(application_path, "database.db")
 query_log_path = os.path.join(application_path, "query.log")
 
-logging.basicConfig(filename=query_log_path, filemode='a', level=logging.INFO)
+logging.basicConfig(filename=query_log_path, filemode='a', level=logging.INFO,
+                    format="%(asctime)s \n%(message)s \n", datefmt='%Y-%m-%d %H:%M:%S')
 
 conn = sqlite3.connect(dbpath)
 conn.execute("PRAGMA foreign_keys = ON")
@@ -108,6 +109,31 @@ def create_database():
 
     cursor.execute(countries_table)
 
+    current_user_table = """
+    CREATE TABLE IF NOT EXISTS current_user (
+        id INTEGER PRIMARY KEY,
+        username TEXT
+    )
+    """
+
+    cursor.execute(current_user_table)
+
+    audit_table = """
+    CREATE TABLE IF NOT EXISTS audit (
+        auditID INTEGER PRIMARY KEY,
+        table_name TEXT,
+        recordID INTEGER,
+        field_name TEXT,
+        old_value TEXT,
+        new_value TEXT,
+        action TEXT,
+        action_time TEXT,
+        changed_by TEXT
+    )
+    """
+
+    cursor.execute(audit_table)
+
     # family_table = """
     # CREATE TABLE IF NOT EXISTS family(
     #     familyID INTEGER PRIMARY KEY,
@@ -118,6 +144,50 @@ def create_database():
     # cursor.execute(family_table)
 
     conn.commit()
+
+
+def triggers_for_audit_table(table_name, fields, primary_key_field):
+    for field in fields:
+
+        cursor.execute(f"""
+            CREATE TRIGGER IF NOT EXISTS {table_name}_{field}_insert
+            AFTER INSERT ON {table_name}
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
+                VALUES ('{table_name}', NEW.{primary_key_field}, '{field}', NULL, NEW.{field}, 'INSERT', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY id DESC LIMIT 1));
+            END;
+        """)
+
+        cursor.execute(f"""
+            CREATE TRIGGER IF NOT EXISTS {table_name}_{field}_update
+            AFTER UPDATE OF {field} ON {table_name}
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
+                VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NEW.{field}, 'UPDATE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY id DESC LIMIT 1));
+            END;
+        """)
+
+        cursor.execute(f"""
+            CREATE TRIGGER IF NOT EXISTS {table_name}_{field}_delete
+            AFTER DELETE ON {table_name}
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
+                VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NULL, 'DELETE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY id DESC LIMIT 1));
+            END;
+        """)
+
+    conn.commit()
+
+
+plans_fields = ["start_date", "end_date", "name", "country", "event_name", "description", "water", "food",
+                "medical_supplies", "shelter", "status"]
+camps_fields = ["location", "shelter", "water", "food", "medical_supplies", "planID"]
+refugees_fields = ["first_name", "last_name", "date_of_birth", "gender", "familyID", "campID", "triage_category",
+                   "medical_conditions", "vital_status"]
+
 
 def clear_dummy_data():
     for table_name in ["plans", "camps", "volunteers", "refugees", "countries"]:
@@ -294,13 +364,25 @@ def insert_dummy_data():
 
     cursor.execute(insert_countries)
 
+    cursor.execute("""
+    INSERT INTO current_user (id, username) VALUES (1, 'default_user')
+    ON CONFLICT(id) DO UPDATE SET username = 'default_user';
+    """)
+
     conn.commit()
+
 
 def check_sample_db_init():
     cursor.execute("SELECT * FROM volunteers WHERE username = 'admin' and password = '111'")
     return cursor.fetchone() is None
 
+
 create_database()
+
+triggers_for_audit_table("plans", plans_fields, "planID")
+triggers_for_audit_table("camps", camps_fields, "campID")
+triggers_for_audit_table("refugees", refugees_fields, "refugeeID")
+
 if __name__ == "__main__" or check_sample_db_init():
     print("Inserting dummy data...")
     clear_dummy_data()
