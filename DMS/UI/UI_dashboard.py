@@ -337,7 +337,9 @@ class Dashboard(tk.Frame):
     ):
         print(f"logged in user = {self.logged_in_user}")
         print(f"camp = {camp}")
-        print(f"plan = {plan.planid}")
+        print(f"plan = {plan.planID}")
+        logged_in_user = self.logged_in_user
+
         resource_key = resource_name.lower().replace(" ", "_")
         if user_type == "admin":
             plan_current_amount = getattr(plan, resource_key)
@@ -350,7 +352,7 @@ class Dashboard(tk.Frame):
         camp_current_amount = getattr(camp, resource_key)
         new_camp_amount = max(0, camp_current_amount + increment)
         if CampDataEdit.update_camp(
-            logged_in_user=self.logged_in_user,
+            logged_in_user=logged_in_user,
             campID=camp.campID,
             **{resource_key: new_camp_amount},
         ):
@@ -463,6 +465,7 @@ class Dashboard(tk.Frame):
         new_amount = max(0, current_amount + increment)
 
         if PlanEdit.update_plan(
+            logged_in_user=self.logged_in_user,
             planID=plan.planID,
             **{resource_key: new_amount},
         ):
