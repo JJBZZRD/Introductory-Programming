@@ -345,7 +345,7 @@ def insert_dummy_data():
     
     -- Camp 7
     ('Timothy', 'Wright', '1980-08-19', 'Male', 63, 7, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
-    ('Victoria', 'Clack', '1970-09-23', 'Male', 64, 7, 'None', 'None', 'Alive', '2023-01-01T14:36:25')
+    ('Victoria', 'Clack', '1970-09-23', 'Female', 64, 7, 'None', 'None', 'Alive', '2023-01-01T14:36:25')
     """
 
     cursor.execute(refugees_data)
