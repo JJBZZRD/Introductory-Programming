@@ -65,7 +65,7 @@ class PersonDataEdit:
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
 
-        now = util.get_current_time().strftime("%Y-%m-%dT%H:%M:%S")
+        now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
         t = (first_name, last_name, username, password, date_of_birth, phone, camp_id, now)
 
@@ -82,8 +82,8 @@ class PersonDataEdit:
 
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
-
-        now = util.get_current_time().strftime("%Y-%m-%dT%H:%M:%S")
+        
+        now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
         t = (first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category, medical_conditions, vital_status, now)
 

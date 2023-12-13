@@ -101,7 +101,7 @@ class CampDataEdit:
                 if len(Plan.get_plan_by_id(planID)) < 1:
                     return "Cannot find this planID. Please try again."
                 
-        now = datetime.now().date().strftime('%Y-%m-%dT%H:%M:%S')
+        now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
         camp_tuple = (location, shelter, water, food, medical_supplies, planID, now)
             
