@@ -71,13 +71,16 @@ class Volunteer:
             params.append(phone)
         if account_status is not None:
             query.append("account_status = ?")
-            params.append(phone)
+            params.append(account_status)
         if campID is not None:
             query.append("campID = ?")
-            params.append(phone)
+            params.append(campID)
 
         params.append(volunteerID)
-        cursor.execute(f"""UPDATE volunteers SET {', '.join(query)} WHERE volunteerID = ?""", params)
+        q = f"""UPDATE volunteers SET {', '.join(query)} WHERE volunteerID = ?"""
+        print(f'q: {q}')
+        print(f'params: {params}')
+        cursor.execute(q, params)
         conn.commit()
         return Volunteer.get_volunteer_by_id(volunteerID=volunteerID)
 

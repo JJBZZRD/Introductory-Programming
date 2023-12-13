@@ -7,19 +7,26 @@ from datetime import datetime
 class PersonDataEdit:
 
     @staticmethod
-    def update_volunteer(volunteerID, first_name = None, last_name = None, phone_num = None, camp_id = None, username = None, password = None, date_of_birth = None, account_status = None):
-        # get variables
-        # volunteer = PersonDataRetrieve.get_volunteers('id', id)
+    def update_volunteer(volunteerID, first_name = None, last_name = None, phone = None, campID = None, username = None, password = None, date_of_birth = None, account_status = None):
 
-        # try:
-        #     if first_name:
-        #         volunteer.first_name = first_name.strip()
-        #     if last_name:
-        #         volunteer.last_name = last_name.strip()
-        #     if phone_num:
-        #         volunteer.phone = phone_num.strip()
-        #     if camp_id:
-        #         volunteer.campID = camp_id
+        if first_name:
+            first_name = first_name.strip()
+        if last_name:
+            last_name = last_name.strip()
+        if phone:
+            phone = phone.strip()
+            if not util.is_phone_format(phone):
+                return "Incorrect phone number format"
+        if first_name and not util.is_valid_name(first_name):
+            return "Incorrect firt name format"
+        if last_name and not util.is_valid_name(last_name):
+            return "Incorrect last name format"
+        
+        volunteer_tuples = Volunteer.update_volunteer(volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID)
+
+        return util.parse_result('Volunteer', volunteer_tuples)
+        #     if campID:
+        #         volunteer.campID = campID
         #     if username:
         #         volunteer.username = username
         #     if password:
@@ -31,21 +38,6 @@ class PersonDataEdit:
         # except:
         #     return "Invalid inputs, please check and try again"
         # validate
-        if phone_num and not util.is_phone_format(phone_num):
-           return "Incorrect phone number format"
-        print(f'account_status: {account_status}')
-
-        if first_name and not util.is_valid_name(first_name):
-            return "Incorrect firt name format"
-        print(f'account_status: {account_status}')
-
-        if last_name and not util.is_valid_name(last_name):
-            return "Incorrect last name format"
-        print(f'account_status: {account_status}')
-        
-        volunteer_tuples = Volunteer.update_volunteer(id, first_name, last_name, username, password, date_of_birth, phone_num, account_status, camp_id)
-
-        return util.parse_result('Volunteer', volunteer_tuples)
     
     @staticmethod
     def delete_volunteer(id):
@@ -53,7 +45,7 @@ class PersonDataEdit:
         return f"Volunteer {id} has been deleted" if res else f"There is an error when deleting volunteer {id}"
     
     @staticmethod
-    def create_volunteer(first_name = None, last_name = None, camp_id = None, username = None, password = None, date_of_birth = None, phone = None):
+    def create_volunteer(first_name = None, last_name = None, campID = None, username = None, password = None, date_of_birth = None, phone = None):
 
 
         if phone and not util.is_phone_format(phone):
@@ -67,14 +59,14 @@ class PersonDataEdit:
 
         now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
-        t = (first_name, last_name, username, password, date_of_birth, phone, camp_id, now)
+        t = (first_name, last_name, username, password, date_of_birth, phone, campID, now)
 
         volunteer_tuples = Volunteer.create_volunteer(t)
         # print(volunteer_tuples)
         return util.parse_result('Volunteer', volunteer_tuples)
     
     @staticmethod
-    def create_refugee(first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category = 'None', medical_conditions = None, vital_status = 'Alive'):
+    def create_refugee(first_name, last_name, date_of_birth, gender, family_id, campID, triage_category = 'None', medical_conditions = None, vital_status = 'Alive'):
 
 
         if first_name and not util.is_valid_name(first_name):
@@ -85,14 +77,14 @@ class PersonDataEdit:
         
         now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
-        t = (first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category, medical_conditions, vital_status, now)
+        t = (first_name, last_name, date_of_birth, gender, family_id, campID, triage_category, medical_conditions, vital_status, now)
 
         refugee_tuples = Refugee.create_refugee(t)
         return util.parse_result('Refugee', refugee_tuples)
 
     
     @staticmethod
-    def update_refugee(id, first_name = None, last_name = None, date_of_birth = None, gender=None, family_id = None, camp_id = None, triage_category=None, medical_conditions = None, vital_status = None):
+    def update_refugee(id, first_name = None, last_name = None, date_of_birth = None, gender=None, family_id = None, campID = None, triage_category=None, medical_conditions = None, vital_status = None):
         # print(f"id: {id}")
         refugee = PersonDataRetrieve.get_refugees(id=id)[0]
         try:
@@ -104,8 +96,8 @@ class PersonDataEdit:
                 refugee.date_of_birth = date_of_birth
             if gender:
                 refugee.gender = gender
-            if camp_id:
-                refugee.campID = camp_id
+            if campID:
+                refugee.campID = campID
             if family_id:
                 refugee.familyID = family_id
             if triage_category:
@@ -123,7 +115,7 @@ class PersonDataEdit:
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
         
-        refugee_tupples = Refugee.update_refugee(id, first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category, medical_conditions, vital_status)
+        refugee_tupples = Refugee.update_refugee(id, first_name, last_name, date_of_birth, gender, family_id, campID, triage_category, medical_conditions, vital_status)
 
         return util.parse_result('Refugee', refugee_tupples)
     

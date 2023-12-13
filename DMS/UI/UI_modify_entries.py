@@ -329,7 +329,7 @@ class NewVolunteer(ModifyEntries):
         self.modify_type = ['New Volunteer']
         self.modifiable_variables = ['First Name', 'Last Name', 'Username', 'Password',
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
-        self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'name', 'Last Name': 'name', 'Username': 'username', 'Password': 'password',
+        self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username', 'Password': 'password',
                 'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status'}
         self.button_labels = ['Create']
         # self.display_delete_button = False
@@ -347,7 +347,7 @@ class EditVolunteer(ModifyEntries):
         self.modify_type = ['Edit Volunteer']
         self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
-        self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'name', 'Last Name': 'name', 'Username': 'username',
+        self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username',
                 'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status'}
         self.button_labels = ['Save Changes', 'Deactivate']
         self.current_data = self.screen_data.display_info()
@@ -373,7 +373,7 @@ class NewRefugee(ModifyEntries):
                 'Vital Status']
         self.filter_matching = {'First Name': 'first_name', 'Last Name': 'last_name',
                 'Date of Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
-                'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_conditions',
+                'Camp ID': 'campID', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_conditions',
                 'Vital Status': 'vital_status'}
         self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Vital Status': ['Alive', 'Deceased'], 
                                       'Gender': ['Male', 'Female', 'Other'], 'Triage Category': ['None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate']}
@@ -394,7 +394,7 @@ class EditRefugee(ModifyEntries):
                 'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status']
         self.filter_matching = {'Refugee ID': 'id', 'First Name': 'first_name', 'Last Name': 'last_name', 'Date of Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
-                'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_conditions',
+                'Camp ID': 'campID', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_conditions',
                 'Vital Status': 'vital_status'}
         self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Vital Status': ['Alive', 'Deceased'], 
                                       'Gender': ['Male', 'Female', 'Other'], 'Triage Category': ['None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate']}

@@ -7,8 +7,11 @@ from .DB.camp import Camp
 from .DB.countries import *
 
 def is_phone_format(phone_num):
-    phone_pattern = re.compile(r'^\+\d+$')
-    return bool(phone_pattern.match(phone_num))
+    # phone_pattern = re.compile(r'^\+\d+$')
+    # bool(phone_pattern.match(phone_num))
+    phone_num = phone_num.replace('-', '')
+    phone_num = phone_num.replace('+', '')
+    return phone_num.isdigit() and len(phone_num) < 13
 
 def is_num(value):
     return float(value)
