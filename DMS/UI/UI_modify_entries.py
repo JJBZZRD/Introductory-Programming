@@ -355,7 +355,7 @@ class EditVolunteer(ModifyEntries):
         self.delete_record = PersonDataEdit.delete_volunteer
         self.screen_data_id = self.screen_data.volunteerID
         self.entry_fields = {}
-        self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], }
+        self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Account Status': ['Active', 'Inactive']}
         self.read_only_fields = ['Volunteer ID']
         self.create_title()
         self.create_entry_fields()
