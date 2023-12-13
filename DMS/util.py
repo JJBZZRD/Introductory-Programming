@@ -70,15 +70,7 @@ def parse_results(class_name, query_result_1, query_result_2):
     
 def validate_date(date):
     try:
-        date = datetime.strptime(date, '%Y-%m-%d').date()
-
-        if not 1 <= date.day <= 31:
-            return ValueError("Invalid day")
-        elif not 1 <= date.month <= 12:
-            return ValueError("Invalid month")
-        elif not 2023 <= date.year <= 9999:
-            return ValueError("Invalid year")
-        
+        date = datetime.strptime(date, '%Y-%m-%d').date() 
         return True
     
     except Exception as e:
