@@ -46,7 +46,7 @@ class Volunteer:
             return 'Camp campID does not exist'
 
     @staticmethod  # Update an volunteer by selecting on volunteerID
-    def update_volunteer(logged_in_user, volunteerID, first_name=None, last_name=None, username=None,
+    def update_volunteer(volunteerID, first_name=None, last_name=None, username=None,
                          password=None, date_of_birth=None, phone=None, account_status=None, campID=None, created_time=None):
         query = []
         params = []
