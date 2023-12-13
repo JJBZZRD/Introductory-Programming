@@ -76,7 +76,9 @@ class CampDataEdit:
     def create_camp(logged_in_user=None, location=None, shelter=None, water=None, food=None, medical_supplies=None, planID=None, created_time=None):
                 # validate
         if location:
-            if not util.is_valid_name(location):
+            if location in ["Enter Location", '', ' ']:
+                return "Please enter location"
+            elif not util.is_valid_name(location):
                 return "You should enter a valid location name."
         if shelter:
             if util.is_num(shelter):
