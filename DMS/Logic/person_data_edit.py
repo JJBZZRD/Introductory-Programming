@@ -21,7 +21,9 @@ class PersonDataEdit:
             return "Incorrect firt name format"
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
-        
+        if password == "Enter Password":
+            password = None
+
         volunteer_tuples = Volunteer.update_volunteer(volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID)
 
         return util.parse_result('Volunteer', volunteer_tuples)
