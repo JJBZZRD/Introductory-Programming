@@ -47,7 +47,7 @@ class Volunteer:
 
     @staticmethod  # Update an volunteer by selecting on volunteerID
     def update_volunteer(volunteerID, first_name=None, last_name=None, username=None,
-                         password=None, date_of_birth=None, phone=None, account_status=None, campID=None):
+                         password=None, date_of_birth=None, phone=None, account_status=None, campID=None, created_time=None):
         query = []
         params = []
 
@@ -97,7 +97,7 @@ class Volunteer:
     @staticmethod  # Get volunteer details by selecting on any combination of attributes. Can be used to find the
     # volunteerID which can then be used in the delete and update methods. Returns a list of tuples.
     def get_volunteer(volunteerID=None, first_name=None, last_name=None, username=None,
-                      password=None, date_of_birth=None, phone=None, account_status=None, campID=None, inclue_admin=False):
+                      password=None, date_of_birth=None, phone=None, account_status=None, campID=None, inclue_admin=False, created_time=None):
         if inclue_admin:
             query = "SELECT * FROM volunteers WHERE volunteerID IS NOT NULL" 
         else:

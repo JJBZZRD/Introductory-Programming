@@ -199,9 +199,10 @@ def clear_dummy_data():
 def insert_dummy_data():
     plans_data = """
     INSERT INTO plans (planID, start_date, end_date, name, country, event_name, description, shelter, water, food, medical_supplies, status, created_time) VALUES
-    (1, '2023-01-01', '2025-01-01', 'Wylfa Nuclear Meltdown', 'United Kingdom', 'Nuclear Crisis Management', 'Emergency response to nuclear meltdown on Anglesey', 100, 100, 100, 100, 'Active', '2023-01-01T14:36:25'),
-    (2, '2023-01-01', '2025-01-01', 'London Virus Outbreak', 'United Kingdom', 'Virus Containment Effort', 'Response to widespread virus outbreak in London', 200, 200, 200, 200, 'Active', '2023-01-01T14:36:25'),
-    (3, '2023-01-01', '2025-01-01', 'Paris Earthquake Response', 'France', 'Earthquake Relief', 'Relief efforts for earthquake in Paris', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25');
+    (1, '2023-01-01', '2025-01-01', 'Nuclear war', 'United Kingdom', 'Nuclear Crisis Management', 'Nuclear War in England', 100, 100, 100, 100, 'Active', '2023-01-01T14:36:25'),
+    (2, '2023-01-01', '2025-01-01', 'London War', 'United Kingdom', 'War', 'Response to war in London', 200, 200, 200, 200, 'Active', '2023-01-01T14:36:25'),
+    (3, '2023-01-01', '2025-01-01', 'Paris War', 'France', 'War', 'Response to war in Paris', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25'),
+    (4, '2023-01-01', '2025-01-01', 'War', 'United Kingdom', 'War', 'Response to war in UK', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25');
     """
 
     cursor.execute(plans_data)
@@ -212,7 +213,9 @@ def insert_dummy_data():
     (2, 'Greenwich', 20, 300, 600, 200, 1, '2023-01-01T14:36:25'),
     (3, 'Snowdonia', 20, 300, 600, 200, 2, '2023-01-01T14:36:25'),
     (4, 'Richmond', 20, 300, 600, 200, 2, '2023-01-01T14:36:25'),
-    (5, 'Versailles', 20, 300, 600, 200, 3, '2023-01-01T14:36:25')
+    (5, 'Versailles', 20, 300, 600, 200, 3, '2023-01-01T14:36:25'),
+    (6, 'Oxford', 20, 300, 600, 200, 4,'2023-01-01T14:36:25'),
+    (7, 'Reading', 20, 300, 600, 200, 4,'2023-01-01T14:36:25');
     """
 
     cursor.execute(camp_data)
@@ -223,38 +226,44 @@ def insert_dummy_data():
     -- Camp 1
     ('admin', '111', 'admin', '111', '1990-05-15', '555-1234', 'Active', NULL, '2023-01-01T14:36:25'),
     ('Jane', 'Smith', 'volunteer1', '111', '1985-08-22', '555-5678', 'Active', 1, '2023-01-01T14:36:25'),
-    ('Robert', 'Johnson', 'robert_j', 'password789', '1992-03-10', '555-9876', 'Active', 1, '2023-01-01T14:36:25'),
-    ('Emily', 'Williams', 'emily_w', 'passwordabc', '1988-11-27', '555-4321', 'Active', 1, '2023-01-01T14:36:25'),
-    ('Michael', 'Brown', 'michael_b', 'passworddef', '1995-07-18', '555-8765', 'Inactive', 1, '2023-01-01T14:36:25'),
-    ('Sophia', 'Davis', 'sophia_d', 'pass123', '1993-09-05', '555-2345', 'Active', 1, '2023-01-01T14:36:25'),
-    ('David', 'Anderson', 'david_a', 'pass456', '1991-02-14', '555-6789', 'Inactive', 1, '2023-01-01T14:36:25'),
-    ('Olivia', 'Thomas', 'olivia_t', 'pass789', '1986-12-03', '555-8765', 'Active', 1, '2023-01-01T14:36:25'),
-    ('Christopher', 'Garcia', 'chris_g', 'passabc', '1994-04-20', '555-2345', 'Active', 1, '2023-01-01T14:36:25'),
-    ('Emma', 'Johnson', 'emma_j', 'pass789', '1998-06-08', '555-5678', 'Active', 1, '2023-01-01T14:36:25'),
+    ('Robert', 'Johnson', 'volunteer12', '111', '1992-03-10', '555-9876', 'Active', 1, '2023-01-01T14:36:25'),
+    ('Emily', 'Williams', 'volunteer31', '111', '1988-11-27', '555-4321', 'Active', 1, '2023-01-01T14:36:25'),
+    ('Michael', 'Brown', 'volunteer6', '111', '1995-07-18', '555-8765', 'Inactive', 1, '2023-01-01T14:36:25'),
+    ('Sophia', 'Davis', 'volunteer7', '111', '1993-09-05', '555-2345', 'Active', 1, '2023-01-01T14:36:25'),
+    ('David', 'Anderson', 'volunteer8', '111', '1991-02-14', '555-6789', 'Inactive', 1, '2023-01-01T14:36:25'),
+    ('Olivia', 'Thomas', 'volunteer9', '111', '1986-12-03', '555-8765', 'Active', 1, '2023-01-01T14:36:25'),
+    ('Christopher', 'Garcia', 'volunteer10', '111', '1994-04-20', '555-2345', 'Active', 1, '2023-01-01T14:36:25'),
+    ('Emma', 'Johnson', 'volunteer11', '111', '1998-06-08', '555-5678', 'Active', 1, '2023-01-01T14:36:25'),
 
     -- Camp 2
-    ('Daniel', 'White', 'volunteer2', '222', '1987-10-12', '555-3456', 'Active', 2, '2023-01-01T14:36:25'),
-    ('Sophie', 'Miller', 'sophie_m', 'pass456', '1994-01-25', '555-7890', 'Active', 2, '2023-01-01T14:36:25'),
-    ('Matthew', 'Davis', 'matthew_d', 'pass789', '1990-09-30', '555-2345', 'Active', 2, '2023-01-01T14:36:25'),
-    ('Ava', 'Wilson', 'ava_w', 'passabc', '1985-12-15', '555-6789', 'Active', 2, '2023-01-01T14:36:25'),
-    ('Nicholas', 'Taylor', 'nicholas_t', 'passdef', '1992-05-18', '555-8765', 'Inactive', 2, '2023-01-01T14:36:25'),
-    ('Grace', 'Moore', 'grace_m', 'passghi', '1997-03-22', '555-1234', 'Active', 2, '2023-01-01T14:36:25'),
-    ('Ethan', 'Baker', 'ethan_b', 'passjkl', '1988-08-08', '555-5678', 'Inactive', 2, '2023-01-01T14:36:25'),
-    ('Chloe', 'Fisher', 'chloe_f', 'passmno', '1995-04-02', '555-2345', 'Active', 2, '2023-01-01T14:36:25'),
-    ('Caleb', 'Ward', 'caleb_w', 'passpqr', '1989-11-10', '555-6789', 'Active', 2, '2023-01-01T14:36:25'),
-    ('Madison', 'Perry', 'madison_p', 'passtu', '1996-07-17', '555-8765', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Daniel', 'White', 'volunteer2', '111', '1987-10-12', '555-3456', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Sophie', 'Miller', 'volunteer21', '111', '1994-01-25', '555-7890', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Matthew', 'Davis', 'volunteer13', '111', '1990-09-30', '555-2345', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Ava', 'Wilson', 'volunteer14', '111', '1985-12-15', '555-6789', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Nicholas', 'Taylor', 'volunteer15', '111', '1992-05-18', '555-8765', 'Inactive', 2, '2023-01-01T14:36:25'),
+    ('Grace', 'Moore', 'volunteer16', '111', '1997-03-22', '555-1234', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Ethan', 'Baker', 'volunteer17', '111', '1988-08-08', '555-5678', 'Inactive', 2, '2023-01-01T14:36:25'),
+    ('Chloe', 'Fisher', 'volunteer18', '111', '1995-04-02', '555-2345', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Caleb', 'Ward', 'volunteer19', '111', '1989-11-10', '555-6789', 'Active', 2, '2023-01-01T14:36:25'),
+    ('Madison', 'Perry', 'volunteer20', '111', '1996-07-17', '555-8765', 'Active', 2, '2023-01-01T14:36:25'),
 
     -- Camp 3
-    ('Liam', 'Carter', 'volunteer3', '333', '1993-02-05', '555-2345', 'Active', 3, '2023-01-01T14:36:25'),
-    ('Aubrey', 'Hayes', 'aubrey_h', 'passyz1', '1998-08-20', '555-6789', 'Active', 3, '2023-01-01T14:36:25'),
-    ('Mason', 'Wells', 'mason_w', 'pass234', '1991-04-15', '555-1234', 'Active', 3, '2023-01-01T14:36:25'),
-    ('Harper', 'Barnes', 'harper_b', 'pass567', '1986-10-30', '555-5678', 'Active', 3, '2023-01-01T14:36:25'),
-    ('Aiden', 'Fisher', 'aiden_f', 'pass890', '1994-12-22', '555-8765', 'Inactive', 3, '2023-01-01T14:36:25'),
-    ('Ella', 'Bryant', 'ella_b', 'passabc1', '1997-06-18', '555-2345', 'Active', 3, '2023-01-01T14:36:25'),
-    ('Logan', 'Coleman', 'logan_c', 'passdef1', '1989-01-12', '555-6789', 'Inactive', 3, '2023-01-01T14:36:25'),
-    ('Avery', 'Reyes', 'avery_r', 'passghi1', '1996-03-25', '555-8765', 'Active', 3, '2023-01-01T14:36:25'),
-    ('Lucas', 'Scott', 'lucas_s', 'passjkl1', '1992-07-08', '555-2345', 'Active', 3, '2023-01-01T14:36:25'),
-    ('Sophie', 'Jordan', 'sophie_j', 'passmno1', '1995-09-20', '555-6789', 'Active', 3, '2023-01-01T14:36:25')
+    ('Liam', 'Carter', 'volunteer3', '111', '1993-02-05', '555-2345', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Aubrey', 'Hayes', 'volunteer30', '111', '1998-08-20', '555-6789', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Mason', 'Wells', 'volunteer22', '111', '1991-04-15', '555-1234', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Harper', 'Barnes', 'volunteer23', '111', '1986-10-30', '555-5678', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Aiden', 'Fisher', 'volunteer24', '111', '1994-12-22', '555-8765', 'Inactive', 3, '2023-01-01T14:36:25'),
+    ('Ella', 'Bryant', 'volunteer25', '111', '1997-06-18', '555-2345', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Logan', 'Coleman', 'volunteer26', '111', '1989-01-12', '555-6789', 'Inactive', 3, '2023-01-01T14:36:25'),
+    ('Avery', 'Reyes', 'volunteer27', '111', '1996-03-25', '555-8765', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Lucas', 'Scott', 'volunteer28', '111', '1992-07-08', '555-2345', 'Active', 3, '2023-01-01T14:36:25'),
+    ('Sophie', 'Jordan', 'volunteer29', '111', '1995-09-20', '555-6789', 'Active', 3, '2023-01-01T14:36:25'),
+    
+    -- Camp 6
+    ('Cuthbert', 'Jones', 'volunteer4', '111', '1996-01-16', '555-6789', 'Active', 6, '2023-01-01T14:36:25'),
+    
+    -- Camp 7
+    ('Penelope', 'Walsh', 'volunteer5', '111', '1980-09-07', '555-2345', 'Active', 7, '2023-01-01T14:36:25')
     """
 
     cursor.execute(volunteers_data)
@@ -328,7 +337,15 @@ def insert_dummy_data():
     ('Zara', 'Clark', '2005-07-28', 'Female', 57, 3, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
     ('Mia', 'Evans', '1998-04-15', 'Female', 49, 3, 'Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
     ('Noah', 'Baker', '2011-09-10', 'Male', 8, 3, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Ella', 'Thompson', '2004-05-05', 'Male', 60, 3, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25')
+    ('Ella', 'Thompson', '2004-05-05', 'Male', 60, 3, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    
+    -- Camp 6
+    ('Phoebe', 'Taylor', '1998-02-19', 'Female', 61, 6, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
+    ('Edward', 'Moldoon', '1983-08-14', 'Male', 62, 6, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    
+    -- Camp 7
+    ('Timothy', 'Wright', '1980-08-19', 'Male', 63, 7, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Victoria', 'Clack', '1970-09-23', 'Female', 64, 7, 'None', 'None', 'Alive', '2023-01-01T14:36:25')
     """
 
     cursor.execute(refugees_data)

@@ -42,8 +42,7 @@ class Camp:  # Camp class has attributes matching columns in table
             return 'Plan planID does not exist'
         
     @staticmethod  # Update a camp by selecting on campID
-    def update_camp(campID, location=None, shelter=None, water=None, food=None, medical_supplies=None, planID=None):
-
+    def update_camp(campID, location=None, shelter=None, water=None, food=None, medical_supplies=None, planID=None, created_time=None):
         query = []
         params = []
 
