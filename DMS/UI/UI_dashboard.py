@@ -12,9 +12,10 @@ class Dashboard(tk.Frame):
     def __init__(self, ui_manager, *args):
         super().__init__(ui_manager.root)
         self.root = ui_manager.root
-        self.setup_dashboard(ui_manager.screen_data)
         self.show_screen = ui_manager.show_screen
         self.ui_manager = ui_manager
+        self.logged_in_user = ui_manager.logged_in_user
+        self.setup_dashboard(ui_manager.screen_data)
 
     def setup_dashboard(self, *args):
         raise NotImplementedError(
@@ -334,16 +335,25 @@ class Dashboard(tk.Frame):
         plan,
         user_type,
     ):
+        print(f"logged in user = {self.logged_in_user}")
+        print(f"camp = {camp}")
+        print(f"plan = {plan.planid}")
         resource_key = resource_name.lower().replace(" ", "_")
         if user_type == "admin":
             plan_current_amount = getattr(plan, resource_key)
             new_plan_amount = max(0, plan_current_amount - increment)
-            if PlanEdit.update_plan(plan.planID, **{resource_key: new_plan_amount}):
+            if PlanEdit.update_plan(
+                planID=plan.planID, **{resource_key: new_plan_amount}
+            ):
                 setattr(plan, resource_key, new_plan_amount)
 
         camp_current_amount = getattr(camp, resource_key)
         new_camp_amount = max(0, camp_current_amount + increment)
-        if CampDataEdit.update_camp(camp.campID, **{resource_key: new_camp_amount}):
+        if CampDataEdit.update_camp(
+            logged_in_user=self.logged_in_user,
+            campID=camp.campID,
+            **{resource_key: new_camp_amount},
+        ):
             setattr(camp, resource_key, new_camp_amount)
 
         aaa = "canvas" in str(resource_frame.master)
@@ -452,7 +462,10 @@ class Dashboard(tk.Frame):
         current_amount = getattr(plan, resource_key)
         new_amount = max(0, current_amount + increment)
 
-        if PlanEdit.update_plan(plan.planID, **{resource_key: new_amount}):
+        if PlanEdit.update_plan(
+            planID=plan.planID,
+            **{resource_key: new_amount},
+        ):
             setattr(plan, resource_key, new_amount)
 
         self.ui_manager.refresh_page()
