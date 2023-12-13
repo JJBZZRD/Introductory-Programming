@@ -189,6 +189,8 @@ plans_fields = ["start_date", "end_date", "name", "country", "event_name", "desc
 camps_fields = ["location", "shelter", "water", "food", "medical_supplies", "planID"]
 refugees_fields = ["first_name", "last_name", "date_of_birth", "gender", "familyID", "campID", "triage_category",
                    "medical_conditions", "vital_status"]
+volunteers_fields = ["volunteerID", "first_name", "last_name", "username", "password", "date_of_birth", "phone",
+                     "account_status", "campID"]
 
 
 def clear_dummy_data():
@@ -401,6 +403,7 @@ create_database()
 triggers_for_audit_table("plans", plans_fields, "planID")
 triggers_for_audit_table("camps", camps_fields, "campID")
 triggers_for_audit_table("refugees", refugees_fields, "refugeeID")
+triggers_for_audit_table("volunteers", volunteers_fields, "volunteerID")
 
 if __name__ == "__main__" or check_sample_db_init():
     print("Inserting dummy data...")
