@@ -383,10 +383,10 @@ def insert_dummy_data():
 
     cursor.execute(insert_countries)
 
-    # cursor.execute("""
-    # INSERT INTO current_user (id, username) VALUES (1, 'default_user')
-    # ON CONFLICT(id) DO UPDATE SET username = 'default_user';
-    # """)
+    cursor.execute("""
+    INSERT INTO current_user (id, username) VALUES (1, 'default_user')
+    ON CONFLICT(id) DO UPDATE SET username = 'default_user';
+    """)
 
     conn.commit()
 
