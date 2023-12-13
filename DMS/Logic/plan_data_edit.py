@@ -53,45 +53,49 @@ class PlanEdit:
             return util.parse_result('Plan', plan)
 
     @staticmethod
-    def update_plan(logged_in_user, planID=None, name=None, event_name=None, country=None, description=None, start_date=None, end_date=None, water=None, food=None, shelter=None, medical_supplies=None, status=None, created_time=None):
+    def update_plan(logged_in_user, planID, name=None, event_name=None, country=None, description=None, start_date=None, end_date=None, water=None, food=None, shelter=None, medical_supplies=None, status=None, created_time=None):
 
         tuple = (planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
-
         print(f"tuple: {tuple}")
-
-        if name:
-            if not util.is_valid_name(name):
-                return "Invalid plan name"
-        if country:
-            if not util.is_valid_country(country):
-                return "Invalid country"
-        if event_name:
-            if not util.is_valid_name(event_name):
-                return "Invalid event name"
-        if start_date:
-            if not util.validate_date(start_date):
-                return "Invalid start date"
-        if end_date and end_date != 'None':
-            if not util.validate_end_date(start_date, end_date):
-                # print('aaaaaa')
-                return "Invalid end date"
-        #     if datetime.today().date() == end_date:
-        #         return Plan.delete_plan(planID)
-        #     else: 
-        #         return Plan.update_plan(planID, start_date, end_date, name, country, event_name, description)
-        # else:
-        #     end_date = None
 
         if status and status not in ['Active', 'Ended']:
             return "Invalid status"
+        if status == 'Acvive':
+            if name:
+                if not util.is_valid_name(name):
+                    return "Invalid plan name"
+            if country:
+                if not util.is_valid_country(country):
+                    return "Invalid country"
+            if event_name:
+                if not util.is_valid_name(event_name):
+                    return "Invalid event name"
+            if start_date:
+                if not util.validate_date(start_date):
+                    return "Invalid start date"
+            if end_date and end_date != 'None':
+                if not util.validate_end_date(start_date, end_date):
+                    # print('aaaaaa')
+                    return "Invalid end date"
 
-        #return message to plan ui
+            
+            res = Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
 
-        res = Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
+            print(f"res:  {res}")
 
-        print(f"res:  {res}")
+            return util.parse_result('Plan', res)
+        elif status == 'Ended':
+            if end_date:
+                now = datetime.now().date()
+                end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+                if end_date < now:
+                    return "This plan has ended, to re-activate this plan, please update the end date to a future date"
+                else:
+                    res = Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, "Active")
+                    return util.parse_result('Plan', res)
+            else:
+                return "Error: ended plan must have an end date"
 
-        return util.parse_result('Plan', res)
 
     @staticmethod
     def end_plan(planID):
