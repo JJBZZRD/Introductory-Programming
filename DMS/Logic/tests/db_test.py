@@ -69,10 +69,15 @@ class test_db(unittest.TestCase):
     def test_aaa(self):
         print(" ------------ Executing test_aaaaa --------------- ")
         q = f"""
-        SELECT * FROM camps WHERE planID = 6
+        SELECT * FROM plans WHERE planID = 2
         """
         cursor.execute(q)
         print(cursor.fetchall())
+
+    def test_bbb(self):
+        dic = {}
+        print('aaa' in dic)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -195,7 +195,7 @@ class Dashboard(tk.Frame):
         resources_frame = tk.Frame(parent_tab, relief="solid", borderwidth=2)
         resources_frame.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
         resources_frame.grid_columnconfigure(1, weight=1)
-
+        print(f"camp: {camp.display_info()}")
         title_label = tk.Label(
             resources_frame,
             text=f"Current Resources in {camp.location}",
@@ -211,6 +211,7 @@ class Dashboard(tk.Frame):
             "Food": camp.food,
             "Medical Supplies": camp.medical_supplies,
         }
+        print(f"resources: {resources}")
 
         for index, (resource_name, amount) in enumerate(resources.items()):
             resource_row = index * 3 + 1
@@ -248,7 +249,7 @@ class Dashboard(tk.Frame):
                         user_type,
                     ),
                 ).grid(row=resource_row + 1, rowspan=2, column=2, padx=5)
-
+            print(f"getattr(plan, {plan_resouce}): {getattr(plan, plan_resouce)}")
             if (
                 user_type == "admin" and getattr(plan, plan_resouce) > 0
             ) or user_type == "volunteer":
