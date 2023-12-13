@@ -39,12 +39,15 @@ class PersonDataRetrieve:
         else:
             account_status = 'Inactive'
 
-        volunteer_tuples_1 = Volunteer.get_volunteer(volunteerID=volunteerID, first_name=name, username=username,password=password, date_of_birth=date_of_birth, phone=phone, account_status=account_status, campID=campID)
+        if name:
+            volunteer_tuples_1 = Volunteer.get_volunteer(volunteerID=volunteerID, first_name=name, username=username,password=password, date_of_birth=date_of_birth, phone=phone, account_status=account_status, campID=campID)
 
-        volunteer_tuples_2 = Volunteer.get_volunteer(volunteerID=volunteerID, last_name=name, username=username,password=password, date_of_birth=date_of_birth, phone=phone, account_status=account_status, campID=campID)
+            volunteer_tuples_2 = Volunteer.get_volunteer(volunteerID=volunteerID, last_name=name, username=username,password=password, date_of_birth=date_of_birth, phone=phone, account_status=account_status, campID=campID)
 
-        return util.parse_results('Volunteer', volunteer_tuples_1, volunteer_tuples_2)
-        
+            return util.parse_results('Volunteer', volunteer_tuples_1, volunteer_tuples_2)
+        else:
+            volunteer_tuple = Volunteer.get_volunteer(volunteerID=volunteerID, username=username,password=password, date_of_birth=date_of_birth, phone=phone, account_status=account_status, campID=campID)
+            return util.parse_result('Volunteer', volunteer_tuple)
 
     @staticmethod
     def get_all_refugees():
