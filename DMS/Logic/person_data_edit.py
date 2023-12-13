@@ -21,7 +21,9 @@ class PersonDataEdit:
             return "Incorrect firt name format"
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
-        
+        if password == "Enter Password":
+            password = None
+
         volunteer_tuples = Volunteer.update_volunteer(volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID)
 
         return util.parse_result('Volunteer', volunteer_tuples)
@@ -47,15 +49,37 @@ class PersonDataEdit:
     @staticmethod
     def create_volunteer(logged_in_user=None, first_name = None, last_name = None, campID = None, username = None, password = None, date_of_birth = None, phone = None, account_status = None,created_time = None):
 
-
+        if phone in ["Enter Phone", '', ' ']:
+            return "Please enter phone"
         if phone and not util.is_phone_format(phone):
            return "Incorrect phone number format"
 
+        if first_name in ["Enter First Name", '', ' ']:
+            return "Please enter first name"
         if first_name and not util.is_valid_name(first_name):
             return "Incorrect firt name format"
 
+        if last_name in ["Enter Last Name", '', ' ']:
+            return "Please enter last name"
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
+
+        if username in ["Enter Username", '', ' ']:
+            return "Please enter username"
+
+        if password in ["Enter Password", '', ' ']:
+            return "Please enter password"
+
+        if date_of_birth in ["yyyy-mm-dd", '', ' ']:
+            return "Please enter date of birth"
+        if date_of_birth and date_of_birth not in ["yyyy-mm-dd", '', ' ']:
+            if util.validate_date(date_of_birth):
+                year_of_birth = datetime.strptime(date_of_birth, '%Y-%m-%d').date().year
+                current_year = datetime.now().year
+                if year_of_birth > current_year:
+                    return "      Invalid year of birth      "
+            if not util.validate_date(date_of_birth):
+                return "Invalid date of birth (yyyy-mm-dd)"
 
         now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
@@ -68,13 +92,27 @@ class PersonDataEdit:
     @staticmethod
     def create_refugee(logged_in_user=None, first_name=None, last_name=None, date_of_birth=None, gender=None, family_id=None, campID=None, triage_category = 'None', medical_conditions = None, vital_status = 'Alive'):
 
-
+        if first_name in ["Enter First Name", '', ' ']:
+            return "Please enter first name"
         if first_name and not util.is_valid_name(first_name):
             return "Incorrect firt name format"
 
+        if last_name in ["Enter Last Name", '', ' ']:
+            return "Please enter last name"
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
         
+        if date_of_birth in ["yyyy-mm-dd", '', ' ']:
+            return "Please enter date of birth"
+        if date_of_birth and date_of_birth not in ["yyyy-mm-dd", '', ' ']:
+            if util.validate_date(date_of_birth):
+                year_of_birth = datetime.strptime(date_of_birth, '%Y-%m-%d').date().year
+                current_year = datetime.now().year
+                if year_of_birth > current_year:
+                    return "      Invalid year of birth      "
+            if not util.validate_date(date_of_birth):
+                return "Invalid date of birth (yyyy-mm-dd)"
+
         now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
         t = (first_name, last_name, date_of_birth, gender, family_id, campID, triage_category, medical_conditions, vital_status, now)

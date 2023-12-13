@@ -29,3 +29,11 @@ class AuditTable:  # Camp class has attributes matching columns in table
         conn.commit()
         record_id = cursor.execute("SELECT last_insert_rowid() FROM current_user").fetchone()
         return True if record_id else False
+    
+    @staticmethod
+    def get_audit_logs():
+        q = f"""
+            SELECT * FROM audit_table WHERE changed_by IS NOT NULL
+            """
+        cursor.execute(q)
+        return cursor.fetchall()
