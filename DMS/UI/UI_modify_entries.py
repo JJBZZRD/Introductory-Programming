@@ -181,7 +181,7 @@ class ModifyEntries(tk.Frame):
 
                 pass
             case 'End':
-                self.confirmation_popup('Are you sure you want to end this plan?', self.end_plan(self.screen_data_id))
+                self.confirmation_popup('Are you sure you want to end this plan?', self.end_plan)
 
 
         # takes the entry field values
@@ -262,7 +262,7 @@ class EditPlan(ModifyEntries):
         self.current_data = self.screen_data.display_info()
         self.save_record = PlanEdit.update_plan
         self.delete_record = PlanEdit.delete_plan
-        self.page_nav_on_delete = ('PlanList')
+        self.page_nav_on_delete = ('PlanList', None)
         self.end_plan = PlanEdit.end_plan
         self.screen_data_id = self.screen_data.planID
         self.entry_fields = {}
