@@ -3,9 +3,7 @@ from ..Logic.person_data_retrieve import PersonDataRetrieve
 
 
 class LoginScreen(tk.Frame):
-
     def login(self, username, password):
-
         print(username)
         print(password)
         res = PersonDataRetrieve.login(str(username), str(password))
@@ -20,9 +18,9 @@ class LoginScreen(tk.Frame):
         else:
             self.set_user(res[0])
             if res[0].campID is None:
-                screen = 'PlanList'
+                screen = "PlanList"
             else:
-                screen = 'VolunteerDashboard'
+                screen = "VolunteerDashboard"
             self.show_screen(screen, res[0])
 
     def __init__(self, ui_manager, **kwargs):
@@ -32,28 +30,35 @@ class LoginScreen(tk.Frame):
         self.set_user = ui_manager.set_user
         self.setup_login_screen()
 
-
-
     def setup_login_screen(self):
-        tk.Label(self, text="Username:").pack()
-        username_entry = tk.Entry(self)
-        username_entry.pack()
+        login_frame = tk.Frame(self)
+        login_frame.pack(padx=10, pady=10)
 
-        tk.Label(self, text="Password:").pack()
-        # password_entry = tk.Entry(self)
-        password_entry = tk.Entry(self, show="*")
-        password_entry.pack()
+        tk.Label(login_frame, text="Username:").grid(
+            row=0, column=0, sticky="w", padx=5, pady=5
+        )
+        username_entry = tk.Entry(login_frame)
+        username_entry.grid(row=0, column=1, padx=5, pady=5)
 
-        password_entry.bind("<Return>", lambda event: self.login(username_entry.get(), password_entry.get()))
+        tk.Label(login_frame, text="Password:").grid(
+            row=1, column=0, sticky="w", padx=5, pady=5
+        )
+        password_entry = tk.Entry(login_frame, show="*")
+        password_entry.grid(row=1, column=1, padx=5, pady=5)
 
-        login_button = tk.Button(self, text="Login", command= lambda: self.login(username_entry.get(), password_entry.get()))
-        login_button.pack(pady=5)
+        password_entry.bind(
+            "<Return>",
+            lambda event: self.login(username_entry.get(), password_entry.get()),
+        )
 
-        self.error_label = tk.Label(self, text="", fg="red")
-        self.error_label.pack()
+        login_button = tk.Button(
+            login_frame,
+            text="Login",
+            command=lambda: self.login(username_entry.get(), password_entry.get()),
+        )
+        login_button.grid(row=2, column=0, columnspan=2, pady=10)
 
-        # for person in PersonDataRetrieve.get_all_volunteers():
-        #     print(person.display_info())
+        self.error_label = tk.Label(login_frame, text="", fg="red")
+        self.error_label.grid(row=3, column=0, columnspan=2)
 
-
-
+        username_entry.focus_set()

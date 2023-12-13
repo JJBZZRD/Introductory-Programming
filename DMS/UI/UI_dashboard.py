@@ -171,12 +171,12 @@ class Dashboard(tk.Frame):
                     key_parts = key.split("_", 1)  # Split only at the first underscore
                     pct_key = "pct_" + key_parts[1]
                     pct_value = stats.get(pct_key, 0)
-                    formatted_key = key_parts[1].replace('_', ' ').title()  # Replace subsequent underscores with spaces
-                    formatted_stat = (
-                        f"{formatted_key}: {pct_value:.0f}% ({value})"
-                    )
+                    formatted_key = (
+                        key_parts[1].replace("_", " ").title()
+                    )  # Replace subsequent underscores with spaces
+                    formatted_stat = f"{formatted_key}: {pct_value:.0f}% ({value})"
                     stats_text += formatted_stat + " | "
-            
+
             stats_text = stats_text.rstrip(" | ")
 
             tk.Label(
@@ -543,7 +543,7 @@ class Dashboard(tk.Frame):
         )
 
         if not self.refugees:
-            refugees_treeview.insert("", "end", text="No matching refugees found.")
+            refugees_treeview.insert("", "end", text="N/A")
         else:
             for refugee in self.refugees:
                 refugees_treeview.insert(
@@ -868,15 +868,13 @@ class AdminDashboard(Dashboard):
             stats_text = ""
             for key, value in stats.items():
                 if "num_" in key:
-                    key_parts = key.split("_", 1)  # Split only at the first underscore
+                    key_parts = key.split("_", 1)
                     pct_key = "pct_" + key_parts[1]
                     pct_value = stats.get(pct_key, 0)
-                    formatted_key = key_parts[1].replace('_', ' ').title()  # Replace subsequent underscores with spaces
-                    formatted_stat = (
-                        f"{formatted_key}: {pct_value:.0f}% ({value})"
-                    )
+                    formatted_key = key_parts[1].replace("_", " ").title()
+                    formatted_stat = f"{formatted_key}: {pct_value:.0f}% ({value})"
                     stats_text += formatted_stat + " | "
-            
+
             stats_text = stats_text.rstrip(" | ")
 
             tk.Label(
