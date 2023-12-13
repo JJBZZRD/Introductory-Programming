@@ -130,19 +130,23 @@ class Dashboard(tk.Frame):
 
         tk.Label(
             camp_statistics_frame,
-            text=f"Number of Families: {num_families}",
+            text=f"Unique families: {num_families}",
+        ).grid(row=row, column=0, sticky="w", padx=5)
+        row += 1
+
+        separate_families_colour = "red" if num_separate_families > 0 else "black"
+
+        tk.Label(
+            camp_statistics_frame,
+            text=f"Number of seperated families (members not all in this camp): {num_separate_families}",
+            fg=separate_families_colour,
         ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
         tk.Label(
             camp_statistics_frame,
-            text=f"Number of Separated Families: {num_separate_families}",
-        ).grid(row=row, column=0, sticky="w", padx=5)
-        row += 1
-
-        tk.Label(
-            camp_statistics_frame,
-            text=f"IDs of Separated Families: {str(separate_families)[1:-1]}",
+            text=f"Family IDs of seperated families: {str(separate_families)[1:-1]}",
+            fg=separate_families_colour,
         ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
@@ -831,19 +835,23 @@ class AdminDashboard(Dashboard):
 
         tk.Label(
             plan_statistics_frame,
-            text=f"Number of Families: {num_families}",
+            text=f"Unique Families: {num_families}",
+        ).grid(row=row, column=0, sticky="w", padx=5)
+        row += 1
+
+        separate_families_colour = "red" if num_separate_families > 0 else "black"
+
+        tk.Label(
+            plan_statistics_frame,
+            text=f"Number of seperated families (members not all in same camp): {num_separate_families}",
+            fg=separate_families_colour,
         ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
         tk.Label(
             plan_statistics_frame,
-            text=f"Number of Separated Families: {num_separate_families}",
-        ).grid(row=row, column=0, sticky="w", padx=5)
-        row += 1
-
-        tk.Label(
-            plan_statistics_frame,
-            text=f"IDs of Separated Families: {str(separate_families)[1:-1]}",
+            text=f"Family IDs of seperated families: {str(separate_families)[1:-1]}",
+            fg=separate_families_colour,
         ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
