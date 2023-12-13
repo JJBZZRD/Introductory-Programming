@@ -210,7 +210,7 @@ class PlanDataRetrieve:
                             (current_date.month, current_date.day) < (birth_date.month, birth_date.day))
                     if age <= 18:
                         num_child += 1
-                    elif 18 < age <= 40:
+                    elif 18 < age <= 65:
                         num_adult += 1
                     else:
                         num_elders += 1
