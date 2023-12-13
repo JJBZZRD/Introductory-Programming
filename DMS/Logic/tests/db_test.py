@@ -65,5 +65,14 @@ class test_db(unittest.TestCase):
         # print(Camp.get_separate_family_by_plan(1))
         print(Camp.get_separate_family())
         print(Camp.get_camp_families(1))
+
+    def test_aaa(self):
+        print(" ------------ Executing test_aaaaa --------------- ")
+        q = f"""
+        SELECT * FROM camps WHERE planID = 6
+        """
+        cursor.execute(q)
+        print(cursor.fetchall())
+
 if __name__ == '__main__':
     unittest.main()

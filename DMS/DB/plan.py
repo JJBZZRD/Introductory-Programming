@@ -104,7 +104,7 @@ class Plan:  # Plan class has attributes matching columns in table
             return False
 
     @staticmethod
-    def get_plan(planID=None, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None):
+    def get_plan(planID=None, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None, status=None):
 
         query = "SELECT * FROM plans WHERE planID IS NOT NULL"
 
@@ -122,6 +122,8 @@ class Plan:  # Plan class has attributes matching columns in table
             query += f" AND event_name LIKE '%{event_name}%'"
         if description:
             query += f" AND description LIKE '%{description}%'"
+        if status:
+            query += f" AND status = '{status}'"
 
         # print(query)
         cursor.execute(query)
@@ -136,10 +138,11 @@ class Plan:  # Plan class has attributes matching columns in table
     @staticmethod
     def get_total_resources(planID):
         q = f"""
-            SELECT SUM(shelter) as sum_shelter,
-                SUM(food) as sum_food,
-                SUM(water) as sum_water,
-                SUM(medical_supplies) as sum_med
+            SELECT 
+            COALESCE(SUM(shelter), 0) as sum_shelter,
+            COALESCE(SUM(food), 0) as sum_food,
+            COALESCE(SUM(water), 0) as sum_water,
+            COALESCE(SUM(medical_supplies), 0) as sum_med
             FROM camps
             WHERE planID = {planID}
             GROUP BY planID

@@ -37,29 +37,36 @@ class PlanDataRetrieve:
 
         print(f' ======== [DEBUG] PlanDataRetrieve.get_plan: planID: {planID}, start_date: {start_date}, end_date: {end_date}, name: {name}, country: {country}, event_name: {event_name}, desc: {description} ============ ')
 
-        plan_tuples = Plan.get_plan(planID=planID, start_date=start_date, end_date=end_date, name=name, 
-                 country=country, event_name=event_name, description=description)
+        if active:
+            status = 'Active'
+        elif active == None:
+            status = None
+        else:
+            status = 'Ended'
+
+        plan_tuples = Plan.get_plan(planID=planID, start_date=start_date, end_date=end_date, name=name, country=country, event_name=event_name, description=description, status=status)
 
         plans = util.parse_result('Plan', plan_tuples)
+        print(f' ======== [DEBUG] PlanDataRetrieve.get_plan: plans: {plans} ============ ')
         # print(f'active = {active}')
         if isinstance(plans, list):
 
-            current_date = datetime.now()
+            # current_date = datetime.now()
             for plan in plans:
-                if plan.end_date:
-                    try:
-                        plan.end_date_datetime = datetime.strptime(plan.end_date, '%Y-%m-%d')
-                    except:
-                        plan.end_date_datetime = datetime.strptime(plan.end_date, '%d/%m/%Y')
+            #     if plan.end_date:
+            #         try:
+            #             plan.end_date_datetime = datetime.strptime(plan.end_date, '%Y-%m-%d')
+            #         except:
+            #             plan.end_date_datetime = datetime.strptime(plan.end_date, '%d/%m/%Y')
 
-            if active:
-                plans = [plan for plan in plans if (plan.end_date_datetime > current_date or not plan.end_date)]
-            elif active == None:
-                pass
-            else:
-                plans = [plan for plan in plans if plan.end_date_datetime < current_date]
+            # if active:
+            #     plans = [plan for plan in plans if (plan.end_date_datetime > current_date or not plan.end_date)]
+            # elif active == None:
+            #     pass
+            # else:
+            #     plans = [plan for plan in plans if plan.end_date_datetime < current_date]
 
-            for plan in plans:
+            # for plan in plans:
                 plan.food, plan.water, plan.shelter, plan.medical_supplies = PlanDataRetrieve.get_resources(plan.planID)
 
         return plans
@@ -68,7 +75,11 @@ class PlanDataRetrieve:
     def get_resources(planID):
         #return [total_food, total_water, total_shelter, total_medical_supplies]
         # [Shelter, Food, Water, Medical Supplies]
-        # print(list(Plan.get_total_resources(planID)[0]))
+        res = Plan.get_total_resources(planID)
+        print(f'Plan.get_total_resources({planID}) {Plan.get_total_resources(planID)}')
+        if len(res) == 0:
+            return [0,0,0,0]
+        # print(f"plan")
         return list(Plan.get_total_resources(planID)[0])
 
     @staticmethod
