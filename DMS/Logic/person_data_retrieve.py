@@ -26,6 +26,10 @@ class PersonDataRetrieve:
             return "There is no volunteer"
 
     @staticmethod
+    def get_volunteers_by_plan(planID):
+        return util.parse_result('Volunteer', Volunteer.get_by_planID(planID))
+
+    @staticmethod
     def get_volunteers(volunteerID=None, name=None, username=None, password=None, date_of_birth=None, phone=None, account_status=None, campID=None, active=None):
 
         if active:

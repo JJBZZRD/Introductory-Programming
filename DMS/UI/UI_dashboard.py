@@ -207,7 +207,7 @@ class Dashboard(tk.Frame):
                     plan_resouce = "food"
                 case "Medical Supplies":
                     plan_resouce = "medical_supplies"
-                    
+
             amount = 0 if isinstance(amount, str) else amount
             if amount > 0:
                 tk.Button(
@@ -757,8 +757,8 @@ class AdminDashboard(Dashboard):
         age_stats = PlanDataRetrieve.get_stats_age(planID)
         vital_status_stats = PlanDataRetrieve.get_stats_vital_status(planID)
 
-        num_volunteers = len(PersonDataRetrieve.get_all_volunteers())
-        num_refugees = len(PersonDataRetrieve.get_all_refugees())
+        num_volunteers = len(PersonDataRetrieve.get_volunteers_by_plan(planID))
+        num_refugees = len(PersonDataRetrieve.get_refugees_by_plan(planID))
         family_stats = PlanDataRetrieve.get_stats_family(planID)
         num_families = (
             family_stats.get("num_families", "Error fetching families")

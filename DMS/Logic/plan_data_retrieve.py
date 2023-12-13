@@ -36,11 +36,12 @@ class PlanDataRetrieve:
             end_date = logic_util.validate_date(end_date)
 
         print(f' ======== [DEBUG] PlanDataRetrieve.get_plan: planID: {planID}, start_date: {start_date}, end_date: {end_date}, name: {name}, country: {country}, event_name: {event_name}, desc: {description} ============ ')
+
         plan_tuples = Plan.get_plan(planID=planID, start_date=start_date, end_date=end_date, name=name, 
                  country=country, event_name=event_name, description=description)
 
         plans = util.parse_result('Plan', plan_tuples)
-        print(f'active = {active}')
+        # print(f'active = {active}')
         if isinstance(plans, list):
 
             current_date = datetime.now()
