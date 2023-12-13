@@ -7,7 +7,7 @@ from datetime import datetime
 class PersonDataEdit:
 
     @staticmethod
-    def update_volunteer(volunteerID, first_name = None, last_name = None, phone = None, campID = None, username = None, password = None, date_of_birth = None, account_status = None):
+    def update_volunteer(logged_in_user, volunteerID, first_name = None, last_name = None, phone = None, campID = None, username = None, password = None, date_of_birth = None, account_status = None):
 
         if first_name:
             first_name = first_name.strip()
@@ -84,7 +84,7 @@ class PersonDataEdit:
 
     
     @staticmethod
-    def update_refugee(id, first_name = None, last_name = None, date_of_birth = None, gender=None, family_id = None, campID = None, triage_category=None, medical_conditions = None, vital_status = None):
+    def update_refugee(logged_in_user, id, first_name = None, last_name = None, date_of_birth = None, gender=None, family_id = None, campID = None, triage_category=None, medical_conditions = None, vital_status = None):
         # print(f"id: {id}")
         refugee = PersonDataRetrieve.get_refugees(id=id)[0]
         try:

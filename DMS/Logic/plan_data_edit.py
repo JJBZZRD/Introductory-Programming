@@ -53,7 +53,7 @@ class PlanEdit:
             return util.parse_result('Plan', plan)
 
     @staticmethod
-    def update_plan(planID=None, name=None, event_name=None, country=None, description=None, start_date=None, end_date=None, water=None, food=None, shelter=None, medical_supplies=None, status=None, created_time=None):
+    def update_plan(logged_in_user, planID=None, name=None, event_name=None, country=None, description=None, start_date=None, end_date=None, water=None, food=None, shelter=None, medical_supplies=None, status=None, created_time=None):
 
         tuple = (planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
 
