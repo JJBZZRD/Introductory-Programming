@@ -19,7 +19,7 @@ class UIHeader(tk.Frame):
 
         original_image = PhotoImage(file="DMS/UI/logo.png")
 
-        logo_label = tk.Label(header, image=original_image, bg="white")
+        logo_label = tk.Label(header, image=original_image)
         logo_label.image = original_image
         logo_label.pack(side=tk.LEFT, padx=(10, 20))
 
@@ -37,7 +37,7 @@ class UIHeader(tk.Frame):
         self.add_navigation_buttons(header)
         self.add_control_buttons(header)
 
-        header.pack(side='top', fill='x')
+        header.pack(side="top", fill="x")
 
     def add_navigation_buttons(self, parent):
         nav_back_button = tk.Button(

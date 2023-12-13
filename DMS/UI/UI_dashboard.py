@@ -297,6 +297,7 @@ class Dashboard(tk.Frame):
                     pady=5,
                 )
 
+        if user_type == "admin":
             self.rebuild_additional_resources_frame(plan)
         return resources_frame
 

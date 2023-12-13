@@ -36,20 +36,18 @@ class LoginScreen(tk.Frame):
         login_frame.pack(padx=10, pady=10)
 
         original_image = PhotoImage(file="DMS/UI/logo.png")
-        subsample_factor = 2
-        resized_image = original_image.subsample(subsample_factor, subsample_factor)
-        logo_label = tk.Label(login_frame, image=resized_image)
-        logo_label.image = resized_image
+        logo_label = tk.Label(login_frame, image=original_image)
+        logo_label.image = original_image
         logo_label.grid(row=0, column=0, columnspan=2, padx=(10, 20), pady=(10, 20))
 
         tk.Label(login_frame, text="Username:").grid(
-            row=1, column=0, sticky="w", padx=5, pady=5
+            row=1, column=0, sticky="ew", padx=5, pady=5
         )
         username_entry = tk.Entry(login_frame)
         username_entry.grid(row=1, column=1, padx=5, pady=5)
 
         tk.Label(login_frame, text="Password:").grid(
-            row=2, column=0, sticky="w", padx=5, pady=5
+            row=2, column=0, sticky="ew", padx=5, pady=5
         )
         password_entry = tk.Entry(login_frame, show="*")
         password_entry.grid(row=2, column=1, padx=5, pady=5)
