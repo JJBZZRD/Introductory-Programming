@@ -156,7 +156,7 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
             FOR EACH ROW
             BEGIN
                 INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
-                VALUES ('{table_name}', NEW.{primary_key_field}, '{field}', NULL, NEW.{field}, 'INSERT', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY id DESC LIMIT 1));
+                VALUES ('{table_name}', NEW.{primary_key_field}, '{field}', NULL, NEW.{field}, 'INSERT', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
             END;
         """)
 
@@ -167,7 +167,7 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
             WHEN OLD.{field} IS NOT NEW.{field}
             BEGIN
                 INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
-                VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NEW.{field}, 'UPDATE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY id DESC LIMIT 1));
+                VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NEW.{field}, 'UPDATE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
             END;
         """)
 
@@ -177,7 +177,7 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
             FOR EACH ROW
             BEGIN
                 INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
-                VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NULL, 'DELETE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY id DESC LIMIT 1));
+                VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NULL, 'DELETE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
             END;
         """)
 
@@ -383,10 +383,10 @@ def insert_dummy_data():
 
     cursor.execute(insert_countries)
 
-    cursor.execute("""
-    INSERT INTO current_user (id, username) VALUES (1, 'default_user')
-    ON CONFLICT(id) DO UPDATE SET username = 'default_user';
-    """)
+    # cursor.execute("""
+    # INSERT INTO current_user (id, username) VALUES (1, 'default_user')
+    # ON CONFLICT(id) DO UPDATE SET username = 'default_user';
+    # """)
 
     conn.commit()
 
