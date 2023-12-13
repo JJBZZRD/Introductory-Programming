@@ -26,6 +26,7 @@ class ManageList(tk.Frame):
         self.export_name = ''
         self.status_filters = []
         self.record_button = None
+        self.filter_values = None
         self.setup_list()
 
     def setup_list(self):
@@ -107,7 +108,7 @@ class ManageList(tk.Frame):
         # search_frame = tk.Frame(self.root)
         # search_frame.pack()
 
-        search_filters = ttk.Combobox(self, values=self.list_headers, state="readonly")
+        search_filters = ttk.Combobox(self, values=self.filter_values, state="readonly")
         search_filters.set("Filter")  # set default value
         search_filters.grid(column=5, row=3, padx=5)
         # search_filters.bind('<<ComboboxSelected>>', )
@@ -214,13 +215,14 @@ class ManageList(tk.Frame):
 class PlanList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Plans', 'Add New Plan']
-        self.list_headers = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date']
+        self.list_headers = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date', 'Status', 'Creation Time']
+        self.filter_values = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date']
         self.list_data = PlanDataRetrieve.get_all_plans()
         self.get_search = PlanDataRetrieve.get_plan
         self.switch_to_page = 'AdminDashboard'
         self.record_button = 'NewPlan'
         self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Country': 'country', 'Event Name': 'event_name',
-                                'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date'}
+                                'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date', 'Status': 'active' ,'Creation Time': 'created_time' }
         self.status_filters = ['All', 'Active', 'Ended']
         self.export_name = 'Plans'
         self.create_title(plan=True)
@@ -231,12 +233,14 @@ class PlanList(ManageList):
 class CampList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Camps', 'Add New Camp']
-        self.list_headers = ['Camp ID', 'Location', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID']
+        self.list_headers = ['Camp ID', 'Location', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID', 'Creation Time']
+        self.filter_values = ['Camp ID', 'Location', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID']
         self.list_data = CampDataRetrieve.get_all_camps()
         self.get_search = CampDataRetrieve.get_camp
         self.switch_to_page = 'EditCamp'
         self.record_button = 'NewCamp'
-        self.filter_matching = {'Camp ID': 'campID', 'Location': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID'}
+        self.filter_matching = {'Camp ID': 'campID', 'Location': 'location', 'Shelter': 'shelter', 'Water': 'water', 
+                                'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID', 'Creation Time': 'created_time' }
         self.export_name = 'Camps'
         self.create_title()
         self.create_search()
@@ -249,13 +253,15 @@ class VolunteerList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Volunteers', 'Add New Volunteer']
         self.list_headers = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
+                'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Creation Time']
+        self.filter_values = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
-        self.list_data = self.list_by_plan
+        self.list_data = self.list_by_plan()
         self.get_search = PersonDataRetrieve.get_volunteers
         self.switch_to_page = 'EditVolunteer'
         self.record_button = 'NewVolunteer'
         self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'name', 'Last Name': 'name', 'Username': 'username',
-                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID'}
+                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Creation Time': 'created_time'}
         self.status_filters = ['All', 'Active', 'Deactivated']
         self.create_title()
         self.create_search()
@@ -269,12 +275,12 @@ class VolunteerList(ManageList):
 
             camps_under_plan = CampDataRetrieve.get_camp(planID=planID)
 
-            camp_id_under_plan = list(set([camp.campID for camp in camps_under_plan]))
+            camp_id_under_plan = [camp.campID for camp in camps_under_plan]
 
             volunteers_of_camps = []
 
             for camp_id in camp_id_under_plan:
-                volunteers_of_camps += PersonDataRetrieve.get_volunteer(campID=camp_id)
+                volunteers_of_camps += PersonDataRetrieve.get_volunteers(campID=camp_id)
 
             return volunteers_of_camps
         else:
@@ -288,6 +294,10 @@ class RefugeeList(ManageList):
         self.list_headers = ['Refugee ID', 'First Name', 'Last Name',
                 'Date of Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
+                'Vital Status', 'Creation Time']
+        self.filter_values = ['Refugee ID', 'First Name', 'Last Name',
+                'Date of Birth', 'Gender', 'Family ID',
+                'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status']
         self.list_data = self.list_by_camp()
         self.get_search = PersonDataRetrieve.get_refugees
@@ -296,7 +306,7 @@ class RefugeeList(ManageList):
         self.filter_matching = {'Refugee ID': 'id', 'First Name': 'name', 'Last Name': 'name',
                 'Date of Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
                 'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
-                'Vital Status': 'vital_status'}
+                'Vital Status': 'vital_status','Creation Time': 'created_time'}
         self.export_name = 'Refugees'
         self.create_title()
         self.create_search()
