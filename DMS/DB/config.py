@@ -163,6 +163,7 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
             CREATE TRIGGER IF NOT EXISTS {table_name}_{field}_update
             AFTER UPDATE OF {field} ON {table_name}
             FOR EACH ROW
+            WHEN OLD.{field} IS NOT NEW.{field}
             BEGIN
                 INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
                 VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NEW.{field}, 'UPDATE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY id DESC LIMIT 1));
