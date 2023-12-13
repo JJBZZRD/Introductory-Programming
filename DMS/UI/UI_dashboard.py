@@ -57,14 +57,15 @@ class Dashboard(tk.Frame):
         )
         plan_title_label.grid(row=1, column=0, sticky="w", padx=5, pady=(0, 5))
 
-        edit_camp_button = ttk.Button(
-            title_frame,
-            text="Edit Camp",
-            command=lambda: self.show_screen("EditCamp", camp),
-        )
-        edit_camp_button.grid(
-            row=0, column=2, rowspan=2, sticky="e", padx=(5, 15), pady=5
-        )
+        if plan.status == "Active":
+            edit_camp_button = ttk.Button(
+                title_frame,
+                text="Edit Camp",
+                command=lambda: self.show_screen("EditCamp", camp),
+            )
+            edit_camp_button.grid(
+                row=0, column=2, rowspan=2, sticky="e", padx=(5, 15), pady=5
+            )
 
         parent_tab.grid_rowconfigure(0, weight=0)
         parent_tab.grid_rowconfigure(1, weight=1)
@@ -134,7 +135,7 @@ class Dashboard(tk.Frame):
         ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
-        separate_families_colour = "red" if num_separate_families > 0 else "black"
+        separate_families_colour = "red" if num_separate_families > 0 else None
 
         tk.Label(
             camp_statistics_frame,
@@ -172,12 +173,10 @@ class Dashboard(tk.Frame):
             stats_text = ""
             for key, value in stats.items():
                 if "num_" in key:
-                    key_parts = key.split("_", 1)  # Split only at the first underscore
+                    key_parts = key.split("_", 1)
                     pct_key = "pct_" + key_parts[1]
                     pct_value = stats.get(pct_key, 0)
-                    formatted_key = (
-                        key_parts[1].replace("_", " ").title()
-                    )  # Replace subsequent underscores with spaces
+                    formatted_key = key_parts[1].replace("_", " ").title()
                     formatted_stat = f"{formatted_key}: {pct_value:.0f}% ({value})"
                     stats_text += formatted_stat + " | "
 
@@ -236,7 +235,7 @@ class Dashboard(tk.Frame):
                     plan_resouce = "medical_supplies"
 
             amount = 0 if isinstance(amount, str) else amount
-            if amount > 0:
+            if amount > 0 and plan.status == "Active":
                 tk.Button(
                     resources_frame,
                     text="-10",
@@ -251,8 +250,9 @@ class Dashboard(tk.Frame):
                 ).grid(row=resource_row + 1, rowspan=2, column=2, padx=5)
             print(f"getattr(plan, {plan_resouce}): {getattr(plan, plan_resouce)}")
             if (
-                user_type == "admin" and getattr(plan, plan_resouce) > 0
-            ) or user_type == "volunteer":
+                (user_type == "admin" and getattr(plan, plan_resouce) > 0)
+                or user_type == "volunteer"
+            ) and plan.status == "Active":
                 tk.Button(
                     resources_frame,
                     text="+10",
@@ -269,7 +269,7 @@ class Dashboard(tk.Frame):
             if resource_name == "Shelter":
                 num_refugees = len(PersonDataRetrieve.get_refugees(camp_id=camp.campID))
 
-                shelter_colour = "red" if num_refugees > camp.shelter else "black"
+                shelter_colour = "red" if num_refugees > camp.shelter else None
 
                 tk.Label(
                     resources_frame,
@@ -287,7 +287,7 @@ class Dashboard(tk.Frame):
             if resource_name in ["Water", "Food", "Medical Supplies"]:
                 days_left = camp_resources_estimation.get(resource_name)
 
-                days_left_color = "red" if days_left < 7 else "black"
+                days_left_color = "red" if days_left < 7 else None
 
                 tk.Label(
                     resources_frame,
@@ -397,7 +397,7 @@ class Dashboard(tk.Frame):
             ).grid(row=resource_row + 1, column=0, sticky="w", padx=5)
 
             amount = 0 if isinstance(amount, str) else amount
-            if amount > 0:
+            if amount > 0 and plan.status == "Active":
                 tk.Button(
                     additional_resources_frame,
                     text="-10",
@@ -409,16 +409,17 @@ class Dashboard(tk.Frame):
                     ),
                 ).grid(row=resource_row + 1, column=1, padx=5, sticky="e")
 
-            tk.Button(
-                additional_resources_frame,
-                text="+10",
-                command=lambda res_name=resource_name: self.update_plan_resources(
+            if plan.status == "Active":
+                tk.Button(
                     additional_resources_frame,
-                    res_name,
-                    plan,
-                    10,
-                ),
-            ).grid(row=resource_row + 1, column=2, padx=5)
+                    text="+10",
+                    command=lambda res_name=resource_name: self.update_plan_resources(
+                        additional_resources_frame,
+                        res_name,
+                        plan,
+                        10,
+                    ),
+                ).grid(row=resource_row + 1, column=2, padx=5)
 
         tk.Label(
             additional_resources_frame,
@@ -840,7 +841,7 @@ class AdminDashboard(Dashboard):
         ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
-        separate_families_colour = "red" if num_separate_families > 0 else "black"
+        separate_families_colour = "red" if num_separate_families > 0 else None
 
         tk.Label(
             plan_statistics_frame,
@@ -914,12 +915,13 @@ class AdminDashboard(Dashboard):
         )
         description_label.grid(row=1, column=0, sticky="w", padx=5, pady=(0, 5))
 
-        new_camp_button = ttk.Button(
-            title_frame,
-            text="New Camp",
-            command=lambda: self.show_screen("NewCamp", plan),
-        )
-        new_camp_button.grid(row=0, column=1, rowspan=2, padx=5)
+        if plan.status == "Active":
+            new_camp_button = ttk.Button(
+                title_frame,
+                text="New Camp",
+                command=lambda: self.show_screen("NewCamp", plan),
+            )
+            new_camp_button.grid(row=0, column=1, rowspan=2, padx=5)
 
         new_camp_item_button = ttk.Button(
             title_frame,
