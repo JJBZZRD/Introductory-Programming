@@ -14,7 +14,7 @@ class CampDataEdit:
             camp = camp[0]
         else:
             return "Cannot find this campID. Please try again."
-        
+        print(f"planID: {planID}")
         plan = util.parse_result('Plan', Plan.get_plan_by_id(planID))[0]
 
         if plan.status != 'Active':

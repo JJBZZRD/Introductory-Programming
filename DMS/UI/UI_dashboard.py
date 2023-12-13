@@ -16,6 +16,7 @@ class Dashboard(tk.Frame):
         self.ui_manager = ui_manager
         self.logged_in_user = ui_manager.logged_in_user
         self.setup_dashboard(ui_manager.screen_data)
+        # print(f"Dashboard logged_in_user: {self.logged_in_user}")
 
     def setup_dashboard(self, *args):
         raise NotImplementedError(
@@ -195,7 +196,7 @@ class Dashboard(tk.Frame):
         resources_frame = tk.Frame(parent_tab, relief="solid", borderwidth=2)
         resources_frame.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
         resources_frame.grid_columnconfigure(1, weight=1)
-        print(f"camp: {camp.display_info()}")
+        # print(f"camp: {camp.display_info()}")
         title_label = tk.Label(
             resources_frame,
             text=f"Current Resources in {camp.location}",
@@ -211,7 +212,7 @@ class Dashboard(tk.Frame):
             "Food": camp.food,
             "Medical Supplies": camp.medical_supplies,
         }
-        print(f"resources: {resources}")
+        # print(f"resources: {resources}")
 
         for index, (resource_name, amount) in enumerate(resources.items()):
             resource_row = index * 3 + 1
@@ -249,7 +250,7 @@ class Dashboard(tk.Frame):
                         user_type,
                     ),
                 ).grid(row=resource_row + 1, rowspan=2, column=2, padx=5)
-            print(f"getattr(plan, {plan_resouce}): {getattr(plan, plan_resouce)}")
+            # print(f"getattr(plan, {plan_resouce}): {getattr(plan, plan_resouce)}")
             if (
                 (user_type == "admin" and getattr(plan, plan_resouce) > 0)
                 or user_type == "volunteer"
@@ -335,25 +336,27 @@ class Dashboard(tk.Frame):
         plan,
         user_type,
     ):
-        print(f"logged in user = {self.logged_in_user}")
-        print(f"camp = {camp}")
-        print(f"plan = {plan.planID}")
-        logged_in_user = self.logged_in_user
-
+        # print(f"logged in user = {self.logged_in_user}")
+        # print(f"camp = {camp}")
+        # print(f"plan = {plan.planid}")
         resource_key = resource_name.lower().replace(" ", "_")
         if user_type == "admin":
             plan_current_amount = getattr(plan, resource_key)
             new_plan_amount = max(0, plan_current_amount - increment)
             if PlanEdit.update_plan(
-                planID=plan.planID, **{resource_key: new_plan_amount}
+                logged_in_user=self.logged_in_user,
+                planID=plan.planID, 
+                status=plan.status,
+                **{resource_key: new_plan_amount}
             ):
                 setattr(plan, resource_key, new_plan_amount)
 
         camp_current_amount = getattr(camp, resource_key)
         new_camp_amount = max(0, camp_current_amount + increment)
         if CampDataEdit.update_camp(
-            logged_in_user=logged_in_user,
+            logged_in_user=self.logged_in_user,
             campID=camp.campID,
+            planID=camp.planID,
             **{resource_key: new_camp_amount},
         ):
             setattr(camp, resource_key, new_camp_amount)
@@ -374,6 +377,7 @@ class Dashboard(tk.Frame):
         # self.rebuild_additional_resources_frame(plan)
 
     def create_additional_resources_section(self, parent_frame, plan):
+        # print(f"create_additional_resources_section: {self.logged_in_user.username}")
         additional_resources_frame = tk.Frame(
             parent_frame, relief="solid", borderwidth=2
         )
@@ -460,15 +464,20 @@ class Dashboard(tk.Frame):
         return additional_resources_frame
 
     def update_plan_resources(self, resource_frame, resource_name, plan, increment):
+        print(f"resource_name: {resource_name}")
         resource_key = resource_name.lower().replace(" ", "_")
         current_amount = getattr(plan, resource_key)
         new_amount = max(0, current_amount + increment)
 
-        if PlanEdit.update_plan(
+        res = PlanEdit.update_plan(
             logged_in_user=self.logged_in_user,
             planID=plan.planID,
-            **{resource_key: new_amount},
-        ):
+            status=plan.status,
+            **{resource_key:new_amount},
+        )
+        print(f"res: {res}")
+        if res: 
+            print(f"new_amount: {new_amount}")
             setattr(plan, resource_key, new_amount)
 
         self.ui_manager.refresh_page()
@@ -682,6 +691,7 @@ class AdminDashboard(Dashboard):
             self.setup_camp_tab(tab, camp, self.plan, user_type)
 
     def setup_distribute_resources_tab(self):
+        # print(f"setup_distribute_resources_tab: {self.logged_in_user}")
         distribute_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(distribute_tab, text="Distribute Plan Resources")
 

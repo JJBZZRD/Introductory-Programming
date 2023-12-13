@@ -35,11 +35,11 @@ class PlanEdit:
         if start_date in ["yyyy-mm-dd", '', ' ']:
             return "Please enter start date"
         if start_date and start_date not in ["yyyy-mm-dd", '', ' ']:
-            if util.validate_date(start_date):
-                start_year = datetime.strptime(start_date, '%Y-%m-%d').date().year
-                current_year = datetime.now().year
-                if start_year > current_year:
-                    return "        Invalid year        "
+            # if util.validate_date(start_date):
+            #     start_year = datetime.strptime(start_date, '%Y-%m-%d').date().year
+            #     current_year = datetime.now().year
+            #     if start_year > current_year:
+            #         return "        Invalid year        "
             if not util.validate_date(start_date):
                 return "Invalid date for start date (yyyy-mm-dd)"
 
@@ -104,11 +104,10 @@ class PlanEdit:
                 if not util.validate_end_date(start_date, end_date):
                     # print('aaaaaa')
                     return "Invalid end date"
-
-            
+            print("aaaaaaaa")
             res = Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
 
-            print(f"res:  {res}")
+            print(f"res: Plan.update_plan  {res}")
 
             return util.parse_result('Plan', res)
         elif status == 'Ended':
@@ -122,6 +121,8 @@ class PlanEdit:
                     return util.parse_result('Plan', res)
             else:
                 return "Error: ended plan must have an end date"
+        else:
+            return f"Error: Invalid status: {status}"
 
 
     @staticmethod
