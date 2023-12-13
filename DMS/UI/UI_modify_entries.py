@@ -152,7 +152,7 @@ class ModifyEntries(tk.Frame):
                 inputs = {}
                 for key in self.entry_fields:
                     inputs.update({self.entry_fields[key][0]: self.entry_fields[key][1].get()})
-                print(inputs)
+                #print(inputs)
                 #print(tuple(inputs))
 
                 
