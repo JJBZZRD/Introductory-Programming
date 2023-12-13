@@ -32,7 +32,7 @@ class Camp:  # Camp class has attributes matching columns in table
             sql = """
                 INSERT INTO camps (
                     location, shelter, water, food, medical_supplies, planID, created_time) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 """
             cursor.execute(sql, (location, shelter, water, food, medical_supplies, planID, created_time))
             conn.commit()
