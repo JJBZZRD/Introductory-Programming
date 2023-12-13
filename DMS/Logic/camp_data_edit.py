@@ -98,7 +98,7 @@ class CampDataEdit:
                 return "You should enter a number to medical_supplies."
         if planID:
             if util.is_num(planID):
-                if not Plan.get_planID(planID):
+                if len(Plan.get_plan_by_id(planID)) < 1:
                     return "Cannot find this planID. Please try again."
                 
         now = datetime.now().date().strftime('%Y-%m-%dT%H:%M:%S')

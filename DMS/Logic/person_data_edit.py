@@ -86,13 +86,13 @@ class PersonDataEdit:
         now = util.get_current_time().strftime("%Y-%m-%dT%H:%M:%S")
 
         t = (first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category, medical_conditions, vital_status, now)
-        
+
         refugee_tuples = Refugee.create_refugee(t)
         return util.parse_result('Refugee', refugee_tuples)
 
     
     @staticmethod
-    def update_refugee(id, first_name = None, last_name = None, date_of_birth = None, family_id = None, camp_id = None, medical_conditions = None):
+    def update_refugee(id, first_name = None, last_name = None, date_of_birth = None, gender=None, family_id = None, camp_id = None, triage_category=None, medical_conditions = None, vital_status = None):
         refugee = PersonDataRetrieve.get_refugees('id', id)[0]
         try:
             if first_name:
@@ -101,12 +101,18 @@ class PersonDataEdit:
                 refugee.last_name = last_name.strip()
             if date_of_birth:
                 refugee.date_of_birth = date_of_birth
+            if gender:
+                refugee.gender = gender
             if camp_id:
                 refugee.campID = camp_id
             if family_id:
                 refugee.familyID = family_id
+            if triage_category:
+                refugee.triage_category = triage_category
             if medical_conditions:
                 refugee.medical_conditions = medical_conditions
+            if vital_status:
+                refugee.vital_status = vital_status
         except:
             return "Invalid inputs, please check and try again"
         
@@ -116,7 +122,7 @@ class PersonDataEdit:
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
         
-        refugee_tupples = Refugee.update_refugee(id, first_name, last_name, date_of_birth, family_id, camp_id, medical_conditions)
+        refugee_tupples = Refugee.update_refugee(id, first_name, last_name, date_of_birth, gender, family_id, camp_id, triage_category, medical_conditions, vital_status)
 
         return util.parse_result('Refugee', refugee_tupples)
     

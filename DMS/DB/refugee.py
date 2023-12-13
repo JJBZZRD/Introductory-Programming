@@ -130,6 +130,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
         if vital_status:
             query += f" AND vital_status = '{vital_status}'" 
 
+        print(f"query: {query}")
         cursor.execute(query)
         return cursor.fetchall()
 
