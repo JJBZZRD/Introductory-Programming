@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import PhotoImage
 from ..Logic.person_data_retrieve import PersonDataRetrieve
 
 
@@ -34,17 +35,24 @@ class LoginScreen(tk.Frame):
         login_frame = tk.Frame(self)
         login_frame.pack(padx=10, pady=10)
 
-        tk.Label(login_frame, text="Username:").grid(
-            row=0, column=0, sticky="w", padx=5, pady=5
-        )
-        username_entry = tk.Entry(login_frame)
-        username_entry.grid(row=0, column=1, padx=5, pady=5)
+        original_image = PhotoImage(file="DMS/UI/logo.png")
+        subsample_factor = 2
+        resized_image = original_image.subsample(subsample_factor, subsample_factor)
+        logo_label = tk.Label(login_frame, image=resized_image)
+        logo_label.image = resized_image
+        logo_label.grid(row=0, column=0, columnspan=2, padx=(10, 20), pady=(10, 20))
 
-        tk.Label(login_frame, text="Password:").grid(
+        tk.Label(login_frame, text="Username:").grid(
             row=1, column=0, sticky="w", padx=5, pady=5
         )
+        username_entry = tk.Entry(login_frame)
+        username_entry.grid(row=1, column=1, padx=5, pady=5)
+
+        tk.Label(login_frame, text="Password:").grid(
+            row=2, column=0, sticky="w", padx=5, pady=5
+        )
         password_entry = tk.Entry(login_frame, show="*")
-        password_entry.grid(row=1, column=1, padx=5, pady=5)
+        password_entry.grid(row=2, column=1, padx=5, pady=5)
 
         password_entry.bind(
             "<Return>",
@@ -56,9 +64,9 @@ class LoginScreen(tk.Frame):
             text="Login",
             command=lambda: self.login(username_entry.get(), password_entry.get()),
         )
-        login_button.grid(row=2, column=0, columnspan=2, pady=10)
+        login_button.grid(row=3, column=0, columnspan=2, pady=10)
 
         self.error_label = tk.Label(login_frame, text="", fg="red")
-        self.error_label.grid(row=3, column=0, columnspan=2)
+        self.error_label.grid(row=4, column=0, columnspan=2)
 
         username_entry.focus_set()
