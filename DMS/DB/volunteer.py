@@ -30,7 +30,7 @@ class Volunteer:
 
     @classmethod  # Insert a volunteer into the database without creating a new instance
     def create_volunteer(cls, volunteer_tuple):
-        first_name, last_name, username, password, date_of_birth, phone, campID, created_time = volunteer_tuple
+        first_name, last_name, username, password, date_of_birth, phone, account_status,campID, created_time = volunteer_tuple
         if Volunteer.check_campID_exist(campID):
             sql = """
                 INSERT INTO volunteers (
@@ -38,7 +38,7 @@ class Volunteer:
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """
             cursor.execute(sql, (first_name, last_name, username,
-                                 password, date_of_birth, phone, "Active", campID, created_time))
+                                 password, date_of_birth, phone, account_status, campID, created_time))
             conn.commit()
             volunteer_id = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
             return Volunteer.get_volunteer_by_id(volunteer_id)

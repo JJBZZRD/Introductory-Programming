@@ -45,7 +45,7 @@ class PersonDataEdit:
         return f"Volunteer {id} has been deleted" if res else f"There is an error when deleting volunteer {id}"
     
     @staticmethod
-    def create_volunteer(logged_in_user=None, first_name = None, last_name = None, campID = None, username = None, password = None, date_of_birth = None, phone = None, created_time = None):
+    def create_volunteer(logged_in_user=None, first_name = None, last_name = None, campID = None, username = None, password = None, date_of_birth = None, phone = None, account_status = None,created_time = None):
 
 
         if phone and not util.is_phone_format(phone):
@@ -59,7 +59,7 @@ class PersonDataEdit:
 
         now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
-        t = (first_name, last_name, username, password, date_of_birth, phone, campID, now)
+        t = (first_name, last_name, username, password, date_of_birth, phone, account_status,campID, now)
 
         volunteer_tuples = Volunteer.create_volunteer(t)
         # print(volunteer_tuples)
