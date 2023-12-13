@@ -6,6 +6,9 @@ from .DB.plan import Plan
 from .DB.camp import Camp
 from .DB.countries import *
 
+def get_current_time():
+    return datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+
 def is_phone_format(phone_num):
     # phone_pattern = re.compile(r'^\+\d+$')
     # bool(phone_pattern.match(phone_num))

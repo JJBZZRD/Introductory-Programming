@@ -1,5 +1,6 @@
 from ..DB.volunteer import Volunteer
 from ..DB.refugee import Refugee
+from ..DB.audit_table import AuditTable
 from .. import util
 
 class PersonDataRetrieve:
@@ -11,6 +12,8 @@ class PersonDataRetrieve:
             volunteer_tuples = Volunteer.get_volunteer(username=username, password=password, inclue_admin=True)
         else:
             volunteer_tuples = Volunteer.get_volunteer(username=username, password=password, account_status='Active')
+        if not AuditTable.log_user_login_history(username, util.get_current_time()):
+            return "Failed to log user login history"
         return util.parse_result('Volunteer', volunteer_tuples)
 
     @staticmethod
