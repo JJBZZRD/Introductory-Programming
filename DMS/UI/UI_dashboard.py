@@ -207,7 +207,8 @@ class Dashboard(tk.Frame):
                     plan_resouce = "food"
                 case "Medical Supplies":
                     plan_resouce = "medical_supplies"
-
+                    
+            amount = 0 if isinstance(amount, str) else amount
             if amount > 0:
                 tk.Button(
                     resources_frame,
@@ -367,6 +368,7 @@ class Dashboard(tk.Frame):
                 additional_resources_frame, text=f"{resource_name}: {amount}"
             ).grid(row=resource_row + 1, column=0, sticky="w", padx=5)
 
+            amount = 0 if isinstance(amount, str) else amount
             if amount > 0:
                 tk.Button(
                     additional_resources_frame,

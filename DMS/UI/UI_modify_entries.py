@@ -84,6 +84,8 @@ class ModifyEntries(tk.Frame):
                     placeholder = self.current_data[i]
                 elif "Date" in variable:
                     placeholder = "yyyy-mm-dd"
+                elif variable in ["Water", "Food", "Medical Supplies", "Shelter"]:
+                    placeholder = "0"
                 else:
                     placeholder = "Enter " + variable
 
