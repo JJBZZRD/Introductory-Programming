@@ -357,9 +357,9 @@ class EditVolunteer(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Volunteer']
         self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
-                'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Creation Time']
+                'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Creation Time', 'Password']
         self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username',
-                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status', 'Creation Time': 'created_time'}
+                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status', 'Creation Time': 'created_time', 'Password': 'password'}
         self.button_labels = ['Save Changes', 'Delete']
         self.current_data = self.screen_data.display_info()
         self.save_record = PersonDataEdit.update_volunteer
