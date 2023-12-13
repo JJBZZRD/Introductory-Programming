@@ -249,6 +249,7 @@ class CampList(ManageList):
         self.create_search()
         self.create_results()
 
+
     def list_by_plan(self):
         if isinstance(self.screen_data, Plan):
             return CampDataRetrieve.get_camp(planID=self.screen_data.planID)
@@ -258,6 +259,8 @@ class CampList(ManageList):
     def modify_title(self):
         if isinstance(self.screen_data, Plan):
             self.list_type[0] = f'Manage Camps for Plan {self.screen_data.planID}'
+        else:
+            self.list_type[0] = f'Manage camps: Global'
 
 class VolunteerList(ManageList):
 
@@ -278,6 +281,7 @@ class VolunteerList(ManageList):
         self.create_title()
         self.create_search()
         self.create_results()
+
 
     def list_by_plan(self):
         #need some way of extracting list of volunteers asociated with a specific planID
@@ -301,6 +305,8 @@ class VolunteerList(ManageList):
     def modify_title(self):
         if isinstance(self.screen_data, Camp):
             self.list_type[0] = f'Manage Volunteers for Plan {self.screen_data.planID}'
+        else:
+            self.list_type[0] = f'Manage camps: Global'
 
 
 class RefugeeList(ManageList):
@@ -338,3 +344,5 @@ class RefugeeList(ManageList):
     def modify_title(self):
         if isinstance(self.screen_data, Camp):
             self.list_type[0] = f'Manage Refugees for Camp {self.screen_data.campID}'
+        else:
+            self.list_type[0] = f'Manage camps: Global'
