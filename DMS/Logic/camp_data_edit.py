@@ -7,7 +7,7 @@ from datetime import datetime
 class CampDataEdit:
 
     @staticmethod
-    def update_camp(logged_in_user=None, campID=None, location=None, shelter=None, water=None,food=None, medical_supplies=None, planID=None):
+    def update_camp(logged_in_user=None, campID=None, location=None, shelter=None, water=None,food=None, medical_supplies=None, planID=None, created_time=None):
         # get variables
         camp = CampDataRetrieve.get_camp(campID=campID)
         if len(camp) >0:
@@ -73,7 +73,7 @@ class CampDataEdit:
         return util.parse_result('Camp', camp_tuple)
 
     @staticmethod  # Insert a camp into the database without creating a new instance
-    def create_camp(logged_in_user=None, location=None, shelter=None, water=None, food=None, medical_supplies=None, planID=None):
+    def create_camp(logged_in_user=None, location=None, shelter=None, water=None, food=None, medical_supplies=None, planID=None, created_time=None):
                 # validate
         if location:
             if not util.is_valid_name(location):
