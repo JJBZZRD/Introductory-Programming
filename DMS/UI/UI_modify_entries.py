@@ -181,9 +181,8 @@ class ModifyEntries(tk.Frame):
 
                 pass
             case 'End':
-                self.confirmation_popup('Are you sure you want to end this plan?', self.end_plan)
-                # logic fo r ending a plan
-                pass
+                self.confirmation_popup('Are you sure you want to end this plan?', self.end_plan(self.screen_data_id))
+
 
         # takes the entry field values
 
@@ -259,7 +258,7 @@ class EditPlan(ModifyEntries):
         self.modifiable_variables = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date', 'Water', 'Food', 'Medical Supplies', 'Shelter', 'Status', 'Creation Time']
         self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Country': 'country', 'Event Name': 'event_name',
                                 'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date', 'Water': 'water', 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Shelter': 'shelter', 'Status':'status', 'Creation Time': 'created_time'}
-        self.button_labels = ['Save Changes', 'Delete']
+        self.button_labels = ['Save Changes', 'Delete', 'End']
         self.current_data = self.screen_data.display_info()
         self.save_record = PlanEdit.update_plan
         self.delete_record = PlanEdit.delete_plan
@@ -267,8 +266,8 @@ class EditPlan(ModifyEntries):
         self.end_plan = PlanEdit.end_plan
         self.screen_data_id = self.screen_data.planID
         self.entry_fields = {}
-        self.fields_to_be_dropdown = {'Country': get_all_countries(), 'Status': ['Active', 'Ended']}
-        self.read_only_fields = ['Plan ID', 'Creation Time']
+        self.fields_to_be_dropdown = {'Country': get_all_countries()}
+        self.read_only_fields = ['Plan ID', 'Creation Time', 'Status']
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
