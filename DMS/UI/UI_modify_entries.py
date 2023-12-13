@@ -37,7 +37,7 @@ class ModifyEntries(tk.Frame):
         self.fields_to_be_dropdown = {}
         self.read_only_fields = []
         self.screen_data_id = None
-        self.passed_id = None
+        self.passed_id = {}
         self.setup_modify()
 
     def setup_modify(self):
@@ -61,7 +61,7 @@ class ModifyEntries(tk.Frame):
         k = 1
         j = 0
         for i, variable in enumerate(self.modifiable_variables):  # this loop creates a vertical list of columns that is 4 high maximum
-            if variable in self.fields_to_be_dropdown:
+            if variable in self.fields_to_be_dropdown and variable not in self.passed_id:
                 entry_name = ttk.Label(self.lower_frame, text=variable)
                 entry_name.grid(column=k, row=j, pady=5, padx=5)
 
@@ -82,7 +82,7 @@ class ModifyEntries(tk.Frame):
 
                 self.entry_fields.update({variable: [self.filter_matching[variable], entry_field]})
                 
-                if self.passed_id and variable in self.passed_id:
+                if variable in self.passed_id:
                     placeholder = self.passed_id[variable]
 
                 elif self.current_data is not None and i < len(self.current_data):
@@ -283,7 +283,7 @@ class NewCamp(ModifyEntries):
         self.button_labels = ['Create']
         self.create_record = CampDataEdit.create_camp
         self.entry_fields = {}
-        self.fields_to_be_dropdown = {'Country': get_all_countries()}
+        self.fields_to_be_dropdown = {'Country': get_all_countries(), 'Plan ID': [plan.planID for plan in PlanDataRetrieve.get_all_plans()]}
         self.read_only_fields = []
         self.passed_id = self.plan_id_set()
         self.create_title()
