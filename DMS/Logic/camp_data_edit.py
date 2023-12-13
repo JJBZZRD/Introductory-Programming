@@ -14,6 +14,12 @@ class CampDataEdit:
             camp = camp[0]
         else:
             return "Cannot find this campID. Please try again."
+        
+        plan = util.parse_result('Plan', Plan.get_plan_by_id(planID))[0]
+
+        if plan.status != 'Active':
+            return "You are not allowed to edit this camp because the plan has ended."
+
         try:
             if location:
                 camp.location = location
