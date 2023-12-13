@@ -7,7 +7,7 @@ from datetime import datetime
 class PersonDataEdit:
 
     @staticmethod
-    def update_volunteer(logged_in_user=None, volunteerID=None, first_name = None, last_name = None, phone = None, campID = None, username = None, password = None, date_of_birth = None, account_status = None):
+    def update_volunteer(logged_in_user=None, volunteerID=None, first_name = None, last_name = None, phone = None, campID = None, username = None, password = None, date_of_birth = None, account_status = None, created_time = None):
 
         if first_name:
             first_name = first_name.strip()
@@ -45,7 +45,7 @@ class PersonDataEdit:
         return f"Volunteer {id} has been deleted" if res else f"There is an error when deleting volunteer {id}"
     
     @staticmethod
-    def create_volunteer(logged_in_user=None, first_name = None, last_name = None, campID = None, username = None, password = None, date_of_birth = None, phone = None):
+    def create_volunteer(logged_in_user=None, first_name = None, last_name = None, campID = None, username = None, password = None, date_of_birth = None, phone = None, created_time = None):
 
 
         if phone and not util.is_phone_format(phone):
@@ -84,7 +84,7 @@ class PersonDataEdit:
 
     
     @staticmethod
-    def update_refugee(logged_in_user=None, id=None, first_name = None, last_name = None, date_of_birth = None, gender=None, family_id = None, campID = None, triage_category=None, medical_conditions = None, vital_status = None):
+    def update_refugee(logged_in_user=None, id=None, first_name = None, last_name = None, date_of_birth = None, gender=None, family_id = None, campID = None, triage_category=None, medical_conditions = None, vital_status = None, created_time = None):
         # print(f"id: {id}")
         refugee = PersonDataRetrieve.get_refugees(id=id)[0]
         try:
