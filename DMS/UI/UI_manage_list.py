@@ -216,14 +216,14 @@ class ManageList(tk.Frame):
 class PlanList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Plans', 'Add New Plan']
-        self.list_headers = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date', 'Status', 'Creation Time']
+        self.list_headers = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date', 'Water', 'Food', 'Medical Supplies', 'Shelter', 'Status', 'Creation Time']
         self.filter_values = ['Plan ID', 'Plan Name', 'Country', 'Event Name', 'Description', 'Start Date', 'End Date']
         self.list_data = PlanDataRetrieve.get_all_plans()
         self.get_search = PlanDataRetrieve.get_plan
         self.switch_to_page = 'AdminDashboard'
         self.record_button = 'NewPlan'
         self.filter_matching = {'Plan ID': 'planID', 'Plan Name': 'name', 'Country': 'country', 'Event Name': 'event_name',
-                                'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date', 'Status': 'active' ,'Creation Time': 'created_time' }
+                                'Description': 'description', 'Start Date': 'start_date', 'End Date': 'end_date', 'Status': 'active' ,'Creation Time': 'created_time', 'Water':'water', 'Food':'food', 'Medical Supplies':'medical_supplies', 'Shelter':'shelter'}
         self.status_filters = ['All', 'Active', 'Ended']
         self.export_name = 'Plans'
         self.create_title(plan=True)
