@@ -5,6 +5,7 @@ from ..Logic.plan_data_retrieve import PlanDataRetrieve
 from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.person_data_retrieve import PersonDataRetrieve
 from ..DB.camp import Camp
+from ..DB.plan import Plan
 import pandas as pd
 
 
@@ -235,7 +236,7 @@ class CampList(ManageList):
         self.list_type = ['Manage Camps', 'Add New Camp']
         self.list_headers = ['Camp ID', 'Location', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID', 'Creation Time']
         self.filter_values = ['Camp ID', 'Location', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID']
-        self.list_data = CampDataRetrieve.get_all_camps()
+        self.list_data = self.list_by_plan()
         self.get_search = CampDataRetrieve.get_camp
         self.switch_to_page = 'EditCamp'
         self.record_button = 'NewCamp'
@@ -245,6 +246,12 @@ class CampList(ManageList):
         self.create_title()
         self.create_search()
         self.create_results()
+
+    def list_by_plan(self):
+        if isinstance(self.screen_data, Plan):
+            return CampDataRetrieve.get_camp(planID=self.screen_data.planID)
+        else:
+            return CampDataRetrieve.get_all_camps()
 
 
 
