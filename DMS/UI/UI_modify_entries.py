@@ -335,7 +335,7 @@ class NewVolunteer(ModifyEntries):
         # self.display_delete_button = False
         self.create_record = PersonDataEdit.create_volunteer
         self.entry_fields = {}
-        self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()]}
+        self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Account Status': ['Active', 'Inactive']}
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
@@ -416,8 +416,8 @@ class EditPersonalDetails(ModifyEntries):
         self.modify_type = ['Edit Personal Details']
         self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Password']
-        self.filter_matching = {'Volunteer ID': 'id', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username', 'Password': 'password',
-                'Date of Birth': 'date_of_birth', 'Phone': 'phone_num', 'Camp ID': 'camp_id', 'Account Status': 'account_status'}
+        self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username', 'Password': 'password',
+                'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status'}
         self.button_labels = ['Save Changes']#, 'Delete', 'Deactivate']
         self.current_data = self.logged_in_user.display_info()
         self.save_record = PersonDataEdit.update_volunteer
