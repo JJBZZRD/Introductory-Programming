@@ -93,7 +93,8 @@ class PersonDataEdit:
     
     @staticmethod
     def update_refugee(id, first_name = None, last_name = None, date_of_birth = None, gender=None, family_id = None, camp_id = None, triage_category=None, medical_conditions = None, vital_status = None):
-        refugee = PersonDataRetrieve.get_refugees('id', id)[0]
+        # print(f"id: {id}")
+        refugee = PersonDataRetrieve.get_refugees(id=id)[0]
         try:
             if first_name:
                 refugee.first_name = first_name.strip()

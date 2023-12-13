@@ -52,6 +52,7 @@ class PersonDataRetrieve:
     
     @staticmethod
     def get_refugees(id=None, name=None, date_of_birth=None, gender=None, family_id=None, camp_id=None, triage_category=None, medical_condition=None, vital_status=None):
+        # print(f"id: {id}")
         if name:
             refugee_tuple_1 = Refugee.get_refugee(refugeeID=id, first_name=name, date_of_birth=date_of_birth, gender=gender, familyID=family_id, campID=camp_id, triage_category=triage_category, medical_conditions=medical_condition, vital_status=vital_status)
 

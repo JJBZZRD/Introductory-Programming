@@ -107,6 +107,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
     def get_refugee(refugeeID=None, first_name=None, last_name=None, date_of_birth=None, gender=None,
                     familyID=None, campID=None, triage_category=None, medical_conditions=None,
                     vital_status=None):
+        print(f"refugeeID: {refugeeID}")
         query = "SELECT * FROM refugees WHERE refugeeID IS NOT NULL"
 
         if refugeeID:
@@ -130,7 +131,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
         if vital_status:
             query += f" AND vital_status = '{vital_status}'" 
 
-        print(f"query: {query}")
+        # print(f"query: {query}")
         cursor.execute(query)
         return cursor.fetchall()
 
