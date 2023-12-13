@@ -104,11 +104,10 @@ class PlanEdit:
                 if not util.validate_end_date(start_date, end_date):
                     # print('aaaaaa')
                     return "Invalid end date"
-
-            
+            print("aaaaaaaa")
             res = Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
 
-            print(f"res:  {res}")
+            print(f"res: Plan.update_plan  {res}")
 
             return util.parse_result('Plan', res)
         elif status == 'Ended':
@@ -122,6 +121,8 @@ class PlanEdit:
                     return util.parse_result('Plan', res)
             else:
                 return "Error: ended plan must have an end date"
+        else:
+            return f"Error: Invalid status: {status}"
 
 
     @staticmethod

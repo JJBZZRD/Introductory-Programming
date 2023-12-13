@@ -89,6 +89,7 @@ class Plan:  # Plan class has attributes matching columns in table
         params.append(planID)
         cursor.execute(f"""UPDATE plans SET {', '.join(query)} WHERE planID = ?""", params)
         conn.commit()
+        print(f"Plan {planID} has been updated")
         return Plan.get_plan(planID=planID)
 
     @staticmethod
