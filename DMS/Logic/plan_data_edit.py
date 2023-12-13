@@ -21,7 +21,7 @@ class PlanEdit:
                 plan.status = 'Ended'
 
     @staticmethod
-    def create_plan(name, event_name, country, description, start_date, end_date=None, water=None, food=None, medical_supplies=None, shelter=None, status='Active'):
+    def create_plan(logged_in_user, name, event_name, country, description, start_date, end_date=None, water=None, food=None, medical_supplies=None, shelter=None, status='Active'):
         for attr in [start_date, name, country, event_name, description]:
             if not attr:
                 return "Please provide {}".format(attr)

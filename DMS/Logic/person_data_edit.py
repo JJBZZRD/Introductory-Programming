@@ -45,7 +45,7 @@ class PersonDataEdit:
         return f"Volunteer {id} has been deleted" if res else f"There is an error when deleting volunteer {id}"
     
     @staticmethod
-    def create_volunteer(first_name = None, last_name = None, campID = None, username = None, password = None, date_of_birth = None, phone = None):
+    def create_volunteer(logged_in_user, first_name = None, last_name = None, campID = None, username = None, password = None, date_of_birth = None, phone = None):
 
 
         if phone and not util.is_phone_format(phone):
@@ -66,7 +66,7 @@ class PersonDataEdit:
         return util.parse_result('Volunteer', volunteer_tuples)
     
     @staticmethod
-    def create_refugee(first_name, last_name, date_of_birth, gender, family_id, campID, triage_category = 'None', medical_conditions = None, vital_status = 'Alive'):
+    def create_refugee(logged_in_user, first_name, last_name, date_of_birth, gender, family_id, campID, triage_category = 'None', medical_conditions = None, vital_status = 'Alive'):
 
 
         if first_name and not util.is_valid_name(first_name):
