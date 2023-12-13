@@ -93,16 +93,16 @@ def validate(value, message):
     return value
 
 def validate_end_date(start_time, end_time):
-    if not validate_date(end_time):
-        return False
-    else:
-        try:
-            start_time = datetime.strptime(start_time, '%Y-%m-%d').date()
-            end_time = datetime.strptime(end_time, '%Y-%m-%d').date()
-            return start_time < end_time
-        except Exception as e:
-            print(e)
+    try:
+        start_time = datetime.strptime(start_time, '%Y-%m-%d').date()
+        end_time = datetime.strptime(end_time, '%Y-%m-%d').date()
+        if start_time < end_time:
             return False
+        else:
+            return True
+    except Exception as e:
+        print(e)
+        return False
      
 
 # def validate_end_date(start_time, end_time):

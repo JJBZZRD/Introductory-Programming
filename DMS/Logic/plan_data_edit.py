@@ -32,13 +32,40 @@ class PlanEdit:
         if country not in get_all_countries():
             return "Please enter a valid country"
 
-        if not util.validate_date(start_date):
-            print(f" =============== plan_data_edit.create_plan() ERROR: Invalid date format for start_date: {start_date} has to be yyyy-mm-dd =========")
-            return "Invalid date format for start_date: has to be yyyy-mm-dd"
-        if end_date and (end_date not in ["yyyy-mm-dd", '', ' ']):
-            if not util.validate_end_date(start_date, end_date):
-                print(f" =============== plan_data_edit.create_plan() ERROR: Invalid end_date: {end_date} has to be in yyyy-mm-dd and greater than start_date =========")
-                return "Invalid date format for end_date: has to be yyyy-mm-dd"
+        if start_date in ["yyyy-mm-dd", '', ' ']:
+            return "Please enter start date"
+        if start_date and start_date not in ["yyyy-mm-dd", '', ' ']:
+            if util.validate_date(start_date):
+                start_year = datetime.strptime(start_date, '%Y-%m-%d').date().year
+                current_year = datetime.now().year
+                if start_year > current_year:
+                    return "        Invalid year        "
+            if not util.validate_date(start_date):
+                return "Invalid date for start date (yyyy-mm-dd)"
+
+        if end_date and end_date not in ["yyyy-mm-dd", '', ' ']:
+            if util.validate_date(end_date):
+                if util.validate_end_date(start_date, end_date):
+                    return "Invalid. End date must be after start date"
+            if not util.validate_date(end_date):
+                return "Invalid date for end date (yyyy-mm-dd)"
+
+        if name in ["Enter Plan Name", '', ' ']:
+            return "Please enter plan name"
+
+        if event_name in ["Enter Event Name", '', ' ']:
+            return "Please enter event name"
+
+        if description in ["Enter Description", '', ' ']:
+            return "Please enter description"
+
+        # if not util.validate_date(start_date):
+        #     print(f" =============== plan_data_edit.create_plan() ERROR: Invalid date format for start_date: {start_date} has to be yyyy-mm-dd =========")
+        #     return "Invalid date format for start_date: has to be yyyy-mm-dd"
+        # if end_date and (end_date not in ["yyyy-mm-dd", '', ' ']):
+        #     if not util.validate_end_date(start_date, end_date):
+        #         print(f" =============== plan_data_edit.create_plan() ERROR: Invalid end_date: {end_date} has to be in yyyy-mm-dd and greater than start_date =========")
+        #         return "Invalid date format for end_date: has to be yyyy-mm-dd"
         else:
             end_date = None
         now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
