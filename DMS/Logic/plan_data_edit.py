@@ -21,7 +21,7 @@ class PlanEdit:
                 plan.status = 'Ended'
 
     @staticmethod
-    def create_plan(logged_in_user, name, event_name, country, description, start_date, end_date=None, water=None, food=None, medical_supplies=None, shelter=None, status='Active'):
+    def create_plan(logged_in_user=None, name, event_name, country, description, start_date, end_date=None, water=None, food=None, medical_supplies=None, shelter=None, status='Active'):
         for attr in [start_date, name, country, event_name, description]:
             if not attr:
                 return "Please provide {}".format(attr)
@@ -53,7 +53,7 @@ class PlanEdit:
             return util.parse_result('Plan', plan)
 
     @staticmethod
-    def update_plan(logged_in_user, planID=None, name=None, event_name=None, country=None, description=None, start_date=None, end_date=None, water=None, food=None, shelter=None, medical_supplies=None, status=None, created_time=None):
+    def update_plan(logged_in_user=None, planID=None, name=None, event_name=None, country=None, description=None, start_date=None, end_date=None, water=None, food=None, shelter=None, medical_supplies=None, status=None, created_time=None):
 
         tuple = (planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
         print(f"tuple: {tuple}")

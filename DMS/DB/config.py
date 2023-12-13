@@ -112,7 +112,8 @@ def create_database():
     current_user_table = """
     CREATE TABLE IF NOT EXISTS current_user (
         id INTEGER PRIMARY KEY,
-        username TEXT
+        username TEXT,
+        time TEXT
     )
     """
 

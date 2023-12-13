@@ -70,7 +70,7 @@ def validate_date(date):
         date = datetime.strptime(date, '%Y-%m-%d').date()
 
         if not 1 <= date.day <= 31:
-                return ValueError("Invalid day")
+            return ValueError("Invalid day")
         elif not 1 <= date.month <= 12:
             return ValueError("Invalid month")
         elif not 2023 <= date.year <= 9999:
