@@ -7,7 +7,7 @@ from datetime import datetime
 class PersonDataEdit:
 
     @staticmethod
-    def update_volunteer(id, first_name = None, last_name = None, phone_num = None, camp_id = None, username = None, password = None, date_of_birth = None, account_status = None):
+    def update_volunteer(volunteerID, first_name = None, last_name = None, phone_num = None, camp_id = None, username = None, password = None, date_of_birth = None, account_status = None):
         # get variables
         # volunteer = PersonDataRetrieve.get_volunteers('id', id)
 
