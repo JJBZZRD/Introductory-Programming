@@ -35,7 +35,7 @@ class Volunteer:
             sql = """
                 INSERT INTO volunteers (
                 first_name, last_name, username, password, date_of_birth, phone, account_status, campID, created_time) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """
             cursor.execute(sql, (first_name, last_name, username,
                                  password, date_of_birth, phone, "Active", campID, created_time))

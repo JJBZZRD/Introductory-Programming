@@ -41,7 +41,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
             sql = """
                 INSERT INTO refugees (
                 first_name, last_name, date_of_birth, gender, familyID, campID, triage_category, medical_conditions, vital_status, created_time) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """
             cursor.execute(sql, (first_name, last_name, date_of_birth, gender,
                                  familyID, campID, triage_category, medical_conditions, vital_status, created_time))
