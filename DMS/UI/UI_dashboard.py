@@ -88,6 +88,14 @@ class Dashboard(tk.Frame):
             else family_stats
         )
 
+        separate_families = (
+            family_stats.get("separate_families", "Error fetching separate families")
+            if isinstance(family_stats, dict)
+            else family_stats
+        )
+
+        num_separate_families = len(separate_families)
+
         stats_functions = [
             ("Gender Distribution", gender_stats),
             ("Age Distribution", age_stats),
@@ -122,7 +130,19 @@ class Dashboard(tk.Frame):
 
         tk.Label(
             camp_statistics_frame,
-            text=f"Families: {num_families}",
+            text=f"Number of Families: {num_families}",
+        ).grid(row=row, column=0, sticky="w", padx=5)
+        row += 1
+
+        tk.Label(
+            camp_statistics_frame,
+            text=f"Number of Separated Families: {num_separate_families}",
+        ).grid(row=row, column=0, sticky="w", padx=5)
+        row += 1
+
+        tk.Label(
+            camp_statistics_frame,
+            text=f"IDs of Separated Families: {str(separate_families)[1:-1]}",
         ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
@@ -148,13 +168,15 @@ class Dashboard(tk.Frame):
             stats_text = ""
             for key, value in stats.items():
                 if "num_" in key:
-                    pct_key = "pct_" + key.split("_")[1]
+                    key_parts = key.split("_", 1)  # Split only at the first underscore
+                    pct_key = "pct_" + key_parts[1]
                     pct_value = stats.get(pct_key, 0)
+                    formatted_key = key_parts[1].replace('_', ' ').title()  # Replace subsequent underscores with spaces
                     formatted_stat = (
-                        f"{key.split('_')[1].title()}: {pct_value:.0f}% ({value})"
+                        f"{formatted_key}: {pct_value:.0f}% ({value})"
                     )
                     stats_text += formatted_stat + " | "
-
+            
             stats_text = stats_text.rstrip(" | ")
 
             tk.Label(
@@ -766,6 +788,14 @@ class AdminDashboard(Dashboard):
             else family_stats
         )
 
+        separate_families = (
+            family_stats.get("separate_families", "Error fetching families")
+            if isinstance(family_stats, dict)
+            else family_stats
+        )
+
+        num_separate_families = len(separate_families)
+
         stats_functions = [
             ("Gender Distribution", gender_stats),
             ("Age Distribution", age_stats),
@@ -800,7 +830,19 @@ class AdminDashboard(Dashboard):
 
         tk.Label(
             plan_statistics_frame,
-            text=f"Families: {num_families}",
+            text=f"Number of Families: {num_families}",
+        ).grid(row=row, column=0, sticky="w", padx=5)
+        row += 1
+
+        tk.Label(
+            plan_statistics_frame,
+            text=f"Number of Separated Families: {num_separate_families}",
+        ).grid(row=row, column=0, sticky="w", padx=5)
+        row += 1
+
+        tk.Label(
+            plan_statistics_frame,
+            text=f"IDs of Separated Families: {str(separate_families)[1:-1]}",
         ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
@@ -826,13 +868,15 @@ class AdminDashboard(Dashboard):
             stats_text = ""
             for key, value in stats.items():
                 if "num_" in key:
-                    pct_key = "pct_" + key.split("_")[1]
+                    key_parts = key.split("_", 1)  # Split only at the first underscore
+                    pct_key = "pct_" + key_parts[1]
                     pct_value = stats.get(pct_key, 0)
+                    formatted_key = key_parts[1].replace('_', ' ').title()  # Replace subsequent underscores with spaces
                     formatted_stat = (
-                        f"{key.split('_')[1].title()}: {pct_value:.0f}% ({value})"
+                        f"{formatted_key}: {pct_value:.0f}% ({value})"
                     )
                     stats_text += formatted_stat + " | "
-
+            
             stats_text = stats_text.rstrip(" | ")
 
             tk.Label(
