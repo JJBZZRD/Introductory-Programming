@@ -24,7 +24,7 @@ class Plan:  # Plan class has attributes matching columns in table
 
     def display_info(self):
         return [str(self.planID), str(self.name), str(self.country), str(self.event_name), str(self.description),
-                str(self.start_date), str(self.end_date), self.status, self.created_time]
+                str(self.start_date), str(self.end_date), self.water, self.food, self.medical_supplies, self.shelter,  self.status, self.created_time]
 
     @staticmethod
     def get_plan_by_id(planID):  # Get plan details by selecting on planID. Returns a list of tuples.

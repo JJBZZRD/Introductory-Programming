@@ -422,7 +422,7 @@ class Dashboard(tk.Frame):
 
         tk.Label(
             additional_resources_frame,
-            text=f"\nButtons above update plan {plan.planID}'s available nadditional resources.",
+            text=f"\nButtons above update plan {plan.planID}'s available additional resources.",
         ).grid(
             row=len(additional_resources) * 2 + 2,
             column=0,
