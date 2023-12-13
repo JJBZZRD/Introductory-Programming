@@ -85,6 +85,8 @@ class PlanEdit:
         if status and status not in ['Active', 'Ended']:
             return "Invalid status"
 
+        #return message to plan ui
+
         res = Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
 
         print(f"res:  {res}")
