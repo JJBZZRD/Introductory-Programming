@@ -1,6 +1,6 @@
 from .config import conn, cursor
 
-class Camp:  # Camp class has attributes matching columns in table
+class AuditTable:  # Camp class has attributes matching columns in table
     def __init__(self, auditID, table_name, recordID, field_name, old_value, new_value, action, created_time, changed_by):
         self.auditID = auditID
         self.table_name = table_name
