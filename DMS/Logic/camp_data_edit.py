@@ -7,7 +7,7 @@ from datetime import datetime
 class CampDataEdit:
 
     @staticmethod
-    def update_camp(campID, location=None, shelter=None, water=None,food=None, medical_supplies=None, planID=None):
+    def update_camp(logged_in_user, campID, location=None, shelter=None, water=None,food=None, medical_supplies=None, planID=None):
         # get variables
         camp = CampDataRetrieve.get_camp(campID=campID)
         if len(camp) >0:
