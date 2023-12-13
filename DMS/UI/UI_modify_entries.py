@@ -415,8 +415,8 @@ class EditPersonalDetails(ModifyEntries):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Personal Details']
         self.modifiable_variables = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
-                'Date of Birth', 'Phone', 'Account Status', 'Camp ID']
-        self.filter_matching = {'Volunteer ID': 'id', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username',
+                'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Password']
+        self.filter_matching = {'Volunteer ID': 'id', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username', 'Password': 'password',
                 'Date of Birth': 'date_of_birth', 'Phone': 'phone_num', 'Camp ID': 'camp_id', 'Account Status': 'account_status'}
         self.button_labels = ['Save Changes']#, 'Delete', 'Deactivate']
         self.current_data = self.logged_in_user.display_info()
