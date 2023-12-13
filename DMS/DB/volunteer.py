@@ -145,12 +145,11 @@ class Volunteer:
 
     @staticmethod
     def get_by_planID(planID):
-        query = []
-        params = []
-        camps = Camp.get_camp(planID=planID)
-        campIDs = [camps[i][0] for i in range(len(camps))]
-        for campID in campIDs:
-            query.append("campID = ?")
-            params.append(campID)
-        cursor.execute(f"""SELECT * FROM volunteers WHERE {' OR '.join(query)}""", params)
+        q = f"""
+            SELECT * FROM volunteers
+            WHERE campID IN (
+                SELECT campID FROM camps
+                WHERE planID = {planID}
+            )"""
+        cursor.execute(q)
         return cursor.fetchall()

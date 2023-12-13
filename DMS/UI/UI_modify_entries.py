@@ -61,38 +61,40 @@ class ModifyEntries(tk.Frame):
         k = 1
         j = 0
         for i, variable in enumerate(self.modifiable_variables):  # this loop creates a vertical list of columns that is 4 high maximum
-            if variable in self.fields_to_be_dropdown and variable not in self.passed_id:
-                entry_name = ttk.Label(self.lower_frame, text=variable)
-                entry_name.grid(column=k, row=j, pady=5, padx=5)
+            if variable is not None:
+                variable_in_passed_id = False if self.passed_id is None else variable in self.passed_id
+                if variable in self.fields_to_be_dropdown and not variable_in_passed_id:
+                    entry_name = ttk.Label(self.lower_frame, text=variable)
+                    entry_name.grid(column=k, row=j, pady=5, padx=5)
 
-                drop_down = ttk.Combobox(self.lower_frame, values=self.fields_to_be_dropdown[variable], state='readonly')
+                    drop_down = ttk.Combobox(self.lower_frame, values=self.fields_to_be_dropdown[variable], state='readonly')
 
-                if self.current_data is not None and i < len(self.current_data):
-                    drop_down.set(self.current_data[i])
+                    if self.current_data is not None and i < len(self.current_data):
+                        drop_down.set(self.current_data[i])
+                    else:
+                        drop_down.set(self.fields_to_be_dropdown[variable][0])
+                    drop_down.grid(column=k + 1, row=j, pady=5, padx=5)
+                    self.entry_fields.update({variable: [self.filter_matching[variable], drop_down]})
                 else:
-                    drop_down.set(self.fields_to_be_dropdown[variable][0])
-                drop_down.grid(column=k + 1, row=j, pady=5, padx=5)
-                self.entry_fields.update({variable: [self.filter_matching[variable], drop_down]})
-            else:
-                entry_name = ttk.Label(self.lower_frame, text=variable)
-                entry_name.grid(column=k, row=j, pady=5, padx=5)
+                    entry_name = ttk.Label(self.lower_frame, text=variable)
+                    entry_name.grid(column=k, row=j, pady=5, padx=5)
 
-                entry_field = ttk.Entry(self.lower_frame)
-                entry_field.grid(column=k + 1, row=j, pady=5, padx=5)
+                    entry_field = ttk.Entry(self.lower_frame)
+                    entry_field.grid(column=k + 1, row=j, pady=5, padx=5)
 
-                self.entry_fields.update({variable: [self.filter_matching[variable], entry_field]})
-                
-                if variable in self.passed_id:
-                    placeholder = self.passed_id[variable]
+                    self.entry_fields.update({variable: [self.filter_matching[variable], entry_field]})
+                    
+                    if variable_in_passed_id:
+                        placeholder = self.passed_id[variable]
 
-                elif self.current_data is not None and i < len(self.current_data):
-                    placeholder = self.current_data[i]
-                elif "Date" in variable:
-                    placeholder = "yyyy-mm-dd"
-                elif variable in ["Water", "Food", "Medical Supplies", "Shelter"]:
-                    placeholder = "0"
-                else:
-                    placeholder = "Enter " + variable
+                    elif self.current_data is not None and i < len(self.current_data):
+                        placeholder = self.current_data[i]
+                    elif "Date" in variable:
+                        placeholder = "yyyy-mm-dd"
+                    elif variable in ["Water", "Food", "Medical Supplies", "Shelter"]:
+                        placeholder = "0"
+                    else:
+                        placeholder = "Enter " + variable
 
 
                 entry_field.insert(0, placeholder)
