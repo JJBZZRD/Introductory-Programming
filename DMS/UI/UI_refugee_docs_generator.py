@@ -4,7 +4,7 @@ from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 
 def generate_refugee_document(refugee):
-    refugee_details = PersonDataRetrieve.get_refugees(refugeeID=refugee.refugeeID)[0]
+    refugee_details = PersonDataRetrieve.get_refugees(id=refugee.refugeeID)[0]
 
     # Retrieve camp details
     camp_details = CampDataRetrieve.get_camp(campID=refugee.campID)
@@ -13,7 +13,7 @@ def generate_refugee_document(refugee):
     volunteer_contact = PersonDataRetrieve.get_volunteers(campID=refugee.campID)[0]  
 
     # Retrieve plan details linked to the camp
-    plan_details = PlanDataRetrieve.get_plan(planID=camp_details['planID'])
+    plan_details = PlanDataRetrieve.get_plan(planID=camp_details[0].planID)
 
     # family_members = get_family_members(refugee_details['familyID'])
 
