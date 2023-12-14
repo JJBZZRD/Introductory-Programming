@@ -104,7 +104,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
 
     @staticmethod  # Get refugee details by selecting on any combination of attributes. Can be used to find the
     # refugeeID which can then be used in the delete and update methods. Returns a list of tuples.
-    def get_refugee(refugeeID=None, first_name=None, last_name=None, date_of_birth=None, gender=None,
+    def get_refugee(refugeeID=None, name=None, date_of_birth=None, gender=None,
                     familyID=None, campID=None, triage_category=None, medical_conditions=None,
                     vital_status=None):
         # print(f"refugeeID: {refugeeID}")
@@ -112,10 +112,8 @@ class Refugee:  # Refugee class has attributes matching columns in table
 
         if refugeeID:
             query += f" AND refugeeID = {refugeeID}"
-        if first_name:
-            query += f" AND first_name LIKE '%{first_name}%'"
-        if last_name:
-            query += f" AND last_name LIKE '%{last_name}%'" 
+        if name:
+            query += f" AND (first_name LIKE '%{name}%' OR last_name LIKE '%{name}%')" 
         if date_of_birth:
             query += f" AND date_of_birth = '{date_of_birth}'" 
         if gender:
