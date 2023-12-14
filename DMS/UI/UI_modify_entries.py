@@ -187,7 +187,7 @@ class ModifyEntries(tk.Frame):
 
 
             case 'Export Document':
-                doc.generate_refugee_document(self.screen_data)
+                doc.generate_refugee_document(self.root, self.screen_data)
        
 
 
