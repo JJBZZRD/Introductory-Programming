@@ -38,7 +38,7 @@ class CampDataEdit:
         # validate
         if location:
             if not util.is_valid_name(location):
-                return "You should enter a valid location name."
+                return "You should enter a valid camp name."
         if shelter:
             if util.is_num(shelter):
                 if not util.is_positive(shelter):
@@ -79,7 +79,7 @@ class CampDataEdit:
             if location in ["Enter Name", '', ' ']:
                 return "Please enter name"
             elif not util.is_valid_name(location):
-                return "You should enter a valid location name."
+                return "You should enter a valid camp name."
         if shelter:
             if util.is_num(shelter):
                 if not util.is_positive(shelter):

@@ -124,7 +124,7 @@ def create_database():
 
     audit_table = """
     CREATE TABLE IF NOT EXISTS audit (
-        auditID INTEGER PRIMARY KEY,
+        auditID INTEGER PRIMARY KEY AUTOINCREMENT,
         table_name TEXT,
         recordID INTEGER,
         field_name TEXT,
@@ -133,7 +133,7 @@ def create_database():
         action TEXT,
         action_time TEXT,
         changed_by TEXT
-    )
+    );
     """
 
     cursor.execute(audit_table)
@@ -157,6 +157,7 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
             CREATE TRIGGER IF NOT EXISTS {table_name}_{field}_insert
             AFTER INSERT ON {table_name}
             FOR EACH ROW
+            WHEN (SELECT username FROM current_user ORDER BY time DESC LIMIT 1) IS NOT NULL
             BEGIN
                 INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
                 VALUES ('{table_name}', NEW.{primary_key_field}, '{field}', NULL, NEW.{field}, 'INSERT', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
@@ -170,6 +171,7 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
             AFTER UPDATE OF {field} ON {table_name}
             FOR EACH ROW
             WHEN OLD.{field} IS NOT NEW.{field}
+            AND (SELECT username FROM current_user ORDER BY time DESC LIMIT 1) IS NOT NULL
             BEGIN
                 INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
                 VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NEW.{field}, 'UPDATE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
@@ -182,6 +184,7 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
             CREATE TRIGGER IF NOT EXISTS {table_name}_{field}_delete
             AFTER DELETE ON {table_name}
             FOR EACH ROW
+            WHEN (SELECT username FROM current_user ORDER BY time DESC LIMIT 1) IS NOT NULL
             BEGIN
                 INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
                 VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NULL, 'DELETE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
@@ -238,6 +241,7 @@ def clear_dummy_data():
 
 
 def insert_dummy_data():
+
     plans_data = """
     INSERT INTO plans (planID, start_date, end_date, name, country, event_name, description, shelter, water, food, medical_supplies, status, created_time) VALUES
     (1, '2023-01-01', '2025-01-01', 'London Refugee Camps', 'United Kingdom', 'UK Civil War', 'Refugees fleeing UK civil war', 200, 200, 200, 200, 'Active', '2023-01-01T14:36:25'),
@@ -322,7 +326,7 @@ def insert_dummy_data():
     ('Oliver', 'Smith', '1980-03-25', 'Male', 1, 1, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
     ('Charlotte', 'Smith', '1995-12-05', 'Female', 1, 1, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
     ('Henry', 'Smith', '2010-05-18', 'Male', 1, 1, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Sophia', 'Williams', '1998-10-30', 'Female', 2, 1, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
+    ('Sophia', 'Williams', '1998-10-30', 'Female', 2, 1, 'Urgent', 'Respiratory Infection', 'Deceased', '2023-01-01T14:36:25'),
     ('Jacob', 'Williams', '2014-06-22', 'Male', 2, 1, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
     ('Amelia', 'Williams', '2003-04-03', 'Female', 2, 1, 'Non-Urgent', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
     ('William', 'Lee', '1990-01-12', 'Male', 3, 1, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
@@ -344,7 +348,7 @@ def insert_dummy_data():
     ('Alexander', 'White', '1995-03-25', 'Male', 8, 2, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
     ('Mia', 'White', '2008-12-05', 'Female', 8, 2, 'None', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
     ('Leo', 'White', '2012-05-18', 'Male', 8, 2, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Isabella', 'White', '1999-09-30', 'Female', 8, 2, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
+    ('Isabella', 'White', '1999-09-30', 'Female', 8, 2, 'Urgent', 'Respiratory Infection', 'Deceased', '2023-01-01T14:36:25'),
     ('James', 'Martin', '2007-11-15', 'Male', 9, 2, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
     ('Poppy', 'Martin', '2015-04-03', 'Female', 9, 2, 'None', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
     ('Jack', 'Martin', '1988-06-22', 'Male', 9, 2, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
@@ -366,13 +370,13 @@ def insert_dummy_data():
     ('Oliver', 'Harrison', '2002-08-15', 'Male', 11, 3, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
     ('Ava', 'Harrison', '2010-10-05', 'Female', 11, 3, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
     ('Ethan', 'Clark', '2014-11-18', 'Male', 12, 3, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Mia', 'Clark', '2001-09-30', 'Female', 12, 3, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
+    ('Mia', 'Clark', '2001-09-30', 'Female', 12, 3, 'Urgent', 'Respiratory Infection', 'Deceased', '2023-01-01T14:36:25'),
     ('Noah', 'Clark', '2012-01-15', 'Male', 12, 3, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
     ('Layla', 'Thompson', '2015-04-02', 'Female', 7, 3, 'Non-Urgent', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
     ('Oliver', 'Robert', '1998-01-12', 'Male', 13, 3, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
     
     -- Camp 4
-    ('Isla', 'Dupont', '2005-09-20', 'Female', 14, 4, 'Urgent', 'Heart Disease', 'Alive', '2023-01-01T14:36:25'),
+    ('Isla', 'Dupont', '2005-09-20', 'Female', 14, 4, 'Urgent', 'Heart Disease', 'Deceased', '2023-01-01T14:36:25'),
     ('Louis', 'Dupont', '1992-07-08', 'Male', 14, 4, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
     ('Sophia', 'Dupont', '1996-06-18', 'Female', 14, 4, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
     ('Paulo', 'Vidal', '1983-08-14', 'Male', 15, 4, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
@@ -427,6 +431,56 @@ def insert_dummy_data():
     """
 
     cursor.execute(insert_countries)
+
+    audit_data = """
+    INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by) VALUES
+    ('plans', 1, 'shelter', '200', '220', 'UPDATE', '2023-03-01T10:00:00', 'admin'),
+    ('plans', 2, 'description', 'Refugees fleeing Belleville nuclear meltdown', 'Relief for Belleville nuclear incident', 'UPDATE', '2023-03-02T11:30:00', 'admin'),
+    ('plans', 3, 'status', 'Active', 'Completed', 'UPDATE', '2023-04-10T09:20:00', 'volunteer1'),
+    ('camps', 2, 'water', '300', '350', 'UPDATE', '2023-03-05T08:15:00', 'volunteer12'),
+    ('camps', 4, 'location', 'Normandy', 'Lyon', 'UPDATE', '2023-03-06T14:50:00', 'volunteer7'),
+    ('volunteers', 3, 'phone', '555-9876', '555-0000', 'UPDATE', '2023-03-07T16:00:00', 'admin'),
+    ('volunteers', 10, 'account_status', 'Active', 'Inactive', 'UPDATE', '2023-03-11T13:45:00', 'volunteer2'),
+    ('refugees', 15, 'triage_category', 'None', 'Urgent', 'UPDATE', '2023-03-12T17:30:00', 'volunteer30'),
+    ('refugees', 21, 'medical_conditions', 'None', 'Chronic Pain', 'UPDATE', '2023-03-13T10:10:00', 'volunteer3'),
+    ('refugees', 7, 'vital_status', 'Alive', 'Deceased', 'UPDATE', '2023-03-15T12:00:00', 'volunteer25'),
+    ('refugees', 5, 'campID', '1', '2', 'UPDATE', '2023-02-01T09:00:00', 'volunteer11'),
+    ('refugees', 5, 'medical_conditions', 'None', 'Respiratory Infection', 'UPDATE', '2023-02-10T10:00:00', 'volunteer21'),
+    ('refugees', 5, 'triage_category', 'Non-Urgent', 'Urgent', 'UPDATE', '2023-02-10T10:05:00', 'volunteer21'),
+    ('refugees', 5, 'campID', '2', '1', 'UPDATE', '2023-02-20T15:00:00', 'volunteer1'),
+    ('refugees', 5, 'medical_conditions', 'Respiratory Infection', 'Severe Pneumonia', 'UPDATE', '2023-03-01T11:00:00', 'volunteer31'),
+    ('refugees', 5, 'campID', '1', '2', 'UPDATE', '2023-03-10T16:00:00', 'volunteer2'),
+    ('refugees', 5, 'triage_category', 'Urgent', 'Immediate', 'UPDATE', '2023-03-15T08:00:00', 'volunteer20'),
+    ('refugees', 5, 'vital_status', 'Alive', 'Deceased', 'UPDATE', '2023-03-20T14:00:00', 'volunteer20'),
+    ('camps', 1, 'shelter', '20', '30', 'UPDATE', '2023-02-05T10:00:00', 'admin'),
+    ('camps', 1, 'food', '600', '700', 'UPDATE', '2023-02-06T11:00:00', 'volunteer3'),
+    ('camps', 2, 'water', '300', '350', 'UPDATE', '2023-02-07T09:30:00', 'volunteer5'),
+    ('camps', 2, 'medical_supplies', '200', '250', 'UPDATE', '2023-02-08T08:45:00', 'volunteer1'),
+    ('camps', 3, 'shelter', '20', '25', 'UPDATE', '2023-02-10T14:00:00', 'volunteer2'),
+    ('camps', 3, 'food', '600', '650', 'UPDATE', '2023-02-11T15:30:00', 'volunteer7'),
+    ('camps', 4, 'water', '300', '320', 'UPDATE', '2023-02-12T10:15:00', 'admin'),
+    ('camps', 4, 'medical_supplies', '200', '230', 'UPDATE', '2023-02-13T11:20:00', 'volunteer9'),
+    ('camps', 5, 'shelter', '20', '22', 'UPDATE', '2023-02-14T12:00:00', 'volunteer4'),
+    ('camps', 5, 'food', '600', '620', 'UPDATE', '2023-02-15T13:45:00', 'volunteer6'),
+    ('camps', 6, 'water', '300', '280', 'UPDATE', '2023-02-17T09:00:00', 'volunteer11'),
+    ('camps', 6, 'medical_supplies', '200', '220', 'UPDATE', '2023-02-18T10:30:00', 'volunteer12'),
+    ('camps', 7, 'shelter', '20', '18', 'UPDATE', '2023-02-19T08:15:00', 'admin'),
+    ('camps', 7, 'food', '600', '580', 'UPDATE', '2023-02-20T09:45:00', 'volunteer8'),
+    ('refugees', 1, 'triage_category', 'Standard', 'Urgent', 'UPDATE', '2023-02-21T10:00:00', 'volunteer3'),
+    ('refugees', 1, 'medical_conditions', 'None', 'Respiratory Infection', 'UPDATE', '2023-02-22T11:00:00', 'volunteer2'),
+    ('refugees', 2, 'vital_status', 'Alive', 'Deceased', 'UPDATE', '2023-02-23T12:00:00', 'volunteer1'),
+    ('refugees', 2, 'medical_conditions', 'Diabetes', 'Diabetes, Heart Disease', 'UPDATE', '2023-02-24T13:00:00', 'volunteer4'),
+    ('refugees', 7, 'medical_conditions', 'Fractured Arm', 'Healed', 'UPDATE', '2023-02-25T14:00:00', 'volunteer5'),
+    ('refugees', 7, 'triage_category', 'None', 'Non-Urgent', 'UPDATE', '2023-02-26T15:00:00', 'volunteer6'),
+    ('refugees', 9, 'triage_category', 'Non-Urgent', 'Urgent', 'UPDATE', '2023-02-27T16:00:00', 'volunteer7'),
+    ('refugees', 9, 'medical_conditions', 'Heart Disease', 'Heart Disease, High Blood Pressure', 'UPDATE', '2023-02-28T17:00:00', 'volunteer8'),
+    ('refugees', 12, 'medical_conditions', 'Asthma', 'Asthma, Severe Pneumonia', 'UPDATE', '2023-03-02T10:00:00', 'volunteer10'),
+    ('refugees', 12, 'vital_status', 'Alive', 'Deceased', 'UPDATE', '2023-03-01T09:00:00', 'volunteer9'),
+    ('refugees', 16, 'campID', '2', '1', 'UPDATE', '2023-03-03T11:00:00', 'admin'),
+    ('refugees', 16, 'triage_category', 'Standard', 'Urgent', 'UPDATE', '2023-03-04T12:00:00', 'volunteer11');
+    """
+
+    cursor.execute(audit_data)
 
     # cursor.execute("""
     # INSERT INTO current_user (id, username) VALUES (1, 'default_user')
