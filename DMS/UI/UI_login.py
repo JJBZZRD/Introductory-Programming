@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import PhotoImage
 from ..Logic.person_data_retrieve import PersonDataRetrieve
+from ..Logic.plan_data_retrieve import PlanDataRetrieve
+from ..Logic.camp_data_retrieve import CampDataRetrieve
 import os
 import sys
 
@@ -24,9 +26,13 @@ class LoginScreen(tk.Frame):
             self.set_user(res[0])
             if res[0].campID is None:
                 screen = "PlanList"
+                self.show_screen(screen, res[0])
             else:
-                screen = "VolunteerDashboard"
-            self.show_screen(screen, res[0])
+                # screen = "VolunteerDashboard"
+                screen = "AdminDashboard"
+                camp = CampDataRetrieve.get_camp(campID=res[0].campID)
+                plan = PlanDataRetrieve.get_plan(planID=camp[0].planID)
+                self.show_screen(screen, plan[0])
 
     def __init__(self, ui_manager, **kwargs):
         super().__init__(ui_manager.root, **kwargs)
