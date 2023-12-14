@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import PhotoImage
 from ..Logic.person_data_retrieve import PersonDataRetrieve
-
+import os
 
 class LoginScreen(tk.Frame):
     def login(self, username, password):
@@ -38,10 +38,13 @@ class LoginScreen(tk.Frame):
         login_frame = tk.Frame(self)
         login_frame.pack(padx=10, pady=10)
 
-        original_image = PhotoImage(file="DMS/UI/logo.png")
-        logo_label = tk.Label(login_frame, image=original_image)
-        logo_label.image = original_image
-        logo_label.grid(row=0, column=0, columnspan=2, padx=(10, 20), pady=(10, 20))
+
+        # current_directory = os.getcwd()
+        # original_image = PhotoImage(file=current_directory+"/logo.png")
+        # # original_image = PhotoImage(file="DMS/UI/logo.png")
+        # logo_label = tk.Label(login_frame, image=original_image)
+        # logo_label.image = original_image
+        # logo_label.grid(row=0, column=0, columnspan=2, padx=(10, 20), pady=(10, 20))
 
         tk.Label(login_frame, text="Username:").grid(
             row=1, column=0, sticky="ew", padx=5, pady=5

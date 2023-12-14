@@ -77,8 +77,7 @@ def create_database():
         phone TEXT,
         account_status TEXT CHECK (account_status IN ('Active', 'Inactive')),
         campID INTEGER,
-        created_time TEXT,
-        FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
+        created_time TEXT
         )
         """
 
