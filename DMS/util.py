@@ -18,11 +18,11 @@ def is_phone_format(phone_num):
     return phone_num.isdigit() and len(phone_num) < 13
 
 def is_num(value):
-    return float(value)
+    return float(value) or value == '0'
 
 def is_positive(value):
     num = float(value)
-    return num > 0
+    return num >= 0
 
 def is_valid_country(value):
     countries = get_all_countries()
