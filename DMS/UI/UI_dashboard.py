@@ -133,7 +133,7 @@ class Dashboard(tk.Frame):
 
         tk.Label(
             camp_statistics_frame,
-            text=f"Unique families: {num_families}",
+            text=f"Unique Families: {num_families}",
         ).grid(row=row, column=0, sticky="w", padx=5)
         row += 1
 
