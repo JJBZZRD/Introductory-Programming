@@ -14,11 +14,12 @@ class AuditTable:  # Camp class has attributes matching columns in table
         self.changed_by = changed_by
 
     @classmethod
-    def init_from_tuple(cls, camp_tuple):
-        return cls(*camp_tuple)
+    def init_from_tuple(cls, audit_tuple):
+        return cls(*audit_tuple)
 
     def display_info(self):
-        return [str(self.auditID), str(self.table_name), str(self.recordID), str(self.field_name), str(self.old_value), str(self.new_value), str(self.action), str(self.created_time), str(self.changed_by)]
+        return [str(self.auditID), str(self.table_name), str(self.recordID), str(self.field_name), str(self.old_value),
+                str(self.new_value), str(self.action), str(self.created_time), str(self.changed_by)]
 
     @staticmethod
     def log_user_login_history(username, time):
