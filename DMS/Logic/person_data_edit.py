@@ -33,6 +33,9 @@ class PersonDataEdit:
             if not util.validate_date(date_of_birth):
                 return "Invalid date of birth (yyyy-mm-dd)"
 
+        if campID == 'None':
+            campID = None
+
         volunteer_tuples = Volunteer.update_volunteer(volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID)
 
         return util.parse_result('Volunteer', volunteer_tuples)
