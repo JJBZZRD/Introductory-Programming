@@ -44,7 +44,7 @@ def create_rtf_document(refugee_details, camp_details, volunteer_contact, family
     
     rtf_content += add_text("Camp Assignment", bold=True)
     rtf_content += add_text("Camp ID: " + camp_details.campID)
-    rtf_content += add_text("Camp Location: " + camp_details['location'])
+    rtf_content += add_text("Camp Location: " + camp_details.location)
 
     if family_members:
         rtf_content += add_text("Family Members:", bold=True)
