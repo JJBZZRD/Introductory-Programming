@@ -4,18 +4,21 @@ from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
 
 def generate_refugee_document(refugee):
-    refugee_details = PersonDataRetrieve.get_refugees(id=refugee.refugeeID)[0]
+    refugee_details = refugee #PersonDataRetrieve.get_refugees(id=refugee.refugeeID)[0]
 
     # Retrieve camp details
-    camp_details = CampDataRetrieve.get_camp(campID=refugee.campID)
+    camp_details = CampDataRetrieve.get_camp(campID=refugee.campID)[0]
 
     # The emergency contact is a volunteer at the same camp
     volunteer_contact = PersonDataRetrieve.get_volunteers(campID=refugee.campID)[0]  
 
     # Retrieve plan details linked to the camp
-    plan_details = PlanDataRetrieve.get_plan(planID=camp_details[0].planID)
+    plan_details = PlanDataRetrieve.get_plan(planID=camp_details.planID)[0]
 
     # family_members = get_family_members(refugee_details['familyID'])
+
+
+    family_members = PersonDataRetrieve.get_refugees(family_id=refugee.familyID)
 
     create_rtf_document(refugee_details, camp_details, volunteer_contact, family_members)
 
@@ -49,14 +52,14 @@ def create_rtf_document(refugee_details, camp_details, volunteer_contact, family
     if family_members:
         rtf_content += add_text("Family Members:", bold=True)
         for member in family_members:
-            rtf_content += add_text(member['name'] + " (" + member['relationship'] + ")")
+            rtf_content += add_text(member.refugeeID + ' ' + member.first_name + ' ' + member.last_name)
 
     rtf_content += add_text("Emergency Contact Information", bold=True)
     rtf_content += add_text("Emergency Contact: " + volunteer_contact.first_name + ' ' + volunteer_contact.last_name + ", " + str(volunteer_contact.phone))
 
     rtf_content += "}"
 
-    filename = f"refugee_document_{refugee_details.refugeeID}_{refugee_details['full_name']}.rtf"
+    filename = f"refugee_document_{refugee_details.refugeeID}_{refugee_details.first_name} + {refugee_details.last_name}.rtf"
     with open(filename, "w") as file:
         file.write(rtf_content)
 
