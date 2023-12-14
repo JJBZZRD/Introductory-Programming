@@ -356,7 +356,7 @@ class AuditLogs(ManageList):
 
     def setup_list(self):
         self.list_type = ['Audit Logs']
-        self.list_headers = ['Audit ID', 'Table Name', 'Record ID', 'Field Name', 'Old Value', 'New Value', 'Action', 'Created Time', 'Changed By']
+        self.list_headers = ['Log ID', 'Table Name', 'Record ID', 'Field Name', 'Old Value', 'New Value', 'Action', 'Created Time', 'Changed By']
         self.filter_values = ['Table Name', 'Record ID', 'Field Name', 'Old Value', 'New Value', 'Action', 'Changed By']
         self.list_data = AuditDataRetrieve.get_all_audit_logs()
         self.get_search = AuditDataRetrieve.get_audit_logs
