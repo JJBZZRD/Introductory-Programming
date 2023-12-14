@@ -555,7 +555,7 @@ class Dashboard(tk.Frame):
         filter_button.grid(row=0, column=1, padx=3)
 
         update_list_func(camp, search_entry, refugees_treeview)
-        if self.logged_in_user.campID in ["None", camp.campID]:
+        if self.logged_in_user.campID in [None, camp.campID]:
             manage_button = ttk.Button(
                 refugees_volunteers_frame,
                 text=f"Manage Camp {display_type.capitalize()}",
@@ -603,7 +603,7 @@ class Dashboard(tk.Frame):
         unique_volunteers = {v.volunteerID: v for v in self.volunteers}.values()
 
         if not unique_volunteers:
-            volunteers_treeview.insert("", "end", text="No matching volunteers found.")
+            volunteers_treeview.insert("", "end", text="N/A")
         else:
             for volunteer in unique_volunteers:
                 volunteers_treeview.insert(
