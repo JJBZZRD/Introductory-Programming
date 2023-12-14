@@ -311,7 +311,7 @@ class VolunteerList(ManageList):
         if isinstance(self.screen_data, Camp):
             self.list_type[0] = f'Manage Volunteers for Plan {self.screen_data.planID}'
         else:
-            self.list_type[0] = f'Manage camps: Global'
+            self.list_type[0] = f'Manage Vounteers: Global'
 
 
 class RefugeeList(ManageList):
