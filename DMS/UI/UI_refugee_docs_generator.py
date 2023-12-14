@@ -52,7 +52,7 @@ def create_rtf_document(refugee_details, camp_details, volunteer_contact, family
     if family_members:
         rtf_content += add_text("Family Members:", bold=True)
         for member in family_members:
-            rtf_content += add_text(member.refugeeID + ' ' + member.first_name + ' ' + member.last_name)
+            rtf_content += add_text(str(member.refugeeID) + ' ' + member.first_name + ' ' + member.last_name)
 
     rtf_content += add_text("Emergency Contact Information", bold=True)
     rtf_content += add_text("Emergency Contact: " + volunteer_contact.first_name + ' ' + volunteer_contact.last_name + ", " + str(volunteer_contact.phone))
