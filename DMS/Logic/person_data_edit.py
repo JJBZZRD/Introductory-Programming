@@ -18,7 +18,7 @@ class PersonDataEdit:
             if not util.is_phone_format(phone):
                 return "Incorrect phone number format"
         if first_name and not util.is_valid_name(first_name):
-            return "Incorrect firt name format"
+            return "Incorrect first name format"
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
         if password == "Enter Password":
@@ -69,7 +69,7 @@ class PersonDataEdit:
         if first_name in ["Enter First Name", '', ' ']:
             return "Please enter first name"
         if first_name and not util.is_valid_name(first_name):
-            return "Incorrect firt name format"
+            return "Incorrect first name format"
 
         if last_name in ["Enter Last Name", '', ' ']:
             return "Please enter last name"
@@ -107,7 +107,7 @@ class PersonDataEdit:
         if first_name in ["Enter First Name", '', ' ']:
             return "Please enter first name"
         if first_name and not util.is_valid_name(first_name):
-            return "Incorrect firt name format"
+            return "Incorrect first name format"
 
         if last_name in ["Enter Last Name", '', ' ']:
             return "Please enter last name"
@@ -160,7 +160,7 @@ class PersonDataEdit:
             return "Invalid inputs, please check and try again"
         
         if first_name and not util.is_valid_name(first_name):
-            return "Incorrect firt name format"
+            return "Incorrect first name format"
 
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
