@@ -627,7 +627,7 @@ class Dashboard(tk.Frame):
             selected_refugee_list = PersonDataRetrieve.get_refugees(id=refugee_id)
             if selected_refugee_list:
                 selected_refugee = selected_refugee_list[0]
-                if self.logged_in_user.campID == selected_refugee.campID:
+                if self.logged_in_user.campID in [None,selected_refugee.campID]:
                     self.show_screen("EditRefugee", selected_refugee)
 
     def on_volunteer_double_click(self, event, treeview):
@@ -639,7 +639,7 @@ class Dashboard(tk.Frame):
             )
             if selected_volunteer_list:
                 selected_volunteer = selected_volunteer_list[0]
-                if self.logged_in_user.campID == selected_volunteer.campID:
+                if self.logged_in_user.campID in [None,selected_volunteer.campID]:
                     self.show_screen("EditVolunteer", selected_volunteer)
 
 
