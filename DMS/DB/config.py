@@ -375,7 +375,7 @@ def insert_dummy_data():
     ('Isla', 'Dupont', '2005-09-20', 'Female', 14, 4, 'Urgent', 'Heart Disease', 'Alive', '2023-01-01T14:36:25'),
     ('Louis', 'Dupont', '1992-07-08', 'Male', 14, 4, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
     ('Sophia', 'Dupont', '1996-06-18', 'Female', 14, 4, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Henry', 'Vidal', '1983-08-14', 'Male', 15, 4, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
+    ('Paulo', 'Vidal', '1983-08-14', 'Male', 15, 4, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
     ('Eva', 'Vidal', '2007-11-02', 'Female', 15, 4, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
     ('Daniel', 'Vidal', '2000-02-25', 'Male', 15, 4, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
     ('Sophie', 'Nguyen', '1993-03-12', 'Female', 16, 4, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
