@@ -39,6 +39,7 @@ class ModifyEntries(tk.Frame):
         self.read_only_fields = []
         self.screen_data_id = None
         self.page_nav_on_delete = None
+        self.page_nav_on_save = None
         self.passed_id = {}
         self.setup_modify()
 
@@ -216,7 +217,10 @@ class ModifyEntries(tk.Frame):
             msg = tk.Label(popup, text="Operation Successful \n\n You can now close this window and navigage to other pages")
             msg.pack(padx=20, pady=20)
 
-            dismiss_button = tk.Button(popup, text="Dismiss", command=lambda : (popup.destroy(), self.page_nav('back')))
+            if self.page_nav_on_save:
+                dismiss_button = tk.Button(popup, text="Dismiss", command=lambda : (popup.destroy(), self.show_screen(*self.page_nav_on_save)))
+            else:
+                dismiss_button = tk.Button(popup, text="Dismiss", command=lambda : (popup.destroy(), self.page_nav('back')))
             dismiss_button.pack(pady=10) 
 
     def confirmation_popup(self, text, function):
@@ -267,6 +271,7 @@ class EditPlan(ModifyEntries):
         self.save_record = PlanEdit.update_plan
         self.delete_record = PlanEdit.delete_plan
         self.page_nav_on_delete = ('PlanList', None)
+        self.page_nav_on_save = ('PlanList', None)
         self.end_plan = PlanEdit.end_plan
         self.screen_data_id = self.screen_data.planID
         self.entry_fields = {}
