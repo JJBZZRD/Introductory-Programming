@@ -19,8 +19,13 @@ else:
 dbpath = os.path.join(application_path, "database.db")
 query_log_path = os.path.join(application_path, "query.log")
 
-logging.basicConfig(filename=query_log_path, filemode='a', level=logging.INFO,
-                    format="%(asctime)s \n%(message)s \n", datefmt='%Y-%m-%d %H:%M:%S')
+logging.basicConfig(
+    filename=query_log_path,
+    filemode="a",
+    level=logging.INFO,
+    format="%(asctime)s \n%(message)s \n",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 
 conn = sqlite3.connect(dbpath)
 conn.execute("PRAGMA foreign_keys = ON")
@@ -29,7 +34,6 @@ conn.set_trace_callback(logging.info)
 
 
 def create_database():
-
     plans_table = """
     CREATE TABLE IF NOT EXISTS plans (
         planID INTEGER PRIMARY KEY,
@@ -149,8 +153,8 @@ def create_database():
 
 def triggers_for_audit_table(table_name, fields, primary_key_field):
     for field in fields:
-
-        cursor.execute(f"""
+        cursor.execute(
+            f"""
             CREATE TRIGGER IF NOT EXISTS {table_name}_{field}_insert
             AFTER INSERT ON {table_name}
             FOR EACH ROW
@@ -158,9 +162,11 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
                 INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
                 VALUES ('{table_name}', NEW.{primary_key_field}, '{field}', NULL, NEW.{field}, 'INSERT', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
             END;
-        """)
+        """
+        )
 
-        cursor.execute(f"""
+        cursor.execute(
+            f"""
             CREATE TRIGGER IF NOT EXISTS {table_name}_{field}_update
             AFTER UPDATE OF {field} ON {table_name}
             FOR EACH ROW
@@ -169,9 +175,11 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
                 INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
                 VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NEW.{field}, 'UPDATE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
             END;
-        """)
+        """
+        )
 
-        cursor.execute(f"""
+        cursor.execute(
+            f"""
             CREATE TRIGGER IF NOT EXISTS {table_name}_{field}_delete
             AFTER DELETE ON {table_name}
             FOR EACH ROW
@@ -179,18 +187,48 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
                 INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
                 VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NULL, 'DELETE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
             END;
-        """)
+        """
+        )
 
     conn.commit()
 
 
-plans_fields = ["start_date", "end_date", "name", "country", "event_name", "description", "water", "food",
-                "medical_supplies", "shelter", "status"]
+plans_fields = [
+    "start_date",
+    "end_date",
+    "name",
+    "country",
+    "event_name",
+    "description",
+    "water",
+    "food",
+    "medical_supplies",
+    "shelter",
+    "status",
+]
 camps_fields = ["location", "shelter", "water", "food", "medical_supplies", "planID"]
-refugees_fields = ["first_name", "last_name", "date_of_birth", "gender", "familyID", "campID", "triage_category",
-                   "medical_conditions", "vital_status"]
-volunteers_fields = ["volunteerID", "first_name", "last_name", "username", "password", "date_of_birth", "phone",
-                     "account_status", "campID"]
+refugees_fields = [
+    "first_name",
+    "last_name",
+    "date_of_birth",
+    "gender",
+    "familyID",
+    "campID",
+    "triage_category",
+    "medical_conditions",
+    "vital_status",
+]
+volunteers_fields = [
+    "volunteerID",
+    "first_name",
+    "last_name",
+    "username",
+    "password",
+    "date_of_birth",
+    "phone",
+    "account_status",
+    "campID",
+]
 
 
 def clear_dummy_data():
@@ -199,13 +237,13 @@ def clear_dummy_data():
         cursor.execute(q)
     conn.commit()
 
+
 def insert_dummy_data():
     plans_data = """
     INSERT INTO plans (planID, start_date, end_date, name, country, event_name, description, shelter, water, food, medical_supplies, status, created_time) VALUES
-    (1, '2023-01-01', '2025-01-01', 'Nuclear war', 'United Kingdom', 'Nuclear Crisis Management', 'Nuclear War in England', 100, 100, 100, 100, 'Active', '2023-01-01T14:36:25'),
-    (2, '2023-01-01', '2025-01-01', 'London War', 'United Kingdom', 'War', 'Response to war in London', 200, 200, 200, 200, 'Active', '2023-01-01T14:36:25'),
-    (3, '2023-01-01', '2025-01-01', 'Paris War', 'France', 'War', 'Response to war in Paris', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25'),
-    (4, '2023-01-01', '2025-01-01', 'War', 'United Kingdom', 'War', 'Response to war in UK', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25');
+    (1, '2023-01-01', '2025-01-01', 'London refugee camps', 'United Kingdom', 'UK Civil War', 'Refugees fleeing UK civil war', 200, 200, 200, 200, 'Active', '2023-01-01T14:36:25'),
+    (2, '2023-01-01', '2025-01-01', 'French refugee camps', 'France', 'France Nuclear Disaster', 'Refugees fleeing Belleville nuclear meltdown', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25'),
+    (3, '2023-01-01', '2025-01-01', 'Spanish refugee camps', 'Spain', 'Spanish Coup', 'Refugees fleeing Madrid coup', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25');
     """
 
     cursor.execute(plans_data)
@@ -214,11 +252,11 @@ def insert_dummy_data():
     INSERT INTO camps (campID, location, shelter, water, food, medical_supplies, planID, created_time) VALUES
     (1, 'Camden', 20, 300, 600, 200, 1, '2023-01-01T14:36:25'),
     (2, 'Greenwich', 20, 300, 600, 200, 1, '2023-01-01T14:36:25'),
-    (3, 'Snowdonia', 20, 300, 600, 200, 2, '2023-01-01T14:36:25'),
-    (4, 'Richmond', 20, 300, 600, 200, 2, '2023-01-01T14:36:25'),
-    (5, 'Versailles', 20, 300, 600, 200, 3, '2023-01-01T14:36:25'),
-    (6, 'Oxford', 20, 300, 600, 200, 4,'2023-01-01T14:36:25'),
-    (7, 'Reading', 20, 300, 600, 200, 4,'2023-01-01T14:36:25');
+    (3, 'Paris', 20, 300, 600, 200, 2, '2023-01-01T14:36:25'),
+    (4, 'Normandy', 20, 300, 600, 200, 2, '2023-01-01T14:36:25'),
+    (5, 'Versailles', 20, 300, 600, 200, 2, '2023-01-01T14:36:25'),
+    (6, 'Barcelona', 20, 300, 600, 200, 3,'2023-01-01T14:36:25'),
+    (7, 'Valencia', 20, 300, 600, 200, 3,'2023-01-01T14:36:25');
     """
 
     cursor.execute(camp_data)
@@ -256,16 +294,18 @@ def insert_dummy_data():
     ('Mason', 'Wells', 'volunteer22', '111', '1991-04-15', '555-1234', 'Active', 3, '2023-01-01T14:36:25'),
     ('Harper', 'Barnes', 'volunteer23', '111', '1986-10-30', '555-5678', 'Active', 3, '2023-01-01T14:36:25'),
     ('Aiden', 'Fisher', 'volunteer24', '111', '1994-12-22', '555-8765', 'Inactive', 3, '2023-01-01T14:36:25'),
-    ('Ella', 'Bryant', 'volunteer25', '111', '1997-06-18', '555-2345', 'Active', 3, '2023-01-01T14:36:25'),
-    ('Logan', 'Coleman', 'volunteer26', '111', '1989-01-12', '555-6789', 'Inactive', 3, '2023-01-01T14:36:25'),
-    ('Avery', 'Reyes', 'volunteer27', '111', '1996-03-25', '555-8765', 'Active', 3, '2023-01-01T14:36:25'),
-    ('Lucas', 'Scott', 'volunteer28', '111', '1992-07-08', '555-2345', 'Active', 3, '2023-01-01T14:36:25'),
-    ('Sophie', 'Jordan', 'volunteer29', '111', '1995-09-20', '555-6789', 'Active', 3, '2023-01-01T14:36:25'),
     
-    -- Camp 6
+    --Camp 4
+    ('Ella', 'Bryant', 'volunteer25', '111', '1997-06-18', '555-2345', 'Active', 4, '2023-01-01T14:36:25'),
+    ('Logan', 'Coleman', 'volunteer26', '111', '1989-01-12', '555-6789', 'Inactive', 4, '2023-01-01T14:36:25'),
+    ('Avery', 'Reyes', 'volunteer27', '111', '1996-03-25', '555-8765', 'Active', 4, '2023-01-01T14:36:25'),
+    ('Lucas', 'Scott', 'volunteer28', '111', '1992-07-08', '555-2345', 'Active', 4, '2023-01-01T14:36:25'),
+    ('Sophie', 'Jordan', 'volunteer29', '111', '1995-09-20', '555-6789', 'Active', 4, '2023-01-01T14:36:25'),
+    
+    -- Camp 5
     ('Cuthbert', 'Jones', 'volunteer4', '111', '1996-01-16', '555-6789', 'Active', 6, '2023-01-01T14:36:25'),
     
-    -- Camp 7
+    -- Camp 6
     ('Penelope', 'Walsh', 'volunteer5', '111', '1980-09-07', '555-2345', 'Active', 7, '2023-01-01T14:36:25')
     """
 
@@ -277,78 +317,80 @@ def insert_dummy_data():
     --Family separated: 8, 10, 
 
     -- Camp 1
-    ('Isabella', 'Johnson', '2002-08-10', 'Female', 1, 1, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Oliver', 'Smith', '1980-03-25', 'Male', 2, 1, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
-    ('Charlotte', 'Taylor', '1995-12-05', 'Female', 3, 1, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
-    ('Henry', 'Clark', '2010-05-18', 'Male', 4, 1, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Sophia', 'Williams', '1998-10-30', 'Female', 5, 1, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
-    ('Jacob', 'Brown', '2014-06-22', 'Male', 6, 1, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Amelia', 'Harrison', '2003-04-03', 'Female', 7, 1, 'Non-Urgent', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
-    ('William', 'Baker', '1990-01-12', 'Male', 8, 1, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
-    ('Sophie', 'Evans', '2005-09-20', 'Female', 9, 1, 'Urgent', 'Heart Disease', 'Alive', '2023-01-01T14:36:25'),
-    ('Thomas', 'Jones', '1988-07-08', 'Male', 10, 1, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Aisha', 'Khan', '1996-06-18', 'Female', 11, 1, 'Urgent', 'Hypertension', 'Alive', '2023-01-01T14:36:25'),
-    ('Alexander', 'Brown', '1983-08-14', 'Male', 12, 1, 'None', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
-    ('Lily', 'Taylor', '2007-11-02', 'Female', 13, 1, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
-    ('Daniel', 'Evans', '2000-02-25', 'Male', 9, 1, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Ella', 'Williams', '1993-03-12', 'Female', 15, 1, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Leo', 'Jones', '2012-12-30', 'Male', 10, 1, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
-    ('Zara', 'Clark', '2005-07-28', 'Female', 17, 1, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Mia', 'Evans', '1998-04-15', 'Female', 9, 1, 'Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
-    ('Nooh', 'Baker', '2011-09-10', 'Male', 8, 1, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Liam', 'Thompson', '2004-05-05', 'Male', 20, 1, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    ('Isabella', 'Smith', '2002-08-10', 'Female', 1, 1, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Oliver', 'Smith', '1980-03-25', 'Male', 1, 1, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Charlotte', 'Smith', '1995-12-05', 'Female', 1, 1, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Henry', 'Smith', '2010-05-18', 'Male', 1, 1, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Sophia', 'Williams', '1998-10-30', 'Female', 2, 1, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
+    ('Jacob', 'Williams', '2014-06-22', 'Male', 2, 1, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Amelia', 'Williams', '2003-04-03', 'Female', 2, 1, 'Non-Urgent', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
+    ('William', 'Baker', '1990-01-12', 'Male', 3, 1, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    ('Sophie', 'Baker', '2005-09-20', 'Female', 3, 1, 'Urgent', 'Heart Disease', 'Alive', '2023-01-01T14:36:25'),
+    ('Thomas', 'Baker', '1988-07-08', 'Male', 3, 1, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Aisha', 'Baker', '1996-06-18', 'Female', 3, 1, 'Urgent', 'Hypertension', 'Alive', '2023-01-01T14:36:25'),
+    ('Alexander', 'Baker', '1983-08-14', 'Male', 3, 1, 'None', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
+    ('Lily', 'Taylor', '2007-11-02', 'Female', 4, 1, 'None', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Daniel', 'Taylor', '2000-02-25', 'Male', 4, 1, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Ella', 'Taylor', '1993-03-12', 'Female', 4, 1, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Leo', 'Jones', '2012-12-30', 'Male', 5, 1, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Zara', 'Jones', '2005-07-28', 'Female', 5, 1, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Mia', 'Evans', '1998-04-15', 'Female', 6, 1, 'Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Nooh', 'Evans', '2011-09-10', 'Male', 6, 1, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Liam', 'Thompson', '2004-05-05', 'Male', 7, 1, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
 
     -- Camp 2
-    ('Emily', 'White', '2001-11-10', 'Female', 21, 2, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Alexander', 'Miller', '1995-03-25', 'Male', 22, 2, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
-    ('Mia', 'Davis', '2008-12-05', 'Female', 23, 2, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
-    ('Leo', 'Baker', '2012-05-18', 'Male', 8, 2, 'Immediate', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Isabella', 'Clark', '1999-09-30', 'Female', 25, 2, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
-    ('James', 'Martin', '2007-11-15', 'Male', 26, 2, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Poppy', 'Harrison', '2015-04-03', 'Female', 7, 2, 'Non-Urgent', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
-    ('Jack', 'Baker', '1988-06-22', 'Male', 8, 2, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
-    ('Ruby', 'Evans', '2003-09-20', 'Female', 29, 2, 'Urgent', 'Heart Disease', 'Alive', '2023-01-01T14:36:25'),
-    ('George', 'Jones', '1994-07-08', 'Male', 10, 2, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Sophie', 'Harrison', '1996-06-18', 'Female', 7, 2, 'Urgent', 'Hypertension', 'Alive', '2023-01-01T14:36:25'),
-    ('Benjamin', 'Hill', '1983-08-14', 'Male', 32, 2, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
-    ('Isla', 'Clark', '2007-11-02', 'Female', 33, 2, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
-    ('Jacob', 'Evans', '2000-02-25', 'Male', 29, 2, 'Immediate', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Ella', 'Williams', '1993-03-12', 'Female', 35, 2, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Oliver', 'Jones', '2012-12-30', 'Male', 10, 2, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
-    ('Zara', 'Clark', '2005-07-28', 'Female', 37, 2, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Ava', 'Evans', '1998-04-15', 'Female', 29, 2, 'Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
-    ('Noah', 'Baker', '2011-09-10', 'Male', 39, 2, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Ethan', 'Thompson', '2004-05-05', 'Male', 40, 2, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    ('Emily', 'White', '2001-11-10', 'Female', 8, 2, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Alexander', 'White', '1995-03-25', 'Male', 8, 2, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Mia', 'White', '2008-12-05', 'Female', 8, 2, 'None', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Leo', 'White', '2012-05-18', 'Male', 8, 2, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Isabella', 'White', '1999-09-30', 'Female', 8, 2, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
+    ('James', 'Martin', '2007-11-15', 'Male', 9, 2, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Poppy', 'Martin', '2015-04-03', 'Female', 9, 2, 'None', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
+    ('Jack', 'Martin', '1988-06-22', 'Male', 9, 2, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    ('Ruby', 'Martin', '2003-09-20', 'Female', 9, 2, 'Urgent', 'Heart Disease', 'Alive', '2023-01-01T14:36:25'),
+    ('George', 'Jones', '1994-07-08', 'Male', 5, 2, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Sophie', 'Jones', '1996-06-18', 'Female', 5, 2, 'Urgent', 'Hypertension', 'Alive', '2023-01-01T14:36:25'),
+    ('Benjamin', 'Hill', '1983-08-14', 'Male', 10, 2, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
+    ('Isla', 'Hill', '2007-11-02', 'Female', 10, 2, 'None', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Jacob', 'Hill', '2000-02-25', 'Male', 10, 2, 'Immediate', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Ella', 'Hill', '1993-03-12', 'Female', 10, 2, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Oliver', 'Thompson', '2012-12-30', 'Male', 7, 2, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Zara', 'Thompson', '2005-07-28', 'Female', 7, 2, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Ava', 'Thompson', '1998-04-15', 'Female', 7, 2, 'Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Noah', 'Baker', '2011-09-10', 'Male', 39, 3, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Ethan', 'Baker', '2004-05-05', 'Male', 40, 3, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
 
     -- Camp 3
-    ('Lily', 'White', '1996-04-20', 'Female', 41, 3, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Oliver', 'Taylor', '2002-08-15', 'Male', 42, 3, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
-    ('Ava', 'Harrison', '2010-10-05', 'Female', 7, 3, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
-    ('Ethan', 'Baker', '2014-11-18', 'Male', 39, 3, 'Immediate', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Mia', 'Williams', '2001-09-30', 'Female', 45, 3, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
-    ('Noah', 'Martin', '2012-01-15', 'Male', 46, 3, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Layla', 'Harrison', '2015-04-02', 'Female', 7, 3, 'Non-Urgent', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
-    ('Oliver', 'Baker', '1998-01-12', 'Male', 39, 3, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
-    ('Isla', 'Evans', '2005-09-20', 'Female', 49, 3, 'Urgent', 'Heart Disease', 'Alive', '2023-01-01T14:36:25'),
-    ('Harry', 'Jones', '1992-07-08', 'Male', 10, 3, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Sophia', 'Taylor', '1996-06-18', 'Female', 51, 3, 'Urgent', 'Hypertension', 'Alive', '2023-01-01T14:36:25'),
-    ('Henry', 'Hill', '1983-08-14', 'Male', 52, 3, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
-    ('Eva', 'Clark', '2007-11-02', 'Female', 53, 3, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
-    ('Daniel', 'Evans', '2000-02-25', 'Male', 49, 3, 'Immediate', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Sophie', 'Williams', '1993-03-12', 'Female', 55, 3, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Leo', 'Jones', '2012-12-30', 'Male', 10, 3, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
-    ('Zara', 'Clark', '2005-07-28', 'Female', 57, 3, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Mia', 'Evans', '1998-04-15', 'Female', 49, 3, 'Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
-    ('Noah', 'Baker', '2011-09-10', 'Male', 8, 3, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Ella', 'Thompson', '2004-05-05', 'Male', 60, 3, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    ('Lily', 'Harrison', '1996-04-20', 'Female', 11, 3, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Oliver', 'Harrison', '2002-08-15', 'Male', 11, 3, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Ava', 'Harrison', '2010-10-05', 'Female', 11, 3, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Ethan', 'Clark', '2014-11-18', 'Male', 12, 3, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Mia', 'Clark', '2001-09-30', 'Female', 12, 3, 'Urgent', 'Respiratory Infection', 'Alive', '2023-01-01T14:36:25'),
+    ('Noah', 'Clark', '2012-01-15', 'Male', 12, 3, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Layla', 'Clark', '2015-04-02', 'Female', 7, 3, 'Non-Urgent', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
+    ('Oliver', 'Robert', '1998-01-12', 'Male', 13, 3, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    
+    -- Camp 4
+    ('Isla', 'Dupont', '2005-09-20', 'Female', 14, 4, 'Urgent', 'Heart Disease', 'Alive', '2023-01-01T14:36:25'),
+    ('Louis', 'Dupont', '1992-07-08', 'Male', 14, 4, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Sophia', 'Dupont', '1996-06-18', 'Female', 14, 4, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Henry', 'Vidal', '1983-08-14', 'Male', 15, 4, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
+    ('Eva', 'Vidal', '2007-11-02', 'Female', 15, 4, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Daniel', 'Vidal', '2000-02-25', 'Male', 15, 4, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Sophie', 'Nguyen', '1993-03-12', 'Female', 16, 4, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Leo', 'Nguyen', '2012-12-30', 'Male', 16, 4, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Zara', 'Nguyen', '2005-07-28', 'Female', 16, 4, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Mia', 'Nguyen', '1998-04-15', 'Female', 16, 4, 'Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
+    ('Noah', 'Robert', '2011-09-10', 'Male', 13, 4, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Ella', 'Robert', '2004-05-05', 'Male', 13, 4, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    
+    -- Camp 5
+    ('Camilla', 'Diaz', '1998-02-19', 'Female', 17, 5, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
+    ('Antonio', 'Garcia', '1983-08-14', 'Male', 18, 5, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
     
     -- Camp 6
-    ('Phoebe', 'Taylor', '1998-02-19', 'Female', 61, 6, 'Immediate', 'Fractured Leg', 'Alive', '2023-01-01T14:36:25'),
-    ('Edward', 'Moldoon', '1983-08-14', 'Male', 62, 6, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
-    
-    -- Camp 7
-    ('Timothy', 'Wright', '1980-08-19', 'Male', 63, 7, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
-    ('Victoria', 'Clack', '1970-09-23', 'Female', 64, 7, 'None', 'None', 'Alive', '2023-01-01T14:36:25')
+    ('Rafael', 'Diaz', '1980-08-19', 'Male', 17, 6, 'None', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
+    ('Victoria', 'Garcia', '1970-09-23', 'Female', 18, 6, 'None', 'None', 'Alive', '2023-01-01T14:36:25')
     """
 
     cursor.execute(refugees_data)
@@ -394,7 +436,9 @@ def insert_dummy_data():
 
 
 def check_sample_db_init():
-    cursor.execute("SELECT * FROM volunteers WHERE username = 'admin' and password = '111'")
+    cursor.execute(
+        "SELECT * FROM volunteers WHERE username = 'admin' and password = '111'"
+    )
     return cursor.fetchone() is None
 
 

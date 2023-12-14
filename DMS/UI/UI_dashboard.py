@@ -116,7 +116,7 @@ class Dashboard(tk.Frame):
         row += 1
 
         separator = tk.ttk.Separator(camp_statistics_frame, orient="horizontal")
-        separator.grid(row=row, column=0, columnspan=5, sticky="ew", pady=5)
+        separator.grid(row=row, column=0, columnspan=4, sticky="ew", pady=5)
         row += 1
 
         tk.Label(
@@ -155,7 +155,7 @@ class Dashboard(tk.Frame):
 
         for label, stats in stats_functions:
             separator = tk.ttk.Separator(camp_statistics_frame, orient="horizontal")
-            separator.grid(row=row, column=0, columnspan=5, sticky="ew", pady=5)
+            separator.grid(row=row, column=0, columnspan=4, sticky="ew", pady=5)
             row += 1
 
             tk.Label(
@@ -345,9 +345,9 @@ class Dashboard(tk.Frame):
             new_plan_amount = max(0, plan_current_amount - increment)
             if PlanEdit.update_plan(
                 logged_in_user=self.logged_in_user,
-                planID=plan.planID, 
+                planID=plan.planID,
                 status=plan.status,
-                **{resource_key: new_plan_amount}
+                **{resource_key: new_plan_amount},
             ):
                 setattr(plan, resource_key, new_plan_amount)
 
@@ -473,10 +473,10 @@ class Dashboard(tk.Frame):
             logged_in_user=self.logged_in_user,
             planID=plan.planID,
             status=plan.status,
-            **{resource_key:new_amount},
+            **{resource_key: new_amount},
         )
         print(f"res: {res}")
-        if res: 
+        if res:
             print(f"new_amount: {new_amount}")
             setattr(plan, resource_key, new_amount)
 
