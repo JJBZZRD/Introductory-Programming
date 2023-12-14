@@ -350,7 +350,7 @@ class RefugeeList(ManageList):
         if isinstance(self.screen_data, Camp):
             self.list_type[0] = f'Manage Refugees for Camp {self.screen_data.campID}'
         else:
-            self.list_type[0] = f'Manage camps: Global'
+            self.list_type[0] = f'Manage Refugees: Global'
 
 class AuditLogs(ManageList):
 
