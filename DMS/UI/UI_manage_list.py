@@ -319,7 +319,7 @@ class RefugeeList(ManageList):
                 'Date of Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status', 'Creation Time']
-        self.filter_values = ['Refugee ID', 'First Name', 'Last Name',
+        self.filter_values = ['Plan ID', 'Refugee ID', 'First Name', 'Last Name',
                 'Date of Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status']
@@ -330,7 +330,7 @@ class RefugeeList(ManageList):
         self.filter_matching = {'Refugee ID': 'id', 'First Name': 'name', 'Last Name': 'name',
                 'Date of Birth': 'date_of_birth', 'Gender': 'gender', 'Family ID': 'family_id',
                 'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
-                'Vital Status': 'vital_status','Creation Time': 'created_time'}
+                'Vital Status': 'vital_status','Creation Time': 'created_time', 'Plan ID':'planID'}
         self.export_name = 'Refugees'
         self.modify_title()
         self.create_title()
