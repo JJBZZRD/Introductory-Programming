@@ -37,7 +37,7 @@ def create_rtf_document(refugee_details, camp_details, volunteer_contact, family
     rtf_content += add_text("Personal Information", bold=True)
     rtf_content += add_text("Refugee ID: " + refugee_details.refugeeID)
     rtf_content += add_text("Full Name: " + refugee_details.first_name + ' ' + refugee_details.last_name)
-    rtf_content += add_text("Date of Birth: " + refugee_details['date_of_birth'])
+    rtf_content += add_text("Date of Birth: " + refugee_details.date_of_birth)
     rtf_content += add_text("Gender: " + refugee_details['gender'])
     rtf_content += add_text("Medical Condition: " + refugee_details['medical_conditions'])
     rtf_content += add_text("Vital Status: " + refugee_details['vital_status'])
