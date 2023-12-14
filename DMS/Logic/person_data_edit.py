@@ -36,8 +36,9 @@ class PersonDataEdit:
         if campID == 'None':
             campID = None
         if username:
+            # print(f"volunteerID: {volunteerID}")
             vols = PersonDataRetrieve.get_volunteers(username=username)
-            if isinstance(vols, list) and len(vols) > 0 and vols[0].volunteerID != volunteerID:
+            if isinstance(vols, list) and len(vols) > 0 and str(vols[0].volunteerID) != str(volunteerID):
                 return "Username already exists"
         try:
             volunteer_tuples = Volunteer.update_volunteer(volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID)

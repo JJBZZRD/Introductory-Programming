@@ -49,6 +49,8 @@ class PlanEdit:
                     return "Invalid. End date must be after start date"
             if not util.validate_date(end_date):
                 return "Invalid date for end date (yyyy-mm-dd)"
+        else:
+            end_date = None
 
         if name in ["Enter Plan Name", '', ' ']:
             return "Please enter plan name"
@@ -66,8 +68,6 @@ class PlanEdit:
         #     if not util.validate_end_date(start_date, end_date):
         #         print(f" =============== plan_data_edit.create_plan() ERROR: Invalid end_date: {end_date} has to be in yyyy-mm-dd and greater than start_date =========")
         #         return "Invalid date format for end_date: has to be yyyy-mm-dd"
-        else:
-            end_date = None
         now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
         plan_tuple = (start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, now)
 
