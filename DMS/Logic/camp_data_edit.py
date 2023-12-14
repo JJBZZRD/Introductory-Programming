@@ -77,7 +77,11 @@ class CampDataEdit:
                 # validate
         if location:
             if location in ["Enter Name", '', ' ']:
+<<<<<<< Updated upstream
                 return "Please enter name"
+=======
+                return "Please enter Name"
+>>>>>>> Stashed changes
             elif not util.is_valid_name(location):
                 return "You should enter a valid location name."
         if shelter:
