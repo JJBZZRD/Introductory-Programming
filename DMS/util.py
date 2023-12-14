@@ -5,6 +5,7 @@ from .DB.refugee import Refugee
 from .DB.plan import Plan
 from .DB.camp import Camp
 from .DB.countries import *
+from .DB.audit_table import AuditTable
 
 def get_current_time():
     return datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
@@ -50,6 +51,8 @@ def parse_result(class_name, query_result):
                 r = [Plan.init_from_tuple(row) for row in query_result]
             case 'Camp':
                 r = [Camp.init_from_tuple(row) for row in query_result]
+            case 'AuditTable':
+                r = [AuditTable.init_from_tuple(row) for row in query_result]   
             case _:
                 pass
         # for record in r:
@@ -89,9 +92,9 @@ def validate_end_date(start_time, end_time):
         start_time = datetime.strptime(start_time, '%Y-%m-%d').date()
         end_time = datetime.strptime(end_time, '%Y-%m-%d').date()
         if start_time < end_time:
-            return False
-        else:
             return True
+        else:
+            return False
     except Exception as e:
         print(e)
         return False

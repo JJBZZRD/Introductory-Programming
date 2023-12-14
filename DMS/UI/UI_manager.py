@@ -31,7 +31,7 @@ class UIManager:
             'EditPlan': me.EditPlan,
             'NewCamp': me.NewCamp, 'EditCamp': me.EditCamp, 'NewVolunteer': me.NewVolunteer,
             'EditVolunteer': me.EditVolunteer, 'EditPersonalDetails': me.EditPersonalDetails, 'NewRefugee': me.NewRefugee, 'EditRefugee': me.EditRefugee, 
-            'CampList':ml.CampList
+            'CampList':ml.CampList, 'AuditLogs': ml.AuditLogs
         }
         self.logged_in_user = None
         self.screen_data = None
