@@ -213,9 +213,6 @@ class ManageList(tk.Frame):
         if file_path:  
             df.to_csv(file_path, index=False)
 
-    
-
-            
 
 
 class PlanList(ManageList):
