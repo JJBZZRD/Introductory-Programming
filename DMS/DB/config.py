@@ -240,9 +240,9 @@ def clear_dummy_data():
 def insert_dummy_data():
     plans_data = """
     INSERT INTO plans (planID, start_date, end_date, name, country, event_name, description, shelter, water, food, medical_supplies, status, created_time) VALUES
-    (1, '2023-01-01', '2025-01-01', 'London refugee camps', 'United Kingdom', 'UK Civil War', 'Refugees fleeing UK civil war', 200, 200, 200, 200, 'Active', '2023-01-01T14:36:25'),
-    (2, '2023-01-01', '2025-01-01', 'French refugee camps', 'France', 'France Nuclear Disaster', 'Refugees fleeing Belleville nuclear meltdown', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25'),
-    (3, '2023-01-01', '2025-01-01', 'Spanish refugee camps', 'Spain', 'Spanish Coup', 'Refugees fleeing Madrid coup', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25');
+    (1, '2023-01-01', '2025-01-01', 'London Refugee Camps', 'United Kingdom', 'UK Civil War', 'Refugees fleeing UK civil war', 200, 200, 200, 200, 'Active', '2023-01-01T14:36:25'),
+    (2, '2023-01-01', '2025-01-01', 'French Refugee Camps', 'France', 'France Nuclear Disaster', 'Refugees fleeing Belleville nuclear meltdown', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25'),
+    (3, '2023-01-01', '2025-01-01', 'Spanish Refugee Camps', 'Spain', 'Spanish Coup', 'Refugees fleeing Madrid coup', 300, 300, 300, 300, 'Active', '2023-01-01T14:36:25');
     """
 
     cursor.execute(plans_data)
