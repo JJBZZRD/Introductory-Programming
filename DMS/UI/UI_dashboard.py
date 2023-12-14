@@ -304,7 +304,7 @@ class Dashboard(tk.Frame):
                     pady=5,
                 )
 
-        if user_type == "admin":
+        if self.logged_in_user.campID is None:
             self.rebuild_additional_resources_frame(plan)
         return resources_frame
 
@@ -555,13 +555,13 @@ class Dashboard(tk.Frame):
         filter_button.grid(row=0, column=1, padx=3)
 
         update_list_func(camp, search_entry, refugees_treeview)
-
-        manage_button = ttk.Button(
-            refugees_volunteers_frame,
-            text=f"Manage Camp {display_type.capitalize()}",
-            command=lambda: self.show_screen(manage_screen, camp),
-        )
-        manage_button.grid(row=3, column=0, pady=5)
+        if self.logged_in_user.campID is None:
+            manage_button = ttk.Button(
+                refugees_volunteers_frame,
+                text=f"Manage Camp {display_type.capitalize()}",
+                command=lambda: self.show_screen(manage_screen, camp),
+            )
+            manage_button.grid(row=3, column=0, pady=5)
 
         return refugees_volunteers_frame
 
@@ -639,7 +639,7 @@ class Dashboard(tk.Frame):
             )
             if selected_volunteer_list:
                 selected_volunteer = selected_volunteer_list[0]
-                if self.logged_in_user.campID in [None,selected_volunteer.campID]:
+                if self.logged_in_user.campID is None:
                     self.show_screen("EditVolunteer", selected_volunteer)
 
 
@@ -679,7 +679,8 @@ class AdminDashboard(Dashboard):
         self.tab_control.pack(expand=1, fill="both")
 
     def create_admin_tabs(self):
-        self.setup_distribute_resources_tab()
+        if self.logged_in_user.campID is None:
+            self.setup_distribute_resources_tab()
 
         self.setup_plan_statistics_tab()
 
@@ -698,9 +699,8 @@ class AdminDashboard(Dashboard):
         self.tab_control.add(distribute_tab, text="Distribute Plan Resources")
 
         self.create_plan_tab_title(distribute_tab, self.plan)
-        self.additional_resources_frame = self.create_additional_resources_section(
-            distribute_tab, self.plan
-        )
+        if self.logged_in_user.campID is None:
+            self.additional_resources_frame = self.create_additional_resources_section(distribute_tab, self.plan)
 
         (
             camp_resources_canvas,
