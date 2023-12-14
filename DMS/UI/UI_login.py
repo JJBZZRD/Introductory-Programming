@@ -13,7 +13,7 @@ class LoginScreen(tk.Frame):
             print(r.display_info())
 
 
-        if res[0].account_status == 'Inactive':
+        if len(res) > 0 and res[0].account_status == 'Inactive':
             self.error_label.config(text="Your account has been deactivated, contact the administrator")
         elif isinstance(res, str):
             self.error_label.config(text=res)
