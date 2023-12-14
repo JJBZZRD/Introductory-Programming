@@ -339,9 +339,11 @@ class EditCamp(ModifyEntries):
         if self.logged_in_user.volunteerID != 1:
             self.fields_to_be_dropdown = {}
             self.read_only_fields = ['Camp ID', 'Plan ID', 'Creation Time']
+            self.button_labels = ['Save Changes']
         else:
            self.fields_to_be_dropdown = {'Plan ID': [plan.planID for plan in PlanDataRetrieve.get_all_plans()]}
            self.read_only_fields = ['Camp ID', 'Creation Time']
+           
 
 
 
