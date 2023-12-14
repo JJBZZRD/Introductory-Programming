@@ -124,7 +124,7 @@ def create_database():
 
     audit_table = """
     CREATE TABLE IF NOT EXISTS audit (
-        auditID INTEGER PRIMARY KEY AUTOINCREMENT,
+        auditID INTEGER PRIMARY KEY,
         table_name TEXT,
         recordID INTEGER,
         field_name TEXT,
@@ -234,7 +234,7 @@ volunteers_fields = [
 
 
 def clear_dummy_data():
-    for table_name in ["plans", "camps", "volunteers", "refugees", "countries"]:
+    for table_name in ["plans", "camps", "volunteers", "refugees", "countries", "audit"]:
         q = f"""DELETE FROM {table_name}"""
         cursor.execute(q)
     conn.commit()
@@ -326,7 +326,7 @@ def insert_dummy_data():
     ('Oliver', 'Smith', '1980-03-25', 'Male', 1, 1, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
     ('Charlotte', 'Smith', '1995-12-05', 'Female', 1, 1, 'Non-Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
     ('Henry', 'Smith', '2010-05-18', 'Male', 1, 1, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Sophia', 'Williams', '1998-10-30', 'Female', 2, 1, 'Urgent', 'Respiratory Infection', 'Deceased', '2023-01-01T14:36:25'),
+    ('Sophia', 'Williams', '1998-10-30', 'Female', 2, 1, 'Immediate', 'Severe Pneumonia', 'Deceased', '2023-01-01T14:36:25'),
     ('Jacob', 'Williams', '2014-06-22', 'Male', 2, 1, 'Standard', 'None', 'Alive', '2023-01-01T14:36:25'),
     ('Amelia', 'Williams', '2003-04-03', 'Female', 2, 1, 'Non-Urgent', 'Allergies', 'Alive', '2023-01-01T14:36:25'),
     ('William', 'Lee', '1990-01-12', 'Male', 3, 1, 'None', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
@@ -435,7 +435,7 @@ def insert_dummy_data():
     audit_data = """
     INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by) VALUES
     ('plans', 1, 'shelter', '200', '220', 'UPDATE', '2023-03-01T10:00:00', 'admin'),
-    ('plans', 2, 'description', 'Refugees fleeing Belleville nuclear meltdown', 'Relief for Belleville nuclear incident', 'UPDATE', '2023-03-02T11:30:00', 'admin'),
+    ('plans', 2, 'description', 'Relief for Belleville nuclear incident', 'Refugees fleeing Belleville nuclear meltdown', 'UPDATE', '2023-03-02T11:30:00', 'admin'),
     ('plans', 3, 'status', 'Active', 'Completed', 'UPDATE', '2023-04-10T09:20:00', 'volunteer1'),
     ('camps', 2, 'water', '300', '350', 'UPDATE', '2023-03-05T08:15:00', 'volunteer12'),
     ('camps', 4, 'location', 'Normandy', 'Lyon', 'UPDATE', '2023-03-06T14:50:00', 'volunteer7'),
@@ -482,11 +482,6 @@ def insert_dummy_data():
 
     cursor.execute(audit_data)
 
-    # cursor.execute("""
-    # INSERT INTO current_user (id, username) VALUES (1, 'default_user')
-    # ON CONFLICT(id) DO UPDATE SET username = 'default_user';
-    # """)
-
     conn.commit()
 
 
@@ -499,12 +494,12 @@ def check_sample_db_init():
 
 create_database()
 
-triggers_for_audit_table("plans", plans_fields, "planID")
-triggers_for_audit_table("camps", camps_fields, "campID")
-triggers_for_audit_table("refugees", refugees_fields, "refugeeID")
-triggers_for_audit_table("volunteers", volunteers_fields, "volunteerID")
 
 if __name__ == "__main__" or check_sample_db_init():
     print("Inserting dummy data...")
     clear_dummy_data()
     insert_dummy_data()
+    triggers_for_audit_table("plans", plans_fields, "planID")
+    triggers_for_audit_table("camps", camps_fields, "campID")
+    triggers_for_audit_table("refugees", refugees_fields, "refugeeID")
+    triggers_for_audit_table("volunteers", volunteers_fields, "volunteerID")
