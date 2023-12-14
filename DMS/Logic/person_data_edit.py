@@ -35,9 +35,14 @@ class PersonDataEdit:
 
         if campID == 'None':
             campID = None
-
-        volunteer_tuples = Volunteer.update_volunteer(volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID)
-
+        if username:
+            vols = PersonDataRetrieve.get_volunteers(username=username)
+            if isinstance(vols, list) and len(vols) > 0 and vols[0].volunteerID != volunteerID:
+                return "Username already exists"
+        try:
+            volunteer_tuples = Volunteer.update_volunteer(volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID)
+        except:
+            return "Invalid inputs, please check and try again"
         return util.parse_result('Volunteer', volunteer_tuples)
         #     if campID:
         #         volunteer.campID = campID

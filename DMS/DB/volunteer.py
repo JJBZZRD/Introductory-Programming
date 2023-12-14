@@ -80,8 +80,8 @@ class Volunteer:
                 return 'Camp campID does not exist'
         params.append(volunteerID)
         q = f"""UPDATE volunteers SET {', '.join(query)} WHERE volunteerID = ?"""
-        print(f'q: {q}')
-        print(f'params: {params}')
+        # print(f'q: {q}')
+        # print(f'params: {params}')
         cursor.execute(q, params)
         conn.commit()
         return Volunteer.get_volunteer_by_id(volunteerID=volunteerID)
