@@ -272,10 +272,14 @@ class EditPlan(ModifyEntries):
         self.entry_fields = {}
         self.fields_to_be_dropdown = {'Country': get_all_countries()}
         self.read_only_fields = ['Plan ID', 'Creation Time', 'Status']
+        self.is_plan_ended()
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
 
+    def is_plan_ended(self):
+        if self.screen_data.status == 'Ended':
+            self.button_labels = ['Save Changes', 'Delete']
 
 class NewCamp(ModifyEntries):
     def setup_modify(self):
