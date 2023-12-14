@@ -31,7 +31,7 @@ def create_rtf_document(refugee_details, camp_details, volunteer_contact, family
 
     rtf_content = rtf_template
 
-    title = f"Refugee Documentation: ID {refugee_details['refugeeID']} - {refugee_details['full_name']}"
+    title = f"Refugee Documentation: ID {refugee_details.refugeeID} - {refugee_details['full_name']}"
     rtf_content += add_text(title, bold=True)
 
     rtf_content += add_text("Personal Information", bold=True)
