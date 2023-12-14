@@ -466,6 +466,7 @@ class EditPersonalDetails(ModifyEntries):
         self.save_record = PersonDataEdit.update_volunteer
         self.entry_fields = {}
         self.read_only_fields = ['Volunteer ID', 'Account Status', 'Creation Time']
+        self.fields_to_be_dropdown = {}
         self.admin_user()
         self.create_title()
         self.create_entry_fields()
@@ -474,3 +475,15 @@ class EditPersonalDetails(ModifyEntries):
     def admin_user(self):
         if self.logged_in_user.campID is None:
             self.read_only_fields = ['Volunteer ID', 'Account Status', 'Creation Time', 'Camp ID']
+        else:
+            logged_in_user_campID = self.screen_data.campID
+
+            camp_of_campID = CampDataRetrieve.get_camp(campID=logged_in_user_campID)[0]
+
+            planID_of_camp = camp_of_campID.planID
+
+            camps = CampDataRetrieve.get_camp(planID=planID_of_camp)
+
+            list_of_camp_ids = [camp.campID for camp in camps]
+
+            self.fields_to_be_dropdown.update({'Camp ID': list_of_camp_ids})
