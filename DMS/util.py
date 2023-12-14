@@ -92,9 +92,9 @@ def validate_end_date(start_time, end_time):
         start_time = datetime.strptime(start_time, '%Y-%m-%d').date()
         end_time = datetime.strptime(end_time, '%Y-%m-%d').date()
         if start_time < end_time:
-            return False
-        else:
             return True
+        else:
+            return False
     except Exception as e:
         print(e)
         return False
