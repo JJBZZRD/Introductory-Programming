@@ -237,13 +237,13 @@ class PlanList(ManageList):
 class CampList(ManageList):
     def setup_list(self):
         self.list_type = ['Manage Camps', 'Add New Camp']
-        self.list_headers = ['Camp ID', 'Location', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID', 'Creation Time']
+        self.list_headers = ['Camp ID', 'Name', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID', 'Creation Time']
         self.filter_values = ['Camp ID', 'Location', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID']
         self.list_data = self.list_by_plan()
         self.get_search = CampDataRetrieve.get_camp
         self.switch_to_page = 'EditCamp'
         self.record_button = 'NewCamp'
-        self.filter_matching = {'Camp ID': 'campID', 'Location': 'location', 'Shelter': 'shelter', 'Water': 'water', 
+        self.filter_matching = {'Camp ID': 'campID', 'Name': 'location', 'Shelter': 'shelter', 'Water': 'water', 
                                 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID', 'Creation Time': 'created_time' }
         self.export_name = 'Camps'
         self.modify_title()
