@@ -466,10 +466,11 @@ class EditPersonalDetails(ModifyEntries):
         self.save_record = PersonDataEdit.update_volunteer
         self.entry_fields = {}
         self.read_only_fields = ['Volunteer ID', 'Account Status', 'Creation Time']
+        self.admin_user()
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
 
     def admin_user(self):
-        if self.logged_in_user.camp_id is None:
-            self.read_only_fields.append('Camp ID')
+        if self.logged_in_user.campID is None:
+            self.read_only_fields = ['Volunteer ID', 'Account Status', 'Creation Time', 'Camp ID']
