@@ -2,8 +2,10 @@
 from ..Logic.person_data_retrieve import PersonDataRetrieve
 from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.plan_data_retrieve import PlanDataRetrieve
+import tkinter as tk
+from tkinter import filedialog
 
-def generate_refugee_document(refugee):
+def generate_refugee_document(root, refugee):
     refugee_details = refugee #PersonDataRetrieve.get_refugees(id=refugee.refugeeID)[0]
 
     # Retrieve camp details
@@ -20,10 +22,24 @@ def generate_refugee_document(refugee):
 
     family_members = PersonDataRetrieve.get_refugees(family_id=refugee.familyID)
 
-    create_rtf_document(refugee_details, camp_details, volunteer_contact, family_members)
+    create_rtf_document(root, refugee_details, camp_details, volunteer_contact, family_members)
 
 
-def create_rtf_document(refugee_details, camp_details, volunteer_contact, family_members):
+def create_rtf_document(root, refugee_details, camp_details, volunteer_contact, family_members):
+
+    file_path = filedialog.asksaveasfilename(
+        initialdir="/",
+        initialfile=f"refugee_document_{refugee_details.refugeeID}_{refugee_details.first_name}_{refugee_details.last_name}.rtf",
+        defaultextension=".rtf", 
+        filetypes=[("RTF files", "*.rtf")],
+        parent=root  
+    )
+
+    
+    if not file_path:
+        return  
+
+
     rtf_template = r"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard"
 
     def add_text(text, bold=False, newline=True):
@@ -61,8 +77,7 @@ def create_rtf_document(refugee_details, camp_details, volunteer_contact, family
 
     rtf_content += "}"
 
-    filename = f"refugee_document_{refugee_details.refugeeID}_{refugee_details.first_name} + {refugee_details.last_name}.rtf"
-    with open(filename, "w") as file:
+    with open(file_path, "w") as file:
         file.write(rtf_content)
 
 # refugee_details = {
