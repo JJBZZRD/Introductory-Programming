@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import PhotoImage
 from ..Logic.person_data_retrieve import PersonDataRetrieve
 import os
+import sys
 
 class LoginScreen(tk.Frame):
     def login(self, username, password):
