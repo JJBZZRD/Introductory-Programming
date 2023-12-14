@@ -44,7 +44,7 @@ def create_rtf_document(refugee_details, camp_details, volunteer_contact, family
     
     rtf_content += add_text("Camp Assignment", bold=True)
     rtf_content += add_text("Camp ID: " + str(camp_details.campID))
-    rtf_content += add_text("Camp Location: " + camp_details.location)
+    rtf_content += add_text("Camp Name: " + camp_details.location)
 
     if family_members:
         rtf_content += add_text("Family Members:", bold=True)
@@ -60,28 +60,28 @@ def create_rtf_document(refugee_details, camp_details, volunteer_contact, family
     with open(filename, "w") as file:
         file.write(rtf_content)
 
-refugee_details = {
-    'refugeeID': '12345',
-    'full_name': 'John Doe',
-    'date_of_birth': '01/01/1980',
-    'gender': 'Male',
-    'medical_conditions': 'None',
-    'vital_status': 'Alive'
-}
+# refugee_details = {
+#     'refugeeID': '12345',
+#     'full_name': 'John Doe',
+#     'date_of_birth': '01/01/1980',
+#     'gender': 'Male',
+#     'medical_conditions': 'None',
+#     'vital_status': 'Alive'
+# }
 
-camp_details = {
-    'campID': 'C001',
-    'location': 'Camp Location'
-}
+# camp_details = {
+#     'campID': 'C001',
+#     'location': 'Camp Name'
+# }
 
-volunteer_contact = {
-    'name': 'Jane Smith',
-    'phone': '555-0101'
-}
+# volunteer_contact = {
+#     'name': 'Jane Smith',
+#     'phone': '555-0101'
+# }
 
-family_members = [
-    {'name': 'Jane Doe', 'relationship': 'Spouse'},
-    {'name': 'Baby Doe', 'relationship': 'Child'}
-]
+# family_members = [
+#     {'name': 'Jane Doe', 'relationship': 'Spouse'},
+#     {'name': 'Baby Doe', 'relationship': 'Child'}
+# ]
 
 #create_rtf_document(refugee_details, camp_details, volunteer_contact, family_members)
