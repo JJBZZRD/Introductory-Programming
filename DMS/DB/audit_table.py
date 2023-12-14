@@ -43,7 +43,7 @@ class AuditTable:  # Camp class has attributes matching columns in table
     def get_audit_logs(auditID=None, table_name=None, recordID=None, field_name=None, old_value=None, new_value=None, action=None, created_time=None, changed_by=None):
 
         q = """
-            SELECT * FROM audit WHERE cahnged_by IS NOT NULL
+            SELECT * FROM audit WHERE changed_by IS NOT NULL
             """
 
         if auditID:
