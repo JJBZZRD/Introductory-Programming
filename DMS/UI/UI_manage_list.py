@@ -6,6 +6,7 @@ from ..Logic.camp_data_retrieve import CampDataRetrieve
 from ..Logic.person_data_retrieve import PersonDataRetrieve
 from ..DB.camp import Camp
 from ..DB.plan import Plan
+from ..Logic.audit_data_retrieve import AuditDataRetrieve
 import pandas as pd
 
 
@@ -91,8 +92,9 @@ class ManageList(tk.Frame):
         list_title = ttk.Label(self, text=self.list_type[0], font=("Helvetica", 20, "bold"))
         list_title.grid(column=6, row=0, padx=10, pady=5)
 
-        new_plan_button = ttk.Button(self, text=self.list_type[1], command=self.new_record_button)
-        new_plan_button.grid(column=6, row=1, padx=10, pady=5)
+        if len(self.list_type) > 1:
+            new_plan_button = ttk.Button(self, text=self.list_type[1], command=self.new_record_button)
+            new_plan_button.grid(column=6, row=1, padx=10, pady=5)
 
         if plan:
             manage_camps = ttk.Button(self, text='  Manage Camps   ', command=lambda page='CampList': self.show_screen(page))
@@ -103,6 +105,9 @@ class ManageList(tk.Frame):
 
             manage_refugees = ttk.Button(self, text=' Manage Refugees ', command=lambda page='RefugeeList': self.show_screen(page))
             manage_refugees.grid(column=4, row=2, padx=5, pady=5)
+
+            audit_logs = ttk.Button(self, text='Audit Logs', command=lambda page='AuditLogs': self.show_screen(page))
+            audit_logs.grid(column=8, row=0, padx=5, pady=5)
 
     def create_search(self):
         # this creates the search bar, filters and search button
@@ -346,3 +351,17 @@ class RefugeeList(ManageList):
             self.list_type[0] = f'Manage Refugees for Camp {self.screen_data.campID}'
         else:
             self.list_type[0] = f'Manage camps: Global'
+
+class AuditLogs(ManageList):
+
+    def setup_list(self):
+        self.list_type = ['Audit Logs']
+        self.list_headers = ['Audit ID', 'Table Name', 'Record ID', 'Field Name', 'Old Value', 'New Value', 'Action', 'Created Time', 'Changed By']
+        self.filter_values = ['Table Name', 'Record ID', 'Field Name', 'Old Value', 'New Value', 'Action', 'Changed By']
+        self.list_data = AuditDataRetrieve.get_all_audit_logs()
+        self.get_search = AuditDataRetrieve.get_audit_logs
+        self.filter_matching ={'Table Name': 'table_name', 'Record ID': 'recordID', 'Field Name': 'field_name', 'Old Value': 'old_value', 'New Value': 'new_value', 'Action': 'action', 'Changed By': 'changed_by'}
+        self.export_name = 'Audit Logs'
+        self.create_title()
+        self.create_search()
+        self.create_results()
