@@ -73,9 +73,11 @@ class Volunteer:
             query.append("account_status = ?")
             params.append(account_status)
         if campID is not None:
-            query.append("campID = ?")
-            params.append(campID)
-
+            if Volunteer.check_campID_exist(campID): 
+                query.append("campID = ?")
+                params.append(campID)
+            else:
+                return 'Camp campID does not exist'
         params.append(volunteerID)
         q = f"""UPDATE volunteers SET {', '.join(query)} WHERE volunteerID = ?"""
         print(f'q: {q}')
