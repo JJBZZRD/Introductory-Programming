@@ -358,8 +358,8 @@ def insert_dummy_data():
     ('Oliver', 'Thompson', '2012-12-30', 'Male', 7, 2, 'Urgent', 'Diabetes', 'Alive', '2023-01-01T14:36:25'),
     ('Zara', 'Thompson', '2005-07-28', 'Female', 7, 2, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
     ('Ava', 'Thompson', '1998-04-15', 'Female', 7, 2, 'Urgent', 'Asthma', 'Alive', '2023-01-01T14:36:25'),
-    ('Noah', 'Lee', '2011-09-10', 'Male', 39, 3, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
-    ('Ethan', 'Lee', '2004-05-05', 'Male', 40, 3, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
+    ('Noah', 'Lee', '2011-09-10', 'Male', 3, 2, 'Non-Urgent', 'None', 'Alive', '2023-01-01T14:36:25'),
+    ('Ethan', 'Lee', '2004-05-05', 'Male', 3, 2, 'Immediate', 'Fractured Arm', 'Alive', '2023-01-01T14:36:25'),
 
     -- Camp 3
     ('Lily', 'Harrison', '1996-04-20', 'Female', 11, 3, 'None', 'None', 'Alive', '2023-01-01T14:36:25'),
