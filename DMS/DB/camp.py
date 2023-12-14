@@ -103,6 +103,7 @@ class Camp:  # Camp class has attributes matching columns in table
         if planID:
             query += f" AND planID = {planID}"
 
+        # print(f"query: {query}")
         cursor.execute(query)
         return cursor.fetchall()
     
