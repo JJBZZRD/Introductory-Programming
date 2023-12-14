@@ -88,21 +88,20 @@ class PlanEdit:
         if status and status not in ['Active', 'Ended']:
             return "Invalid status"
         if status == 'Active':
-            if name:
-                if not util.is_valid_name(name):
-                    return "Invalid plan name"
+            # if name:
+            #     if not util.is_valid_name(name):
+            #         return "Invalid plan name"
             if country:
                 if not util.is_valid_country(country):
                     return "Invalid country"
-            if event_name:
-                if not util.is_valid_name(event_name):
-                    return "Invalid event name"
+            # if event_name:
+            #     if not util.is_valid_name(event_name):
+            #         return "Invalid event name"
             if start_date:
                 if not util.validate_date(start_date):
                     return "Invalid start date"
             if end_date and end_date != 'None':
                 if not util.validate_end_date(start_date, end_date):
-                    # print('aaaaaa')
                     return "Invalid end date"
             print("aaaaaaaa")
             res = Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, status)
