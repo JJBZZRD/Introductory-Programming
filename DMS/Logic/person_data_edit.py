@@ -130,6 +130,10 @@ class PersonDataEdit:
             if not util.validate_date(date_of_birth):
                 return "Invalid date of birth (yyyy-mm-dd)"
 
+        if family_id in ["Enter Family ID", '', ' ']:
+            family_count = Refugee.get_family_count()[0]
+            return f"Please enter family ID, if there is no known family for this refugee, please enter {family_count + 1}"
+
         now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
         t = (first_name, last_name, date_of_birth, gender, family_id, campID, triage_category, medical_conditions, vital_status, now)

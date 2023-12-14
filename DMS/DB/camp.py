@@ -120,16 +120,7 @@ class Camp:  # Camp class has attributes matching columns in table
         else:
             return False
 
-    # @staticmethod
-    # def get_family_counts(campID):
-    #     q = f"""
-    #         SELECT COUNT(DISTINCT familyID)
-    #         FROM refugees
-    #         WHERE campID = {campID}
-    #         """ 
-    #     cursor.execute(q)
-    #     return cursor.fetchone()
-    
+
     @staticmethod
     def get_separate_family():
         q = """

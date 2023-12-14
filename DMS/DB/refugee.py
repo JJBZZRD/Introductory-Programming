@@ -194,3 +194,12 @@ class Refugee:  # Refugee class has attributes matching columns in table
             """
         cursor.execute(q)
         return cursor.fetchall()
+    
+    @staticmethod
+    def get_family_count():
+        q = f"""
+            SELECT COUNT(DISTINCT familyID)
+            FROM refugees
+            """ 
+        cursor.execute(q)
+        return cursor.fetchone()
