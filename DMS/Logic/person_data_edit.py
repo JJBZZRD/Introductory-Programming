@@ -134,6 +134,9 @@ class PersonDataEdit:
             family_count = Refugee.get_family_count()[0]
             return f"Please enter family ID, if there is no known family for this refugee, please enter {family_count + 1}"
 
+        if medical_conditions in ["Enter Medical Conditions", '', ' ']:
+            medical_conditions = None
+
         now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
         t = (first_name, last_name, date_of_birth, gender, family_id, campID, triage_category, medical_conditions, vital_status, now)
@@ -157,10 +160,15 @@ class PersonDataEdit:
                 refugee.gender = gender
             if campID:
                 refugee.campID = campID
+            if family_id in ["Enter Family ID", '', ' ']:
+                family_count = Refugee.get_family_count()[0]
+                return f"Please enter family ID, if there is no known family for this refugee, please enter {family_count + 1}"
             if family_id:
                 refugee.familyID = family_id
             if triage_category:
                 refugee.triage_category = triage_category
+            if medical_conditions in ["Enter Medical Conditions", '', ' ']:
+                refugee.medical_conditions = None
             if medical_conditions:
                 refugee.medical_conditions = medical_conditions
             if vital_status:
