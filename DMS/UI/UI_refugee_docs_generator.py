@@ -52,11 +52,11 @@ def create_rtf_document(refugee_details, camp_details, volunteer_contact, family
             rtf_content += add_text(member['name'] + " (" + member['relationship'] + ")")
 
     rtf_content += add_text("Emergency Contact Information", bold=True)
-    rtf_content += add_text("Emergency Contact: " + volunteer_contact['name'] + ", " + volunteer_contact['phone'])
+    rtf_content += add_text("Emergency Contact: " + volunteer_contact.first_name + ' ' + volunteer_contact.last_name + ", " + str(volunteer_contact.phone))
 
     rtf_content += "}"
 
-    filename = f"refugee_document_{refugee_details['refugeeID']}_{refugee_details['full_name']}.rtf"
+    filename = f"refugee_document_{refugee_details.refugeeID}_{refugee_details['full_name']}.rtf"
     with open(filename, "w") as file:
         file.write(rtf_content)
 
