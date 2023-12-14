@@ -39,22 +39,7 @@ class LoginScreen(tk.Frame):
         login_frame = tk.Frame(self)
         login_frame.pack(padx=10, pady=10)
 
-        if getattr(sys, "frozen", False):
-            application_path = os.path.dirname(sys.executable)
-            running_mode = "Frozen/executable"
-        else:
-            try:
-                app_full_path = os.path.realpath(__file__)
-                application_path = os.path.dirname(app_full_path)
-                running_mode = "Non-interactive (e.g. 'python __main__.py')"
-            except NameError:
-                application_path = os.getcwd()
-                running_mode = "Interactive"
-
-        original_image = os.path.join(application_path, "logo.png")
-        # current_directory = os.getcwd()
-        # original_image = PhotoImage(file=current_directory+"/logo.png")
-        # # original_image = PhotoImage(file="DMS/UI/logo.png")
+        original_image = PhotoImage(file="DMS/UI/logo.png")
         logo_label = tk.Label(login_frame, image=original_image)
         logo_label.image = original_image
         logo_label.grid(row=0, column=0, columnspan=2, padx=(10, 20), pady=(10, 20))

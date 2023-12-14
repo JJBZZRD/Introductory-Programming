@@ -76,15 +76,9 @@ class test_db(unittest.TestCase):
 
     def test_bbb(self):
         q = """
-        SELECT familyID
-        FROM
-            (SELECT familyID, campID
-            FROM refugees
-            GROUP BY familyID, campID
-            ORDER BY familyID)
-        GROUP BY familyID
-        HAVING COUNT(campID) > 1
-            """
+        SELECT * FROM volunteers WHERE campID IS NOT NULL
+        AND username = 'admin'
+        """
         cursor.execute(q)
         print(f"cursor.fetchall() = {cursor.fetchall()}")
 

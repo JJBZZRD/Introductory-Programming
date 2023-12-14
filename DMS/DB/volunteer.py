@@ -121,12 +121,14 @@ class Volunteer:
         if campID:
             query += f" AND campID = {campID}"
 
+        print(f'query: {query}')
+
         cursor.execute(query)
         return cursor.fetchall()
     
     @staticmethod
     def get_all_volunteers():  # Gets all volunteers. Returns a list of tuples.
-        cursor.execute("SELECT * FROM volunteers")
+        cursor.execute("SELECT * FROM volunteers WHERE campID IS NOT NULL")
         return cursor.fetchall()
 
     @staticmethod  # Returns all usernames of active volunteers only. Perhaps useful for the login.
