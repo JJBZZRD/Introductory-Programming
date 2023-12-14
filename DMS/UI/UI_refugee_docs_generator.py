@@ -34,28 +34,30 @@ def create_rtf_document(refugee_details, camp_details, volunteer_contact, family
 
     rtf_content = rtf_template
 
-    title = f"Refugee Documentation: ID {refugee_details.refugeeID} - {refugee_details.first_name} + ' ' + {refugee_details.last_name}"
+    title = f"Refugee Documentation: ID {refugee_details.refugeeID} - {refugee_details.first_name} {refugee_details.last_name}"
     rtf_content += add_text(title, bold=True)
 
     rtf_content += add_text("Personal Information", bold=True)
-    rtf_content += add_text("Refugee ID: " + str(refugee_details.refugeeID))
-    rtf_content += add_text("Full Name: " + refugee_details.first_name + ' ' + refugee_details.last_name)
-    rtf_content += add_text("Date of Birth: " + str(refugee_details.date_of_birth))
-    rtf_content += add_text("Gender: " + refugee_details.gender)
-    rtf_content += add_text("Medical Condition: " + refugee_details.medical_conditions)
-    rtf_content += add_text("Vital Status: " + refugee_details.vital_status)
-    
-    rtf_content += add_text("Camp Assignment", bold=True)
-    rtf_content += add_text("Camp ID: " + str(camp_details.campID))
-    rtf_content += add_text("Camp Name: " + camp_details.location)
+    rtf_content += add_text("\nRefugee ID: " + str(refugee_details.refugeeID))
+    rtf_content += add_text("\nFull Name: " + refugee_details.first_name + ' ' + refugee_details.last_name)
+    rtf_content += add_text("\nDate of Birth: " + str(refugee_details.date_of_birth))
+    rtf_content += add_text("\nGender: " + refugee_details.gender)
+    rtf_content += add_text("\nMedical Condition: " + refugee_details.medical_conditions)
+    rtf_content += add_text("\nVital Status: " + refugee_details.vital_status)
+    rtf_content += add_text("\n")
+    rtf_content += add_text("\nCamp Assignment", bold=True)
+    rtf_content += add_text("\nCamp ID: " + str(camp_details.campID))
+    rtf_content += add_text("\nCamp Name: " + camp_details.location)
+    rtf_content += add_text("\n")
 
     if family_members:
-        rtf_content += add_text("Family Members:", bold=True)
+        rtf_content += add_text("\nFamily Members:", bold=True)
         for member in family_members:
             rtf_content += add_text(str(member.refugeeID) + ' ' + member.first_name + ' ' + member.last_name)
 
+    rtf_content += add_text("\n")
     rtf_content += add_text("Emergency Contact Information", bold=True)
-    rtf_content += add_text("Emergency Contact: " + volunteer_contact.first_name + ' ' + volunteer_contact.last_name + ", " + str(volunteer_contact.phone))
+    rtf_content += add_text("\nEmergency Contact: " + volunteer_contact.first_name + ' ' + volunteer_contact.last_name + ", " + str(volunteer_contact.phone))
 
     rtf_content += "}"
 
