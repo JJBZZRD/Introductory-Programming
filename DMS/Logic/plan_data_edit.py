@@ -113,7 +113,7 @@ class PlanEdit:
             if end_date:
                 now = datetime.now().date()
                 end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-                if end_date < now:
+                if end_date <= now:
                     return "This plan has ended, to re-activate this plan, please update the end date to a future date"
                 else:
                     res = Plan.update_plan(planID, start_date, end_date, name, country, event_name, description, water, food, shelter, medical_supplies, "Active")
