@@ -9,6 +9,7 @@ from ..Logic.person_data_retrieve import PersonDataRetrieve
 from ..DB.countries import get_all_countries
 from ..DB.camp import Camp
 from ..DB.plan import Plan
+from . import UI_refugee_docs_generator as doc
 
 # the name of this class might not explain the functionality very well as its quite an abstraction. This class
 # produces varients of the pages to modfiy camps, plans, refugees, volunteers (and admins as personal details) There
@@ -185,7 +186,9 @@ class ModifyEntries(tk.Frame):
                 self.confirmation_popup('Are you sure you want to end this plan?', self.end_plan)
 
 
-        # takes the entry field values
+            case 'Export Document':
+                doc.generate_refugee_document(self.screen_data)
+       
 
 
 
@@ -278,8 +281,8 @@ class NewCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['New Camp']
-        self.modifiable_variables = ['Location', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID']
-        self.filter_matching = {'Camp ID': 'campID', 'Location': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID'}
+        self.modifiable_variables = ['Name', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID']
+        self.filter_matching = {'Camp ID': 'campID', 'Name': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID'}
         self.button_labels = ['Create']
         self.create_record = CampDataEdit.create_camp
         self.entry_fields = {}
@@ -307,8 +310,8 @@ class EditCamp(ModifyEntries):
     def setup_modify(self):
         self.lower_frame = tk.Frame(self)
         self.modify_type = ['Edit Camp']
-        self.modifiable_variables = ['Camp ID', 'Location', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID', 'Creation Time']
-        self.filter_matching = {'Camp ID': 'campID', 'Location': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID', 'Creation Time': 'created_time'}
+        self.modifiable_variables = ['Camp ID', 'Name', 'Shelter', 'Water', 'Food', 'Medical Supplies', 'Plan ID', 'Creation Time']
+        self.filter_matching = {'Camp ID': 'campID', 'Name': 'location', 'Shelter': 'shelter', 'Water': 'water', 'Food': 'food', 'Medical Supplies': 'medical_supplies', 'Plan ID': 'planID', 'Creation Time': 'created_time'}
         self.current_data = self.screen_data.display_info()
         self.button_labels = ['Save Changes', 'Delete']
         self.save_record = CampDataEdit.update_camp
@@ -409,7 +412,7 @@ class EditRefugee(ModifyEntries):
                 'Vital Status': 'vital_status', 'Creation Time': 'created_time'}
         self.fields_to_be_dropdown = {'Vital Status': ['Alive', 'Deceased'], 
                                       'Gender': ['Male', 'Female', 'Other'], 'Triage Category': ['None', 'Non-Urgent', 'Standard', 'Urgent', 'Very-Urgent', 'Immediate']}
-        self.button_labels = ['Save Changes', 'Delete']
+        self.button_labels = ['Save Changes', 'Delete', 'Export Document']
         self.current_data = self.screen_data.display_info()
         self.save_record = PersonDataEdit.update_refugee
         self.delete_record = PersonDataEdit.delete_refugee
