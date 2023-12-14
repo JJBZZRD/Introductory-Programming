@@ -23,6 +23,15 @@ class PersonDataEdit:
             return "Incorrect last name format"
         if password == "Enter Password":
             password = None
+        
+        if date_of_birth:
+            if util.validate_date(date_of_birth):
+                year_of_birth = datetime.strptime(date_of_birth, '%Y-%m-%d').date().year
+                current_year = datetime.now().year
+                if year_of_birth > current_year:
+                    return "      Invalid year of birth      "
+            if not util.validate_date(date_of_birth):
+                return "Invalid date of birth (yyyy-mm-dd)"
 
         volunteer_tuples = Volunteer.update_volunteer(volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID)
 
@@ -152,6 +161,15 @@ class PersonDataEdit:
 
         if last_name and not util.is_valid_name(last_name):
             return "Incorrect last name format"
+        
+        if date_of_birth:
+            if util.validate_date(date_of_birth):
+                year_of_birth = datetime.strptime(date_of_birth, '%Y-%m-%d').date().year
+                current_year = datetime.now().year
+                if year_of_birth > current_year:
+                    return "      Invalid year of birth      "
+            if not util.validate_date(date_of_birth):
+                return "Invalid date of birth (yyyy-mm-dd)"
         
         refugee_tupples = Refugee.update_refugee(id, first_name, last_name, date_of_birth, gender, family_id, campID, triage_category, medical_conditions, vital_status)
 
