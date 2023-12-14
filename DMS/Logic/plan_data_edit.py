@@ -45,7 +45,7 @@ class PlanEdit:
 
         if end_date and end_date not in ["yyyy-mm-dd", '', ' ']:
             if util.validate_date(end_date):
-                if util.validate_end_date(start_date, end_date):
+                if not util.validate_end_date(start_date, end_date):
                     return "Invalid. End date must be after start date"
             if not util.validate_date(end_date):
                 return "Invalid date for end date (yyyy-mm-dd)"
