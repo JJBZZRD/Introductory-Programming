@@ -16,10 +16,13 @@ def grant_execute_permission(binary_file_path):
         script_file.write(script_content)
 
     # Make the shell script executable
-    subprocess.run(["chmod", "+x", script_file_path])
+    # subprocess.run(["chmod", "+x", script_file_path])
+
+    subprocess.run(["pip3 install pandas"])
+    subprocess.run(["pip3 install np"])
 
     # Execute the shell script
-    subprocess.run(["/bin/bash", script_file_path])
+    # subprocess.run(["/bin/bash", script_file_path])
 
     # Remove the temporary script file
     os.remove(script_file_path)

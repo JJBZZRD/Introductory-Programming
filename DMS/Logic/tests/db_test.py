@@ -75,8 +75,18 @@ class test_db(unittest.TestCase):
         print(cursor.fetchall())
 
     def test_bbb(self):
-        dic = {}
-        print('aaa' in dic)
+        q = """
+        SELECT familyID
+        FROM
+            (SELECT familyID, campID
+            FROM refugees
+            GROUP BY familyID, campID
+            ORDER BY familyID)
+        GROUP BY familyID
+        HAVING COUNT(campID) > 1
+            """
+        cursor.execute(q)
+        print(f"cursor.fetchall() = {cursor.fetchall()}")
 
 
 if __name__ == '__main__':

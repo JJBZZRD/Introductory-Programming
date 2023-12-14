@@ -11,7 +11,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=['numpy', 'pandas'],
     noarchive=False,
 )
 pyz = PYZ(a.pure)
@@ -40,5 +40,5 @@ app = BUNDLE(
     exe,
     name='dms.app',
     icon=None,
-    bundle_identifier='uk.ac.ucl.dms',
+    bundle_identifier='',
 )
