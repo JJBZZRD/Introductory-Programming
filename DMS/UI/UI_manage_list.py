@@ -270,13 +270,13 @@ class VolunteerList(ManageList):
         self.list_type = ['Manage Volunteers', 'Add New Volunteer']
         self.list_headers = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Creation Time']
-        self.filter_values = ['Volunteer ID', 'First Name', 'Last Name', 'Username',
+        self.filter_values = ['Volunteer ID', 'Name', 'Username',
                 'Date of Birth', 'Phone', 'Camp ID']
         self.list_data = self.list_by_plan()
         self.get_search = PersonDataRetrieve.get_volunteers
         self.switch_to_page = 'EditVolunteer'
         self.record_button = 'NewVolunteer'
-        self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'name', 'Last Name': 'name', 'Username': 'username',
+        self.filter_matching = {'Volunteer ID': 'volunteerID', 'Name': 'name', 'Last Name': 'name', 'Username': 'username',
                 'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Creation Time': 'created_time'}
         self.status_filters = ['All', 'Active', 'Inactive']
         self.modify_title()
