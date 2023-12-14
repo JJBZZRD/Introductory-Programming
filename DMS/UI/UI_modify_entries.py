@@ -157,7 +157,8 @@ class ModifyEntries(tk.Frame):
                 #print(inputs)
                 #print(tuple(inputs))
 
-                
+                # if str(self) == '.!editpersonaldetails':
+                    # print(f"self.current_screen = {str(self)}")
                 print(f"inputs: {inputs}")  
                 self.ui_error_popup(self.save_record(**inputs, logged_in_user=self.logged_in_user))
                 # try to update data using the business logic function
@@ -213,8 +214,11 @@ class ModifyEntries(tk.Frame):
         else:
             popup = tk.Toplevel(self.root)
             popup.title("System Message")
-
-            msg = tk.Label(popup, text="Operation Successful \n\n You can now close this window and navigage to other pages")
+            # print(f"self.current_screen = {self}")
+            if str(self) == '.!editpersonaldetails':
+                msg = tk.Label(popup, text="Your personal details have been updated. \n\n Please log in again to see the changes")
+            else:
+                msg = tk.Label(popup, text="Operation Successful \n\n You can now close this window and navigage to other pages")
             msg.pack(padx=20, pady=20)
 
             if self.page_nav_on_save:
