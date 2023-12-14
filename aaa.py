@@ -26,5 +26,5 @@ def grant_execute_permission(binary_file_path):
 
 if __name__ == "__main__":
     # Replace 'your_binary_file' with the path to your binary file
-    binary_file_path = "dist/dms"
+    binary_file_path = "dms"
     grant_execute_permission(binary_file_path)

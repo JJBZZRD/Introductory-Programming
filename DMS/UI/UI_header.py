@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import PhotoImage
-
+import os
 
 class UIHeader(tk.Frame):
     def __init__(self, ui_manager, *args, **kwargs):
@@ -17,11 +17,13 @@ class UIHeader(tk.Frame):
     def create_header(self):
         header = tk.Frame(self)
 
-        original_image = PhotoImage(file="DMS/UI/logo.png")
+        # current_directory = os.getcwd()
+        # original_image = PhotoImage(file=current_directory+"/logo.png")
+        # # original_image = PhotoImage(file="DMS/UI/logo.png")
 
-        logo_label = tk.Label(header, image=original_image)
-        logo_label.image = original_image
-        logo_label.pack(side=tk.LEFT, padx=(10, 20))
+        # logo_label = tk.Label(header, image=original_image)
+        # logo_label.image = original_image
+        # logo_label.pack(side=tk.LEFT, padx=(10, 20))
 
         # logged_in_user is a user object and .name provides the username
         camp_label = tk.Label(

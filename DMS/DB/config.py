@@ -81,8 +81,7 @@ def create_database():
         phone TEXT,
         account_status TEXT CHECK (account_status IN ('Active', 'Inactive')),
         campID INTEGER,
-        created_time TEXT,
-        FOREIGN KEY (campID) REFERENCES camps(campID) ON DELETE CASCADE ON UPDATE CASCADE
+        created_time TEXT
         )
         """
 
@@ -265,7 +264,7 @@ def insert_dummy_data():
     volunteers_data = """
     INSERT INTO volunteers (first_name, last_name, username, password, date_of_birth, phone, account_status, campID, created_time) VALUES
     -- Camp 1
-    ('admin', '111', 'admin', '111', '1990-05-15', '555-1234', 'Active', NULL, '2023-01-01T14:36:25'),
+    ('admin', 'admin', 'admin', '111', '1990-05-15', '555-1234', 'Active', NULL, '2023-01-01T14:36:25'),
     ('Jane', 'Smith', 'volunteer1', '111', '1985-08-22', '555-5678', 'Active', 1, '2023-01-01T14:36:25'),
     ('Robert', 'Johnson', 'volunteer12', '111', '1992-03-10', '555-9876', 'Active', 1, '2023-01-01T14:36:25'),
     ('Emily', 'Williams', 'volunteer31', '111', '1988-11-27', '555-4321', 'Active', 1, '2023-01-01T14:36:25'),
