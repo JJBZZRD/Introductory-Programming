@@ -840,7 +840,7 @@ class AdminDashboard(Dashboard):
 
         tk.Label(
             plan_statistics_frame,
-            text=f"{plan.name} Statistics",
+            text=f"Plan {plan.planID}: {plan.name} Statistics",
             font=("Arial", 14, "bold"),
         ).grid(row=row, column=0, sticky="w", padx=5, pady=5)
         row += 1
