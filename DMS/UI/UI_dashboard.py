@@ -933,7 +933,15 @@ class Dashboard(tk.Frame):
                 style="TButton",
                 command=lambda: self.show_screen("EditPlan", plan),
             )
-            edit_button.grid(row=0, column=3, rowspan=2, padx=(5, 15))
+            edit_button.grid(row=0, column=3, rowspan=2, padx=5)
+
+            manage_plan_volunteers_button = ttk.Button(
+                title_frame,
+                text="Manage Plan Volunteers",
+                style="TButton",
+                command=lambda: self.show_screen("VolunteerList", plan)
+            )
+            manage_plan_volunteers_button.grid(row=0, column=4, rowspan=2, padx=(5, 15))
 
 
 class VolunteerDashboard(Dashboard):
