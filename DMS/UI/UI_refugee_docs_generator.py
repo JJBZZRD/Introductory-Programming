@@ -10,13 +10,13 @@ def generate_refugee_document(root, refugee):
         refugee
     )
 
-    # Retrieve camp object
+    # get camp object
     camp_details = CampDataRetrieve.get_camp(campID=refugee.campID)[0]
 
-    # The emergency contact is a volunteer at the same camp
+    # The emergency contact will be a volunteer at the same camp
     volunteer_contact = PersonDataRetrieve.get_volunteers(campID=refugee.campID)[0]
 
-    # Retrieve plan details linked to the camp
+    # Get plan details linked to the camp
     plan_details = PlanDataRetrieve.get_plan(planID=camp_details.planID)[0]
 
     family_members = PersonDataRetrieve.get_refugees(family_id=refugee.familyID)
