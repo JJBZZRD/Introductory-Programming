@@ -508,23 +508,22 @@ class Dashboard(tk.Frame):
         )
         refugees_title.grid(row=0, column=0, sticky="w", padx=5, pady=5)
 
-        if self.logged_in_user is None:
-            switch_text = (
-                "Switch to Volunteers"
-                if display_type == "refugees"
-                else "Switch to Refugees"
-            )
-            switch_button = tk.Button(
-                refugees_volunteers_frame,
-                text=switch_text,
-                command=lambda: self.create_camp_refugees_volunteers_section(
-                    parent_tab,
-                    camp,
-                    "volunteers" if display_type == "refugees" else "refugees",
-                    user_type,
-                ),
-            )
-            switch_button.grid(row=0, column=0, sticky="e", padx=5)
+        switch_text = (
+            "Switch to Volunteers"
+            if display_type == "refugees"
+            else "Switch to Refugees"
+        )
+        switch_button = tk.Button(
+            refugees_volunteers_frame,
+            text=switch_text,
+            command=lambda: self.create_camp_refugees_volunteers_section(
+                parent_tab,
+                camp,
+                "volunteers" if display_type == "refugees" else "refugees",
+                user_type,
+            ),
+        )
+        switch_button.grid(row=0, column=0, sticky="e", padx=5)
 
         search_frame = tk.Frame(refugees_volunteers_frame)
         search_frame.grid(row=1, column=0, sticky="ew", pady=5)
