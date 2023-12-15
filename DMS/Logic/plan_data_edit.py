@@ -35,11 +35,6 @@ class PlanEdit:
         if start_date in ["yyyy-mm-dd", '', ' ']:
             return "Please enter start date"
         if start_date and start_date not in ["yyyy-mm-dd", '', ' ']:
-            # if util.validate_date(start_date):
-            #     start_year = datetime.strptime(start_date, '%Y-%m-%d').date().year
-            #     current_year = datetime.now().year
-            #     if start_year > current_year:
-            #         return "        Invalid year        "
             if not util.validate_date(start_date):
                 return "Invalid date for start date (yyyy-mm-dd)"
 
@@ -61,19 +56,11 @@ class PlanEdit:
         if description in ["Enter Description", '', ' ']:
             return "Please enter description"
 
-        # if not util.validate_date(start_date):
-        #     print(f" =============== plan_data_edit.create_plan() ERROR: Invalid date format for start_date: {start_date} has to be yyyy-mm-dd =========")
-        #     return "Invalid date format for start_date: has to be yyyy-mm-dd"
-        # if end_date and (end_date not in ["yyyy-mm-dd", '', ' ']):
-        #     if not util.validate_end_date(start_date, end_date):
-        #         print(f" =============== plan_data_edit.create_plan() ERROR: Invalid end_date: {end_date} has to be in yyyy-mm-dd and greater than start_date =========")
-        #         return "Invalid date format for end_date: has to be yyyy-mm-dd"
         now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
         plan_tuple = (start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, now)
 
         plan = util.parse_result('Plan', Plan.create_plan(plan_tuple))[0]
         if isinstance(plan, Plan):
-            # plan.status = 'Active'
             plan.end_date_datetime = datetime.strptime(plan.end_date, '%Y-%m-%d') if plan.end_date is not None else None
             return plan
         else:
@@ -88,15 +75,9 @@ class PlanEdit:
         if status and status not in ['Active', 'Ended']:
             return "Invalid status"
         if status == 'Active':
-            # if name:
-            #     if not util.is_valid_name(name):
-            #         return "Invalid plan name"
             if country:
                 if not util.is_valid_country(country):
                     return "Invalid country"
-            # if event_name:
-            #     if not util.is_valid_name(event_name):
-            #         return "Invalid event name"
             if start_date:
                 if not util.validate_date(start_date):
                     return "Invalid start date"
@@ -139,16 +120,3 @@ class PlanEdit:
     def delete_plan(planID):
         return f"Plan {planID} has been deleted" if Plan.delete_plan(planID) else f"There is an error when deleting plan {planID}"
     
-    # @staticmethod
-    # def plan_status(planID):
-    #     plan = Plan.get_plan(planID)
-        
-    #     if not plan:
-    #         return "Plan"
-
-    #     plan_end_date = datetime.strptime(plan[3], '%d%m%Y').date()
-
-    #     if plan_end_date < datetime.now().date():
-    #         return False
-    #     else:
-    #         return True
