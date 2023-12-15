@@ -13,6 +13,10 @@ if platform.system() in ["Windows", "Darwin"]:
             subprocess.run(["python", "temp.py"])
 elif platform.system() == "Linux":
     try:
+        subprocess.run(["sudo", "apt", "update"])
+    except:
+        print("Looks like your system is faulty. Please use a proper Linux distro.")
+    try:
         subprocess.run(["sudo", "apt-get", "install", "python3-pandas"])
     except:
         subprocess.run(["sudo", "pip", "install", "pandas"])
