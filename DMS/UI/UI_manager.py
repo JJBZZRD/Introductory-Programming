@@ -47,7 +47,6 @@ class UIManager:
             *args: Additional arguments to be passed to the screen constructor.
         """
 
-        #print(f"Showing screen: {screen_name}")
         self.clear_screen()
 
         screen_class = self.possible_screens.get(screen_name)
@@ -91,7 +90,6 @@ class UIManager:
 
     def clear_screen(self):
         if self.current_screen is not None:
-            #print(f"Clearing screen: {type(self.current_screen)}")
             self.current_screen.destroy()
             self.current_screen = None
         else:
