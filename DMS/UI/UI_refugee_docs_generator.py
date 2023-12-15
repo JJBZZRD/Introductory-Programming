@@ -7,10 +7,10 @@ from tkinter import filedialog
 
 def generate_refugee_document(root, refugee):
     refugee_details = (
-        refugee  # PersonDataRetrieve.get_refugees(id=refugee.refugeeID)[0]
+        refugee
     )
 
-    # Retrieve camp details
+    # Retrieve camp object
     camp_details = CampDataRetrieve.get_camp(campID=refugee.campID)[0]
 
     # The emergency contact is a volunteer at the same camp
@@ -18,8 +18,6 @@ def generate_refugee_document(root, refugee):
 
     # Retrieve plan details linked to the camp
     plan_details = PlanDataRetrieve.get_plan(planID=camp_details.planID)[0]
-
-    # family_members = get_family_members(refugee_details['familyID'])
 
     family_members = PersonDataRetrieve.get_refugees(family_id=refugee.familyID)
 
