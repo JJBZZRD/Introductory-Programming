@@ -9,7 +9,7 @@ from ..DB.plan import Plan
 from ..Logic.audit_data_retrieve import AuditDataRetrieve
 import pandas as pd
 
-
+#this class generates a list page. variations are sest using the subclasses
 class ManageList(tk.Frame):
     def __init__(self, ui_manager, **kwargs):
         super().__init__(ui_manager.root, **kwargs)
@@ -57,10 +57,6 @@ class ManageList(tk.Frame):
 
         self.results_list.destroy()
 
-        # if searchbar == '' and status == 'All':
-        #     self.list_data = PlanDataRetrieve.get_plans()
-        #     self.create_results()
-        #     return
         status_filter = None
 
         if status:
@@ -85,9 +81,8 @@ class ManageList(tk.Frame):
         self.create_results()
 
     def create_title(self, plan=False):
-        # this method creates the title and add entry button for each list
-        # page_top_frame = tk.Frame(self.root)
-        # page_top_frame.pack(side='top')
+        #this method creates the title and add entry button for each list
+
 
         list_title = ttk.Label(self, text=self.list_type[0], font=("Helvetica", 20, "bold"))
         list_title.grid(column=6, row=0, padx=10, pady=5)
@@ -111,13 +106,10 @@ class ManageList(tk.Frame):
 
     def create_search(self):
         # this creates the search bar, filters and search button
-        # search_frame = tk.Frame(self.root)
-        # search_frame.pack()
 
         search_filters = ttk.Combobox(self, values=self.filter_values, state="readonly")
-        search_filters.set("Filter")  # set default value
+        search_filters.set("Filter")  
         search_filters.grid(column=5, row=3, padx=5)
-        # search_filters.bind('<<ComboboxSelected>>', )
 
         if self.status_filters:
             activity_status = ttk.Combobox(self, values=self.status_filters)
@@ -131,32 +123,28 @@ class ManageList(tk.Frame):
 
         search_bar = ttk.Entry(self, width=100)
         search_bar.grid(column=6, row=3, padx=5)
-        # search_bar.pack(padx=10, pady=5)
 
         
         search_button.grid(column=7, row=3)
-        # search_button.pack(side='right', padx=10, pady=5)
 
         export_data_button = ttk.Button(self, text='Export Results', command=self.export_data)
         export_data_button.grid(column=8, row=3, padx=5)
         
     def create_results(self):
-        # this method creates the results list for a chosen subclass
+        #this method create the results list for a chosen subclass
         self.results_list = ttk.Treeview(self, columns=self.list_headers, show='headings')
 
-        # this lets us change the header values depending on what are being passed
+        #this lets us change the header values depending on what are being passed
         for i in self.list_headers:
             self.results_list.heading(i, text=i)
             self.results_list.column(i, anchor='center', width=int(1000/len(self.list_headers)))
 
-        # self.tree_item_to_object = {}
 
         # Insert items into the Treeview and populate the dictionary
         for result in self.list_data:
             result_id = self.results_list.insert('', 'end', values=result.display_info())
             self.tree_item_to_object[result_id] = result
 
-        # print("Tree items to objects:", self.tree_item_to_object)
 
         
         self.results_list.bind('<Double-1>', lambda event: self.on_item_double_click(event))
@@ -173,24 +161,16 @@ class ManageList(tk.Frame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(4, weight=1)
 
-        # print("Tree items to objects:", self.tree_item_to_object)
 
     def on_item_double_click(self, event):
-        # Identify the Treeview widget
         tree = event.widget
 
-        # Get the selected item
         result_id = tree.selection()[0]
 
-        # print("Current tree_item_to_object dictionary:", self.tree_item_to_object)
-        # print("Clicked item ID:", result_id)
-
-        # Retrieve the associated object from the dictionary
         associated_object = self.tree_item_to_object[result_id]
 
         if associated_object:
             self.show_screen(self.switch_to_page, associated_object)
-            #print(self.switch_to_page, associated_object)
         else:
             print("no asssociated object")
 
@@ -204,7 +184,6 @@ class ManageList(tk.Frame):
 
         df = pd.DataFrame(data_list, columns=self.list_headers)
         
-        #df.to_csv(self.export_name + '.csv', index=False)
 
         file_path = filedialog.asksaveasfilename(initialfile=self.export_name + '.csv',
                                              defaultextension=".csv", 
@@ -286,8 +265,7 @@ class VolunteerList(ManageList):
 
 
     def list_by_plan(self):
-        #need some way of extracting list of volunteers asociated with a specific planID
-        #if i give you a camp, can you give me a list of volunteers associated with the plan that contains that camp
+        #this method provides a list of volunteers for a specific plan if a camp is provided
         if isinstance(self.screen_data, Camp):
             planID = self.screen_data.planID
 
