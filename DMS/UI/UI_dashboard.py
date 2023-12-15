@@ -439,7 +439,7 @@ class Dashboard(tk.Frame):
                     additional_resources_frame,
                     text="-10",
                     command=lambda res_name=resource_name: self.update_plan_resources(
-                        additional_resources_frame,
+                        # additional_resources_frame,
                         res_name,
                         plan,
                         -10,
@@ -451,7 +451,7 @@ class Dashboard(tk.Frame):
                     additional_resources_frame,
                     text="+10",
                     command=lambda res_name=resource_name: self.update_plan_resources(
-                        additional_resources_frame,
+                        # additional_resources_frame,
                         res_name,
                         plan,
                         10,
