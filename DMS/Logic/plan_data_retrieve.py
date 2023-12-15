@@ -116,8 +116,16 @@ class PlanDataRetrieve:
             else: 
                 nutrition_cost += 2
 
-            if refugee.medical_conditions is not None:
+            if refugee.triage_category == 'Immediate':
+                medical_cost += 3
+            elif refugee.triage_category == 'Very-Urgent':
+                medical_cost += 2.5 
+            elif refugee.triage_category == 'Urgent':
+                medical_cost += 2
+            elif refugee.triage_category == 'Standard':
                 medical_cost += 1
+            elif refugee.triage_category == 'Non-Urgent':
+                medical_cost += 0.5
     
         est_food = plan_resources[0]//nutrition_cost
         est_water = plan_resources[1]//nutrition_cost

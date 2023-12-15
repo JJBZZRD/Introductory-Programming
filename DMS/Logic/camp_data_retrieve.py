@@ -91,8 +91,20 @@ class CampDataRetrieve:
             else:
                 cost += 0.8
 
-            if refugee.medical_conditions is not None:
+            # if refugee.medical_conditions is not None:
+            #     cost_med += 1
+
+            if refugee.triage_category == 'Immediate':
+                cost_med += 3
+            elif refugee.triage_category == 'Very-Urgent':
+                cost_med += 2.5 
+            elif refugee.triage_category == 'Urgent':
+                cost_med += 2
+            elif refugee.triage_category == 'Standard':
                 cost_med += 1
+            elif refugee.triage_category == 'Non-Urgent':
+                cost_med += 0.5
+
 
         for resource in resources_name:
             value = getattr(camp, resource)  # value = camp.water
