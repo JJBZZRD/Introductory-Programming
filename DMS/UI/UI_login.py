@@ -28,7 +28,6 @@ class LoginScreen(tk.Frame):
                 screen = "PlanList"
                 self.show_screen(screen, res[0])
             else:
-                # screen = "VolunteerDashboard"
                 screen = "AdminDashboard"
                 camp = CampDataRetrieve.get_camp(campID=res[0].campID)
                 plan = PlanDataRetrieve.get_plan(planID=camp[0].planID)
