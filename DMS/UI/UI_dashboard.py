@@ -508,7 +508,7 @@ class Dashboard(tk.Frame):
         )
         refugees_title.grid(row=0, column=0, sticky="w", padx=5, pady=5)
 
-        if user_type == "admin":
+        if self.logged_in_user is None:
             switch_text = (
                 "Switch to Volunteers"
                 if display_type == "refugees"
