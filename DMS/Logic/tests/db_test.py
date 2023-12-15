@@ -55,10 +55,33 @@ class test_db(unittest.TestCase):
     #     # print(Volunteer.get_all_volunteers())
     #     persons = PersonDataRetrieve.get_all_volunteers()
 
-    def test_update_volunteer(self):
-        print(" ------------ Executing test_update_volunteer_status --------------- ")
-        res = Volunteer.update_volunteer(31, account_status='Active')
-        print(res)
+    # def test_update_volunteer(self):
+    #     print(" ------------ Executing test_update_volunteer_status --------------- ")
+    #     res = Volunteer.update_volunteer(31, account_status='Active')
+    #     print(res)
+
+    def test_get_separate_family_by_camp(self):
+        # print(Camp.get_separate_family_by_camp(2))
+        # print(Camp.get_separate_family_by_plan(1))
+        print(Camp.get_separate_family())
+        print(Camp.get_camp_families(1))
+
+    def test_aaa(self):
+        print(" ------------ Executing test_aaaaa --------------- ")
+        q = f"""
+        SELECT * FROM plans WHERE planID = 2
+        """
+        cursor.execute(q)
+        print(cursor.fetchall())
+
+    def test_bbb(self):
+        q = """
+        SELECT * FROM volunteers WHERE campID IS NOT NULL
+        AND username = 'admin'
+        """
+        cursor.execute(q)
+        print(f"cursor.fetchall() = {cursor.fetchall()}")
+
 
 if __name__ == '__main__':
     unittest.main()

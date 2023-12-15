@@ -1,4 +1,4 @@
-from config import conn, cursor
+from .config import conn, cursor
 
 
 def get_all_countries():
@@ -8,5 +8,5 @@ def get_all_countries():
     return list_of_countries
 
 
-countries_test = get_all_countries()
-print(countries_test)
+# countries_test = get_all_countries()
+# print(countries_test)

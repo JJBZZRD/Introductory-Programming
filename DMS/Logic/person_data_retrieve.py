@@ -1,5 +1,6 @@
 from ..DB.volunteer import Volunteer
 from ..DB.refugee import Refugee
+from ..DB.audit_table import AuditTable
 from .. import util
 
 class PersonDataRetrieve:
@@ -8,9 +9,11 @@ class PersonDataRetrieve:
     def login(username, password):
         # Validate the user's cre dentials using the UserDataAccess class
         if username == 'admin':
-            volunteer_tuples = Volunteer.get_volunteer(username=username, password=password)
+            volunteer_tuples = Volunteer.get_volunteer(username=username, password=password, inclue_admin=True)
         else:
-            volunteer_tuples = Volunteer.get_volunteer(username=username, password=password, account_status='Active')
+            volunteer_tuples = Volunteer.get_volunteer(username=username, password=password)
+        if not AuditTable.log_user_login_history(username, util.get_current_time()):
+            return "Failed to log user login history"
         return util.parse_result('Volunteer', volunteer_tuples)
 
     @staticmethod
@@ -24,78 +27,49 @@ class PersonDataRetrieve:
             return util.parse_result('Volunteer', volunteer_tuples)
         else:
             return "There is no volunteer"
-    # deprecate, use the version that takes multiple args instead
-    # @staticmethod
-    # def get_volunteers(filter, value):
-    #     if not value:
-    #         return "You need to specify the filter name and value"
-    #     else:
-    #         try:
-    #             match filter:
-    #                 case "id":
-    #                     volunteer_tuples = Volunteer.get_volunteer(volunteerID=value)
-    #                 case "name":
-    #                     res1 = Volunteer.get_volunteer(first_name=value)
-    #                     res2 = Volunteer.get_volunteer(last_name=value)
-    #                     return util.parse_results('Volunteer', res1, res2)
-    #                 case "camp_id":
-    #                     volunteer_tuples = Volunteer.get_volunteer(campID=value)
-    #                 case "plan_id":
-    #                     volunteer_tuples = Volunteer.get_volunteer(planID=value)
-    #                 case "account_status":
-    #                     volunteer_tuples = Volunteer.get_volunteer(account_status=value)
-    #                 case _:
-    #                     return "You need to specify the filter name and value"
-    #         except:
-    #             return "Invalid inputs for get_volunteers(filter, value)"
-        
-    #         return util.parse_result('Volunteer', volunteer_tuples)
 
-    
     @staticmethod
-    def get_volunteers(volunteerID=None, name=None, username=None, password=None, date_of_birth=None, phone=None, account_status=None, campID=None):
-        volunteer_tuples_1 = Volunteer.get_volunteer(volunteerID=volunteerID, first_name=name, username=username,password=password, date_of_birth=date_of_birth, phone=phone, account_status=account_status, campID=campID)
-        volunteer_tuples_2 = Volunteer.get_volunteer(volunteerID=volunteerID, last_name=name, username=username,password=password, date_of_birth=date_of_birth, phone=phone, account_status=account_status, campID=campID)
-        return util.parse_results('Volunteer', volunteer_tuples_1, volunteer_tuples_2)
-        
+    def get_volunteers_by_plan(planID):
+        return util.parse_result('Volunteer', Volunteer.get_by_planID(planID))
+
+    @staticmethod
+    def get_volunteers(volunteerID=None, name=None, username=None, password=None, date_of_birth=None, phone=None, account_status=None, campID=None, active=None, created_time=None):
+
+        if active:
+            account_status = 'Active'
+        elif active == None:
+            account_status = None
+        else:
+            account_status = 'Inactive'
+        volunteer_tuple = Volunteer.get_volunteer(volunteerID=volunteerID, name=name, username=username,password=password, date_of_birth=date_of_birth, phone=phone, account_status=account_status, campID=campID)
+        return util.parse_result('Volunteer', volunteer_tuple)
 
     @staticmethod
     def get_all_refugees():
         refugee_tuples = Refugee.get_all_refugees() 
         return util.parse_result('Refugee', refugee_tuples)
-
-    # @staticmethod
-    # def get_refugees(filter, value):
-    #     if not value:
-    #         return "You need to specify the filter name and value"
-    #     else:
-    #         try:
-    #             match filter:
-    #                 case "id":
-    #                     refugees = Refugee.get_refugee(refugeeID=value)
-    #                 case "name":
-    #                     res1 = Refugee.get_refugee(first_name=value)
-    #                     res2 = Refugee.get_refugee(last_name=value)
-    #                     return util.parse_results('Refugee', res1, res2)
-    #                 case "camp_id":
-    #                     refugee_tuples = Refugee.get_refugee(campID=value)
-    #                 case "plan_id":
-    #                     refugee_tuples = Refugee.get_refugee(planID=value)
-    #                 case "account_status":
-    #                     refugee_tuples = Refugee.get_refugee(account_status=value)
-    #                 case "family_id":
-    #                     refugee_tuples = Refugee.get_refugee(familyID=value)
-    #                 case "medical_condition":
-    #                     refugee_tuples = Refugee.get_refugee(medical_condition=value)
-    #                 case _:
-    #                     return "You need to specify the filter name and value"
-    #         except:
-    #             return "Invalid inputs for get_refugees(filter, value)"
-        
-    #         return util.parse_result('Refugee', refugee_tuples)
-
+    
+    def get_refugees_by_plan(plan_id, triage_category = None, gender = None, vital_status=None):
+        return util.parse_result('Refugee', Refugee.get_refugees_by_plan(plan_id, triage_category, gender, vital_status))
+    
     @staticmethod
-    def get_refugees(id=None, name=None, date_of_birth=None, family_id=None, camp_id=None, medical_condition=None):
-        refugee_tuple_1 = Refugee.get_refugee(refugeeID=id, first_name=name, date_of_birth=date_of_birth, familyID=family_id, campID=camp_id, medical_condition=medical_condition)
-        refugee_tuple_2 = Refugee.get_refugee(refugeeID=id, last_name=name, date_of_birth=date_of_birth, familyID=family_id, campID=camp_id, medical_condition=medical_condition)
-        return util.parse_results('Refugee', refugee_tuple_1, refugee_tuple_2)
+    def get_refugees(id=None, name=None, date_of_birth=None, gender=None, family_id=None, camp_id=None, triage_category=None, medical_condition=None, vital_status=None, created_time=None, planID=None):
+        # print(f"id: {id}")
+        if planID:
+            return util.parse_result('Refugee', Refugee.get_refugees_by_plan(planID))
+
+
+        # if name:
+        #     refugee_tuple_1 = Refugee.get_refugee(refugeeID=id, first_name=name, date_of_birth=date_of_birth, gender=gender, familyID=family_id, campID=camp_id, triage_category=triage_category, medical_conditions=medical_condition, vital_status=vital_status)
+
+        #     refugee_tuple_2 = Refugee.get_refugee(refugeeID=id, last_name=name, date_of_birth=date_of_birth, gender=gender, familyID=family_id, campID=camp_id, triage_category=triage_category, medical_conditions=medical_condition, vital_status=vital_status)
+
+        #     # print(f'refugee1: {refugee_tuple_1}')
+        #     # print(f'refugee2: {refugee_tuple_2}')
+
+        #     return util.parse_results('Refugee', refugee_tuple_1, refugee_tuple_2)
+        else:
+            refugee_tuple = Refugee.get_refugee(refugeeID=id, name=name, date_of_birth=date_of_birth, gender=gender, familyID=family_id, campID=camp_id, triage_category=triage_category, medical_conditions=medical_condition, vital_status=vital_status)
+            # print(f'refugee: {refugee_tuple}')
+
+            return util.parse_result('Refugee', refugee_tuple)

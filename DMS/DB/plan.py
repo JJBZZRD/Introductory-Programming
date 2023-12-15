@@ -2,22 +2,29 @@ from .config import conn, cursor
 
 
 class Plan:  # Plan class has attributes matching columns in table
-    def __init__(self, planID, start_date, end_date, name, region, event_name, description):
+    def __init__(self, planID, start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, created_time):
         self.planID = planID
         self.start_date = start_date
         self.end_date = end_date
         self.name = name
-        self.region = region
+        self.country = country
         self.event_name = event_name
         self.description = description
+        self.water = water
+        self.food = food
+        self.medical_supplies = medical_supplies
+        self.shelter = shelter
+        self.end_date_datetime = None
+        self.status = status
+        self.created_time = created_time
 
     @classmethod
     def init_from_tuple(cls, plan_tuple):
         return cls(*plan_tuple)
 
     def display_info(self):
-        return [str(self.planID), str(self.name), str(self.region), str(self.event_name), str(self.description),
-                str(self.start_date), str(self.end_date)]
+        return [str(self.planID), str(self.name), str(self.country), str(self.event_name), str(self.description),
+                str(self.start_date), str(self.end_date), str(self.water), str(self.food), str(self.medical_supplies), str(self.shelter),  self.status, self.created_time]
 
     @staticmethod
     def get_plan_by_id(planID):  # Get plan details by selecting on planID. Returns a list of tuples.
@@ -26,20 +33,20 @@ class Plan:  # Plan class has attributes matching columns in table
 
     @classmethod  # Insert a plan into the database
     def create_plan(cls, plan_tuple):
-        start_date, end_date, name, region, event_name, description = plan_tuple
+        start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, created_time = plan_tuple
         sql = """
             INSERT INTO plans (
-                start_date, end_date, name, region, event_name, description) 
-            VALUES (?, ?, ?, ?, ?, ?)
+                start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, created_time) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
-        cursor.execute(sql, (start_date, end_date, name, region, event_name, description))
+        cursor.execute(sql, (start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, created_time))
         conn.commit()
         plan_id = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
         return Plan.get_plan_by_id(plan_id)
 
 
     @staticmethod  # Update a plan by selecting on planID
-    def update_plan(planID, start_date=None, end_date=None, name=None, region=None, event_name=None, description=None):
+    def update_plan(planID, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None, water=None, food=None, shelter=None, medical_supplies=None, status=None, created_time=None):
 
         query = []
         params = []
@@ -53,19 +60,36 @@ class Plan:  # Plan class has attributes matching columns in table
         if name is not None:
             query.append("name = ?")
             params.append(name)
-        if region is not None:
-            query.append("region = ?")
-            params.append(region)
+        if country is not None:
+            query.append("country = ?")
+            params.append(country)
         if event_name is not None:
             query.append("event_name = ?")
             params.append(event_name)
         if description is not None:
             query.append("description = ?")
             params.append(description)
+        if water is not None:
+            query.append("water = ?")
+            params.append(water)
+        if food is not None:
+            query.append("food = ?")
+            params.append(food)
+        if shelter is not None:
+            query.append("shelter = ?")
+            params.append(shelter)
+        if medical_supplies is not None:
+            query.append("medical_supplies = ?")
+            params.append(medical_supplies)
+        if status is not None: 
+            query.append("status = ?")
+            params.append(status)
+
 
         params.append(planID)
         cursor.execute(f"""UPDATE plans SET {', '.join(query)} WHERE planID = ?""", params)
         conn.commit()
+        print(f"Plan {planID} has been updated")
         return Plan.get_plan(planID=planID)
 
     @staticmethod
@@ -75,40 +99,37 @@ class Plan:  # Plan class has attributes matching columns in table
         conn.commit()
         if rows_deleted > 0:
             print(f"Plan {planID} has been deleted")
+            return True
         else:
             print(f"Plan {planID} has not been deleted")
+            return False
 
-    @staticmethod  # Get plan details by selecting on any combination of attributes. Can be used to find the
-    # planID which can then be used in the delete and update methods. Returns a list of tuples.
-    def get_plan(planID=None, start_date=None, end_date=None, name=None, region=None, event_name=None, description=None):
+    @staticmethod
+    def get_plan(planID=None, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None, status=None):
 
-        query = []
-        params = []
+        query = "SELECT * FROM plans WHERE planID IS NOT NULL"
 
-        if planID is not None:
-            query.append("planID = ?")
-            params.append(planID)
-        if start_date is not None:
-            query.append("start_date = ?")
-            params.append(start_date)
-        if end_date is not None:
-            query.append("end_date = ?")
-            params.append(end_date)
-        if name is not None:
-            query.append("name LIKE ?")
-            params.append(f"{name}%")
-        if region is not None:
-            query.append("region LIKE ?")
-            params.append(f"{region}%")
-        if event_name is not None:
-            query.append("event_name LIKE ?")
-            params.append(f"{event_name}%")
-        if description is not None:
-            query.append("description LIKE ?")
-            params.append(f"{description}%")
+        if planID:
+            query += f" AND planID = {planID}"
+        if start_date:
+            query += f" AND start_date = '{start_date}'"
+        if end_date:
+            query += f" AND end_date = '{end_date}'"
+        if name:
+            query += f" AND name LIKE '%{name}%'"
+        if country:
+            query += f" AND country = '{country}'"
+        if event_name:
+            query += f" AND event_name LIKE '%{event_name}%'"
+        if description:
+            query += f" AND description LIKE '%{description}%'"
+        if status:
+            query += f" AND status = '{status}'"
 
-        cursor.execute(f"""SELECT * FROM plans WHERE {' AND '.join(query)}""", params)
+        # print(query)
+        cursor.execute(query)
         return cursor.fetchall()
+
 
     @staticmethod
     def get_all_plans():  # Gets all plans. Returns a list of tuples.
@@ -116,34 +137,28 @@ class Plan:  # Plan class has attributes matching columns in table
         return cursor.fetchall()
 
     @staticmethod
-    def total_resources(planID):
-        from .camp import Camp as pc
-        shelter = []
-        food = []
-        water = []
-        medical_supplies = []
-        total_shelter = 0
-        total_food = 0
-        total_water = 0
-        total_medical_supplies = 0
-        camps_tuples = pc.get_camp(planID=planID)
-        campIDs = [camps_tuples[i][0] for i in range(len(camps_tuples))]
-        for campID in campIDs:
-            camps = pc.get_camp_by_id(campID)
-            s = camps[0][2]
-            shelter.append(s)
-            f = camps[0][5]
-            food.append(f)
-            w = camps[0][3]
-            water.append(w)
-            m = camps[0][7]
-            medical_supplies.append(m)
-        for i in shelter:
-            total_shelter += i
-        for i in food:
-            total_food += i
-        for i in water:
-            total_water += i
-        for i in medical_supplies:
-            total_medical_supplies += i
-        return [total_food, total_water, total_shelter, total_medical_supplies]
+    def get_total_resources(planID):
+        q = f"""
+            SELECT 
+            COALESCE(SUM(shelter), 0) as sum_shelter,
+            COALESCE(SUM(food), 0) as sum_food,
+            COALESCE(SUM(water), 0) as sum_water,
+            COALESCE(SUM(medical_supplies), 0) as sum_med
+            FROM camps
+            WHERE planID = {planID}
+            GROUP BY planID
+            """
+        cursor.execute(q)
+        return cursor.fetchall()
+
+    @staticmethod
+    def get_plan_families(planID):
+        q = f"""
+        SELECT familyID
+        FROM refugees
+        LEFT JOIN camps ON refugees.campID = camps.campID
+        WHERE camps.planID = {planID}
+        GROUP BY familyID
+        """
+        cursor.execute(q)
+        return cursor.fetchall()

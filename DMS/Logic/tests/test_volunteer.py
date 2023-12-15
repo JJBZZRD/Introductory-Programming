@@ -37,18 +37,18 @@ class TestVolunteer(unittest.TestCase):
         self.connection.rollback()
         self.connection.close()
 
-    def test_create_volunteer_admin(self):
-        print(" ---------------- Executing test_create_volunteer_admin -------------- ")
+    # def test_create_volunteer_admin(self):
+    #     print(" ---------------- Executing test_create_volunteer_admin -------------- ")
 
-        admins = PersonDataRetrieve.get_volunteers(username='admin')
-        if admins:
-            print(admins[0].display_info())
-            self.assertIsInstance(admins, list, f'Admins is not a list but {admins}')
-        # else:
-        #     admin = PersonDataEdit.create_volunteer('admin', 'test', 'admin', '111', '2023-1-1', '10123456', 'Active', )
+    #     admins = PersonDataRetrieve.get_volunteers(username='admin')
+    #     if admins:
+    #         print(admins[0].display_info())
+    #         self.assertIsInstance(admins, list, f'Admins is not a list but {admins}')
+    #     # else:
+    #     #     admin = PersonDataEdit.create_volunteer('admin', 'test', 'admin', '111', '2023-1-1', '10123456', 'Active', )
         
-        # self.assertIsInstance(vols, list, 'vols is not a list')
-        pass
+    #     # self.assertIsInstance(vols, list, 'vols is not a list')
+    #     pass
 
     def test_get_all_volunteers(self):
         volunteers = PersonDataRetrieve.get_all_volunteers()
@@ -56,24 +56,27 @@ class TestVolunteer(unittest.TestCase):
         #     print(v.display_info())
         self.assertIsInstance(volunteers, list, 'get_all_volunteers FAILED')
 
-    def test_get_volutneer(self):
-        print(" ------------ Executing test_get_volutneer --------------- ")
+    def test_get_volutneer_for_login(self):
+        print(" ------------ Executing test_get_volutneer_for_login --------------- ")
         vols = PersonDataRetrieve.get_volunteers(username='volunteer1', password='111', account_status='Active')
         print(vols[0].display_info())
         self.assertIsInstance(vols, list, "get_volunteers(campID='') FAILED")
 
-    def test_get_volunteer_admin(self):
-        print(" ------------ Executing test_get_volunteer_admin --------------- ")
-        admins = PersonDataRetrieve.get_volunteers(name='Admin')
-        # print(f'admins: {admins}')
-        self.assertIsInstance(admins, list, f'Admins is not a list but {admins}')
+    def test_get_volutneer_by_camp(self):
+        print(" ------------ Executing test_get_volutneer_by_camp --------------- ")
+        vols = PersonDataRetrieve.get_volunteers(campID=1)
+        print(vols[0].display_info())
+        self.assertIsInstance(vols, list, "get_volunteers(campID='') FAILED")
 
-    def test_update_volunteer_status(self):
-        print(" ------------ Executing test_update_volunteer_status --------------- ")
-        admin = PersonDataRetrieve.get_volunteers(username='admin')[0]
-        admin = PersonDataEdit.update_volunteer(admin.volunteerID, account_status='Active')[0]
-        print(admin)
-        print(admin.display_info())
+    # def test_get_volunteer_admin(self):
+    #     print(" ------------ Executing test_get_volunteer_admin --------------- ") #     admins = PersonDataRetrieve.get_volunteers(name='Admin') #     # print(f'admins: {admins}') #     self.assertIsInstance(admins, list, f'Admins is not a list but {admins}')
+
+    # def test_update_volunteer_status(self):
+    #     print(" ------------ Executing test_update_volunteer_status --------------- ")
+    #     admin = PersonDataRetrieve.get_volunteers(username='admin')[0]
+    #     admin = PersonDataEdit.update_volunteer(admin.volunteerID, account_status='Active')[0]
+    #     print(admin)
+    #     print(admin.display_info())
 
 if __name__ == '__main__':
     unittest.main()
