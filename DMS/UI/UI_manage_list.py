@@ -289,16 +289,22 @@ class VolunteerList(ManageList):
     #         return PersonDataRetrieve.get_all_volunteers()
 
     def volunteer_list_by_plan(self):
-        if isinstance(self.screen_data, Camp):
+        if isinstance(self.screen_data, Plan):
             self.list_data = PersonDataRetrieve.get_volunteers(planID=self.screen_data.planID)
             self.default_filter = {'planID': self.screen_data.planID}
-            
+
+        elif isinstance(self.screen_data, Camp):
+            self.list_data = PersonDataRetrieve.get_volunteers(campID=self.screen_data.campID)
+            self.default_filter = {'CampID': self.screen_data.campID}
+
         else:
             self.list_data = PersonDataRetrieve.get_volunteers()
         
     def modify_title(self):
-        if isinstance(self.screen_data, Camp):
+        if isinstance(self.screen_data, Plan):
             self.list_type[0] = f'Manage Volunteers for Plan {self.screen_data.planID}'
+        elif isinstance(self.screen_data, Camp):
+            self.list_type[0] = f'Manage Volunteers for Camp {self.screen_data.campID}'
         else:
             self.list_type[0] = f'Manage Vounteers: Global'
 
