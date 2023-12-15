@@ -44,4 +44,7 @@ else:
         try:
             subprocess.run(["python3", "temp.py"]) 
         except:
-            subprocess.run(["python", "temp.py"])
+            try:
+                subprocess.run(["python", "temp.py"])
+            except:
+                print("Looks like your system is faulty. Please use a proper Linux distro.")
