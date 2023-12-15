@@ -339,7 +339,7 @@ class Dashboard(tk.Frame):
         user_type,
     ):
         resource_key = resource_name.lower().replace(" ", "_")
-        if user_type == "admin":
+        if self.logged_in_user.campID is None:
             plan_current_amount = getattr(plan, resource_key)
             new_plan_amount = max(0, plan_current_amount - increment)
             if PlanEdit.update_plan(
