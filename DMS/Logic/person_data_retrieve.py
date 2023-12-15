@@ -7,7 +7,6 @@ class PersonDataRetrieve:
 
     @staticmethod
     def login(username, password):
-        # Validate the user's cre dentials using the UserDataAccess class
         if username == 'admin':
             volunteer_tuples = Volunteer.get_volunteer(username=username, password=password, inclue_admin=True)
         else:
@@ -58,16 +57,6 @@ class PersonDataRetrieve:
         if planID:
             return util.parse_result('Refugee', Refugee.get_refugees_by_plan(planID))
 
-
-        # if name:
-        #     refugee_tuple_1 = Refugee.get_refugee(refugeeID=id, first_name=name, date_of_birth=date_of_birth, gender=gender, familyID=family_id, campID=camp_id, triage_category=triage_category, medical_conditions=medical_condition, vital_status=vital_status)
-
-        #     refugee_tuple_2 = Refugee.get_refugee(refugeeID=id, last_name=name, date_of_birth=date_of_birth, gender=gender, familyID=family_id, campID=camp_id, triage_category=triage_category, medical_conditions=medical_condition, vital_status=vital_status)
-
-        #     # print(f'refugee1: {refugee_tuple_1}')
-        #     # print(f'refugee2: {refugee_tuple_2}')
-
-        #     return util.parse_results('Refugee', refugee_tuple_1, refugee_tuple_2)
         else:
             refugee_tuple = Refugee.get_refugee(refugeeID=id, name=name, date_of_birth=date_of_birth, gender=gender, familyID=family_id, campID=camp_id, triage_category=triage_category, medical_conditions=medical_condition, vital_status=vital_status)
             # print(f'refugee: {refugee_tuple}')

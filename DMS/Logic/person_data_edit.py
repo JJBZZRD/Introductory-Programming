@@ -45,20 +45,7 @@ class PersonDataEdit:
         except:
             return "Invalid inputs, please check and try again"
         return util.parse_result('Volunteer', volunteer_tuples)
-        #     if campID:
-        #         volunteer.campID = campID
-        #     if username:
-        #         volunteer.username = username
-        #     if password:
-        #         volunteer.password = password
-        #     if date_of_birth:
-        #         volunteer.date_of_birth = date_of_birth
-        #     if account_status:
-        #         volunteer.account_status = account_status 
-        # except:
-        #     return "Invalid inputs, please check and try again"
-        # validate
-    
+
     @staticmethod
     def delete_volunteer(id):
         res = Volunteer.delete_volunteer(id)

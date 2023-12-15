@@ -1,7 +1,7 @@
 from .config import conn, cursor
 
 
-class Plan:  # Plan class has attributes matching columns in table
+class Plan: 
     def __init__(self, planID, start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, created_time):
         self.planID = planID
         self.start_date = start_date
@@ -27,11 +27,11 @@ class Plan:  # Plan class has attributes matching columns in table
                 str(self.start_date), str(self.end_date), str(self.water), str(self.food), str(self.medical_supplies), str(self.shelter),  self.status, self.created_time]
 
     @staticmethod
-    def get_plan_by_id(planID):  # Get plan details by selecting on planID. Returns a list of tuples.
+    def get_plan_by_id(planID):
         cursor.execute("SELECT * FROM plans WHERE planID = ?", (planID,))
         return [cursor.fetchone()]
 
-    @classmethod  # Insert a plan into the database
+    @classmethod
     def create_plan(cls, plan_tuple):
         start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, created_time = plan_tuple
         sql = """
@@ -45,7 +45,7 @@ class Plan:  # Plan class has attributes matching columns in table
         return Plan.get_plan_by_id(plan_id)
 
 
-    @staticmethod  # Update a plan by selecting on planID
+    @staticmethod
     def update_plan(planID, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None, water=None, food=None, shelter=None, medical_supplies=None, status=None, created_time=None):
 
         query = []
@@ -93,7 +93,7 @@ class Plan:  # Plan class has attributes matching columns in table
         return Plan.get_plan(planID=planID)
 
     @staticmethod
-    def delete_plan(planID):  # Delete a plan by selecting on planID
+    def delete_plan(planID): 
         cursor.execute("DELETE FROM plans WHERE planID = ?", (planID,))
         rows_deleted = cursor.rowcount
         conn.commit()
@@ -132,7 +132,7 @@ class Plan:  # Plan class has attributes matching columns in table
 
 
     @staticmethod
-    def get_all_plans():  # Gets all plans. Returns a list of tuples.
+    def get_all_plans():
         cursor.execute("SELECT * FROM plans")
         return cursor.fetchall()
 

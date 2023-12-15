@@ -1,4 +1,3 @@
-import re
 from datetime import datetime
 from .DB.volunteer import Volunteer
 from .DB.refugee import Refugee
@@ -99,39 +98,3 @@ def validate_end_date(start_time, end_time):
         print(e)
         return False
      
-
-# def validate_end_date(start_time, end_time):
-#     try:
-#         if not all(isinstance(date, str) for date in [start_time, end_time]):
-#             return "Invalid input type"
-
-#         if not start_time or not end_time:
-#             return "Please enter date"
-
-#         start_time = datetime.strptime(start_time, '%Y-%m-%d').date()
-#         end_time = datetime.strptime(end_time, '%Y-%m-%d').date()
-
-#         for date in [start_time, end_time]:
-#             if not 1 <= date.day <= 31:
-#                 return ValueError("Invalid day")
-#             elif not 1 <= date.month <= 12:
-#                 return ValueError("Invalid month")
-#             elif not 2023 <= date.year <= 9999:
-#                 return ValueError("Invalid year")
-
-#         if start_time > end_time:
-#             return ValueError("Invalid. End time must be after start time")
-
-#         return start_time, end_time
-
-#     except ValueError:
-#         return "Invalid input"
-    
-
-
-# from datetime import datetime
-# s = '2023-01-01'
-# e = '2025-01-01'
-# start_time = datetime.strptime(s, '%Y-%m-%d').date()
-# end_time = datetime.strptime(e, '%Y-%m-%d').date()
-# print(start_time < end_time)

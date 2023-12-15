@@ -72,9 +72,8 @@ class CampDataEdit:
 
         return util.parse_result('Camp', camp_tuple)
 
-    @staticmethod  # Insert a camp into the database without creating a new instance
+    @staticmethod
     def create_camp(logged_in_user=None, location=None, shelter=None, water=None, food=None, medical_supplies=None, planID=None, created_time=None):
-                # validate
         if location:
             if location in ["Enter Name", '', ' ']:
                 return "Please enter name"

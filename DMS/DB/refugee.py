@@ -2,7 +2,7 @@ from .config import conn, cursor
 from .camp import Camp
 
 
-class Refugee:  # Refugee class has attributes matching columns in table
+class Refugee:
     def __init__(self, refugeeID, first_name, last_name, date_of_birth, gender, familyID, campID,triage_category, medical_conditions, vital_status, created_time):
         self.refugeeID = refugeeID
         self.first_name = first_name
@@ -29,11 +29,11 @@ class Refugee:  # Refugee class has attributes matching columns in table
                 str(self.vital_status), self.created_time]
 
     @staticmethod
-    def get_refugee_by_id(refugeeID):  # Get refugee details by selecting on refugeeID. Returns a list of tuples.
+    def get_refugee_by_id(refugeeID):
         cursor.execute("SELECT * FROM refugees WHERE refugeeID = ?", (refugeeID,))
         return [cursor.fetchone()]
 
-    @classmethod    # Insert a refugee into the database without creating a new instance
+    @classmethod
     def create_refugee(cls, refugee_tuple):
         (first_name, last_name, date_of_birth, gender, familyID, campID, triage_category,
          medical_conditions, vital_status, created_time) = refugee_tuple
@@ -51,7 +51,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
         else:
             return 'Camp campID does not exist'
 
-    @staticmethod  # Update a refugee by selecting on refugeeID
+    @staticmethod
     def update_refugee(refugeeID, first_name=None, last_name=None, date_of_birth=None, gender=None,
                        familyID=None, campID=None, triage_category=None, medical_conditions=None, vital_status=None):
         query = []
@@ -91,7 +91,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
         return Refugee.get_refugee_by_id(refugeeID)
 
     @staticmethod
-    def delete_refugee(refugeeID):  # Delete a refugee by selecting on refugeeID
+    def delete_refugee(refugeeID):
         cursor.execute("DELETE FROM refugees WHERE refugeeID = ?", (refugeeID,))
         rows_deleted = cursor.rowcount
         conn.commit()
@@ -102,8 +102,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
             print(f"Refugee {refugeeID} has not been deleted")
             return False
 
-    @staticmethod  # Get refugee details by selecting on any combination of attributes. Can be used to find the
-    # refugeeID which can then be used in the delete and update methods. Returns a list of tuples.
+    @staticmethod
     def get_refugee(refugeeID=None, name=None, date_of_birth=None, gender=None,
                     familyID=None, campID=None, triage_category=None, medical_conditions=None,
                     vital_status=None):
@@ -134,7 +133,7 @@ class Refugee:  # Refugee class has attributes matching columns in table
         return cursor.fetchall()
 
     @staticmethod
-    def get_all_refugees():  # Gets all refugees. Returns a list of tuples.
+    def get_all_refugees():
         cursor.execute("SELECT * FROM refugees")
         return cursor.fetchall()
 

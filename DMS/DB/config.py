@@ -137,18 +137,7 @@ def create_database():
     """
 
     cursor.execute(audit_table)
-
-    # family_table = """
-    # CREATE TABLE IF NOT EXISTS family(
-    #     familyID INTEGER PRIMARY KEY,
-    #     family_name TEXT,
-    #     lead_family_memberID INTEGER)
-    #     """
-
-    # cursor.execute(family_table)
-
     conn.commit()
-
 
 def triggers_for_audit_table(table_name, fields, primary_key_field):
     for field in fields:

@@ -1,7 +1,6 @@
 from .. import util
 from ..DB.camp import Camp
 from ..DB.plan import Plan
-# from ..DB.refugee import Refugee
 from ..Logic.person_data_retrieve import PersonDataRetrieve
 from datetime import datetime
 
@@ -58,20 +57,13 @@ class CampDataRetrieve:
         estimation = {}
         resources_name = ['water', 'food']
         refugees = PersonDataRetrieve.get_refugees(camp_id=campID)
-        # if len(refugees) >0:
-        #     # print("found some refs")
-        #     # for refugee in refugees:
-        #     #     print(refugee.display_info())
-        # else:
-        #     print("NO ref")
-        #     return []
+
         camp = CampDataRetrieve.get_camp(campID=campID)
         if len(camp) >0:
             camp = camp[0]
             # print(camp.display_info())
         else:
             print("NO CAMP")
-            # return []
 
         cost = 1
         cost_med = 1
@@ -90,10 +82,6 @@ class CampDataRetrieve:
                 cost += 2
             else:
                 cost += 0.8
-
-            # if refugee.medical_conditions is not None:
-            #     cost_med += 1
-
             if refugee.triage_category == 'Immediate':
                 cost_med += 3
             elif refugee.triage_category == 'Very-Urgent':

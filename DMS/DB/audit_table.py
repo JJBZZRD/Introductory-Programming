@@ -1,7 +1,7 @@
 from .config import conn, cursor
 
 
-class AuditTable:  # AuditTable class has attributes matching columns in table
+class AuditTable:
     def __init__(self, auditID, table_name, recordID, field_name, old_value, new_value, action, created_time, changed_by):
         self.auditID = auditID
         self.table_name = table_name

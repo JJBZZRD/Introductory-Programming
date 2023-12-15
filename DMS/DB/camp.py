@@ -2,7 +2,7 @@ from .config import conn, cursor
 from .plan import Plan
 
 
-class Camp:  # Camp class has attributes matching columns in table
+class Camp:
     def __init__(self, campID, location, shelter, water, food, medical_supplies, planID, created_time):
         self.campID = campID
         self.location = location
@@ -21,11 +21,11 @@ class Camp:  # Camp class has attributes matching columns in table
         return [str(self.campID), str(self.location), str(self.shelter), str(self.water), str(self.food), str(self.medical_supplies), str(self.planID), self.created_time]
 
     @staticmethod
-    def get_camp_by_id(campID):  # Get camp details by selecting on campID. Returns a list of tuples.
+    def get_camp_by_id(campID):
         cursor.execute("SELECT * FROM camps WHERE campID = ?", (campID,))
         return [cursor.fetchone()]
 
-    @classmethod  # Insert a camp into the database without creating a new instance
+    @classmethod
     def create_camp(cls, camp_tuple):
         location, shelter, water, food, medical_supplies, planID, created_time = camp_tuple
         if Camp.check_planID_exist(planID):
@@ -41,7 +41,7 @@ class Camp:  # Camp class has attributes matching columns in table
         else:
             return 'Plan planID does not exist'
         
-    @staticmethod  # Update a camp by selecting on campID
+    @staticmethod 
     def update_camp(campID, location=None, shelter=None, water=None, food=None, medical_supplies=None, planID=None, created_time=None):
         query = []
         params = []
@@ -71,7 +71,7 @@ class Camp:  # Camp class has attributes matching columns in table
         return Camp.get_camp_by_id(campID)
 
     @staticmethod
-    def delete_camp(campID):  # Delete a camp by selecting on campID
+    def delete_camp(campID): 
         cursor.execute("DELETE FROM camps WHERE campID = ?", (campID,))
         rows_deleted = cursor.rowcount
         conn.commit()
@@ -83,8 +83,7 @@ class Camp:  # Camp class has attributes matching columns in table
             return False
 
 
-    @staticmethod  # Get camp details by selecting on any combination of attributes. Can be used to find the
-    # campID which can then be used in the delete and update methods. Returns a list of tuples.
+    @staticmethod 
     def get_camp(campID=None, location=None, shelter=None, water=None, food=None, medical_supplies=None, planID=None, created_time=None):
 
         query = "SELECT * FROM camps WHERE campID IS NOT NULL"
@@ -108,7 +107,7 @@ class Camp:  # Camp class has attributes matching columns in table
         return cursor.fetchall()
     
     @staticmethod
-    def get_all_camps():  # Gets all camps. Returns a list of tuples.
+    def get_all_camps(): 
         cursor.execute("SELECT * FROM camps")
         return cursor.fetchall()
 
