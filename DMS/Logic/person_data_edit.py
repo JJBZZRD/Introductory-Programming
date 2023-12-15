@@ -134,7 +134,10 @@ class PersonDataEdit:
         if family_id in ["Enter Family ID", '', ' ']:
             family_count = Refugee.get_family_count()[0]
             return f"Please enter family ID, if there is no known family for this refugee, please enter {family_count + 1}"
-
+        if family_id:
+            if not util.is_num(family_id):
+                return "Family ID must be a number"
+            
         if medical_conditions in ["Enter Medical Conditions", '', ' ']:
             medical_conditions = None
 
@@ -165,7 +168,10 @@ class PersonDataEdit:
                 family_count = Refugee.get_family_count()[0]
                 return f"Please enter family ID, if there is no known family for this refugee, please enter {family_count + 1}"
             if family_id:
-                refugee.familyID = family_id
+                if not util.is_num(family_id):
+                    return "Family ID must be a number"
+                else:
+                    refugee.familyID = family_id
             if triage_category:
                 refugee.triage_category = triage_category
             if medical_conditions in ["Enter Medical Conditions", '', ' ']:
