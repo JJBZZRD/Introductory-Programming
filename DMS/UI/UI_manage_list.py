@@ -301,7 +301,7 @@ class RefugeeList(ManageList):
                 'Date of Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status']
-        self.list_data = self.list_by_camp()
+        self.list_data = PersonDataRetrieve.get_all_refugees()
         self.get_search = PersonDataRetrieve.get_refugees
         self.switch_to_page = 'EditRefugee'
         self.record_button = 'NewRefugee'
@@ -310,17 +310,21 @@ class RefugeeList(ManageList):
                 'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
                 'Vital Status': 'vital_status','Creation Time': 'created_time', 'Plan ID':'planID'}
         self.export_name = 'Refugees'
+        self.refugee_list_by_screen_data_camp()
         self.modify_title()
         self.create_title()
         self.create_search()
         self.create_results()
 
-    def list_by_camp(self):
+    def refugee_list_by_screen_data_camp(self):
         if isinstance(self.screen_data, Camp):
-            return PersonDataRetrieve.get_refugees(camp_id=self.screen_data.campID)
+            self.list_data = PersonDataRetrieve.get_refugees(camp_id=self.screen_data.campID)
+            
         else:
-            return PersonDataRetrieve.get_all_refugees()
+            self.list_data = PersonDataRetrieve.get_refugees()
     
+
+
     def modify_title(self):
         if isinstance(self.screen_data, Camp):
             self.list_type[0] = f'Manage Refugees for Camp {self.screen_data.campID}'
