@@ -139,6 +139,7 @@ def create_database():
     cursor.execute(audit_table)
     conn.commit()
 
+
 def triggers_for_audit_table(table_name, fields, primary_key_field):
     for field in fields:
         cursor.execute(
@@ -148,8 +149,10 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
             FOR EACH ROW
             WHEN (SELECT username FROM current_user ORDER BY time DESC LIMIT 1) IS NOT NULL
             BEGIN
-                INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
-                VALUES ('{table_name}', NEW.{primary_key_field}, '{field}', NULL, NEW.{field}, 'INSERT', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
+                INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time,
+                changed_by)
+                VALUES ('{table_name}', NEW.{primary_key_field}, '{field}', NULL, NEW.{field}, 'INSERT',
+                CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
             END;
         """
         )
@@ -162,8 +165,10 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
             WHEN OLD.{field} IS NOT NEW.{field}
             AND (SELECT username FROM current_user ORDER BY time DESC LIMIT 1) IS NOT NULL
             BEGIN
-                INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
-                VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NEW.{field}, 'UPDATE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
+                INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time,
+                changed_by)
+                VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NEW.{field}, 'UPDATE',
+                CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
             END;
         """
         )
@@ -175,8 +180,10 @@ def triggers_for_audit_table(table_name, fields, primary_key_field):
             FOR EACH ROW
             WHEN (SELECT username FROM current_user ORDER BY time DESC LIMIT 1) IS NOT NULL
             BEGIN
-                INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by)
-                VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NULL, 'DELETE', CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
+                INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time,
+                changed_by)
+                VALUES ('{table_name}', OLD.{primary_key_field}, '{field}', OLD.{field}, NULL, 'DELETE',
+                CURRENT_TIMESTAMP, (SELECT username FROM current_user ORDER BY time DESC LIMIT 1));
             END;
         """
         )
