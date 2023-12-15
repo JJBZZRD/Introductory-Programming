@@ -295,7 +295,7 @@ class VolunteerList(ManageList):
 
         elif isinstance(self.screen_data, Camp):
             self.list_data = PersonDataRetrieve.get_volunteers(campID=self.screen_data.campID)
-            self.default_filter = {'CampID': self.screen_data.campID}
+            self.default_filter = {'campID': self.screen_data.campID}
 
         else:
             self.list_data = PersonDataRetrieve.get_volunteers()
