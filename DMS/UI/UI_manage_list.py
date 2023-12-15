@@ -262,6 +262,7 @@ class VolunteerList(ManageList):
         self.filter_matching = {'Volunteer ID': 'volunteerID', 'Name': 'name', 'Last Name': 'name', 'Username': 'username',
                 'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Creation Time': 'created_time'}
         self.status_filters = ['All', 'Active', 'Inactive']
+        self.default_filter = {'camp_id': self.screen_data.campID}
         self.modify_title()
         self.create_title()
         self.create_search()
@@ -315,13 +316,13 @@ class RefugeeList(ManageList):
                 'Vital Status': 'vital_status','Creation Time': 'created_time', 'Plan ID':'planID'}
         self.export_name = 'Refugees'
         self.default_filter = {}
-        self.refugee_list_by_screen_data_camp()
+        self.refugee_list_by_camp()
         self.modify_title()
         self.create_title()
         self.create_search()
         self.create_results()
 
-    def refugee_list_by_screen_data_camp(self):
+    def refugee_list_by_camp(self):
         if isinstance(self.screen_data, Camp):
             self.list_data = PersonDataRetrieve.get_refugees(camp_id=self.screen_data.campID)
             self.default_filter = {'camp_id': self.screen_data.campID}
