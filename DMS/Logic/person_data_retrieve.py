@@ -32,7 +32,7 @@ class PersonDataRetrieve:
         return util.parse_result('Volunteer', Volunteer.get_by_planID(planID))
 
     @staticmethod
-    def get_volunteers(volunteerID=None, name=None, username=None, password=None, date_of_birth=None, phone=None, account_status=None, campID=None, active=None, created_time=None):
+    def get_volunteers(volunteerID=None, name=None, username=None, password=None, date_of_birth=None, phone=None, account_status=None, campID=None, active=None, created_time=None, planID=None):
 
         if active:
             account_status = 'Active'
@@ -41,7 +41,11 @@ class PersonDataRetrieve:
         else:
             account_status = 'Inactive'
         volunteer_tuple = Volunteer.get_volunteer(volunteerID=volunteerID, name=name, username=username,password=password, date_of_birth=date_of_birth, phone=phone, account_status=account_status, campID=campID)
-        return util.parse_result('Volunteer', volunteer_tuple)
+        vol_list = util.parse_result('Volunteer', volunteer_tuple)
+        if planID:
+            vol_list_plan = util.parse_result('Volunteer', Volunteer.get_volunteers_by_plan(planID))
+            vol_list = [vol for vol in vol_list if vol in vol_list_plan]
+        return vol_list
 
     @staticmethod
     def get_all_refugees():
