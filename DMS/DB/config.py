@@ -432,11 +432,11 @@ def insert_dummy_data():
     INSERT INTO audit (table_name, recordID, field_name, old_value, new_value, action, action_time, changed_by) VALUES
     ('plans', 1, 'shelter', '200', '220', 'UPDATE', '2023-03-01T10:00:00', 'admin'),
     ('plans', 2, 'description', 'Relief for Belleville nuclear incident', 'Refugees fleeing Belleville nuclear meltdown', 'UPDATE', '2023-03-02T11:30:00', 'admin'),
-    ('plans', 3, 'status', 'Active', 'Completed', 'UPDATE', '2023-04-10T09:20:00', 'volunteer1'),
+    ('plans', 3, 'status', 'Active', 'Completed', 'UPDATE', '2023-04-10T09:20:00', 'admin'),
     ('camps', 2, 'water', '300', '350', 'UPDATE', '2023-03-05T08:15:00', 'volunteer12'),
     ('camps', 4, 'location', 'Normandy', 'Lyon', 'UPDATE', '2023-03-06T14:50:00', 'volunteer7'),
     ('volunteers', 3, 'phone', '555-9876', '555-0000', 'UPDATE', '2023-03-07T16:00:00', 'admin'),
-    ('volunteers', 10, 'account_status', 'Active', 'Inactive', 'UPDATE', '2023-03-11T13:45:00', 'volunteer2'),
+    ('volunteers', 10, 'account_status', 'Active', 'Inactive', 'UPDATE', '2023-03-11T13:45:00', 'admin'),
     ('refugees', 15, 'triage_category', 'None', 'Urgent', 'UPDATE', '2023-03-12T17:30:00', 'volunteer30'),
     ('refugees', 21, 'medical_conditions', 'None', 'Chronic Pain', 'UPDATE', '2023-03-13T10:10:00', 'volunteer3'),
     ('refugees', 7, 'vital_status', 'Alive', 'Deceased', 'UPDATE', '2023-03-15T12:00:00', 'volunteer25'),
