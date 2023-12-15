@@ -325,6 +325,9 @@ class RefugeeList(ManageList):
         if isinstance(self.screen_data, Camp):
             self.list_data = PersonDataRetrieve.get_refugees(camp_id=self.screen_data.campID)
             self.default_filter = {'camp_id': self.screen_data.campID}
+            self.filter_values = ['Refugee ID', 'Name',
+                'Date of Birth', 'Gender', 'Family ID', 'Triage Category', 'Medical Conditions',
+                'Vital Status']
             
         else:
             self.list_data = PersonDataRetrieve.get_refugees()
