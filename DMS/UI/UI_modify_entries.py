@@ -48,14 +48,11 @@ class ModifyEntries(tk.Frame):
 
     def create_title(self):
         # this method creates the title
-        # page_top_frame = tk.Frame(self.root)
-        # page_top_frame.pack(side='top')
 
         modify_title = ttk.Label(self, text=self.modify_type[0], font=("Helvetica", 20, "bold"))
         modify_title.pack(side='top', padx=10, pady=5)
 
     def create_entry_fields(self):
-        # lower_frame = tk.Frame(self)
         self.lower_frame.pack(pady=10)
         entry_fields = {}
         # The ui logic to display the current values from the database within the entry boxes (read-only or
@@ -126,12 +123,7 @@ class ModifyEntries(tk.Frame):
             entry.insert(0, placeholder)
 
     def create_buttons(self):
-        #save_record = ttk.Button(self.lower_frame, text=self.button_labels[0], command=self.on_click_save_record)
-        #save_record.grid(column=5, row=4, padx=5, pady=5)
-        # if self.display_delete_button:
-        #     save_record = ttk.Button(self.lower_frame, text=self.button_labels[1], command=self.on_click_save_record)
-        #     save_record.grid(column=5, row=3, padx=5, pady=5)
-        #
+       
         for i, button in enumerate(self.button_labels):
             new_button = ttk.Button(self.lower_frame, text=button, command=lambda b=button: self.button_click_function(b))
             new_button.grid(column=self.button_column, row=4-i, padx=5, pady=5)
@@ -154,34 +146,26 @@ class ModifyEntries(tk.Frame):
                 inputs = {}
                 for key in self.entry_fields:
                     inputs.update({self.entry_fields[key][0]: self.entry_fields[key][1].get()})
-                #print(inputs)
-                #print(tuple(inputs))
-
-                # if str(self) == '.!editpersonaldetails':
-                    # print(f"self.current_screen = {str(self)}")
-                print(f"inputs: {inputs}")  
+ 
                 self.ui_error_popup(self.save_record(**inputs, logged_in_user=self.logged_in_user))
-                # try to update data using the business logic function
 
             case 'Delete':
-
-                # logic for deleting object passed into screen data
 
                 self.confirmation_popup('Are you sure you want to delete?', self.delete_record)
 
                 
             case 'Deactivate':
-
                 # logic for deactivating volunteer account
                 pass
+
             case 'Create':
                 inputs = {}
                 for key in self.entry_fields:
                     inputs.update({self.entry_fields[key][0]: self.entry_fields[key][1].get()})
-                #print(tuple(inputs))
+                
 
                 self.ui_error_popup(self.create_record(**inputs, logged_in_user=self.logged_in_user))
-                #self.page_nav('back')
+                
 
                 pass
             case 'End':
@@ -194,12 +178,6 @@ class ModifyEntries(tk.Frame):
 
 
 
-
-        # if returns true 
-        # return success message utility
-
-        # if returns list
-        # return error message utility with error list as input?
 
     def ui_error_popup(self, function_result):
         if isinstance(function_result, str):
@@ -287,6 +265,7 @@ class EditPlan(ModifyEntries):
         self.create_buttons()
 
     def is_plan_ended(self):
+        #if a plan is ended, this method makes sure the the end button disaspears on edit plan
         if self.screen_data.status == 'Ended':
             self.button_labels = ['Save Changes', 'Delete']
 
@@ -307,7 +286,7 @@ class NewCamp(ModifyEntries):
         self.create_buttons()
 
     def plan_id_set(self):
-        #need to pass a plan id to the new camp if visited from dashboard and set to read only
+        #this method makes sure new camps created from the admin dashboard are provided with the asociated planid
 
         if isinstance(self.screen_data, Plan):
             planID = self.screen_data.planID
@@ -340,6 +319,7 @@ class EditCamp(ModifyEntries):
         self.create_buttons()
 
     def if_logged_in_as_volunteer(self):
+        #adds visual conditionality to editcamp depending on usertype
         if self.logged_in_user.volunteerID != 1:
             self.fields_to_be_dropdown = {}
             self.read_only_fields = ['Camp ID', 'Plan ID', 'Creation Time']
@@ -361,7 +341,6 @@ class NewVolunteer(ModifyEntries):
         self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username', 'Password': 'password',
                 'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status'}
         self.button_labels = ['Create']
-        # self.display_delete_button = False
         self.create_record = PersonDataEdit.create_volunteer
         self.entry_fields = {}
         self.fields_to_be_dropdown = {'Camp ID': [camp.campID for camp in CampDataRetrieve.get_all_camps()], 'Account Status': ['Active', 'Inactive']}
@@ -389,7 +368,6 @@ class EditVolunteer(ModifyEntries):
         self.create_title()
         self.create_entry_fields()
         self.create_buttons()
-        # print(self.entry_fields)
 
 
 class NewRefugee(ModifyEntries):
@@ -440,6 +418,7 @@ class EditRefugee(ModifyEntries):
         self.create_buttons()
 
     def campID_dropdown_values(self):
+        #this method provides a list of camps from the same plan to be provided as a dropdown list
         refugee_campID = self.screen_data.campID
 
         camp_of_campID = CampDataRetrieve.get_camp(campID=refugee_campID)[0]
@@ -461,7 +440,7 @@ class EditPersonalDetails(ModifyEntries):
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Creation Time', 'Password']
         self.filter_matching = {'Volunteer ID': 'volunteerID', 'First Name': 'first_name', 'Last Name': 'last_name', 'Username': 'username', 'Password': 'password',
                 'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Account Status': 'account_status', 'Creation Time': 'created_time'}
-        self.button_labels = ['Save Changes']#, 'Delete', 'Deactivate']
+        self.button_labels = ['Save Changes']
         self.current_data = self.logged_in_user.display_info()
         self.save_record = PersonDataEdit.update_volunteer
         self.entry_fields = {}
