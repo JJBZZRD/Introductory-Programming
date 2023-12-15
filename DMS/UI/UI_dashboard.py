@@ -16,7 +16,6 @@ class Dashboard(tk.Frame):
         self.ui_manager = ui_manager
         self.logged_in_user = ui_manager.logged_in_user
         self.setup_dashboard(ui_manager.screen_data)
-        # print(f"Dashboard logged_in_user: {self.logged_in_user}")
 
     def setup_dashboard(self, *args):
         raise NotImplementedError(
@@ -58,7 +57,9 @@ class Dashboard(tk.Frame):
         )
         plan_title_label.grid(row=1, column=0, sticky="w", padx=5, pady=(0, 5))
 
-        if plan.status == "Active" and (self.logged_in_user.campID in [None, camp.campID]):
+        if plan.status == "Active" and (
+            self.logged_in_user.campID in [None, camp.campID]
+        ):
             edit_camp_button = ttk.Button(
                 title_frame,
                 text="Edit Camp",
@@ -195,7 +196,7 @@ class Dashboard(tk.Frame):
         resources_frame = tk.Frame(parent_tab, relief="solid", borderwidth=2)
         resources_frame.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
         resources_frame.grid_columnconfigure(1, weight=1)
-        # print(f"camp: {camp.display_info()}")
+
         title_label = tk.Label(
             resources_frame,
             text=f"Current Resources in {camp.location}",
@@ -211,7 +212,6 @@ class Dashboard(tk.Frame):
             "Food": camp.food,
             "Medical Supplies": camp.medical_supplies,
         }
-        # print(f"resources: {resources}")
 
         for index, (resource_name, amount) in enumerate(resources.items()):
             resource_row = index * 3 + 1
@@ -236,8 +236,11 @@ class Dashboard(tk.Frame):
                     plan_resouce = "medical_supplies"
 
             amount = 0 if isinstance(amount, str) else amount
-            if amount > 0 and plan.status == "Active" and (self.logged_in_user.campID in [None, camp.campID]):
-
+            if (
+                amount > 0
+                and plan.status == "Active"
+                and (self.logged_in_user.campID in [None, camp.campID])
+            ):
                 tk.Button(
                     resources_frame,
                     text="-10",
@@ -250,7 +253,6 @@ class Dashboard(tk.Frame):
                         user_type,
                     ),
                 ).grid(row=resource_row + 1, rowspan=2, column=2, padx=5)
-            # print(f"getattr(plan, {plan_resouce}): {getattr(plan, plan_resouce)}")
             if (
                 (self.logged_in_user.campID is None and getattr(plan, plan_resouce) > 0)
                 or self.logged_in_user.campID == camp.campID
@@ -336,9 +338,6 @@ class Dashboard(tk.Frame):
         plan,
         user_type,
     ):
-        # print(f"logged in user = {self.logged_in_user}")
-        # print(f"camp = {camp}")
-        # print(f"plan = {plan.planid}")
         resource_key = resource_name.lower().replace(" ", "_")
         if user_type == "admin":
             plan_current_amount = getattr(plan, resource_key)
@@ -362,8 +361,7 @@ class Dashboard(tk.Frame):
             setattr(camp, resource_key, new_camp_amount)
 
         aaa = "canvas" in str(resource_frame.master)
-        # print(f"Parent tab: {resource_frame.master}")
-        # print(f" {aaa}")
+
         if aaa:
             try:
                 self.ui_manager.refresh_page()
@@ -372,12 +370,7 @@ class Dashboard(tk.Frame):
         else:
             self.rebuild_resources_frame(camp, resource_frame, plan, user_type)
 
-        # if user_type == "admin":
-        #     self.ui_manager.refresh_page()
-        # self.rebuild_additional_resources_frame(plan)
-
     def create_additional_resources_section(self, parent_frame, plan):
-        # print(f"create_additional_resources_section: {self.logged_in_user.username}")
         additional_resources_frame = tk.Frame(
             parent_frame, relief="solid", borderwidth=2
         )
@@ -413,7 +406,11 @@ class Dashboard(tk.Frame):
             ).grid(row=resource_row + 1, column=0, sticky="w", padx=5)
 
             amount = 0 if isinstance(amount, str) else amount
-            if amount > 0 and plan.status == "Active" and self.logged_in_user.campID is None:
+            if (
+                amount > 0
+                and plan.status == "Active"
+                and self.logged_in_user.campID is None
+            ):
                 tk.Button(
                     additional_resources_frame,
                     text="-10",
@@ -627,7 +624,7 @@ class Dashboard(tk.Frame):
             selected_refugee_list = PersonDataRetrieve.get_refugees(id=refugee_id)
             if selected_refugee_list:
                 selected_refugee = selected_refugee_list[0]
-                if self.logged_in_user.campID in [None,selected_refugee.campID]:
+                if self.logged_in_user.campID in [None, selected_refugee.campID]:
                     self.show_screen("EditRefugee", selected_refugee)
 
     def on_volunteer_double_click(self, event, treeview):
@@ -645,7 +642,9 @@ class Dashboard(tk.Frame):
 
 class VolunteerDashboard(Dashboard):
     """
-    Displays a dashboard with information on that volunteer's camp.
+    Displays dashboard with only volunteer's camp tab.
+
+    Depreciated - replaced by AdminDashboard with conditional logic.
 
     """
 
@@ -664,7 +663,9 @@ class VolunteerDashboard(Dashboard):
 
 class AdminDashboard(Dashboard):
     """
-    Displays information on each camp in plan and adds a plan resource distribution and statistics tabs.
+    Displays information on each camp in plan with plan resource distribution and statistics tabs.
+
+    Used for volunteer dashboard as well - conditional logic hides buttons and tabs they should not be able to access.
     """
 
     def setup_dashboard(self, plan):
@@ -694,13 +695,14 @@ class AdminDashboard(Dashboard):
             self.setup_camp_tab(tab, camp, self.plan, user_type)
 
     def setup_distribute_resources_tab(self):
-        # print(f"setup_distribute_resources_tab: {self.logged_in_user}")
         distribute_tab = ttk.Frame(self.tab_control)
         self.tab_control.add(distribute_tab, text="Distribute Plan Resources")
 
         self.create_plan_tab_title(distribute_tab, self.plan)
         if self.logged_in_user.campID is None:
-            self.additional_resources_frame = self.create_additional_resources_section(distribute_tab, self.plan)
+            self.additional_resources_frame = self.create_additional_resources_section(
+                distribute_tab, self.plan
+            )
 
         (
             camp_resources_canvas,
