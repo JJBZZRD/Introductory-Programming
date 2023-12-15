@@ -1,6 +1,7 @@
 from ..DB.volunteer import Volunteer
 from ..DB.refugee import Refugee
 from ..DB.audit_table import AuditTable
+from ..DB.camp import Camp
 from .. import util
 
 class PersonDataRetrieve:
@@ -33,7 +34,6 @@ class PersonDataRetrieve:
 
     @staticmethod
     def get_volunteers(volunteerID=None, name=None, username=None, password=None, date_of_birth=None, phone=None, account_status=None, campID=None, active=None, created_time=None, planID=None):
-
         if active:
             account_status = 'Active'
         elif active == None:
@@ -42,9 +42,13 @@ class PersonDataRetrieve:
             account_status = 'Inactive'
         volunteer_tuple = Volunteer.get_volunteer(volunteerID=volunteerID, name=name, username=username,password=password, date_of_birth=date_of_birth, phone=phone, account_status=account_status, campID=campID)
         vol_list = util.parse_result('Volunteer', volunteer_tuple)
+        print(f'vol_list: {len(vol_list)}')
         if planID:
-            vol_list_plan = util.parse_result('Volunteer', Volunteer.get_volunteers_by_plan(planID))
-            vol_list = [vol for vol in vol_list if vol in vol_list_plan]
+            print(f'planID: {planID}')
+            camps = util.parse_result('Camp', Camp.get_camp(planID=planID))
+            camps = [camp.campID for camp in camps]
+            vol_list = [vol for vol in vol_list if vol.campID in camps]
+            print(f'vol_list: {len(vol_list)}')
         return vol_list
 
     @staticmethod
