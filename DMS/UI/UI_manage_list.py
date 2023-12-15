@@ -29,6 +29,7 @@ class ManageList(tk.Frame):
         self.status_filters = []
         self.record_button = None
         self.filter_values = None
+        self.default_filter = None
         self.setup_list()
 
     def setup_list(self):
@@ -58,6 +59,9 @@ class ManageList(tk.Frame):
         self.results_list.destroy()
 
         status_filter = None
+
+        if self.default_filter:
+            get_list_input.update(self.default_filter)
 
         if status:
             match status:
@@ -310,6 +314,7 @@ class RefugeeList(ManageList):
                 'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
                 'Vital Status': 'vital_status','Creation Time': 'created_time', 'Plan ID':'planID'}
         self.export_name = 'Refugees'
+        self.default_filter = {}
         self.refugee_list_by_screen_data_camp()
         self.modify_title()
         self.create_title()
@@ -319,11 +324,11 @@ class RefugeeList(ManageList):
     def refugee_list_by_screen_data_camp(self):
         if isinstance(self.screen_data, Camp):
             self.list_data = PersonDataRetrieve.get_refugees(camp_id=self.screen_data.campID)
+            self.default_filter = {'camp_id': self.screen_data.campID}
             
         else:
             self.list_data = PersonDataRetrieve.get_refugees()
     
-
 
     def modify_title(self):
         if isinstance(self.screen_data, Camp):
