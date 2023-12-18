@@ -3,7 +3,19 @@ from .camp import Camp
 
 
 class Volunteer:
-    def __init__(self, volunteerID, first_name, last_name, username, password, date_of_birth, phone, account_status, campID, created_time):
+    def __init__(
+        self,
+        volunteerID,
+        first_name,
+        last_name,
+        username,
+        password,
+        date_of_birth,
+        phone,
+        account_status,
+        campID,
+        created_time,
+    ):
         self.volunteerID = volunteerID
         self.first_name = first_name
         self.last_name = last_name
@@ -20,34 +32,77 @@ class Volunteer:
         return cls(*volunteer_tuple)
 
     def display_info(self):
-        return [str(self.volunteerID), str(self.first_name), str(self.last_name), str(self.username),
-                str(self.date_of_birth), str(self.phone), str(self.account_status), str(self.campID), self.created_time]
+        return [
+            str(self.volunteerID),
+            str(self.first_name),
+            str(self.last_name),
+            str(self.username),
+            str(self.date_of_birth),
+            str(self.phone),
+            str(self.account_status),
+            str(self.campID),
+            self.created_time,
+        ]
 
     @staticmethod
-    def get_volunteer_by_id(volunteerID):  # Get volunteer details by selecting on volunteerID. Returns a list of tuples.
+    def get_volunteer_by_id(volunteerID):
         cursor.execute("SELECT * FROM volunteers WHERE volunteerID = ?", (volunteerID,))
         return [cursor.fetchone()]
 
-    @classmethod  # Insert a volunteer into the database without creating a new instance
+    @classmethod
     def create_volunteer(cls, volunteer_tuple):
-        first_name, last_name, username, password, date_of_birth, phone, account_status,campID, created_time = volunteer_tuple
+        (
+            first_name,
+            last_name,
+            username,
+            password,
+            date_of_birth,
+            phone,
+            account_status,
+            campID,
+            created_time,
+        ) = volunteer_tuple
         if Volunteer.check_campID_exist(campID):
             sql = """
                 INSERT INTO volunteers (
                 first_name, last_name, username, password, date_of_birth, phone, account_status, campID, created_time) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """
-            cursor.execute(sql, (first_name, last_name, username,
-                                 password, date_of_birth, phone, account_status, campID, created_time))
+            cursor.execute(
+                sql,
+                (
+                    first_name,
+                    last_name,
+                    username,
+                    password,
+                    date_of_birth,
+                    phone,
+                    account_status,
+                    campID,
+                    created_time,
+                ),
+            )
             conn.commit()
-            volunteer_id = cursor.execute("SELECT last_insert_rowid() FROM volunteers").fetchone()[0]
+            volunteer_id = cursor.execute(
+                "SELECT last_insert_rowid() FROM volunteers"
+            ).fetchone()[0]
             return Volunteer.get_volunteer_by_id(volunteer_id)
         else:
-            return 'Camp campID does not exist'
+            return "Camp campID does not exist"
 
-    @staticmethod  # Update an volunteer by selecting on volunteerID
-    def update_volunteer(volunteerID, first_name=None, last_name=None, username=None,
-                         password=None, date_of_birth=None, phone=None, account_status=None, campID=None, created_time=None):
+    @staticmethod
+    def update_volunteer(
+        volunteerID,
+        first_name=None,
+        last_name=None,
+        username=None,
+        password=None,
+        date_of_birth=None,
+        phone=None,
+        account_status=None,
+        campID=None,
+        created_time=None,
+    ):
         query = []
         params = []
 
@@ -73,11 +128,11 @@ class Volunteer:
             query.append("account_status = ?")
             params.append(account_status)
         if campID is not None:
-            if Volunteer.check_campID_exist(campID): 
+            if Volunteer.check_campID_exist(campID):
                 query.append("campID = ?")
                 params.append(campID)
             else:
-                return 'Camp campID does not exist'
+                return "Camp campID does not exist"
         params.append(volunteerID)
         q = f"""UPDATE volunteers SET {', '.join(query)} WHERE volunteerID = ?"""
         # print(f'q: {q}')
@@ -87,21 +142,32 @@ class Volunteer:
         return Volunteer.get_volunteer_by_id(volunteerID=volunteerID)
 
     @staticmethod
-    def delete_volunteer(volunteerID):  # Delete a volunteer by selecting on volunteerID
+    def delete_volunteer(volunteerID):
         cursor.execute("DELETE FROM volunteers WHERE volunteerID = ?", (volunteerID,))
         rows_deleted = cursor.rowcount
         conn.commit()
         if rows_deleted > 0:
-            print(f"Volunteer {volunteerID} has been deleted")
+            return True
+            # print(f"Volunteer {volunteerID} has been deleted")
         else:
-            print(f"Volunteer {volunteerID} has not been deleted")
+            return False
+            # print(f"Volunteer {volunteerID} has not been deleted")
 
-    @staticmethod  # Get volunteer details by selecting on any combination of attributes. Can be used to find the
-    # volunteerID which can then be used in the delete and update methods. Returns a list of tuples.
-    def get_volunteer(volunteerID=None, name=None, username=None,
-                      password=None, date_of_birth=None, phone=None, account_status=None, campID=None, inclue_admin=False, created_time=None):
+    @staticmethod
+    def get_volunteer(
+        volunteerID=None,
+        name=None,
+        username=None,
+        password=None,
+        date_of_birth=None,
+        phone=None,
+        account_status=None,
+        campID=None,
+        inclue_admin=False,
+        created_time=None,
+    ):
         if inclue_admin:
-            query = "SELECT * FROM volunteers WHERE volunteerID IS NOT NULL" 
+            query = "SELECT * FROM volunteers WHERE volunteerID IS NOT NULL"
         else:
             query = "SELECT * FROM volunteers WHERE campID IS NOT NULL"
         if volunteerID:
@@ -121,17 +187,17 @@ class Volunteer:
         if campID:
             query += f" AND campID = {campID}"
 
-        print(f'query: {query}')
+        # print(f"query: {query}")
 
         cursor.execute(query)
         return cursor.fetchall()
-    
+
     @staticmethod
-    def get_all_volunteers():  # Gets all volunteers. Returns a list of tuples.
+    def get_all_volunteers():
         cursor.execute("SELECT * FROM volunteers WHERE campID IS NOT NULL")
         return cursor.fetchall()
 
-    @staticmethod  # Returns all usernames of active volunteers only. Perhaps useful for the login.
+    @staticmethod
     def active_volunteer_usernames():
         sql = "SELECT username FROM volunteers WHERE account_status = 'Active'"
         cursor.execute(sql)

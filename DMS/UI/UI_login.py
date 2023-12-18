@@ -6,18 +6,20 @@ from ..Logic.camp_data_retrieve import CampDataRetrieve
 import os
 import sys
 
+
 class LoginScreen(tk.Frame):
     def login(self, username, password):
-        print(username)
-        print(password)
+        # print(username)
+        # print(password)
         res = PersonDataRetrieve.login(str(username), str(password))
-        print(res)
-        for r in res:
-            print(r.display_info())
+        # print(res)
+        # for r in res:
+        #     print(r.display_info())
 
-
-        if len(res) > 0 and res[0].account_status == 'Inactive':
-            self.error_label.config(text="Your account has been deactivated, contact the administrator")
+        if len(res) > 0 and res[0].account_status == "Inactive":
+            self.error_label.config(
+                text="Your account has been deactivated, contact the administrator"
+            )
         elif isinstance(res, str):
             self.error_label.config(text=res)
         elif len(res) != 1:
@@ -28,7 +30,6 @@ class LoginScreen(tk.Frame):
                 screen = "PlanList"
                 self.show_screen(screen, res[0])
             else:
-                # screen = "VolunteerDashboard"
                 screen = "AdminDashboard"
                 camp = CampDataRetrieve.get_camp(campID=res[0].campID)
                 plan = PlanDataRetrieve.get_plan(planID=camp[0].planID)

@@ -9,7 +9,7 @@ from ..DB.plan import Plan
 from ..Logic.audit_data_retrieve import AuditDataRetrieve
 import pandas as pd
 
-
+#this class generates a list page. variations are sest using the subclasses
 class ManageList(tk.Frame):
     def __init__(self, ui_manager, **kwargs):
         super().__init__(ui_manager.root, **kwargs)
@@ -29,6 +29,7 @@ class ManageList(tk.Frame):
         self.status_filters = []
         self.record_button = None
         self.filter_values = None
+        self.default_filter = None
         self.setup_list()
 
     def setup_list(self):
@@ -57,11 +58,10 @@ class ManageList(tk.Frame):
 
         self.results_list.destroy()
 
-        # if searchbar == '' and status == 'All':
-        #     self.list_data = PlanDataRetrieve.get_plans()
-        #     self.create_results()
-        #     return
         status_filter = None
+
+        if self.default_filter:
+            get_list_input.update(self.default_filter)
 
         if status:
             match status:
@@ -85,9 +85,8 @@ class ManageList(tk.Frame):
         self.create_results()
 
     def create_title(self, plan=False):
-        # this method creates the title and add entry button for each list
-        # page_top_frame = tk.Frame(self.root)
-        # page_top_frame.pack(side='top')
+        #this method creates the title and add entry button for each list
+
 
         list_title = ttk.Label(self, text=self.list_type[0], font=("Helvetica", 20, "bold"))
         list_title.grid(column=6, row=0, padx=10, pady=5)
@@ -111,13 +110,10 @@ class ManageList(tk.Frame):
 
     def create_search(self):
         # this creates the search bar, filters and search button
-        # search_frame = tk.Frame(self.root)
-        # search_frame.pack()
 
         search_filters = ttk.Combobox(self, values=self.filter_values, state="readonly")
-        search_filters.set("Filter")  # set default value
+        search_filters.set("Filter")  
         search_filters.grid(column=5, row=3, padx=5)
-        # search_filters.bind('<<ComboboxSelected>>', )
 
         if self.status_filters:
             activity_status = ttk.Combobox(self, values=self.status_filters)
@@ -131,32 +127,28 @@ class ManageList(tk.Frame):
 
         search_bar = ttk.Entry(self, width=100)
         search_bar.grid(column=6, row=3, padx=5)
-        # search_bar.pack(padx=10, pady=5)
 
         
         search_button.grid(column=7, row=3)
-        # search_button.pack(side='right', padx=10, pady=5)
 
         export_data_button = ttk.Button(self, text='Export Results', command=self.export_data)
         export_data_button.grid(column=8, row=3, padx=5)
         
     def create_results(self):
-        # this method creates the results list for a chosen subclass
+        #this method create the results list for a chosen subclass
         self.results_list = ttk.Treeview(self, columns=self.list_headers, show='headings')
 
-        # this lets us change the header values depending on what are being passed
+        #this lets us change the header values depending on what are being passed
         for i in self.list_headers:
             self.results_list.heading(i, text=i)
             self.results_list.column(i, anchor='center', width=int(1000/len(self.list_headers)))
 
-        # self.tree_item_to_object = {}
 
         # Insert items into the Treeview and populate the dictionary
         for result in self.list_data:
             result_id = self.results_list.insert('', 'end', values=result.display_info())
             self.tree_item_to_object[result_id] = result
 
-        # print("Tree items to objects:", self.tree_item_to_object)
 
         
         self.results_list.bind('<Double-1>', lambda event: self.on_item_double_click(event))
@@ -173,24 +165,16 @@ class ManageList(tk.Frame):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(4, weight=1)
 
-        # print("Tree items to objects:", self.tree_item_to_object)
 
     def on_item_double_click(self, event):
-        # Identify the Treeview widget
         tree = event.widget
 
-        # Get the selected item
         result_id = tree.selection()[0]
 
-        # print("Current tree_item_to_object dictionary:", self.tree_item_to_object)
-        # print("Clicked item ID:", result_id)
-
-        # Retrieve the associated object from the dictionary
         associated_object = self.tree_item_to_object[result_id]
 
         if associated_object:
             self.show_screen(self.switch_to_page, associated_object)
-            #print(self.switch_to_page, associated_object)
         else:
             print("no asssociated object")
 
@@ -204,7 +188,6 @@ class ManageList(tk.Frame):
 
         df = pd.DataFrame(data_list, columns=self.list_headers)
         
-        #df.to_csv(self.export_name + '.csv', index=False)
 
         file_path = filedialog.asksaveasfilename(initialfile=self.export_name + '.csv',
                                              defaultextension=".csv", 
@@ -272,41 +255,58 @@ class VolunteerList(ManageList):
                 'Date of Birth', 'Phone', 'Account Status', 'Camp ID', 'Creation Time']
         self.filter_values = ['Volunteer ID', 'Name', 'Username',
                 'Date of Birth', 'Phone', 'Camp ID']
-        self.list_data = self.list_by_plan()
+        self.list_data = PersonDataRetrieve.get_all_volunteers()
         self.get_search = PersonDataRetrieve.get_volunteers
         self.switch_to_page = 'EditVolunteer'
         self.record_button = 'NewVolunteer'
         self.filter_matching = {'Volunteer ID': 'volunteerID', 'Name': 'name', 'Last Name': 'name', 'Username': 'username',
                 'Date of Birth': 'date_of_birth', 'Phone': 'phone', 'Camp ID': 'campID', 'Creation Time': 'created_time'}
         self.status_filters = ['All', 'Active', 'Inactive']
+        self.default_filter = {}
+        self.volunteer_list_by_plan()
         self.modify_title()
         self.create_title()
         self.create_search()
         self.create_results()
 
 
-    def list_by_plan(self):
-        #need some way of extracting list of volunteers asociated with a specific planID
-        #if i give you a camp, can you give me a list of volunteers associated with the plan that contains that camp
-        if isinstance(self.screen_data, Camp):
-            planID = self.screen_data.planID
+    # def list_by_plan(self):
+    #     #this method provides a list of volunteers for a specific plan if a camp is provided
+    #     if isinstance(self.screen_data, Camp):
+    #         planID = self.screen_data.planID
 
-            camps_under_plan = CampDataRetrieve.get_camp(planID=planID)
+    #         camps_under_plan = CampDataRetrieve.get_camp(planID=planID)
 
-            camp_id_under_plan = [camp.campID for camp in camps_under_plan]
+    #         camp_id_under_plan = [camp.campID for camp in camps_under_plan]
 
-            volunteers_of_camps = []
+    #         volunteers_of_camps = []
 
-            for camp_id in camp_id_under_plan:
-                volunteers_of_camps += PersonDataRetrieve.get_volunteers(campID=camp_id)
+    #         for camp_id in camp_id_under_plan:
+    #             volunteers_of_camps += PersonDataRetrieve.get_volunteers(campID=camp_id)
 
-            return volunteers_of_camps
+    #         return volunteers_of_camps
+    #     else:
+    #         return PersonDataRetrieve.get_all_volunteers()
+
+    def volunteer_list_by_plan(self):
+        if isinstance(self.screen_data, Plan):
+            self.list_data = PersonDataRetrieve.get_volunteers(planID=self.screen_data.planID)
+            self.default_filter = {'planID': self.screen_data.planID}
+
+        elif isinstance(self.screen_data, Camp):
+            self.list_data = PersonDataRetrieve.get_volunteers(campID=self.screen_data.campID)
+            self.default_filter = {'campID': self.screen_data.campID}
+            self.filter_values = ['Volunteer ID', 'Name', 'Username',
+                'Date of Birth', 'Phone']
+
         else:
-            return PersonDataRetrieve.get_all_volunteers()
+            self.list_data = PersonDataRetrieve.get_volunteers()
         
     def modify_title(self):
-        if isinstance(self.screen_data, Camp):
+        if isinstance(self.screen_data, Plan):
             self.list_type[0] = f'Manage Volunteers for Plan {self.screen_data.planID}'
+        elif isinstance(self.screen_data, Camp):
+            self.list_type[0] = f'Manage Volunteers for Camp {self.screen_data.campID}'
         else:
             self.list_type[0] = f'Manage Vounteers: Global'
 
@@ -323,7 +323,7 @@ class RefugeeList(ManageList):
                 'Date of Birth', 'Gender', 'Family ID',
                 'Camp ID', 'Triage Category', 'Medical Conditions',
                 'Vital Status']
-        self.list_data = self.list_by_camp()
+        self.list_data = PersonDataRetrieve.get_all_refugees()
         self.get_search = PersonDataRetrieve.get_refugees
         self.switch_to_page = 'EditRefugee'
         self.record_button = 'NewRefugee'
@@ -332,17 +332,25 @@ class RefugeeList(ManageList):
                 'Camp ID': 'camp_id', 'Triage Category': 'triage_category', 'Medical Conditions': 'medical_condition',
                 'Vital Status': 'vital_status','Creation Time': 'created_time', 'Plan ID':'planID'}
         self.export_name = 'Refugees'
+        self.default_filter = {}
+        self.refugee_list_by_camp()
         self.modify_title()
         self.create_title()
         self.create_search()
         self.create_results()
 
-    def list_by_camp(self):
+    def refugee_list_by_camp(self):
         if isinstance(self.screen_data, Camp):
-            return PersonDataRetrieve.get_refugees(camp_id=self.screen_data.campID)
+            self.list_data = PersonDataRetrieve.get_refugees(camp_id=self.screen_data.campID)
+            self.default_filter = {'camp_id': self.screen_data.campID}
+            self.filter_values = ['Refugee ID', 'Name',
+                'Date of Birth', 'Gender', 'Family ID', 'Triage Category', 'Medical Conditions',
+                'Vital Status']
+            
         else:
-            return PersonDataRetrieve.get_all_refugees()
+            self.list_data = PersonDataRetrieve.get_refugees()
     
+
     def modify_title(self):
         if isinstance(self.screen_data, Camp):
             self.list_type[0] = f'Manage Refugees for Camp {self.screen_data.campID}'
