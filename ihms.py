@@ -48,10 +48,14 @@ elif platform.system() == "Linux":
         subprocess.run(["sudo", "pip", "install", "tk"])
     finally:
         try:
+            print("Trying Python 3")
             subprocess.run(["python3", "temp.py"])
-        except:   
+        except Exception as e:
+            print(e)
+            print("Trying Python in except")
             subprocess.run(["python", "temp.py"])
         finally:
+            print("Trying Python in finally")
             subprocess.run(["python", "temp.py"])
 else:
     try:
