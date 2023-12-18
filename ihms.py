@@ -3,22 +3,31 @@ import platform
 
 if platform.system() in ["Windows", "Darwin"]:
     try:
+        print("Trying pip install --upgrade numpy")
         subprocess.run(["pip", "install", "--upgrade", "numpy"])
     except:
+        print("Except Trying pip3 install --upgrade numpy")
         subprocess.run(["pip3", "install", "--upgrade", "numpy"])
     finally:
+        print("Finally Trying pip3 install --upgrade numpy")
         subprocess.run(["pip3", "install", "--upgrade", "numpy"])
     try:
+        print("Trying pip install --upgrade pandas")
         subprocess.run(["pip", "install", "--upgrade", "pandas"])
     except:
+        print("Except Trying pip3 install --upgrade pandas")
         subprocess.run(["pip3", "install", "--upgrade", "pandas"])
     finally:
+        print("Finally Trying pip3 install --upgrade pandas")
         subprocess.run(["pip3", "install", "--upgrade", "pandas"])
-    try:
+    try: 
+        print("Trying pip install tk")
         subprocess.run(["pip", "install", "tk"])
     except:
+        print("Except Trying pip3 install tk")
         subprocess.run(["pip3", "install", "tk"])
     finally:
+        print("Finally Trying pip3 install tk")
         subprocess.run(["pip3", "install", "tk"])
     try:
         print("Trying Python 3")
@@ -28,8 +37,11 @@ if platform.system() in ["Windows", "Darwin"]:
         print("Trying Python in except")
         subprocess.run(["python", "temp.py"])
     finally:
-        print("Trying Python in finally")
-        subprocess.run(["python", "temp.py"])
+        try:
+            print("Trying Python in finally")
+            subprocess.run(["python", "temp.py"])
+        except:
+            pass
 
 elif platform.system() == "Linux":
     try:
