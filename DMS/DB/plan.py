@@ -1,8 +1,23 @@
 from .config import conn, cursor
 
 
-class Plan: 
-    def __init__(self, planID, start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, created_time):
+class Plan:
+    def __init__(
+        self,
+        planID,
+        start_date,
+        end_date,
+        name,
+        country,
+        event_name,
+        description,
+        water,
+        food,
+        medical_supplies,
+        shelter,
+        status,
+        created_time,
+    ):
         self.planID = planID
         self.start_date = start_date
         self.end_date = end_date
@@ -23,8 +38,21 @@ class Plan:
         return cls(*plan_tuple)
 
     def display_info(self):
-        return [str(self.planID), str(self.name), str(self.country), str(self.event_name), str(self.description),
-                str(self.start_date), str(self.end_date), str(self.water), str(self.food), str(self.medical_supplies), str(self.shelter),  self.status, self.created_time]
+        return [
+            str(self.planID),
+            str(self.name),
+            str(self.country),
+            str(self.event_name),
+            str(self.description),
+            str(self.start_date),
+            str(self.end_date),
+            str(self.water),
+            str(self.food),
+            str(self.medical_supplies),
+            str(self.shelter),
+            self.status,
+            self.created_time,
+        ]
 
     @staticmethod
     def get_plan_by_id(planID):
@@ -33,21 +61,62 @@ class Plan:
 
     @classmethod
     def create_plan(cls, plan_tuple):
-        start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, created_time = plan_tuple
+        (
+            start_date,
+            end_date,
+            name,
+            country,
+            event_name,
+            description,
+            water,
+            food,
+            medical_supplies,
+            shelter,
+            status,
+            created_time,
+        ) = plan_tuple
         sql = """
             INSERT INTO plans (
                 start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, created_time) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """
-        cursor.execute(sql, (start_date, end_date, name, country, event_name, description, water, food, medical_supplies, shelter, status, created_time))
+        cursor.execute(
+            sql,
+            (
+                start_date,
+                end_date,
+                name,
+                country,
+                event_name,
+                description,
+                water,
+                food,
+                medical_supplies,
+                shelter,
+                status,
+                created_time,
+            ),
+        )
         conn.commit()
         plan_id = cursor.execute("SELECT last_insert_rowid() FROM plans").fetchone()[0]
         return Plan.get_plan_by_id(plan_id)
 
-
     @staticmethod
-    def update_plan(planID, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None, water=None, food=None, shelter=None, medical_supplies=None, status=None, created_time=None):
-
+    def update_plan(
+        planID,
+        start_date=None,
+        end_date=None,
+        name=None,
+        country=None,
+        event_name=None,
+        description=None,
+        water=None,
+        food=None,
+        shelter=None,
+        medical_supplies=None,
+        status=None,
+        created_time=None,
+    ):
         query = []
         params = []
 
@@ -81,32 +150,41 @@ class Plan:
         if medical_supplies is not None:
             query.append("medical_supplies = ?")
             params.append(medical_supplies)
-        if status is not None: 
+        if status is not None:
             query.append("status = ?")
             params.append(status)
 
-
         params.append(planID)
-        cursor.execute(f"""UPDATE plans SET {', '.join(query)} WHERE planID = ?""", params)
+        cursor.execute(
+            f"""UPDATE plans SET {', '.join(query)} WHERE planID = ?""", params
+        )
         conn.commit()
-        print(f"Plan {planID} has been updated")
+        # print(f"Plan {planID} has been updated")
         return Plan.get_plan(planID=planID)
 
     @staticmethod
-    def delete_plan(planID): 
+    def delete_plan(planID):
         cursor.execute("DELETE FROM plans WHERE planID = ?", (planID,))
         rows_deleted = cursor.rowcount
         conn.commit()
         if rows_deleted > 0:
-            print(f"Plan {planID} has been deleted")
+            # print(f"Plan {planID} has been deleted")
             return True
         else:
-            print(f"Plan {planID} has not been deleted")
+            # print(f"Plan {planID} has not been deleted")
             return False
 
     @staticmethod
-    def get_plan(planID=None, start_date=None, end_date=None, name=None, country=None, event_name=None, description=None, status=None):
-
+    def get_plan(
+        planID=None,
+        start_date=None,
+        end_date=None,
+        name=None,
+        country=None,
+        event_name=None,
+        description=None,
+        status=None,
+    ):
         query = "SELECT * FROM plans WHERE planID IS NOT NULL"
 
         if planID:
@@ -129,7 +207,6 @@ class Plan:
         # print(query)
         cursor.execute(query)
         return cursor.fetchall()
-
 
     @staticmethod
     def get_all_plans():

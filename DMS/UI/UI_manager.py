@@ -4,6 +4,7 @@ from . import UI_dashboard as db
 from . import UI_manage_list as ml
 from . import UI_modify_entries as me
 
+
 class UIManager:
     """
     Handles page rendering, navigation history, and user session management.
@@ -25,18 +26,34 @@ class UIManager:
         self.current_page_position = -1
         self.header = None
         self.possible_screens = {
-            'LoginScreen': LoginScreen, 'PlanList': ml.PlanList, 'RefugeeList': ml.RefugeeList,
-            'VolunteerList': ml.VolunteerList,
-            'AdminDashboard': db.AdminDashboard, 'VolunteerDashboard': db.VolunteerDashboard, 'NewPlan': me.NewPlan,
-            'EditPlan': me.EditPlan,
-            'NewCamp': me.NewCamp, 'EditCamp': me.EditCamp, 'NewVolunteer': me.NewVolunteer,
-            'EditVolunteer': me.EditVolunteer, 'EditPersonalDetails': me.EditPersonalDetails, 'NewRefugee': me.NewRefugee, 'EditRefugee': me.EditRefugee, 
-            'CampList':ml.CampList, 'AuditLogs': ml.AuditLogs
+            "LoginScreen": LoginScreen,
+            "PlanList": ml.PlanList,
+            "RefugeeList": ml.RefugeeList,
+            "VolunteerList": ml.VolunteerList,
+            "AdminDashboard": db.AdminDashboard,
+            "VolunteerDashboard": db.VolunteerDashboard,
+            "NewPlan": me.NewPlan,
+            "EditPlan": me.EditPlan,
+            "NewCamp": me.NewCamp,
+            "EditCamp": me.EditCamp,
+            "NewVolunteer": me.NewVolunteer,
+            "EditVolunteer": me.EditVolunteer,
+            "EditPersonalDetails": me.EditPersonalDetails,
+            "NewRefugee": me.NewRefugee,
+            "EditRefugee": me.EditRefugee,
+            "CampList": ml.CampList,
+            "AuditLogs": ml.AuditLogs,
         }
         self.logged_in_user = None
         self.screen_data = None
 
-    def show_screen(self, screen_name: str, screen_data: any = None, add_to_history: bool = True, *args):
+    def show_screen(
+        self,
+        screen_name: str,
+        screen_data: any = None,
+        add_to_history: bool = True,
+        *args,
+    ):
         """
         Displays the specified screen in the UI. Manages the header and updates navigation history.
 
@@ -60,11 +77,13 @@ class UIManager:
             # The following if statement checks to see if the current page is the last item in the history.
             # If not the page history is reduced to include pages only up to the current page
             if self.current_page_position != len(self.page_history) - 1:
-                self.page_history = self.page_history[:self.current_page_position + 1]
+                self.page_history = self.page_history[: self.current_page_position + 1]
 
             # The following if statement makes sure that pressing the same button multiple times doesn't add
             # to the page history or position
-            if screen_class is LoginScreen or (len(self.page_history) > 0 and screen_name != self.page_history[-1][0]):
+            if screen_class is LoginScreen or (
+                len(self.page_history) > 0 and screen_name != self.page_history[-1][0]
+            ):
                 self.page_history.append((screen_name, screen_data))
                 self.current_page_position += 1
 
@@ -77,16 +96,16 @@ class UIManager:
             self.header = None
         elif self.header is None and screen_class is not LoginScreen:
             self.header = UIHeader(self, *args)
-            self.header.pack(side='top', fill='x')
+            self.header.pack(side="top", fill="x")
 
         self.current_screen = screen_class(self, *args)
-        self.current_screen.pack(expand=True, fill='both')
+        self.current_screen.pack(expand=True, fill="both")
 
         list = []
         for i in self.page_history:
             list.append(i[0])
 
-        print(list)
+        # print(list)
 
     def clear_screen(self):
         if self.current_screen is not None:
@@ -96,28 +115,31 @@ class UIManager:
             print("No current screen to clear.")
 
     def page_nav(self, direction):
-        if direction == 'back' and self.current_page_position > 0:
-            if self.page_history[self.current_page_position - 1][0] == 'LoginScreen':
-                print('Cannot navigate back to LoginScreen.')
+        if direction == "back" and self.current_page_position > 0:
+            if self.page_history[self.current_page_position - 1][0] == "LoginScreen":
+                print("Cannot navigate back to LoginScreen.")
                 return
             self.current_page_position -= 1
 
-        elif direction == 'forward' and self.current_page_position < len(self.page_history) - 1:
+        elif (
+            direction == "forward"
+            and self.current_page_position < len(self.page_history) - 1
+        ):
             self.current_page_position += 1
         else:
-            print('Invalid navigation direction or boundary reached.')
+            print("Invalid navigation direction or boundary reached.")
             return
 
         screen_name, screen_data = self.page_history[self.current_page_position]
         self.show_screen(screen_name, screen_data=screen_data, add_to_history=False)
 
     def refresh_page(self):
-        if self.page_history[self.current_page_position - 1][0] == 'LoginScreen':
-            self.page_nav('forward')
-            self.page_nav('back')
+        if self.page_history[self.current_page_position - 1][0] == "LoginScreen":
+            self.page_nav("forward")
+            self.page_nav("back")
         else:
-            self.page_nav('back')
-            self.page_nav('forward')
+            self.page_nav("back")
+            self.page_nav("forward")
 
     def reset_history(self):
         self.page_history = []

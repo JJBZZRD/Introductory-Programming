@@ -4,20 +4,30 @@ from .camp_data_retrieve import CampDataRetrieve
 from .. import util
 from datetime import datetime
 
-class CampDataEdit:
 
+class CampDataEdit:
     @staticmethod
-    def update_camp(logged_in_user=None, campID=None, location=None, shelter=None, water=None,food=None, medical_supplies=None, planID=None, created_time=None):
+    def update_camp(
+        logged_in_user=None,
+        campID=None,
+        location=None,
+        shelter=None,
+        water=None,
+        food=None,
+        medical_supplies=None,
+        planID=None,
+        created_time=None,
+    ):
         # get variables
         camp = CampDataRetrieve.get_camp(campID=campID)
-        if len(camp) >0:
+        if len(camp) > 0:
             camp = camp[0]
         else:
             return "Cannot find this campID. Please try again."
-        print(f"planID: {planID}")
-        plan = util.parse_result('Plan', Plan.get_plan_by_id(planID))[0]
+        # print(f"planID: {planID}")
+        plan = util.parse_result("Plan", Plan.get_plan_by_id(planID))[0]
 
-        if plan.status != 'Active':
+        if plan.status != "Active":
             return "You are not allowed to edit this camp because the plan has ended."
 
         try:
@@ -68,14 +78,25 @@ class CampDataEdit:
                 if len(Plan.get_plan_by_id(planID)) < 1:
                     return "Cannot find this planID. Please try again."
 
-        camp_tuple = Camp.update_camp(campID, location, shelter, water, food,medical_supplies, planID)
+        camp_tuple = Camp.update_camp(
+            campID, location, shelter, water, food, medical_supplies, planID
+        )
 
-        return util.parse_result('Camp', camp_tuple)
+        return util.parse_result("Camp", camp_tuple)
 
     @staticmethod
-    def create_camp(logged_in_user=None, location=None, shelter=None, water=None, food=None, medical_supplies=None, planID=None, created_time=None):
+    def create_camp(
+        logged_in_user=None,
+        location=None,
+        shelter=None,
+        water=None,
+        food=None,
+        medical_supplies=None,
+        planID=None,
+        created_time=None,
+    ):
         if location:
-            if location in ["Enter Name", '', ' ']:
+            if location in ["Enter Name", "", " "]:
                 return "Please enter name"
             elif not util.is_valid_name(location):
                 return "You should enter a valid camp name."
@@ -107,14 +128,18 @@ class CampDataEdit:
             if util.is_num(planID):
                 if len(Plan.get_plan_by_id(planID)) < 1:
                     return "Cannot find this planID. Please try again."
-                
-        now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+
+        now = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
         camp_tuple = (location, shelter, water, food, medical_supplies, planID, now)
-            
+
         camps = Camp.create_camp(camp_tuple)
-        return util.parse_result('Camp', camps)
+        return util.parse_result("Camp", camps)
 
     @staticmethod
     def delete_camp(campID):
-        return f"Camp {campID} has been deleted" if Camp.delete_camp(campID) else f"There is an error when deleting camp {campID}"
+        return (
+            f"Camp {campID} has been deleted"
+            if Camp.delete_camp(campID)
+            else f"There is an error when deleting camp {campID}"
+        )
