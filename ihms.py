@@ -3,17 +3,17 @@ import platform
 
 if platform.system() in ["Windows", "Darwin"]:
     try:
-        subprocess.run(["pip", "install", "numpy"])
+        subprocess.run(["pip", "install", "--upgrade", "numpy"])
     except:
-        subprocess.run(["pip3", "install", "numpy"])
+        subprocess.run(["pip3", "install", "--upgrade", "numpy"])
     finally:
-        subprocess.run(["pip3", "install", "numpy"])
+        subprocess.run(["pip3", "install", "--upgrade", "numpy"])
     try:
-        subprocess.run(["pip", "install", "pandas"])
+        subprocess.run(["pip", "install", "--upgrade", "pandas"])
     except:
-        subprocess.run(["pip3", "install", "pandas"])
+        subprocess.run(["pip3", "install", "--upgrade", "pandas"])
     finally:
-        subprocess.run(["pip3", "install", "pandas"])
+        subprocess.run(["pip3", "install", "--upgrade", "pandas"])
     try:
         subprocess.run(["pip", "install", "tk"])
     except:
@@ -39,12 +39,12 @@ elif platform.system() == "Linux":
     try:
         subprocess.run(["sudo", "apt-get", "install", "python3-pandas"])
     except:
-        subprocess.run(["sudo", "pip", "install", "pandas"])
+        subprocess.run(["sudo", "pip", "install", "--upgrade", "pandas"])
     try:
-        subprocess.run(["sudo", "pip", "install", "numpy"])
+        subprocess.run(["sudo", "pip", "install", "--upgrade", "numpy"])
     except:
         subprocess.run(["sudo", "apt-get", "install", "python-pip"])
-        subprocess.run(["sudo", "pip", "install", "numpy"])
+        subprocess.run(["sudo", "pip", "install", "--upgrade", "numpy"])
     try:
         subprocess.run(["sudo", "apt-get", "install", "python3-tk"])
     except:
@@ -63,9 +63,9 @@ elif platform.system() == "Linux":
             subprocess.run(["python", "temp.py"])
 else:
     try:
-        subprocess.run(["pip", "install", "numpy", "pandas", "tk"])
+        subprocess.run(["pip", "install", "--upgrade", "numpy", "pandas", "tk"])
     except:
-        subprocess.run(["pip3", "install", "numpy", "pandas", "tk"])
+        subprocess.run(["pip3", "install", "--upgrade", "numpy", "pandas", "tk"])
     finally:
         try:
             subprocess.run(["python3", "temp.py"]) 
