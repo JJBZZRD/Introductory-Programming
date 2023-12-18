@@ -3,11 +3,23 @@ import platform
 
 if platform.system() in ["Windows", "Darwin"]:
     try:
-        subprocess.run(["pip", "install", "numpy", "pandas", "tk"])
+        subprocess.run(["pip", "install", "numpy"])
     except:
-        subprocess.run(["pip3", "install", "numpy", "pandas", "tk"])
+        subprocess.run(["pip3", "install", "numpy"])
     finally:
-        subprocess.run(["pip3", "install", "numpy", "pandas", "tk"])
+        subprocess.run(["pip3", "install", "numpy"])
+    try:
+        subprocess.run(["pip", "install", "pandas"])
+    except:
+        subprocess.run(["pip3", "install", "pandas"])
+    finally:
+        subprocess.run(["pip3", "install", "pandas"])
+    try:
+        subprocess.run(["pip", "install", "tk"])
+    except:
+        subprocess.run(["pip3", "install", "tk"])
+    finally:
+        subprocess.run(["pip3", "install", "tk"])
     try:
         subprocess.run(["python3", "temp.py"]) 
     except:
