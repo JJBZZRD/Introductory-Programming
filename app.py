@@ -4,4 +4,4 @@ from DMS.DB.config import *
 
 # print(tk.TkVersion)
 
-print("Hello World")
+print("IHMS version 1.03")
