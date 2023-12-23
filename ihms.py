@@ -3,17 +3,45 @@ import platform
 
 if platform.system() in ["Windows", "Darwin"]:
     try:
-        subprocess.run(["pip", "install", "numpy", "pandas", "tk"])
+        print("Trying pip install --upgrade numpy")
+        subprocess.run(["pip", "install", "--upgrade", "numpy"])
     except:
-        subprocess.run(["pip3", "install", "numpy", "pandas", "tk"])
+        print("Except Trying pip3 install --upgrade numpy")
+        subprocess.run(["pip3", "install", "--upgrade", "numpy"])
     finally:
-        subprocess.run(["pip3", "install", "numpy", "pandas", "tk"])
+        print("Finally Trying pip3 install --upgrade numpy")
+        subprocess.run(["pip3", "install", "--upgrade", "numpy"])
     try:
-        subprocess.run(["python3", "temp.py"]) 
+        print("Trying pip install --upgrade pandas")
+        subprocess.run(["pip", "install", "--upgrade", "pandas"])
     except:
-        subprocess.run(["python", "temp.py"])
+        print("Except Trying pip3 install --upgrade pandas")
+        subprocess.run(["pip3", "install", "--upgrade", "pandas"])
     finally:
-        subprocess.run(["python", "temp.py"])
+        print("Finally Trying pip3 install --upgrade pandas")
+        subprocess.run(["pip3", "install", "--upgrade", "pandas"])
+    try: 
+        print("Trying pip install tk")
+        subprocess.run(["pip", "install", "tk"])
+    except:
+        print("Except Trying pip3 install tk")
+        subprocess.run(["pip3", "install", "tk"])
+    finally:
+        print("Finally Trying pip3 install tk")
+        subprocess.run(["pip3", "install", "tk"])
+    try:
+        print("Trying Python 3")
+        subprocess.run(["python3", "app.py"]) 
+    except Exception as e:
+        print(e)
+        print("Trying Python in except")
+        subprocess.run(["python", "app.py"])
+    finally:
+        try:
+            print("Trying Python in finally")
+            subprocess.run(["python", "app.py"])
+        except:
+            pass
 
 elif platform.system() == "Linux":
     try:
@@ -23,12 +51,12 @@ elif platform.system() == "Linux":
     try:
         subprocess.run(["sudo", "apt-get", "install", "python3-pandas"])
     except:
-        subprocess.run(["sudo", "pip", "install", "pandas"])
+        subprocess.run(["sudo", "pip", "install", "--upgrade", "pandas"])
     try:
-        subprocess.run(["sudo", "pip", "install", "numpy"])
+        subprocess.run(["sudo", "pip", "install", "--upgrade", "numpy"])
     except:
         subprocess.run(["sudo", "apt-get", "install", "python-pip"])
-        subprocess.run(["sudo", "pip", "install", "numpy"])
+        subprocess.run(["sudo", "pip", "install", "--upgrade", "numpy"])
     try:
         subprocess.run(["sudo", "apt-get", "install", "python3-tk"])
     except:
@@ -36,23 +64,27 @@ elif platform.system() == "Linux":
         subprocess.run(["sudo", "pip", "install", "tk"])
     finally:
         try:
-            subprocess.run(["python3", "temp.py"])
-        except:   
-            subprocess.run(["python", "temp.py"])
+            print("Trying Python 3")
+            subprocess.run(["python3", "app.py"])
+        except Exception as e:
+            print(e)
+            print("Trying Python in except")
+            subprocess.run(["python", "app.py"])
         finally:
-            subprocess.run(["python", "temp.py"])
+            print("Trying Python in finally")
+            subprocess.run(["python", "app.py"])
 else:
     try:
-        subprocess.run(["pip", "install", "numpy", "pandas", "tk"])
+        subprocess.run(["pip", "install", "--upgrade", "numpy", "pandas", "tk"])
     except:
-        subprocess.run(["pip3", "install", "numpy", "pandas", "tk"])
+        subprocess.run(["pip3", "install", "--upgrade", "numpy", "pandas", "tk"])
     finally:
         try:
-            subprocess.run(["python3", "temp.py"]) 
+            subprocess.run(["python3", "app.py"]) 
         except:
             try:
-                subprocess.run(["python", "temp.py"])
+                subprocess.run(["python", "app.py"])
             except:
                 print("Looks like your system is faulty. Please use a proper Linux distro.")
             finally:
-                subprocess.run(["python", "temp.py"])
+                subprocess.run(["python", "app.py"])

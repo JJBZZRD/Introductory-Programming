@@ -7,7 +7,8 @@ from ..Logic.person_data_retrieve import PersonDataRetrieve
 from ..DB.camp import Camp
 from ..DB.plan import Plan
 from ..Logic.audit_data_retrieve import AuditDataRetrieve
-import pandas as pd
+# import pandas as pd
+from pandas import DataFrame
 
 #this class generates a list page. variations are sest using the subclasses
 class ManageList(tk.Frame):
@@ -186,7 +187,8 @@ class ManageList(tk.Frame):
 
         data_list = [object.display_info() for object in self.list_data]
 
-        df = pd.DataFrame(data_list, columns=self.list_headers)
+        # df = pd.DataFrame(data_list, columns=self.list_headers)
+        df = DataFrame(data_list, columns=self.list_headers)
         
 
         file_path = filedialog.asksaveasfilename(initialfile=self.export_name + '.csv',
